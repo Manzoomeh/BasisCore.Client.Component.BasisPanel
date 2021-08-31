@@ -1,0 +1,29 @@
+{
+  "name": "basispanel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack serve --mode=development",
+    "pub": "webpack --mode=production",
+    "ws": "node websocket-server/server.js"
+  },
+  "keywords": [
+    "TypeScript",
+    "ClientSide",
+    "basispanel",
+    "panel"
+  ],
+  "author": "Manzomeh",
+  "license": "ISC",
+  "devDependencies": {
+    "circular-dependency-plugin": "^5.2.2",
+    "css-loader": "^6.2.0",
+    "style-loader": "^3.2.1",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.2",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.0.0"
+  }
+}
