@@ -1,1 +1,3 @@
-console.log("in the name of god");
+import BasisPanelComponent from "./components/basispanel/BasisPanelComponent";
+
+export { BasisPanelComponent };

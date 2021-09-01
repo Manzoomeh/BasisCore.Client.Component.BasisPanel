@@ -1,5 +1,6 @@
 const path = require("path");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
+const httpServer = require("./server/trust-login");
 
 module.exports = {
   entry: {
@@ -11,17 +12,20 @@ module.exports = {
         type: "assign",
       },
     },
-    gridComponent: {
-      import: "./src/ComponentLoader.ts",
-      filename: "basiscore.basispanel.component.js",
-      library: {
-        name: "bc",
-        type: "assign",
-      },
-    },
+    // gridComponent: {
+    //   import: "./src/ComponentLoader.ts",
+    //   filename: "basiscore.basispanel.component.js",
+    //   library: {
+    //     name: "bc",
+    //     type: "assign",
+    //   },
+    // },
   },
   devServer: {
     static: path.resolve(__dirname, "wwwroot"),
+    onBeforeSetupMiddleware: function (server) {
+      server.app.use("/server", httpServer);
+    },
     open: true,
   },
   module: {
@@ -35,13 +39,13 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.png/,
-        type: "asset/resource",
+        test: /\.(png|html)$/,
+        type: "asset/source",
       },
     ],
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".png"], // there's a dot missing
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".png", ".html"], // there's a dot missing
   },
   plugins: [
     new CircularDependencyPlugin({
