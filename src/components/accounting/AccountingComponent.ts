@@ -4,6 +4,7 @@ import { IQuestionItem } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
 import html from "./assets/layout.html";
+import "./assets/style.css";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
 

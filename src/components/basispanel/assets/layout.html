@@ -1,18 +1,18 @@
 <basis core="group" run="atclient">
-  <div data-bc-bp-header>
-    <basis core="component.basispanel.accounting" run="atclient"></basis>
-    <basis core="component.basispanel.corporate" run="atclient"></basis>
-    <basis core="component.basispanel.business" run="atclient"></basis>
-  </div>
-  <basis core="component.basispanel.menu" run="atclient"></basis>
+<div id="body">
+  <div class="header_wrapper">
+    <div class="header">
+      <basis core="component.basispanel.accounting" run="atclient"></basis>
+      <basis core="component.basispanel.corporate" run="atclient"></basis>
+      <basis core="component.basispanel.business" run="atclient"></basis>
+      <div class="logo">
+        <a href="/"><img src="assets/img/basispanel_logo.png" alt="" /></a>
+      </div>
+    </div>
+    <div class="clr"></div>
+    <basis core="component.basispanel.menu" run="atclient"></basis> 
   <basis core="component.basispanel.workspace" run="atclient"></basis>
-  <basis core="component.basispanel.footer" run="atclient"></basis>
-  <!-- <button bc-triggers="click" bc-name="demo.data" bc-value="in the name of god">
-    click me
-  </button> -->
-  <basis
-    core="callback"
-    run="atclient"
-    triggers="demo.data basispanel.userInfo"
-  ></basis>
+</div>
+<div class="clr"></div>
+<basis core="component.basispanel.footer" run="atclient"></basis>
 </basis>

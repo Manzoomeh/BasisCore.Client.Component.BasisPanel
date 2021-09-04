@@ -1,8 +1,9 @@
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
+import html from "./assets/layout.html";
+import "./assets/style.css";
 
-const html = "";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, html, "data-bc-bp-workspace-container");

@@ -4,8 +4,9 @@ import { SourceId } from "../../basiscore/type-alias";
 import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import html from "./asset/layout.html";
+import html from "./assets/layout.html";
 import IMenuInfo from "./IMenuInfo";
+import "./assets/style.css";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   static readonly USER_INFO_SOURCE: SourceId = "basispanel.userinfo";
