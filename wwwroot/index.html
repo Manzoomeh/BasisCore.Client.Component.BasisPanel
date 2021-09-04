@@ -7,18 +7,32 @@
     <title>Demo</title>
   </head>
   <body>
-    <div id="main"></div>
-    <script src="./basiscore.basispanel.js"></script>
+    <Basis
+      core="component.bc.basispanel"
+      run="atclient"
+      rKey="1229BF0C-D2F1-4172-9817-9E8E87BF35BE"
+    >
+    </Basis>
     <script>
       const option = {
         accountingUrl: "/server/profile",
         profileImageUrl:
           "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
       };
-      const container = document.getElementById("main");
-      const rKey = "1234";
-      const c = new basispanel.BasisPanelComponent(rKey, container, option);
-      c.initializeAsync();
+
+      const host = {
+        settings: {
+          "basispanel.option": {
+            accountingUrl: "/server/profile",
+            profileImageUrl:
+              "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
+          },
+        },
+        repositories: {
+          "bc.basispanel": "/basiscore.basispanel.component.js",
+        },
+      };
     </script>
+    <script src="http://localhost:3000/basiscore.min.js"></script>
   </body>
 </html>

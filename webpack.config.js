@@ -12,14 +12,14 @@ module.exports = {
         type: "assign",
       },
     },
-    // gridComponent: {
-    //   import: "./src/ComponentLoader.ts",
-    //   filename: "basiscore.basispanel.component.js",
-    //   library: {
-    //     name: "bc",
-    //     type: "assign",
-    //   },
-    // },
+    gridComponent: {
+      import: "./src/ComponentLoader.ts",
+      filename: "basiscore.basispanel.component.js",
+      library: {
+        name: "bc",
+        type: "assign",
+      },
+    },
   },
   devServer: {
     static: path.resolve(__dirname, "wwwroot"),
