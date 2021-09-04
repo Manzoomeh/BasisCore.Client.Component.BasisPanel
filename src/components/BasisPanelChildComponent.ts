@@ -10,23 +10,17 @@ export default abstract class BasisPanelChildComponent
   protected readonly container: Element;
   protected options: IBasisPanelOptions;
 
-  constructor(owner: IUserDefineComponent, dataAttr: string) {
+  constructor(owner: IUserDefineComponent, html: string, dataAttr: string) {
     this.owner = owner;
     this.container = document.createElement("div");
     this.container.setAttribute(dataAttr, "");
     this.owner.setContent(this.container);
+    this.container.innerHTML = html;
     this.options = this.owner.getSetting<IBasisPanelOptions>(
       "basispanel.option",
       null
     );
   }
-  public async initializeAsync(): Promise<void> {
-    const style = await this.owner.getAttributeValueAsync("style");
-    if (style) {
-      this.container.setAttribute("style", style);
-    }
-  }
-  public runAsync(source?: ISource): Promise<any> {
-    return Promise.resolve(true);
-  }
+  public abstract initializeAsync(): void | Promise<void>;
+  public abstract runAsync(source?: ISource): any | Promise<any>;
 }

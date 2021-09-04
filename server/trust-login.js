@@ -6,8 +6,9 @@ var router = express.Router();
 //   console.log('Time: ', Date.now())
 //   next()
 // })
-// define the home page route
-router.get("/profile", function (req, res) {
+
+router.get("/:rKey/profile", function (req, res) {
+  //console.log("profile", req.params);
   const result = [
     { prpid: 1, question: "نام كاربر", answer: "مریم" },
     { prpid: 2, question: "نام خانوادگي", answer: "جعفرزاده" },
@@ -25,9 +26,38 @@ router.get("/profile", function (req, res) {
   ];
   res.json(result);
 });
-// define the about route
-router.get("/about", function (req, res) {
-  res.send("About birds");
+
+router.get("/:rKey/menu", function (req, res) {
+  //console.log("menu", req.params);
+  const result = {
+    nodes: [
+      {
+        title: "اطلاعات کاربری",
+        pid: "1",
+      },
+      {
+        title: "مدیریت فایل ها",
+        nodes: [
+          { title: "فایل های من", pid: 4 },
+          { title: "اشتراک با من", pid: 5 },
+        ],
+      },
+      { title: "تقویم", pid: 6 },
+      {
+        mid: 2,
+        title: "Ticketing",
+        multi: true,
+        url: "185.44.36.103",
+      },
+      {
+        mid: 4,
+        title: "TaskManager",
+        multi: false,
+        url: "185.44.36.103",
+      },
+    ],
+  };
+  res.json(result);
 });
 
 module.exports = router;

@@ -11,21 +11,26 @@ export default class AccountingComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, "data-bc-bp-accounting-container");
-    this.container.innerHTML = html;
+    super(owner, html, "data-bc-bp-accounting-container");
   }
 
   public runAsync(source?: ISource): Promise<any> {
     return this.loadDataAsync();
   }
 
+  public initializeAsync(): void | Promise<void> {}
+
   public async loadDataAsync(): Promise<void> {
+    const urlFormatter = new Function(
+      "rKey",
+      `return \`${this.options.accountingUrl}\``
+    );
     const questions = await HttpUtil.getDataAsync<Array<IQuestionItem>>(
-      this.options.accountingUrl
+      urlFormatter(this.options.rKey)
     );
     this.profile = QuestionUtil.toObject(questions);
-    console.log(this.profile);
     this.refreshUI();
+    this.owner.setSource("basispanel.userInfo", this.profile);
   }
 
   public refreshUI() {

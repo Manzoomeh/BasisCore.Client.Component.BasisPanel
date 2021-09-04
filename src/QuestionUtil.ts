@@ -3,7 +3,6 @@ import { IQuestionItem } from "./type-alias";
 export class QuestionUtil {
   public static toObject(list: Array<IQuestionItem>, obj?: any): any {
     const retVal = obj ?? {};
-    console.log(retVal);
     list.forEach((question) =>
       Reflect.set(retVal, QuestionUtil.s.get(question.prpid), question.answer)
     );

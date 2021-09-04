@@ -1,8 +1,15 @@
+import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-
+const html = "";
 export default class FooterComponent extends BasisPanelChildComponent {
   constructor(owner: IUserDefineComponent) {
-    super(owner, "data-bc-bp-footer-container");
+    super(owner, html, "data-bc-bp-footer-container");
+  }
+
+  public initializeAsync(): void | Promise<void> {}
+
+  public runAsync(source?: ISource) {
+    return true;
   }
 }

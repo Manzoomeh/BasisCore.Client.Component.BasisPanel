@@ -7,8 +7,12 @@
   <basis core="component.basispanel.menu" run="atclient"></basis>
   <basis core="component.basispanel.workspace" run="atclient"></basis>
   <basis core="component.basispanel.footer" run="atclient"></basis>
-  <button bc-triggers="click" bc-name="demo.data" bc-value="in the name of god">
+  <!-- <button bc-triggers="click" bc-name="demo.data" bc-value="in the name of god">
     click me
-  </button>
-  <basis core="callback" trigger="demo.data"></basis>
+  </button> -->
+  <basis
+    core="callback"
+    run="atclient"
+    triggers="demo.data basispanel.userInfo"
+  ></basis>
 </basis>
