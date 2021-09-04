@@ -1,8 +1,8 @@
-import IBasisPanel from "../basispanel/IBasisPanel";
+import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 
 export default class MenuComponent extends BasisPanelChildComponent {
-  constructor(owner: IBasisPanel, container: Element) {
-    super(owner, container);
+  constructor(owner: IUserDefineComponent) {
+    super(owner, "data-bc-bp-menu-container");
   }
 }

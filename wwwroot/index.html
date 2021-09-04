@@ -7,12 +7,7 @@
     <title>Demo</title>
   </head>
   <body>
-    <Basis
-      core="component.bc.basispanel"
-      run="atclient"
-      rKey="1229BF0C-D2F1-4172-9817-9E8E87BF35BE"
-    >
-    </Basis>
+    <Basis core="component.basispanel.panel" run="atclient"> </Basis>
     <script>
       const option = {
         accountingUrl: "/server/profile",
@@ -23,13 +18,14 @@
       const host = {
         settings: {
           "basispanel.option": {
+            rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
             accountingUrl: "/server/profile",
             profileImageUrl:
               "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
           },
         },
         repositories: {
-          "bc.basispanel": "/basiscore.basispanel.component.js",
+          basispanel: "/basiscore.basispanel.component.js",
         },
       };
     </script>

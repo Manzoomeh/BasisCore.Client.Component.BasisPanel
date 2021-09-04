@@ -1,7 +1,14 @@
-<div data-bc-bp-header></div>
-<div data-bc-bp-accounting-container></div>
-<div data-bc-bp-menu-container></div>
-<div data-bc-bp-corporate-container></div>
-<div data-bc-bp-business-container></div>
-<div data-bc-bp-workspace-container></div>
-<div data-bc-bp-footer-container></div>
+<basis core="group" run="atclient">
+  <div data-bc-bp-header>
+    <basis core="component.basispanel.accounting" run="atclient"></basis>
+    <basis core="component.basispanel.corporate" run="atclient"></basis>
+    <basis core="component.basispanel.business" run="atclient"></basis>
+  </div>
+  <basis core="component.basispanel.menu" run="atclient"></basis>
+  <basis core="component.basispanel.workspace" run="atclient"></basis>
+  <basis core="component.basispanel.footer" run="atclient"></basis>
+  <button bc-triggers="click" bc-name="demo.data" bc-value="in the name of god">
+    click me
+  </button>
+  <basis core="callback" trigger="demo.data"></basis>
+</basis>

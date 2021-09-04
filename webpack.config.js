@@ -16,7 +16,7 @@ module.exports = {
       import: "./src/ComponentLoader.ts",
       filename: "basiscore.basispanel.component.js",
       library: {
-        name: "bc",
+        name: "basispanel",
         type: "assign",
       },
     },

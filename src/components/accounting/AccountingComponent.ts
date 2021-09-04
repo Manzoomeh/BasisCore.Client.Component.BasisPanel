@@ -1,22 +1,27 @@
 import HttpUtil from "../../HttpUtil";
 import { QuestionUtil } from "../../QuestionUtil";
 import { IQuestionItem } from "../../type-alias";
-import IBasisPanel from "../basispanel/IBasisPanel";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
 import html from "./assets/layout.html";
+import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import ISource from "../../basiscore/ISource";
 
 export default class AccountingComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
 
-  constructor(owner: IBasisPanel, container: Element) {
-    super(owner, container);
-    container.innerHTML = html;
+  constructor(owner: IUserDefineComponent) {
+    super(owner, "data-bc-bp-accounting-container");
+    this.container.innerHTML = html;
+  }
+
+  public runAsync(source?: ISource): Promise<any> {
+    return this.loadDataAsync();
   }
 
   public async loadDataAsync(): Promise<void> {
     const questions = await HttpUtil.getDataAsync<Array<IQuestionItem>>(
-      this.owner.options.accountingUrl
+      this.options.accountingUrl
     );
     this.profile = QuestionUtil.toObject(questions);
     console.log(this.profile);
@@ -31,9 +36,9 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     const fn = new Function(
       "rKey",
       "profile",
-      `return \`${this.owner.options.profileImageUrl}\``
+      `return \`${this.options.profileImageUrl}\``
     );
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
-      fn(this.owner.rKey, this.profile);
+      fn(this.options.rKey, this.profile);
   }
 }

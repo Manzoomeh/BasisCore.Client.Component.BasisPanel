@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+  </head>
+  <body>
+    <div id="main"></div>
+    <script src="./basiscore.basispanel.js"></script>
+    <script>
+      const option = {
+        accountingUrl: "/server/profile",
+        profileImageUrl:
+          "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
+      };
+      const container = document.getElementById("main");
+      const rKey = "1234";
+      const c = new basispanel.BasisPanelComponent(rKey, container, option);
+      c.initializeAsync();
+    </script>
+  </body>
+</html>
