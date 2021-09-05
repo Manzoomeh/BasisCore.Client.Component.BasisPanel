@@ -1,3 +1,5 @@
+import IProfileInfo from "../accounting/IProfileInfo";
+
 export default interface IMenuInfo {
   nodes: Array<IMenuItemInfo>;
 }
@@ -18,4 +20,12 @@ export interface IMenuLevelInfo extends IMenuItemInfo {
 
 export interface IMenuPageInfo extends IMenuItemInfo {
   pid: number;
+}
+
+export interface IMenuLoaderParam {
+  type: string;
+  key: number;
+  profile: IProfileInfo;
+  rawUrl: string;
+  rKey: string;
 }

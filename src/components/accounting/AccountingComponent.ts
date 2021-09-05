@@ -7,7 +7,7 @@ import html from "./assets/layout.html";
 import "./assets/style.css";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
-import { SourceId } from "../../basiscore/type-alias";
+import { IMenuLoaderParam } from "../menu/IMenuInfo";
 
 export default class AccountingComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -20,7 +20,12 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     return this.loadDataAsync();
   }
 
-  public initializeAsync(): void | Promise<void> {}
+  public initializeAsync(): void | Promise<void> {
+    this.container.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.signalToDisplayMenu();
+    });
+  }
 
   public async loadDataAsync(): Promise<void> {
     const urlFormatter = new Function(
@@ -33,9 +38,23 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
+    this.signalToDisplayMenu();
   }
 
-  public refreshUI() {
+  private signalToDisplayMenu() {
+    if (this.profile) {
+      const menuInfo: IMenuLoaderParam = {
+        type: "profile",
+        key: 0,
+        profile: this.profile,
+        rawUrl: this.options.profileMenuUrl,
+        rKey: this.options.rKey,
+      };
+      this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
+    }
+  }
+
+  private refreshUI() {
     const ui = this.container.querySelector<HTMLDivElement>(
       "[data-bc-user-name]"
     );

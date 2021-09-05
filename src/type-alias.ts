@@ -6,4 +6,5 @@ export interface IQuestionItem {
 
 export class DefaultSource {
   static readonly USER_INFO_SOURCE = "basispanel.userinfo";
+  static readonly SHOW_MENU = "basispanel.show_menu";
 }

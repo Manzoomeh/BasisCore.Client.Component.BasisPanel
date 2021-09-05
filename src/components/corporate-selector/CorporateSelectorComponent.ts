@@ -4,6 +4,7 @@ import HttpUtil from "../../HttpUtil";
 import { DefaultSource } from "../../type-alias";
 import IProfileInfo from "../accounting/IProfileInfo";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
+import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import html from "./assets/layout.html";
 import "./assets/style.css";
 import ICorporateInfo from "./ICorporateInfo";
@@ -27,12 +28,26 @@ export default class CorporateSelectorComponent extends BasisPanelChildComponent
         this.dataLoaded = true;
       }
     });
+
+    this.element.addEventListener("change", (e) => {
+      e.preventDefault();
+      console.log(this.element.value);
+      this.signalToDisplayMenu();
+    });
+    this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
 
   public async runAsync(source?: ISource) {
-    if (source?.id == DefaultSource.USER_INFO_SOURCE) {
-      this.profile = source.rows[0];
-      await this.loadCorporateAsync();
+    switch (source?.id) {
+      case DefaultSource.USER_INFO_SOURCE: {
+        this.profile = source.rows[0];
+        await this.loadCorporateAsync();
+        break;
+      }
+      case DefaultSource.USER_INFO_SOURCE: {
+        this.profile = source.rows[0];
+        break;
+      }
     }
     return true;
   }
@@ -47,5 +62,18 @@ export default class CorporateSelectorComponent extends BasisPanelChildComponent
       option.text = item.title;
       this.element.appendChild(option);
     });
+  }
+
+  private signalToDisplayMenu() {
+    if (this.profile) {
+      const menuInfo: IMenuLoaderParam = {
+        type: "corporate",
+        key: parseInt(this.element.value),
+        profile: this.profile,
+        rawUrl: this.options.corporateMenuUrl,
+        rKey: this.options.rKey,
+      };
+      this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
+    }
   }
 }
