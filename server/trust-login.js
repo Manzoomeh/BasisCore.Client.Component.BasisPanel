@@ -47,13 +47,40 @@ router.get("/:rKey/menu", function (req, res) {
         mid: 2,
         title: "Ticketing",
         multi: true,
-        url: "185.44.36.103",
+        url: "/server/trust/${rKey}/external-menu/calender",
       },
       {
         mid: 4,
         title: "TaskManager",
         multi: false,
-        url: "185.44.36.103",
+        url: "/server/trust/${rKey}/external-menu/task",
+      },
+    ],
+  };
+  res.json(result);
+});
+
+router.get("/:rKey/external-menu/calender", function (req, res) {
+  const result = {
+    nodes: [
+      {
+        title: "مدیریت پیام ها",
+        nodes: [
+          { title: "لیست پیام ها", pid: 11 },
+          { title: "مدیریت برچسب ها", pid: 13 },
+        ],
+      },
+    ],
+  };
+  res.json(result);
+});
+
+router.get("/:rKey/external-menu/task", function (req, res) {
+  const result = {
+    nodes: [
+      {
+        title: "مدیریت تسک",
+        pid: "19",
       },
     ],
   };

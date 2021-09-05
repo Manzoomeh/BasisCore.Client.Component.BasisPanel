@@ -24,7 +24,7 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, "wwwroot"),
     onBeforeSetupMiddleware: function (server) {
-      server.app.use("/server", httpServer);
+      server.app.use("/server/trust", httpServer);
     },
     open: true,
   },

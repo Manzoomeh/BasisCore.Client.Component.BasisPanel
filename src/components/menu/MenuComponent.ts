@@ -5,13 +5,21 @@ import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import html from "./assets/layout.html";
-import IMenuInfo from "./IMenuInfo";
+import IMenuInfo, {
+  IMenuExternalItemInfo,
+  IMenuItemInfo,
+  IMenuLevelInfo,
+  IMenuPageInfo,
+} from "./IMenuInfo";
 import "./assets/style.css";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   static readonly USER_INFO_SOURCE: SourceId = "basispanel.userinfo";
+  readonly ul: HTMLUListElement;
+  private profile: IProfileInfo;
   constructor(owner: IUserDefineComponent) {
     super(owner, html, "data-bc-bp-menu-container");
+    this.ul = this.container.querySelector("[data-bc-menu]");
   }
 
   public initializeAsync(): void | Promise<void> {
@@ -22,20 +30,80 @@ export default class MenuComponent extends BasisPanelChildComponent {
     //console.log("MenuComponent", source);
     //iuse
     if (source?.id == MenuComponent.USER_INFO_SOURCE) {
-      await this.loadDataAsync(source.rows[0]);
+      this.profile = source.rows[0];
+      await this.loadDataAsync();
     }
   }
 
-  public async loadDataAsync(profile: IProfileInfo): Promise<void> {
+  public async loadDataAsync(): Promise<void> {
     const formatter = new Function(
       "rKey",
       "profile",
       `return \`${this.options.profileMenuUrl}\``
     );
     const menuItems = await HttpUtil.getDataAsync<IMenuInfo>(
-      formatter(this.options.rKey, profile)
+      formatter(this.options.rKey)
     );
-
     console.log(menuItems);
+    this.ul.innerHTML = "";
+    this.createMenu(this.ul, menuItems.nodes);
+  }
+
+  private createMenu(ul: HTMLUListElement, items: Array<IMenuItemInfo>) {
+    console.log(items);
+    items.forEach((node) => {
+      if ((node as IMenuPageInfo).pid) {
+        ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo));
+      } else if ((node as IMenuLevelInfo).nodes) {
+        ul.appendChild(this.createLevelMenuItem(node as IMenuLevelInfo));
+      } else if ((node as IMenuExternalItemInfo).mid) {
+        ul.appendChild(
+          this.createExternalMenuItem(node as IMenuExternalItemInfo)
+        );
+      }
+    });
+  }
+
+  private createLevelMenuItem(node: IMenuLevelInfo): HTMLLIElement {
+    const li = document.createElement("li");
+    li.classList.add("level1_menu");
+    const child = this.owner.toNode(
+      `<a class="white_text open_menu" data-bc-level >${node.title}<i class="lni lni-chevron-down"></i></a>`
+    );
+    const innerUl = document.createElement("ul");
+    innerUl.classList.add("submenu");
+    this.createMenu(innerUl, node.nodes);
+    li.appendChild(child);
+    li.appendChild(innerUl);
+    return li;
+  }
+
+  private createPageMenuItem(node: IMenuPageInfo): HTMLLIElement {
+    const li = document.createElement("li");
+    const content = document.createElement("a");
+    content.classList.add("white_text");
+    content.classList.add("open_menu");
+    content.setAttribute("data-bc-pid", node.pid.toString());
+    content.appendChild(document.createTextNode(node.title));
+    li.appendChild(content);
+    return li;
+  }
+
+  private createExternalMenuItem(node: IMenuExternalItemInfo): HTMLLIElement {
+    const li = document.createElement("li");
+    li.classList.add("level1_menu");
+    const content = document.createElement("a");
+    content.classList.add("white_text");
+    content.classList.add("open_menu");
+    content.appendChild(document.createTextNode(node.title));
+    li.appendChild(content);
+    const ul = document.createElement("ul");
+    ul.classList.add("submenu");
+    li.appendChild(ul);
+    const formatter = new Function("rKey", "profile", `return \`${node.url}\``);
+    HttpUtil.getDataAsync<IMenuInfo>(
+      formatter(this.options.rKey, this.profile)
+    ).then((menu) => this.createMenu(ul, menu.nodes));
+    return li;
   }
 }
