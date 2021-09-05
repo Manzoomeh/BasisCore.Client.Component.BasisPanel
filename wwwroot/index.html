@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title></title>
-  </head>
-  <body>
-    <Basis core="component.basispanel.panel" run="atclient"> </Basis>
-    <div class="clr"></div>
 
-    <script>
-      const host = {
-        settings: {
-          "basispanel.option": {
-            rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
-            accountingUrl: "/server/trust/${rKey}/profile",
-            profileMenuUrl: "/server/trust/${rKey}/menu",
-            profileImageUrl:
-              "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
-          },
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <Basis core="component.basispanel.panel" run="atclient"> </Basis>
+  <div class="clr"></div>
+
+  <script>
+    const host = {
+      settings: {
+        "basispanel.option": {
+          rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
+          accountingUrl: "/server/trust/${rKey}/profile",
+          profileMenuUrl: "/server/trust/${rKey}/menu",
+          profileImageUrl:
+            "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
+          corporateUrl: "/server/corporate/${rKey}/list",
+          corporateMenuUrl: "/server/corporate/${rKey}/menu",
         },
-        repositories: {
-          basispanel: "/basiscore.basispanel.component.js",
-        },
-      };
-    </script>
-    <script src="http://localhost:3000/basiscore.min.js"></script>
-  </body>
+      },
+      repositories: {
+        basispanel: "/basiscore.basispanel.component.js",
+      },
+    };
+  </script>
+  <script src="http://localhost:3000/basiscore.min.js"></script>
+</body>
+
 </html>

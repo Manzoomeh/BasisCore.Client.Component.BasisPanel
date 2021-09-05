@@ -1,12 +1,13 @@
 import HttpUtil from "../../HttpUtil";
 import { QuestionUtil } from "../../QuestionUtil";
-import { IQuestionItem } from "../../type-alias";
+import { DefaultSource, IQuestionItem } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
 import html from "./assets/layout.html";
 import "./assets/style.css";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
+import { SourceId } from "../../basiscore/type-alias";
 
 export default class AccountingComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -31,7 +32,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     );
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
-    this.owner.setSource("basispanel.userInfo", this.profile);
+    this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
   }
 
   public refreshUI() {

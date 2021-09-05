@@ -1,6 +1,8 @@
 const path = require("path");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
-const httpServer = require("./server/trust-login");
+const trustHttpServer = require("./server/trust-login");
+const corporateHttpServer = require("./server/corporate");
+const businessHttpServer = require("./server/business");
 
 module.exports = {
   entry: {
@@ -24,7 +26,9 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, "wwwroot"),
     onBeforeSetupMiddleware: function (server) {
-      server.app.use("/server/trust", httpServer);
+      server.app.use("/server/trust", trustHttpServer);
+      server.app.use("/server/corporate", corporateHttpServer);
+      server.app.use("/server/business", businessHttpServer);
     },
     open: true,
   },

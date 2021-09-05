@@ -1,6 +1,5 @@
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import { SourceId } from "../../basiscore/type-alias";
 import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
@@ -12,9 +11,9 @@ import IMenuInfo, {
   IMenuPageInfo,
 } from "./IMenuInfo";
 import "./assets/style.css";
+import { DefaultSource } from "../../type-alias";
 
 export default class MenuComponent extends BasisPanelChildComponent {
-  static readonly USER_INFO_SOURCE: SourceId = "basispanel.userinfo";
   readonly ul: HTMLUListElement;
   private profile: IProfileInfo;
   constructor(owner: IUserDefineComponent) {
@@ -23,11 +22,11 @@ export default class MenuComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): void | Promise<void> {
-    this.owner.addTrigger([MenuComponent.USER_INFO_SOURCE]);
+    this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
 
   public async runAsync(source?: ISource) {
-    if (source?.id == MenuComponent.USER_INFO_SOURCE) {
+    if (source?.id == DefaultSource.USER_INFO_SOURCE) {
       this.profile = source.rows[0];
       await this.loadDataAsync();
     }

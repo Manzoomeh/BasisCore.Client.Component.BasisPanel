@@ -3,4 +3,6 @@ export default interface IBasisPanelOptions {
   accountingUrl: string;
   profileImageUrl: string;
   profileMenuUrl: string;
+  corporateUrl: string;
+  corporateMenuUrl: string;
 }
