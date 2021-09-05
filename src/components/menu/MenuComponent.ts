@@ -27,8 +27,6 @@ export default class MenuComponent extends BasisPanelChildComponent {
   }
 
   public async runAsync(source?: ISource) {
-    //console.log("MenuComponent", source);
-    //iuse
     if (source?.id == MenuComponent.USER_INFO_SOURCE) {
       this.profile = source.rows[0];
       await this.loadDataAsync();
@@ -44,13 +42,11 @@ export default class MenuComponent extends BasisPanelChildComponent {
     const menuItems = await HttpUtil.getDataAsync<IMenuInfo>(
       formatter(this.options.rKey)
     );
-    console.log(menuItems);
     this.ul.innerHTML = "";
     this.createMenu(this.ul, menuItems.nodes);
   }
 
   private createMenu(ul: HTMLUListElement, items: Array<IMenuItemInfo>) {
-    console.log(items);
     items.forEach((node) => {
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo));
@@ -66,14 +62,12 @@ export default class MenuComponent extends BasisPanelChildComponent {
 
   private createLevelMenuItem(node: IMenuLevelInfo): HTMLLIElement {
     const li = document.createElement("li");
-    li.classList.add("level1_menu");
-    const child = this.owner.toNode(
-      `<a class="white_text open_menu" data-bc-level >${node.title}<i class="lni lni-chevron-down"></i></a>`
-    );
+    const content = document.createElement("a");
+    content.setAttribute("data-bc-level", "");
+    content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
-    innerUl.classList.add("submenu");
     this.createMenu(innerUl, node.nodes);
-    li.appendChild(child);
+    li.appendChild(content);
     li.appendChild(innerUl);
     return li;
   }
@@ -81,8 +75,6 @@ export default class MenuComponent extends BasisPanelChildComponent {
   private createPageMenuItem(node: IMenuPageInfo): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
-    content.classList.add("white_text");
-    content.classList.add("open_menu");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
@@ -91,14 +83,10 @@ export default class MenuComponent extends BasisPanelChildComponent {
 
   private createExternalMenuItem(node: IMenuExternalItemInfo): HTMLLIElement {
     const li = document.createElement("li");
-    li.classList.add("level1_menu");
     const content = document.createElement("a");
-    content.classList.add("white_text");
-    content.classList.add("open_menu");
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");
-    ul.classList.add("submenu");
     li.appendChild(ul);
     const formatter = new Function("rKey", "profile", `return \`${node.url}\``);
     HttpUtil.getDataAsync<IMenuInfo>(
