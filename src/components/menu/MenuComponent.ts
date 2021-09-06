@@ -6,10 +6,13 @@ import "./assets/style.css";
 import { DefaultSource } from "../../type-alias";
 import MenuCache from "./MenuCache";
 import { IMenuLoaderParam } from "./IMenuInfo";
+import Menu from "./Menu";
+import { menu } from "../../ComponentLoader";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   readonly ul: HTMLUListElement;
   private cache: MenuCache;
+  private current: Menu;
   constructor(owner: IUserDefineComponent) {
     super(owner, html, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
@@ -22,14 +25,17 @@ export default class MenuComponent extends BasisPanelChildComponent {
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
-      console.log(source.rows);
       await this.loadDataAsync(source.rows[0]);
     }
   }
 
   public async loadDataAsync(menuParam: IMenuLoaderParam): Promise<void> {
-    this.ul.innerHTML = "";
-    const menuData = await this.cache.loadMenuAsync(menuParam);
-    this.ul.append(...menuData);
+    const newMenu = await this.cache.loadMenuAsync(menuParam);
+    if (this.current != newMenu) {
+      this.current = newMenu;
+      console.log("menu update", menuParam);
+      this.ul.innerHTML = "";
+      this.ul.append(...this.current.nodes);
+    }
   }
 }

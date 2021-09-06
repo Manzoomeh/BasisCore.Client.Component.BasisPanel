@@ -5,7 +5,9 @@ import IMenuInfo, {
   IMenuPageInfo,
   IMenuExternalItemInfo,
   IMenuItemInfo,
+  IMenuLoaderParam,
 } from "./IMenuInfo";
+import Menu from "./Menu";
 
 export default class MenuMaker {
   private readonly rKey: string;
@@ -15,10 +17,10 @@ export default class MenuMaker {
     this.profile = profile;
   }
 
-  public create(menu: IMenuInfo): Array<Node> {
+  public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): Menu {
     const tmpUL = document.createElement("ul");
-    this.createMenu(tmpUL, menu.nodes);
-    return Array.from(tmpUL.childNodes);
+    this.createMenu(tmpUL, menuInfo.nodes);
+    return new Menu(menuParam, Array.from(tmpUL.childNodes));
   }
 
   private createMenu(ul: HTMLUListElement, items: Array<IMenuItemInfo>) {

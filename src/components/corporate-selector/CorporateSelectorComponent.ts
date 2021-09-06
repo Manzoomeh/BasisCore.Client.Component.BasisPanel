@@ -41,7 +41,6 @@ export default class CorporateSelectorComponent extends BasisPanelChildComponent
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
         this.profile = source.rows[0];
-        await this.loadCorporateAsync();
         break;
       }
       case DefaultSource.USER_INFO_SOURCE: {
