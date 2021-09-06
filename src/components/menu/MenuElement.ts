@@ -1,6 +1,6 @@
 import { IMenuLoaderParam } from "./IMenuInfo";
 
-export default class Menu {
+export default class MenuElement {
   readonly nodes: Array<Node>;
   readonly key: number;
   readonly type: string;

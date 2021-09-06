@@ -1,3 +1,4 @@
+import { IDictionary } from "../../type-alias";
 import IProfileInfo from "../accounting/IProfileInfo";
 
 export default interface IMenuInfo {
@@ -28,4 +29,5 @@ export interface IMenuLoaderParam {
   profile: IProfileInfo;
   rawUrl: string;
   rKey: string;
+  extra?: IDictionary<string>;
 }

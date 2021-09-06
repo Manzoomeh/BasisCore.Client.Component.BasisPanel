@@ -1,78 +1,32 @@
-import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import HttpUtil from "../../HttpUtil";
 import { DefaultSource } from "../../type-alias";
-import IProfileInfo from "../accounting/IProfileInfo";
-import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import { IMenuLoaderParam } from "../menu/IMenuInfo";
+import EntitySelectorComponent from "../EntitySelectorComponent";
 import html from "./assets/layout.html";
 import "./assets/style.css";
-import ICorporateInfo from "./ICorporateInfo";
 
-export default class CorporateSelectorComponent extends BasisPanelChildComponent {
-  private profile: IProfileInfo;
-  private element: HTMLOptionElement;
+export default class CorporateSelectorComponent extends EntitySelectorComponent {
   private dataLoaded = false;
+
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-corporate-container");
+    super(owner, html, "corporate");
   }
 
-  public initializeAsync(): void | Promise<void> {
-    this.element = this.container.querySelector<HTMLOptionElement>(
-      "[data-bc-main-list]"
-    );
-    this.element.addEventListener("click", async (e) => {
-      if (!this.dataLoaded) {
-        e.preventDefault();
-        await this.loadCorporateAsync();
-        this.dataLoaded = true;
-      }
-    });
-
-    this.element.addEventListener("change", (e) => {
-      e.preventDefault();
-      console.log(this.element.value);
-      this.signalToDisplayMenu();
-    });
-    this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
+  protected getSourceId(): string {
+    return DefaultSource.CORPORATE_SOURCE;
   }
 
-  public async runAsync(source?: ISource) {
-    switch (source?.id) {
-      case DefaultSource.USER_INFO_SOURCE: {
-        this.profile = source.rows[0];
-        break;
-      }
-      case DefaultSource.USER_INFO_SOURCE: {
-        this.profile = source.rows[0];
-        break;
-      }
-    }
-    return true;
+  protected getMenuUrl(): string {
+    return this.options.corporateMenuUrl;
   }
 
-  private async loadCorporateAsync() {
-    const corporateList = await HttpUtil.formatAndGetDataAsync<
-      Array<ICorporateInfo>
-    >(this.options.corporateUrl, this.options.rKey, this.profile);
-    corporateList.forEach((item) => {
-      const option = document.createElement("option");
-      option.value = item.id.toString();
-      option.text = item.title;
-      this.element.appendChild(option);
-    });
+  protected getListUrl(): string {
+    return this.options.corporateUrl;
   }
 
-  private signalToDisplayMenu() {
-    if (this.profile) {
-      const menuInfo: IMenuLoaderParam = {
-        type: "corporate",
-        key: parseInt(this.element.value),
-        profile: this.profile,
-        rawUrl: this.options.corporateMenuUrl,
-        rKey: this.options.rKey,
-      };
-      this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
+  protected async fillComboAsync() {
+    if (!this.dataLoaded) {
+      await super.fillComboAsync();
+      this.dataLoaded = true;
     }
   }
 }

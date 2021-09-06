@@ -1,4 +1,3 @@
-export default interface ICorporateInfo {
-  id: number;
-  title: string;
-}
+import { IEntityInfo } from "../EntitySelectorComponent";
+
+export default interface ICorporateInfo extends IEntityInfo {}

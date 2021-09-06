@@ -4,19 +4,19 @@ import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import html from "./assets/layout.html";
 import "./assets/style.css";
 import { DefaultSource } from "../../type-alias";
-import MenuCache from "./MenuCache";
+import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
-import Menu from "./Menu";
+import MenuElement from "./MenuElement";
 import { menu } from "../../ComponentLoader";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   readonly ul: HTMLUListElement;
-  private cache: MenuCache;
-  private current: Menu;
+  private cache: MenuCacheManager;
+  private current: MenuElement;
   constructor(owner: IUserDefineComponent) {
     super(owner, html, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
-    this.cache = new MenuCache();
+    this.cache = new MenuCacheManager();
   }
 
   public initializeAsync(): void | Promise<void> {

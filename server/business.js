@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const hosts = [
+const businesses = [
   {
     id: 4312,
     title: "Bisko.ir",
@@ -105,7 +105,30 @@ const hosts = [
 ];
 router.get("/:rKey/list/:id", function (req, res) {
   const id = parseInt(req.params.id);
-  res.json(hosts.filter((x) => x.ownerid === id));
+  res.json(businesses.filter((x) => x.ownerid === id));
+});
+
+router.get("/:rKey/menu/:id", function (req, res) {
+  const i = parseInt(req.params.id);
+  const business = businesses.find((x) => x.id == i);
+  const result = {
+    nodes: [
+      {
+        title: `منوی کسب و کار ${business.title}`,
+        nodes: [
+          {
+            title: `زیر منوی اول کسب و کار ${business.title}`,
+            pid: i * 100 + 1,
+          },
+          {
+            title: `زیر منوی دوم کسب و کار ${business.title}`,
+            pid: i * 100 + 2,
+          },
+        ],
+      },
+    ],
+  };
+  res.json(result);
 });
 
 module.exports = router;

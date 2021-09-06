@@ -5,4 +5,6 @@ export default interface IBasisPanelOptions {
   profileMenuUrl: string;
   corporateUrl: string;
   corporateMenuUrl: string;
+  businessUrl: string;
+  businessMenuUrl: string;
 }

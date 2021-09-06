@@ -1,287 +1,85 @@
 const express = require("express");
 const router = express.Router();
-
-const hosts = [
+const corporates = [
   {
-    ownerid: 8956,
-    businesses: [],
+    id: 8956,
+    title: "Avasys",
   },
   {
-    ownerid: 20,
-    businesses: [],
+    id: 20,
+    title: "BasisDocs",
   },
   {
-    ownerid: 8844,
-    businesses: [],
+    id: 8844,
+    title: "BHK",
   },
   {
-    ownerid: 7660,
-    businesses: [
-      {
-        dmn_id: 4312,
-        domain: "Bisko.ir",
-      },
-    ],
+    id: 7660,
+    title: "Bisko",
   },
   {
-    ownerid: 8935,
-    businesses: [],
+    id: 8935,
+    title: "BROTHER",
   },
   {
-    ownerid: 7,
-    businesses: [
-      {
-        dmn_id: 3460,
-        domain: "manzoomehnet.ir",
-      },
-      {
-        dmn_id: 3461,
-        domain: "www.namayeshgah.ir",
-      },
-    ],
+    id: 7,
+    title: "manzoomehnet.ir",
   },
   {
-    ownerid: 5,
-    businesses: [
-      {
-        dmn_id: 5,
-        domain: "seller.ir",
-      },
-    ],
+    id: 5,
+    title: "Seller.ir",
   },
   {
-    ownerid: 8327,
-    businesses: [
-      {
-        dmn_id: 3842,
-        domain: "abashimi.com",
-      },
-    ],
+    id: 8327,
+    title: "آبا-شیمی",
   },
   {
-    ownerid: 8898,
-    businesses: [
-      {
-        dmn_id: 3715,
-        domain: "abineseir.com",
-      },
-    ],
+    id: 8898,
+    title: "آبینه-سیر-آبشار",
   },
   {
-    ownerid: 8478,
-    businesses: [
-      {
-        dmn_id: 3973,
-        domain: "arttechnical-co.com",
-      },
-      {
-        dmn_id: 3974,
-        domain: "arttechnical.ir",
-      },
-    ],
+    id: 8478,
+    title: "آرت-تکنیکال",
   },
   {
-    ownerid: 1,
-    businesses: [
-      {
-        dmn_id: 7,
-        domain: "basiscore.com",
-      },
-      {
-        dmn_id: 9,
-        domain: "iranact.com",
-      },
-      {
-        dmn_id: 19,
-        domain: "basisevent.com",
-      },
-      {
-        dmn_id: 2668,
-        domain: "school.basiscore.com",
-      },
-      {
-        dmn_id: 2893,
-        domain: "manzoomeh.ir",
-      },
-      {
-        dmn_id: 3241,
-        domain: "basiscore.ir",
-      },
-    ],
+    id: 1,
+    title: "منظومه نگاران",
   },
   {
-    ownerid: 8625,
-    businesses: [
-      {
-        dmn_id: 2933,
-        domain: "old",
-      },
-      {
-        dmn_id: 3565,
-        domain: "mehrsunDelete",
-      },
-      {
-        dmn_id: 4222,
-        domain: "mehrsunnovin.com",
-      },
-    ],
+    id: 8625,
+    title: "مهرسان-نوین",
   },
   {
-    ownerid: 8282,
-    businesses: [],
+    id: 8282,
+    title: "مهرستا",
   },
   {
-    ownerid: 8479,
-    businesses: [
-      {
-        dmn_id: 4042,
-        domain: "mackesh-dahesh.ir",
-      },
-      {
-        dmn_id: 4086,
-        domain: "mackesh-dahesh.com",
-      },
-    ],
+    id: 8479,
+    title: "مکش-و-دهش",
   },
   {
-    ownerid: 8355,
-    businesses: [
-      {
-        dmn_id: 2607,
-        domain: "mitragasht.com",
-      },
-    ],
+    id: 8355,
+    title: "میترا-گشت",
   },
 ];
 router.get("/:rKey/list", function (req, res) {
-  const result = [
-    {
-      id: 8956,
-      title: "Avasys",
-    },
-    {
-      id: 20,
-      title: "BasisDocs",
-    },
-    {
-      id: 8844,
-      title: "BHK",
-    },
-    {
-      id: 7660,
-      title: "Bisko",
-    },
-    {
-      id: 8935,
-      title: "BROTHER",
-    },
-    {
-      id: 7,
-      title: "manzoomehnet.ir",
-    },
-    {
-      id: 5,
-      title: "Seller.ir",
-    },
-    {
-      id: 8327,
-      title: "آبا-شیمی",
-    },
-    {
-      id: 8898,
-      title: "آبینه-سیر-آبشار",
-    },
-    {
-      id: 8478,
-      title: "آرت-تکنیکال",
-    },
-    {
-      id: 1,
-      title: "منظومه نگاران",
-    },
-    {
-      id: 8625,
-      title: "مهرسان-نوین",
-    },
-    {
-      id: 8282,
-      title: "مهرستا",
-    },
-    {
-      id: 8479,
-      title: "مکش-و-دهش",
-    },
-    {
-      id: 8355,
-      title: "میترا-گشت",
-    },
-  ];
-  res.json(result);
+  res.json(corporates);
 });
 
-router.get("/:rKey/list", function (req, res) {
-  const result = [
-    {
-      id: 8956,
-      title: "Avasys",
-    },
-    {
-      id: 20,
-      title: "BasisDocs",
-    },
-    {
-      id: 8844,
-      title: "BHK",
-    },
-    {
-      id: 7660,
-      title: "Bisko",
-    },
-    {
-      id: 8935,
-      title: "BROTHER",
-    },
-    {
-      id: 7,
-      title: "manzoomehnet.ir",
-    },
-    {
-      id: 5,
-      title: "Seller.ir",
-    },
-    {
-      id: 8327,
-      title: "آبا-شیمی",
-    },
-    {
-      id: 8898,
-      title: "آبینه-سیر-آبشار",
-    },
-    {
-      id: 8478,
-      title: "آرت-تکنیکال",
-    },
-    {
-      id: 1,
-      title: "منظومه نگاران",
-    },
-    {
-      id: 8625,
-      title: "مهرسان-نوین",
-    },
-    {
-      id: 8282,
-      title: "مهرستا",
-    },
-    {
-      id: 8479,
-      title: "مکش-و-دهش",
-    },
-    {
-      id: 8355,
-      title: "میترا-گشت",
-    },
-  ];
+router.get("/:rKey/menu/:id", function (req, res) {
+  const i = parseInt(req.params.id);
+  const corporate = corporates.find((x) => x.id == i);
+  const result = {
+    nodes: [
+      {
+        title: `منوی شرکت ${corporate.title}`,
+        nodes: [
+          { title: `زیر منوی اول شرکت ${corporate.title}`, pid: i * 100 + 1 },
+          { title: `زیر منوی دوم شرکت ${corporate.title}`, pid: i * 100 + 2 },
+        ],
+      },
+    ],
+  };
   res.json(result);
 });
 module.exports = router;
