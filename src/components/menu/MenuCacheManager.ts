@@ -1,5 +1,6 @@
 import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
+import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
 import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
@@ -23,19 +24,8 @@ export default class MenuCacheManager {
 class MenuCacheItem {
   private cache = new Map<number, MenuElement>();
   private menuMaker: MenuElementMaker;
-  private readonly formatter: (
-    rKey: string,
-    profile: IProfileInfo,
-    key: number
-  ) => string;
   constructor(menuParam: IMenuLoaderParam) {
     this.menuMaker = new MenuElementMaker(menuParam.rKey, menuParam.profile);
-    this.formatter = new Function(
-      "rKey",
-      "profile",
-      "key",
-      `return \`${menuParam.rawUrl}\``
-    ) as any;
   }
 
   public async loadMenuAsync(
@@ -43,9 +33,10 @@ class MenuCacheItem {
   ): Promise<MenuElement> {
     let menu = this.cache.get(menuParam.key);
     if (!menu) {
-      const menuData = await HttpUtil.getDataAsync<IMenuInfo>(
-        this.formatter(menuParam.rKey, menuParam.profile, menuParam.key)
-      );
+      const url = HttpUtil.formatString(menuParam.rawUrl, {
+        rKey: menuParam.rKey,
+      });
+      const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
       menu = this.menuMaker.create(menuData, menuParam);
       this.cache.set(menuParam.key, menu);
     }

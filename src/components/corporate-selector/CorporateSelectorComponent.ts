@@ -16,11 +16,11 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
   }
 
   protected getMenuUrl(): string {
-    return this.options.corporateMenuUrl;
+    return `${this.options.baseUrl.corporate}${this.options.method.menu}`;
   }
 
   protected getListUrl(): string {
-    return this.options.corporateUrl;
+    return this.options.dataUrl.corporate;
   }
 
   protected async fillComboAsync() {

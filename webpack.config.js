@@ -3,6 +3,9 @@ const CircularDependencyPlugin = require("circular-dependency-plugin");
 const trustHttpServer = require("./server/trust-login");
 const corporateHttpServer = require("./server/corporate");
 const businessHttpServer = require("./server/business");
+const { router: activeManagerHttpServer } = require("./server/active-manager");
+const externalMenuHttpServer = require("./server/external-menu");
+//const router = require("./server/trust-login");
 
 module.exports = {
   entry: {
@@ -29,6 +32,8 @@ module.exports = {
       server.app.use("/server/trust", trustHttpServer);
       server.app.use("/server/corporate", corporateHttpServer);
       server.app.use("/server/business", businessHttpServer);
+      server.app.use("/server/active", activeManagerHttpServer);
+      server.app.use("/server/external", externalMenuHttpServer);
     },
     open: true,
   },

@@ -30,4 +30,5 @@ export interface IMenuLoaderParam {
   rawUrl: string;
   rKey: string;
   extra?: IDictionary<string>;
+  menuMethod: string;
 }

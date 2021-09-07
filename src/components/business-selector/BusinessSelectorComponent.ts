@@ -18,11 +18,11 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
   }
 
   protected getMenuUrl(): string {
-    return this.options.businessMenuUrl;
+    return `${this.options.baseUrl.business}${this.options.method.menu}`;
   }
 
   protected getListUrl(): string {
-    return this.options.businessUrl;
+    return this.options.dataUrl.business;
   }
 
   protected getSourceId(): string {
@@ -38,21 +38,15 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     switch (source?.id) {
       case DefaultSource.CORPORATE_SOURCE: {
         this.currentCorporate = source.rows[0];
-        if (this.cache.has(this.currentCorporate.id)) {
-          await this.fillComboAsync();
-        } else {
-          this.clearCombo();
-        }
+        this.mustReload = true;
+        // if (this.cache.has(this.currentCorporate.id)) {
+        //   await this.fillComboAsync();
+        // }
+        this.clearCombo();
         break;
       }
     }
     return super.runAsync(source);
-  }
-
-  protected getExtraData(): any {
-    return this.currentCorporate
-      ? { corporate: this.currentCorporate.id }
-      : null;
   }
 
   protected async getEntitiesAsync(): Promise<Array<IEntityInfo>> {

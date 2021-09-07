@@ -1,3 +1,5 @@
+var fs = require("fs");
+const path = require("path");
 var express = require("express");
 var router = express.Router();
 
@@ -27,6 +29,19 @@ router.get("/:rKey/profile", function (req, res) {
   res.json(result);
 });
 
+router.get("/:rKey/users/:file", function (req, res) {
+  const type = "image/png";
+  const s = fs.createReadStream(path.join(__dirname, `${req.params.file}.png`));
+  s.on("open", function () {
+    res.set("Content-Type", type);
+    s.pipe(res);
+  });
+  s.on("error", function () {
+    res.set("Content-Type", "text/plain");
+    res.status(404).end("Not found");
+  });
+});
+
 router.get("/:rKey/menu", function (req, res) {
   //console.log("menu", req.params);
   const result = {
@@ -47,40 +62,13 @@ router.get("/:rKey/menu", function (req, res) {
         mid: 2,
         title: "Ticketing",
         multi: true,
-        url: "/server/trust/${rKey}/external-menu/calender",
+        url: "/server/external/calender",
       },
       {
         mid: 4,
         title: "TaskManager",
         multi: false,
-        url: "/server/trust/${rKey}/external-menu/task",
-      },
-    ],
-  };
-  res.json(result);
-});
-
-router.get("/:rKey/external-menu/calender", function (req, res) {
-  const result = {
-    nodes: [
-      {
-        title: "مدیریت پیام ها",
-        nodes: [
-          { title: "لیست پیام ها", pid: 11 },
-          { title: "مدیریت برچسب ها", pid: 13 },
-        ],
-      },
-    ],
-  };
-  res.json(result);
-});
-
-router.get("/:rKey/external-menu/task", function (req, res) {
-  const result = {
-    nodes: [
-      {
-        title: "مدیریت تسک",
-        pid: "19",
+        url: "/server/external/task",
       },
     ],
   };

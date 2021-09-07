@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const corporates = [
+const { active } = require("./active-manager");
+
+const corporateList = [
   {
     id: 8956,
     title: "Avasys",
@@ -63,23 +65,24 @@ const corporates = [
   },
 ];
 router.get("/:rKey/list", function (req, res) {
-  res.json(corporates);
+  res.json(corporateList);
 });
 
-router.get("/:rKey/menu/:id", function (req, res) {
-  const i = parseInt(req.params.id);
-  const corporate = corporates.find((x) => x.id == i);
-  const result = {
-    nodes: [
-      {
-        title: `منوی شرکت ${corporate.title}`,
-        nodes: [
-          { title: `زیر منوی اول شرکت ${corporate.title}`, pid: i * 100 + 1 },
-          { title: `زیر منوی دوم شرکت ${corporate.title}`, pid: i * 100 + 2 },
-        ],
-      },
-    ],
-  };
+router.get("/:rKey/menu", function (req, res) {
+  const corporate = corporateList.find((x) => x.id == active.corporate);
+  const result = { nodes: [] };
+  if (corporate) {
+    result.nodes.push({
+      title: `منوی شرکت ${corporate.title}`,
+      nodes: [
+        { title: `زیر منوی اول شرکت ${corporate.title}`, pid: corporate.id },
+        {
+          title: `زیر منوی دوم شرکت ${corporate.title}`,
+          pid: corporate.id,
+        },
+      ],
+    });
+  }
   res.json(result);
 });
 module.exports = router;

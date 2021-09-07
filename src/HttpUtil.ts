@@ -7,9 +7,17 @@ export default class HttpUtil {
   }
   static async fetchDataAsync<T>(
     url: string,
-    method: "POST" | "GET"
+    method: "POST" | "GET",
+    data?: any
   ): Promise<T> {
-    const result = await fetch(url, { method: method });
+    const init: RequestInit = { method: method };
+    if (data) {
+      init.headers = {
+        "Content-Type": "application/json",
+      };
+      init.body = JSON.stringify(data);
+    }
+    const result = await fetch(url, init);
     return await result.json();
   }
 
@@ -36,5 +44,11 @@ export default class HttpUtil {
     }
 
     return retVal;
+  }
+
+  static formatString(string: string, params: IDictionary<string>): string {
+    const paraNameList = [...Object.getOwnPropertyNames(params)];
+    const formatter = new Function(...paraNameList, `return \`${string}\``);
+    return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
   }
 }

@@ -15,14 +15,24 @@
       settings: {
         "basispanel.option": {
           rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
-          accountingUrl: "/server/trust/${rKey}/profile",
-          profileMenuUrl: "/server/trust/${rKey}/menu",
-          profileImageUrl:
-            "https://trust-login.com/${rKey}/users/${profile.thumbnail}",
-          corporateUrl: "/server/corporate/${rKey}/list",
-          corporateMenuUrl: "/server/corporate/${rKey}/menu/${key}",
-          businessUrl: "/server/business/${rKey}/list/${corporate}",
-          businessMenuUrl: "/server/business/${rKey}/menu/${key}",
+          baseUrl: {
+            user: "/server/trust",
+            corporate: "/server/corporate",
+            business: "/server/business",
+            active: "/server/active/${rKey}/set-active",
+          },
+          dataUrl: {
+            user: "/server/trust/${rKey}/profile",
+            corporate: "/server/corporate/${rKey}/list",
+            business: "/server/business/${rKey}/list"
+          },
+          method: {
+            userImage: "/${rKey}/users/${profile.thumbnail}",
+            menu: "/${rKey}/menu",
+            page: "/${rKey}/page/${pId}",
+
+
+          },
         },
       },
       repositories: {

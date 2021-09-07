@@ -1,5 +1,6 @@
 import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
+import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
 import IMenuInfo, {
   IMenuLevelInfo,
   IMenuPageInfo,
@@ -19,30 +20,39 @@ export default class MenuElementMaker {
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
     const tmpUL = document.createElement("ul");
-    this.createMenu(tmpUL, menuInfo.nodes);
+    this.createMenu(tmpUL, menuInfo.nodes, menuParam);
     return new MenuElement(menuParam, Array.from(tmpUL.childNodes));
   }
 
-  private createMenu(ul: HTMLUListElement, items: Array<IMenuItemInfo>) {
+  private createMenu(
+    ul: HTMLUListElement,
+    items: Array<IMenuItemInfo>,
+    menuParam: IMenuLoaderParam
+  ) {
     items.forEach((node) => {
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo));
       } else if ((node as IMenuLevelInfo).nodes) {
-        ul.appendChild(this.createLevelMenuItem(node as IMenuLevelInfo));
+        ul.appendChild(
+          this.createLevelMenuItem(node as IMenuLevelInfo, menuParam)
+        );
       } else if ((node as IMenuExternalItemInfo).mid) {
         ul.appendChild(
-          this.createExternalMenuItem(node as IMenuExternalItemInfo)
+          this.createExternalMenuItem(node as IMenuExternalItemInfo, menuParam)
         );
       }
     });
   }
-  private createLevelMenuItem(node: IMenuLevelInfo): HTMLLIElement {
+  private createLevelMenuItem(
+    node: IMenuLevelInfo,
+    menuParam: IMenuLoaderParam
+  ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
-    this.createMenu(innerUl, node.nodes);
+    this.createMenu(innerUl, node.nodes, menuParam);
     li.appendChild(content);
     li.appendChild(innerUl);
     return li;
@@ -57,16 +67,21 @@ export default class MenuElementMaker {
     return li;
   }
 
-  private createExternalMenuItem(node: IMenuExternalItemInfo): HTMLLIElement {
+  private createExternalMenuItem(
+    node: IMenuExternalItemInfo,
+    menuParam: IMenuLoaderParam
+  ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");
     li.appendChild(ul);
-    const formatter = new Function("rKey", "profile", `return \`${node.url}\``);
-    HttpUtil.getDataAsync<IMenuInfo>(formatter(this.rKey, this.profile)).then(
-      (menu) => this.createMenu(ul, menu.nodes)
+    const url = HttpUtil.formatString(`${node.url}${menuParam.menuMethod}`, {
+      rKey: this.rKey,
+    });
+    HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
+      this.createMenu(ul, menu.nodes, menuParam)
     );
     return li;
   }

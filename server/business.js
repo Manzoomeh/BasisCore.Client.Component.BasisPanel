@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { active } = require("./active-manager");
 
-const businesses = [
+const businessList = [
   {
     id: 4312,
     title: "Bisko.ir",
@@ -103,31 +104,29 @@ const businesses = [
     ownerid: 8355,
   },
 ];
-router.get("/:rKey/list/:id", function (req, res) {
-  const id = parseInt(req.params.id);
-  res.json(businesses.filter((x) => x.ownerid === id));
+router.get("/:rKey/list", function (req, res) {
+  const business = businessList.filter((x) => x.ownerid == active.corporate);
+  res.json(business);
 });
 
-router.get("/:rKey/menu/:id", function (req, res) {
-  const i = parseInt(req.params.id);
-  const business = businesses.find((x) => x.id == i);
-  const result = {
-    nodes: [
-      {
-        title: `منوی کسب و کار ${business.title}`,
-        nodes: [
-          {
-            title: `زیر منوی اول کسب و کار ${business.title}`,
-            pid: i * 100 + 1,
-          },
-          {
-            title: `زیر منوی دوم کسب و کار ${business.title}`,
-            pid: i * 100 + 2,
-          },
-        ],
-      },
-    ],
-  };
+router.get("/:rKey/menu", function (req, res) {
+  const business = businessList.find((x) => x.id == active.business);
+  const result = { nodes: [] };
+  if (business) {
+    result.nodes.push({
+      title: `منوی کسب و کار ${business.title}`,
+      nodes: [
+        {
+          title: `زیر منوی اول کسب و کار ${business.title}`,
+          pid: business.id,
+        },
+        {
+          title: `زیر منوی دوم کسب و کار ${business.title}`,
+          pid: business.id + 1,
+        },
+      ],
+    });
+  }
   res.json(result);
 });
 

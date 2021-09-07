@@ -30,7 +30,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
   public async loadDataAsync(): Promise<void> {
     const urlFormatter = new Function(
       "rKey",
-      `return \`${this.options.accountingUrl}\``
+      `return \`${this.options.dataUrl.user}\``
     );
     const questions = await HttpUtil.getDataAsync<Array<IQuestionItem>>(
       urlFormatter(this.options.rKey)
@@ -47,8 +47,9 @@ export default class AccountingComponent extends BasisPanelChildComponent {
         type: "profile",
         key: 0,
         profile: this.profile,
-        rawUrl: this.options.profileMenuUrl,
+        rawUrl: `${this.options.baseUrl.user}${this.options.method.menu}`,
         rKey: this.options.rKey,
+        menuMethod: this.options.method.menu,
       };
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
     }
@@ -62,7 +63,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     const fn = new Function(
       "rKey",
       "profile",
-      `return \`${this.options.profileImageUrl}\``
+      `return \`${`${this.options.baseUrl.user}${this.options.method.userImage}`}\``
     );
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
       fn(this.options.rKey, this.profile);

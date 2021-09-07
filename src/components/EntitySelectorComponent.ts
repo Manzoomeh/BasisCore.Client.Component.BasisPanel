@@ -13,6 +13,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private entityType: string;
   private entityList: Array<IEntityInfo>;
 
+  protected mustReload = true;
+
   constructor(owner: IUserDefineComponent, html: string, entityType: string) {
     super(owner, html, `data-bc-bp-${entityType}-container`);
     this.entityType = entityType;
@@ -33,15 +35,34 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       "[data-bc-main-list]"
     );
     this.element.addEventListener("click", async (e) => {
-      await this.fillComboAsync();
+      if (this.mustReload) {
+        this.mustReload = false;
+        await this.fillComboAsync();
+      }
     });
-    this.element.addEventListener("change", (e) => {
+    this.element.addEventListener("change", async (e) => {
       e.preventDefault();
       const id = parseInt(this.element.value);
       const entity = this.entityList.find((x) => x.id == id);
-      console.log(`${this.entityType} change`, entity);
-      this.owner.setSource(this.getSourceId(), entity);
-      this.signalToDisplayMenu();
+      //console.log(`${this.entityType} change`, entity);
+      this.owner.setSource(this.getSourceId(), entity ?? {});
+
+      if (this.profile) {
+        if (entity) {
+          const url = HttpUtil.formatString(this.options.baseUrl.active, {
+            rKey: this.options.rKey,
+          });
+          const result = await HttpUtil.fetchDataAsync(url, "POST", {
+            type: this.entityType,
+            id: id,
+          });
+          console.log(result);
+          this.owner.setSource(
+            DefaultSource.SHOW_MENU,
+            this.createMenuLoaderParam()
+          );
+        }
+      }
     });
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
@@ -67,6 +88,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected async fillComboAsync() {
     this.entityList = await this.getEntitiesAsync();
     this.clearCombo();
+    const option = document.createElement("option");
+    option.text = "";
+    this.element.appendChild(option);
     this.entityList.forEach((item) => {
       const option = document.createElement("option");
       option.value = item.id.toString();
@@ -86,16 +110,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       profile: this.profile,
       rawUrl: this.getMenuUrl(),
       rKey: this.options.rKey,
+      menuMethod: this.options.method.menu,
     };
     return menuParam;
-  }
-  private signalToDisplayMenu() {
-    if (this.profile) {
-      this.owner.setSource(
-        DefaultSource.SHOW_MENU,
-        this.createMenuLoaderParam()
-      );
-    }
   }
 }
 

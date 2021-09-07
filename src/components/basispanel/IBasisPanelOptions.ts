@@ -1,10 +1,23 @@
 export default interface IBasisPanelOptions {
   rKey: string;
-  accountingUrl: string;
-  profileImageUrl: string;
-  profileMenuUrl: string;
-  corporateUrl: string;
-  corporateMenuUrl: string;
-  businessUrl: string;
-  businessMenuUrl: string;
+  baseUrl: IPanelPartUrlOptions;
+  dataUrl: IUrlCollectionOption;
+  method: IPanelPartMethodOptions;
+}
+
+interface IUrlCollectionOption {
+  user: string;
+  corporate: string;
+  business: string;
+}
+interface IPanelPartUrlOptions extends IUrlCollectionOption {
+  active: string;
+}
+
+interface IPanelPartMethodOptions {
+  userImage: string;
+  menu: string;
+  page: string;
+  activeCorporate: string;
+  activeBusiness: string;
 }

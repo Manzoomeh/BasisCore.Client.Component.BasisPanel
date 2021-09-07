@@ -40,7 +40,7 @@ export default class MenuComponent extends BasisPanelChildComponent {
     const newMenu = await this.cache.loadMenuAsync(menuParam);
     if (this.current != newMenu) {
       this.current = newMenu;
-      console.log("menu update", menuParam);
+      //console.log("menu update", menuParam);
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
     }
