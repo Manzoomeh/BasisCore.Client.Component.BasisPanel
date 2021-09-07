@@ -17,6 +17,13 @@ export default class MenuComponent extends BasisPanelChildComponent {
     super(owner, html, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
     this.cache = new MenuCacheManager();
+    this.ul.addEventListener("click", (e) => {
+      const pid = (e.target as Element)?.getAttribute("data-bc-pid");
+      if (pid) {
+        e.preventDefault();
+        this.displayPage(parseInt(pid));
+      }
+    });
   }
 
   public initializeAsync(): void | Promise<void> {
@@ -37,5 +44,9 @@ export default class MenuComponent extends BasisPanelChildComponent {
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
     }
+  }
+
+  private displayPage(pid: number) {
+    console.log(this.current, pid);
   }
 }

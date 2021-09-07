@@ -9,6 +9,7 @@ export class DefaultSource {
   static readonly SHOW_MENU = "basispanel.show_menu";
   static readonly CORPORATE_SOURCE = "basispanel.corporate";
   static readonly BUSINESS_SOURCE = "basispanel.business";
+  static readonly DISPLAY_PAGE = "basispanel.display_page";
 }
 
 export interface IDictionary<TValue> {
