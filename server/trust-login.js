@@ -75,4 +75,13 @@ router.get("/:rKey/menu", function (req, res) {
   res.json(result);
 });
 
+router.get("/:rKey/page/:pageId", function (req, res) {
+  const widgetList = fs.readFileSync(
+    path.join(__dirname, "pages/widget-list.json"),
+    {
+      encoding: "utf8",
+    }
+  );
+  res.json(JSON.parse(widgetList));
+});
 module.exports = router;

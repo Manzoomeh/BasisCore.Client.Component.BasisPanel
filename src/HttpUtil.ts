@@ -46,7 +46,10 @@ export default class HttpUtil {
     return retVal;
   }
 
-  static formatString(string: string, params: IDictionary<string>): string {
+  static formatString(
+    string: string,
+    params: IDictionary<string> | any
+  ): string {
     const paraNameList = [...Object.getOwnPropertyNames(params)];
     const formatter = new Function(...paraNameList, `return \`${string}\``);
     return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
