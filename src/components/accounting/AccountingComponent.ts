@@ -44,10 +44,10 @@ export default class AccountingComponent extends BasisPanelChildComponent {
   private signalToDisplayMenu() {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
-        type: "profile",
-        key: 0,
+        owner: "profile",
+        ownerId: 0,
         profile: this.profile,
-        rawUrl: `${this.options.baseUrl.user}${this.options.method.menu}`,
+        ownerUrl: this.options.baseUrl.user,
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,
       };

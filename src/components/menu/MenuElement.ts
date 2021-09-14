@@ -1,13 +1,12 @@
+import { MenuOwnerType } from "../../type-alias";
 import { IMenuLoaderParam } from "./IMenuInfo";
 
 export default class MenuElement {
   readonly nodes: Array<Node>;
-  readonly key: number;
-  readonly type: string;
+  readonly param: IMenuLoaderParam;
 
-  constructor(menuParam: IMenuLoaderParam, nodes: Array<Node>) {
+  constructor(param: IMenuLoaderParam, nodes: Array<Node>) {
     this.nodes = nodes;
-    this.type = menuParam.type;
-    this.key = menuParam.key;
+    this.param = param;
   }
 }

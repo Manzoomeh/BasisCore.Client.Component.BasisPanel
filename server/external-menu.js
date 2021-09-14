@@ -21,7 +21,7 @@ router.get("/task/:rKey/menu", function (req, res) {
     nodes: [
       {
         title: "مدیریت تسک",
-        pid: "19",
+        pid: 19,
       },
     ],
   };

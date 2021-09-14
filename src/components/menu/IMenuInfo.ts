@@ -1,5 +1,4 @@
-import { IDictionary } from "../../type-alias";
-import IProfileInfo from "../accounting/IProfileInfo";
+import { ILoaderParam } from "../../type-alias";
 
 export default interface IMenuInfo {
   nodes: Array<IMenuItemInfo>;
@@ -23,12 +22,6 @@ export interface IMenuPageInfo extends IMenuItemInfo {
   pid: number;
 }
 
-export interface IMenuLoaderParam {
-  type: string;
-  key: number;
-  profile: IProfileInfo;
-  rawUrl: string;
-  rKey: string;
-  extra?: IDictionary<string>;
+export interface IMenuLoaderParam extends ILoaderParam {
   menuMethod: string;
 }

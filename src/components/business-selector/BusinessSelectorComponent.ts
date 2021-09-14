@@ -17,8 +17,8 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     this.cache = new Map<number, Array<IEntityInfo>>();
   }
 
-  protected getMenuUrl(): string {
-    return `${this.options.baseUrl.business}${this.options.method.menu}`;
+  protected getOwnerUrl(): string {
+    return this.options.baseUrl.business;
   }
 
   protected getListUrl(): string {

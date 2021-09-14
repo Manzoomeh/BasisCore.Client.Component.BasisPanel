@@ -118,11 +118,11 @@ router.get("/:rKey/menu", function (req, res) {
       nodes: [
         {
           title: `زیر منوی اول کسب و کار ${business.title}`,
-          pid: business.id,
+          pid: business.id * 3,
         },
         {
           title: `زیر منوی دوم کسب و کار ${business.title}`,
-          pid: business.id + 1,
+          pid: business.id * 4,
         },
       ],
     });

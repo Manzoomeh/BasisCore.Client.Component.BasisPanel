@@ -75,10 +75,13 @@ router.get("/:rKey/menu", function (req, res) {
     result.nodes.push({
       title: `منوی شرکت ${corporate.title}`,
       nodes: [
-        { title: `زیر منوی اول شرکت ${corporate.title}`, pid: corporate.id },
+        {
+          title: `زیر منوی اول شرکت ${corporate.title}`,
+          pid: corporate.id * 3,
+        },
         {
           title: `زیر منوی دوم شرکت ${corporate.title}`,
-          pid: corporate.id,
+          pid: corporate.id * 4,
         },
       ],
     });

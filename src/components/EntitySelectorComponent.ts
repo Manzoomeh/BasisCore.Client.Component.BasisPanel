@@ -1,7 +1,7 @@
 import ISource from "../basiscore/ISource";
 import IUserDefineComponent from "../basiscore/IUserDefineComponent";
 import HttpUtil from "../HttpUtil";
-import { DefaultSource } from "../type-alias";
+import { DefaultSource, MenuOwnerType } from "../type-alias";
 import IProfileInfo from "./accounting/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
@@ -10,19 +10,23 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private profile: IProfileInfo;
   private element: HTMLOptionElement;
 
-  private entityType: string;
+  private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
 
   protected mustReload = true;
 
-  constructor(owner: IUserDefineComponent, html: string, entityType: string) {
+  constructor(
+    owner: IUserDefineComponent,
+    html: string,
+    entityType: MenuOwnerType
+  ) {
     super(owner, html, `data-bc-bp-${entityType}-container`);
-    this.entityType = entityType;
+    this.ownerType = entityType;
   }
 
   protected abstract getListUrl(): string;
 
-  protected abstract getMenuUrl(): string;
+  protected abstract getOwnerUrl(): string;
 
   protected abstract getSourceId(): string;
 
@@ -44,7 +48,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       e.preventDefault();
       const id = parseInt(this.element.value);
       const entity = this.entityList.find((x) => x.id == id);
-      //console.log(`${this.entityType} change`, entity);
       this.owner.setSource(this.getSourceId(), entity ?? {});
 
       if (this.profile) {
@@ -53,7 +56,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             rKey: this.options.rKey,
           });
           const result = await HttpUtil.fetchDataAsync(url, "POST", {
-            type: this.entityType,
+            type: this.ownerType,
             id: id,
           });
           console.log(result);
@@ -105,10 +108,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected createMenuLoaderParam(): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
-      type: this.entityType,
-      key: parseInt(this.element.value),
+      owner: this.ownerType,
+      ownerId: parseInt(this.element.value),
       profile: this.profile,
-      rawUrl: this.getMenuUrl(),
+      ownerUrl: this.getOwnerUrl(),
       rKey: this.options.rKey,
       menuMethod: this.options.method.menu,
     };

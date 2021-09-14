@@ -7,7 +7,7 @@ import { DefaultSource } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
-import { menu } from "../../ComponentLoader";
+import { IPageLoaderParam } from "./IPageInfo";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   readonly ul: HTMLUListElement;
@@ -17,13 +17,6 @@ export default class MenuComponent extends BasisPanelChildComponent {
     super(owner, html, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
     this.cache = new MenuCacheManager();
-    this.ul.addEventListener("click", (e) => {
-      const pid = (e.target as Element)?.getAttribute("data-bc-pid");
-      if (pid) {
-        e.preventDefault();
-        this.displayPage(parseInt(pid));
-      }
-    });
   }
 
   public initializeAsync(): void | Promise<void> {
@@ -37,16 +30,31 @@ export default class MenuComponent extends BasisPanelChildComponent {
   }
 
   public async loadDataAsync(menuParam: IMenuLoaderParam): Promise<void> {
-    const newMenu = await this.cache.loadMenuAsync(menuParam);
+    const newMenu = await this.cache.loadMenuAsync(
+      menuParam,
+      this.onMenuItemClick.bind(this)
+    );
     if (this.current != newMenu) {
       this.current = newMenu;
-      //console.log("menu update", menuParam);
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
     }
   }
 
-  private displayPage(pid: number) {
-    console.log(this.current, pid);
+  private onMenuItemClick(
+    pageId: number,
+    param: IMenuLoaderParam,
+    target: EventTarget
+  ) {
+    const newParam: IPageLoaderParam = {
+      pageId: pageId,
+      owner: param.owner,
+      ownerId: param.ownerId,
+      ownerUrl: param.ownerUrl,
+      profile: param.profile,
+      rKey: param.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }

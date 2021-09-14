@@ -1,3 +1,5 @@
+import IProfileInfo from "./components/accounting/IProfileInfo";
+
 export interface IQuestionItem {
   prpid: number;
   question: string;
@@ -15,4 +17,14 @@ export class DefaultSource {
 
 export interface IDictionary<TValue> {
   [Key: string]: TValue;
+}
+
+export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
+
+export interface ILoaderParam {
+  profile: IProfileInfo;
+  owner: MenuOwnerType;
+  ownerId: number;
+  ownerUrl: string;
+  rKey: string;
 }

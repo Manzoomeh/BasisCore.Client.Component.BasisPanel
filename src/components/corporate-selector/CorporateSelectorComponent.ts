@@ -15,8 +15,8 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     return DefaultSource.CORPORATE_SOURCE;
   }
 
-  protected getMenuUrl(): string {
-    return `${this.options.baseUrl.corporate}${this.options.method.menu}`;
+  protected getOwnerUrl(): string {
+    return this.options.baseUrl.corporate;
   }
 
   protected getListUrl(): string {

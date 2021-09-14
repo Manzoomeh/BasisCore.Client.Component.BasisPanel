@@ -1,6 +1,6 @@
-export default interface IPageInfo {
-  id: number;
-  title: string;
-  corporateId: number;
-  businessId: number;
+import { ILoaderParam } from "../../type-alias";
+
+export interface IPageLoaderParam extends ILoaderParam {
+  pageId: number;
+  pageMethod: string;
 }

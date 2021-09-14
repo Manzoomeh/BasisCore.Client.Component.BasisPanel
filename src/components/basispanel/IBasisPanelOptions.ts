@@ -18,6 +18,4 @@ interface IPanelPartMethodOptions {
   userImage: string;
   menu: string;
   page: string;
-  activeCorporate: string;
-  activeBusiness: string;
 }

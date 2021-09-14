@@ -1,6 +1,4 @@
 import HttpUtil from "../../HttpUtil";
-import IProfileInfo from "../accounting/IProfileInfo";
-import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
 import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
@@ -11,11 +9,18 @@ export default class MenuCacheManager {
     this.cache = new Map<string, MenuCacheItem>();
   }
 
-  public loadMenuAsync(menuParam: IMenuLoaderParam): Promise<MenuElement> {
-    let cache = this.cache.get(menuParam.type);
+  public loadMenuAsync(
+    menuParam: IMenuLoaderParam,
+    onMenuItemClick: (
+      pageId: number,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void
+  ): Promise<MenuElement> {
+    let cache = this.cache.get(menuParam.owner);
     if (!cache) {
-      cache = new MenuCacheItem(menuParam);
-      this.cache.set(menuParam.type, cache);
+      cache = new MenuCacheItem(menuParam, onMenuItemClick);
+      this.cache.set(menuParam.owner, cache);
     }
     return cache.loadMenuAsync(menuParam);
   }
@@ -24,21 +29,35 @@ export default class MenuCacheManager {
 class MenuCacheItem {
   private cache = new Map<number, MenuElement>();
   private menuMaker: MenuElementMaker;
-  constructor(menuParam: IMenuLoaderParam) {
-    this.menuMaker = new MenuElementMaker(menuParam.rKey, menuParam.profile);
+  constructor(
+    menuParam: IMenuLoaderParam,
+    onMenuItemClick: (
+      pageId: number,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void
+  ) {
+    this.menuMaker = new MenuElementMaker(
+      menuParam.rKey,
+      menuParam.profile,
+      onMenuItemClick
+    );
   }
 
   public async loadMenuAsync(
     menuParam: IMenuLoaderParam
   ): Promise<MenuElement> {
-    let menu = this.cache.get(menuParam.key);
+    let menu = this.cache.get(menuParam.ownerId);
     if (!menu) {
-      const url = HttpUtil.formatString(menuParam.rawUrl, {
-        rKey: menuParam.rKey,
-      });
+      const url = HttpUtil.formatString(
+        `${menuParam.ownerUrl}${menuParam.menuMethod}`,
+        {
+          rKey: menuParam.rKey,
+        }
+      );
       const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
       menu = this.menuMaker.create(menuData, menuParam);
-      this.cache.set(menuParam.key, menu);
+      this.cache.set(menuParam.ownerId, menu);
     }
     return menu;
   }

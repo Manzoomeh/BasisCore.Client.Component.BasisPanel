@@ -1,6 +1,5 @@
 import HttpUtil from "../../HttpUtil";
 import IProfileInfo from "../accounting/IProfileInfo";
-import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
 import IMenuInfo, {
   IMenuLevelInfo,
   IMenuPageInfo,
@@ -11,11 +10,26 @@ import IMenuInfo, {
 import MenuElement from "./MenuElement";
 
 export default class MenuElementMaker {
-  private readonly rKey: string;
-  private readonly profile: IProfileInfo;
-  constructor(rKey: string, profile: IProfileInfo) {
+  readonly rKey: string;
+  readonly profile: IProfileInfo;
+  readonly onMenuItemClick: (
+    pageId: number,
+    param: IMenuLoaderParam,
+    target: EventTarget
+  ) => void;
+
+  constructor(
+    rKey: string,
+    profile: IProfileInfo,
+    onMenuItemClick: (
+      pageId: number,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void
+  ) {
     this.rKey = rKey;
     this.profile = profile;
+    this.onMenuItemClick = onMenuItemClick;
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -31,7 +45,9 @@ export default class MenuElementMaker {
   ) {
     items.forEach((node) => {
       if ((node as IMenuPageInfo).pid) {
-        ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo));
+        ul.appendChild(
+          this.createPageMenuItem(node as IMenuPageInfo, menuParam)
+        );
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
           this.createLevelMenuItem(node as IMenuLevelInfo, menuParam)
@@ -43,6 +59,7 @@ export default class MenuElementMaker {
       }
     });
   }
+
   private createLevelMenuItem(
     node: IMenuLevelInfo,
     menuParam: IMenuLoaderParam
@@ -58,11 +75,18 @@ export default class MenuElementMaker {
     return li;
   }
 
-  private createPageMenuItem(node: IMenuPageInfo): HTMLLIElement {
+  private createPageMenuItem(
+    node: IMenuPageInfo,
+    menuParam: IMenuLoaderParam
+  ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
+    content.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.onMenuItemClick(node.pid, menuParam, e.target);
+    });
     li.appendChild(content);
     return li;
   }
@@ -71,17 +95,29 @@ export default class MenuElementMaker {
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam
   ): HTMLLIElement {
+    const newMenuParam: IMenuLoaderParam = {
+      owner: "external",
+      ownerId: node.mid,
+      ownerUrl: node.url,
+      profile: menuParam.profile,
+      menuMethod: menuParam.menuMethod,
+      rKey: menuParam.rKey,
+    };
+    console.log(newMenuParam);
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");
     li.appendChild(ul);
-    const url = HttpUtil.formatString(`${node.url}${menuParam.menuMethod}`, {
-      rKey: this.rKey,
-    });
+    const url = HttpUtil.formatString(
+      `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
+      {
+        rKey: this.rKey,
+      }
+    );
     HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
-      this.createMenu(ul, menu.nodes, menuParam)
+      this.createMenu(ul, menu.nodes, newMenuParam)
     );
     return li;
   }
