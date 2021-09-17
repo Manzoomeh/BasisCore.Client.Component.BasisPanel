@@ -1,4 +1,4 @@
-import AccountingComponent from "./components/accounting/AccountingComponent";
+import ProfileComponent from "./components/profile/ProfileComponent";
 import BasisPanelComponent from "./components/basispanel/BasisPanelComponent";
 import BusinessSelectorComponent from "./components/business-selector/BusinessSelectorComponent";
 import CorporateSelectorComponent from "./components/corporate-selector/CorporateSelectorComponent";
@@ -9,7 +9,7 @@ import WidgetComponent from "./components/widget/WidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 
 const panel = BasisPanelComponent;
-const accounting = AccountingComponent;
+const profile = ProfileComponent;
 const corporate = CorporateSelectorComponent;
 const business = BusinessSelectorComponent;
 const workspace = WorkspaceComponent;
@@ -20,7 +20,7 @@ const widget = WidgetComponent;
 
 export {
   panel,
-  accounting,
+  profile,
   corporate,
   business,
   workspace,

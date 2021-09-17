@@ -1,4 +1,4 @@
-import IProfileInfo from "./components/accounting/IProfileInfo";
+import IProfileInfo from "./components/profile/IProfileInfo";
 import { IDictionary } from "./type-alias";
 
 export default class HttpUtil {

@@ -6,7 +6,7 @@ export default interface IBasisPanelOptions {
 }
 
 interface IUrlCollectionOption {
-  user: string;
+  profile: string;
   corporate: string;
   business: string;
 }

@@ -2,7 +2,7 @@ import ISource from "../basiscore/ISource";
 import IUserDefineComponent from "../basiscore/IUserDefineComponent";
 import HttpUtil from "../HttpUtil";
 import { DefaultSource, MenuOwnerType } from "../type-alias";
-import IProfileInfo from "./accounting/IProfileInfo";
+import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 

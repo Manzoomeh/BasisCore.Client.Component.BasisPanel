@@ -9,11 +9,11 @@ import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 
-export default class AccountingComponent extends BasisPanelChildComponent {
+export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-accounting-container");
+    super(owner, html, "data-bc-bp-profile-container");
   }
 
   public runAsync(source?: ISource): Promise<any> {
@@ -30,7 +30,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
   public async loadDataAsync(): Promise<void> {
     const urlFormatter = new Function(
       "rKey",
-      `return \`${this.options.dataUrl.user}\``
+      `return \`${this.options.dataUrl.profile}\``
     );
     const questions = await HttpUtil.getDataAsync<Array<IQuestionItem>>(
       urlFormatter(this.options.rKey)
@@ -46,7 +46,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
         ownerId: "",
-        ownerUrl: this.options.baseUrl.user,
+        ownerUrl: this.options.baseUrl.profile,
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,
       };
@@ -62,7 +62,7 @@ export default class AccountingComponent extends BasisPanelChildComponent {
     const fn = new Function(
       "rKey",
       "profile",
-      `return \`${`${this.options.baseUrl.user}${this.options.method.userImage}`}\``
+      `return \`${`${this.options.baseUrl.profile}${this.options.method.userImage}`}\``
     );
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
       fn(this.options.rKey, this.profile);
