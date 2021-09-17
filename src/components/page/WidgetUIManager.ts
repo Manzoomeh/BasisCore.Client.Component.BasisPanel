@@ -5,13 +5,13 @@ export default class WidgetUIManager {
   private _items: Map<number, Element> = new Map<number, Element>();
   private _widgetDialog: Element;
   private owner: IPage;
-  constructor(owner: IPage, widgetList: Array<IWidgetInfo>) {
+  constructor(owner: IPage) {
     this.owner = owner;
-    this._widgetDialog = owner.content.querySelector(
+    this._widgetDialog = owner.container.querySelector(
       "[data-bc-page-widget-dlg]"
     );
     this.hideList();
-    owner.content
+    owner.container
       .querySelectorAll("[data-bc-page-widget-dlg-btn-close]")
       .forEach((btn) =>
         btn.addEventListener("click", (e) => {
@@ -20,8 +20,8 @@ export default class WidgetUIManager {
         })
       );
 
-    this.fillWidgetList(widgetList);
-    owner.content
+    this.fillWidgetList(owner.info.widgets);
+    owner.container
       .querySelectorAll("[data-bc-page-widget-dlg-btn-add]")
       .forEach((btn) =>
         btn.addEventListener("click", (e) => {
@@ -59,12 +59,10 @@ export default class WidgetUIManager {
 
   private addWidget(widgetInfo: IWidgetInfo) {
     this.owner.tryAddingWidget(widgetInfo);
-  }
-
-  public widgetAdded(widgetInfo: IWidgetInfo) {
     const element = this._items.get(widgetInfo.id);
     element.setAttribute("data-bc-display-none", "");
   }
+
   public widgetRemoved(widgetInfo: IWidgetInfo) {
     const element = this._items.get(widgetInfo.id);
     element.removeAttribute("data-bc-display-none");

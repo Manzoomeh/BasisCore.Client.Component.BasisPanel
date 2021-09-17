@@ -4,6 +4,8 @@ import BusinessSelectorComponent from "./components/business-selector/BusinessSe
 import CorporateSelectorComponent from "./components/corporate-selector/CorporateSelectorComponent";
 import FooterComponent from "./components/footer/FooterComponent";
 import MenuComponent from "./components/menu/MenuComponent";
+import PageComponent from "./components/page/PageComponent";
+import WidgetComponent from "./components/widget/WidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 
 const panel = BasisPanelComponent;
@@ -13,5 +15,17 @@ const business = BusinessSelectorComponent;
 const workspace = WorkspaceComponent;
 const footer = FooterComponent;
 const menu = MenuComponent;
+const page = PageComponent;
+const widget = WidgetComponent;
 
-export { panel, accounting, corporate, business, workspace, footer, menu };
+export {
+  panel,
+  accounting,
+  corporate,
+  business,
+  workspace,
+  footer,
+  menu,
+  page,
+  widget,
+};

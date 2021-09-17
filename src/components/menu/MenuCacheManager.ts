@@ -37,11 +37,7 @@ class MenuCacheItem {
       target: EventTarget
     ) => void
   ) {
-    this.menuMaker = new MenuElementMaker(
-      menuParam.rKey,
-      menuParam.profile,
-      onMenuItemClick
-    );
+    this.menuMaker = new MenuElementMaker(menuParam.rKey, onMenuItemClick);
   }
 
   public async loadMenuAsync(

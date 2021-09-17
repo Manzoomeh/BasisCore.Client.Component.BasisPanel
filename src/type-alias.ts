@@ -1,5 +1,3 @@
-import IProfileInfo from "./components/accounting/IProfileInfo";
-
 export interface IQuestionItem {
   prpid: number;
   question: string;
@@ -13,6 +11,7 @@ export class DefaultSource {
   static readonly CORPORATE_SOURCE = "basispanel.corporate";
   static readonly BUSINESS_SOURCE = "basispanel.business";
   static readonly DISPLAY_PAGE = "basispanel.display_page";
+  static readonly WIDGET_CLOSED = "basispanel.widget_closed";
 }
 
 export interface IDictionary<TValue> {
@@ -22,7 +21,6 @@ export interface IDictionary<TValue> {
 export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
 
 export interface ILoaderParam {
-  profile: IProfileInfo;
   owner: MenuOwnerType;
   ownerId: string;
   ownerUrl: string;

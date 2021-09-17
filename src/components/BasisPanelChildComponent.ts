@@ -7,7 +7,7 @@ export default abstract class BasisPanelChildComponent
   implements IComponentManager
 {
   protected readonly owner: IUserDefineComponent;
-  protected readonly container: Element;
+  public readonly container: Element;
   protected readonly options: IBasisPanelOptions;
 
   constructor(owner: IUserDefineComponent, html: string, dataAttr: string) {
@@ -15,7 +15,12 @@ export default abstract class BasisPanelChildComponent
     this.container = document.createElement("div");
     this.container.setAttribute(dataAttr, "");
     this.owner.setContent(this.container);
-    this.container.innerHTML = html;
+    if (html?.length > 0) {
+      const range = new Range();
+      range.setStart(this.container, 0);
+      range.setEnd(this.container, 0);
+      range.insertNode(range.createContextualFragment(html));
+    }
     this.options = this.owner.getSetting<IBasisPanelOptions>(
       "basispanel.option",
       null

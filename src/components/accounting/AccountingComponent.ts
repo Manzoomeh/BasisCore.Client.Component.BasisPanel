@@ -46,7 +46,6 @@ export default class AccountingComponent extends BasisPanelChildComponent {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
         ownerId: "",
-        profile: this.profile,
         ownerUrl: this.options.baseUrl.user,
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,

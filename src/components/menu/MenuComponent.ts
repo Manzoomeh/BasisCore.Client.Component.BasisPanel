@@ -7,7 +7,7 @@ import { DefaultSource } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
-import { IPageLoaderParam } from "./IPageInfo";
+import IPageLoaderParam from "./IPageLoaderParam";
 
 export default class MenuComponent extends BasisPanelChildComponent {
   readonly ul: HTMLUListElement;
@@ -51,7 +51,6 @@ export default class MenuComponent extends BasisPanelChildComponent {
       owner: param.owner,
       ownerId: param.ownerId,
       ownerUrl: param.ownerUrl,
-      profile: param.profile,
       rKey: param.rKey,
       pageMethod: this.options.method.page,
     };

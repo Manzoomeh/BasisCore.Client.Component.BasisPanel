@@ -2,66 +2,64 @@ import IPageInfo from "./IPageInfo";
 import html from "./assets/layout.html";
 import IWidgetInfo from "../widget/IWidgetInfo";
 import IPage from "./IPage";
-import IPageContainer from "../workspace/IPageContainer";
 import WidgetUIManager from "./WidgetUIManager";
-import WidgetComponent from "../widget/WidgetComponent";
-import IWidgetContainer from "./IWidgetContainer";
-import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
-import IPageParam from "../menu/IPageParam";
 import IWidgetParam from "../widget/IWidgetParam";
+import BasisPanelChildComponent from "../BasisPanelChildComponent";
+import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import ISource from "../../basiscore/ISource";
+import HttpUtil from "../../HttpUtil";
+import { DefaultSource } from "../../type-alias";
+import IPageLoaderParam from "../menu/IPageLoaderParam";
 
-export default class PageComponent implements IPage, IWidgetContainer {
-  private readonly _pageParam: IPageParam;
-  private readonly _owner: IPageContainer;
-  public readonly content: Element;
-  private readonly _body: HTMLDivElement;
-  private readonly widgetUIManager: WidgetUIManager;
-  public readonly panelOptions: IBasisPanelOptions;
+export default class PageComponent
+  extends BasisPanelChildComponent
+  implements IPage
+{
+  public loaderParam: IPageLoaderParam;
+  public info: IPageInfo;
+  private widgetUIManager: WidgetUIManager;
 
-  constructor(
-    owner: IPageContainer,
-    pageParam: IPageParam,
-    panelOptions: IBasisPanelOptions
-  ) {
-    this.panelOptions = panelOptions;
-    this._pageParam = pageParam;
-    this._owner = owner;
-    this.content = document.createElement("div");
-    this.content.innerHTML = html;
-    this._owner.addPageContent(this.content);
-    this._body = this.content.querySelector("[data-bc-page-body]");
-    if (this._pageParam.pageInfo.content) {
-      const range = new Range();
-      range.setStart(this._body, 0);
-      range.setEnd(this._body, 0);
-      range.insertNode(
-        range.createContextualFragment(pageParam.pageInfo.content)
-      );
-    }
-    this.widgetUIManager = new WidgetUIManager(
-      this,
-      pageParam.pageInfo.widgets
-    );
+  constructor(owner: IUserDefineComponent) {
+    super(owner, html, "data-bc-bp-page-container");
   }
 
-  closeWidget(widgetInfo: IWidgetInfo) {
-    this.widgetUIManager.widgetRemoved(widgetInfo);
+  public async initializeAsync(): Promise<void> {
+    this.loaderParam = JSON.parse(
+      await this.owner.getAttributeValueAsync("params")
+    );
+    const url = HttpUtil.formatString(
+      `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
+      this.loaderParam
+    );
+    this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
+    const body = this.container.querySelector("[data-bc-page-body]");
+    if (this.info.content) {
+      const range = new Range();
+      range.setStart(body, 0);
+      range.setEnd(body, 0);
+      range.insertNode(range.createContextualFragment(this.info.content));
+    }
+    this.widgetUIManager = new WidgetUIManager(this);
+    this.owner.addTrigger([DefaultSource.WIDGET_CLOSED]);
+  }
+
+  public runAsync(source?: ISource) {
+    if (source?.id === DefaultSource.WIDGET_CLOSED) {
+      this.widgetUIManager.widgetRemoved(source.rows[0]);
+    }
+    return true;
   }
 
   public tryAddingWidget(widgetInfo: IWidgetInfo) {
-    const widgetParam: IWidgetParam = {
+    const param: IWidgetParam = {
       ...widgetInfo,
-      ...{
-        pageParam: this._pageParam,
-        widgetMethod: this.panelOptions.method.widget,
-      },
+      ...{ page: this.loaderParam },
     };
-    const widget = new WidgetComponent(this, widgetParam);
-    widget.loadAsync();
-    this.widgetUIManager.widgetAdded(widgetInfo);
-  }
-
-  public addWidgetContent(content: Element) {
-    this._body.appendChild(content);
+    const paramStr = JSON.stringify(param);
+    const command = `<basis core="component.basispanel.widget" run="atclient" param='${paramStr}' ></basis>`;
+    const doc = this.owner.toNode(command);
+    const nodes = Array.from(doc.childNodes);
+    this.container.appendChild(doc);
+    this.owner.processNodesAsync(nodes);
   }
 }

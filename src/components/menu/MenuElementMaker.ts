@@ -1,5 +1,4 @@
 import HttpUtil from "../../HttpUtil";
-import IProfileInfo from "../accounting/IProfileInfo";
 import IMenuInfo, {
   IMenuLevelInfo,
   IMenuPageInfo,
@@ -11,7 +10,6 @@ import MenuElement from "./MenuElement";
 
 export default class MenuElementMaker {
   readonly rKey: string;
-  readonly profile: IProfileInfo;
   readonly onMenuItemClick: (
     pageId: string,
     param: IMenuLoaderParam,
@@ -20,7 +18,6 @@ export default class MenuElementMaker {
 
   constructor(
     rKey: string,
-    profile: IProfileInfo,
     onMenuItemClick: (
       pageId: string,
       param: IMenuLoaderParam,
@@ -28,7 +25,6 @@ export default class MenuElementMaker {
     ) => void
   ) {
     this.rKey = rKey;
-    this.profile = profile;
     this.onMenuItemClick = onMenuItemClick;
   }
 
@@ -99,11 +95,9 @@ export default class MenuElementMaker {
       owner: "external",
       ownerId: node.mid,
       ownerUrl: node.url,
-      profile: menuParam.profile,
       menuMethod: menuParam.menuMethod,
       rKey: menuParam.rKey,
     };
-    console.log(newMenuParam);
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.appendChild(document.createTextNode(node.title));

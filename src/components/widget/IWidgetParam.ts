@@ -1,7 +1,6 @@
-import IPageParam from "../menu/IPageParam";
+import IPageLoaderParam from "../menu/IPageLoaderParam";
 import IWidgetInfo from "./IWidgetInfo";
 
 export default interface IWidgetParam extends IWidgetInfo {
-  pageParam: IPageParam;
-  widgetMethod: string;
+  page: IPageLoaderParam;
 }

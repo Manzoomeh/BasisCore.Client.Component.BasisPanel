@@ -1,49 +1,52 @@
-import IWidgetInfo from "./IWidgetInfo";
 import html from "./assets/layout.html";
-import IWidgetContainer from "../page/IWidgetContainer";
-import IBasisPanelOptions from "../basispanel/IBasisPanelOptions";
 import HttpUtil from "../../HttpUtil";
 import IWidgetParam from "./IWidgetParam";
+import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import BasisPanelChildComponent from "../BasisPanelChildComponent";
+import ISource from "../../basiscore/ISource";
+import { DefaultSource } from "../../type-alias";
 
-export default class WidgetComponent {
-  private readonly _owner: IWidgetContainer;
-  private readonly _param: IWidgetParam;
-  public readonly _content: Element;
-  constructor(owner: IWidgetContainer, param: IWidgetParam) {
-    this._owner = owner;
-    this._param = param;
-    this._content = document.createElement("div");
-    this._content.innerHTML = html;
-    this._owner.addWidgetContent(this._content);
-
-    this.setTitle(param.title);
-    this._content
-      .querySelectorAll("[data-bc-widget-btn-close]")
-      .forEach((btn) =>
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          this._content.remove();
-          this._owner.closeWidget(this._param);
-        })
-      );
+export default class WidgetComponent extends BasisPanelChildComponent {
+  private param: IWidgetParam;
+  set title(value: string) {
+    this.container.querySelector(
+      "[data-bc-widget-header] > [data-bc-widget-title]"
+    ).textContent = value;
   }
-
-  public async loadAsync(): Promise<void> {
+  public async initializeAsync(): Promise<void> {
+    this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
+    this.title = this.param.title;
     const url = HttpUtil.formatString(
-      `${this._param.pageParam.ownerUrl}${this._param.widgetMethod}`,
-      { rKey: this._param.pageParam.rKey, widgetId: this._param.id }
+      `${this.param.page.ownerUrl}${this.options.method.widget}`,
+      { rKey: this.options.rKey, widgetId: this.param.id }
     );
     var content = await HttpUtil.fetchStringAsync(url, "GET");
     const range = new Range();
     range.selectNode(
-      this._content.querySelector("[data-bc-widget-body-container]")
+      this.container.querySelector("[data-bc-widget-body-container]")
     );
     const newContent = range.createContextualFragment(content);
     range.insertNode(newContent);
+    this.container
+      .querySelectorAll("[data-bc-widget-btn-close]")
+      .forEach((btn) =>
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.remove();
+        })
+      );
   }
-  public setTitle(title: string) {
-    this._content.querySelector(
-      "[data-bc-widget-header] > [data-bc-widget-title]"
-    ).textContent = title;
+
+  public runAsync(source?: ISource) {
+    return true;
+  }
+
+  constructor(owner: IUserDefineComponent) {
+    super(owner, html, "data-bc-bp-page-container");
+  }
+
+  private remove() {
+    this.container.remove();
+    this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
 }
