@@ -4,13 +4,14 @@ import layout from "./assets/layout.html";
 import IComponentManager from "../../basiscore/IComponentManager";
 import ISourceOptions from "../../basiscore/ISourceOptions";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import IDisposable from "../../basiscore/IDisposable";
 
 export default class BasisPanelComponent implements IComponentManager {
   readonly owner: IUserDefineComponent;
   public rKey: string;
   private content: Element;
   private options: IBasisPanelOptions;
-  private runTask: Promise<void>;
+  private runTask: Promise<IDisposable>;
 
   constructor(owner: IUserDefineComponent) {
     this.owner = owner;

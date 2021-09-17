@@ -26,13 +26,15 @@ export default class WidgetComponent extends BasisPanelChildComponent {
       this.container.querySelector("[data-bc-widget-body-container]")
     );
     const newContent = range.createContextualFragment(content);
+    const nodes = Array.from(newContent.childNodes);
     range.insertNode(newContent);
+    this.owner.processNodesAsync(nodes);
     this.container
       .querySelectorAll("[data-bc-widget-btn-close]")
       .forEach((btn) =>
         btn.addEventListener("click", (e) => {
           e.preventDefault();
-          this.remove();
+          this.removeAsync();
         })
       );
   }
@@ -45,7 +47,8 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     super(owner, html, "data-bc-bp-page-container");
   }
 
-  private remove() {
+  private async removeAsync(): Promise<void> {
+    await this.owner.disposeAsync();
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
