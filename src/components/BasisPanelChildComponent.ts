@@ -8,7 +8,7 @@ export default abstract class BasisPanelChildComponent
 {
   protected readonly owner: IUserDefineComponent;
   protected readonly container: Element;
-  protected options: IBasisPanelOptions;
+  protected readonly options: IBasisPanelOptions;
 
   constructor(owner: IUserDefineComponent, html: string, dataAttr: string) {
     this.owner = owner;

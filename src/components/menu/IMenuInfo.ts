@@ -11,7 +11,7 @@ export interface IMenuItemInfo {
 export interface IMenuExternalItemInfo extends IMenuItemInfo {
   multi: boolean;
   url: string;
-  mid: number;
+  mid: string;
 }
 
 export interface IMenuLevelInfo extends IMenuItemInfo {
@@ -19,7 +19,7 @@ export interface IMenuLevelInfo extends IMenuItemInfo {
 }
 
 export interface IMenuPageInfo extends IMenuItemInfo {
-  pid: number;
+  pid: string;
 }
 
 export interface IMenuLoaderParam extends ILoaderParam {

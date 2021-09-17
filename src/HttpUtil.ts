@@ -21,6 +21,14 @@ export default class HttpUtil {
     return await result.json();
   }
 
+  static async fetchStringAsync(
+    url: string,
+    method: "POST" | "GET"
+  ): Promise<string> {
+    const init: RequestInit = { method: method };
+    const result = await fetch(url, init);
+    return await result.text();
+  }
   static async formatAndGetDataAsync<T>(
     url: string,
     rKey: string,

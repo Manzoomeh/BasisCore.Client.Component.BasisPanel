@@ -12,7 +12,7 @@ export default class MenuCacheManager {
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
     onMenuItemClick: (
-      pageId: number,
+      pageId: string,
       param: IMenuLoaderParam,
       target: EventTarget
     ) => void
@@ -27,12 +27,12 @@ export default class MenuCacheManager {
 }
 
 class MenuCacheItem {
-  private cache = new Map<number, MenuElement>();
+  private cache = new Map<string, MenuElement>();
   private menuMaker: MenuElementMaker;
   constructor(
     menuParam: IMenuLoaderParam,
     onMenuItemClick: (
-      pageId: number,
+      pageId: string,
       param: IMenuLoaderParam,
       target: EventTarget
     ) => void

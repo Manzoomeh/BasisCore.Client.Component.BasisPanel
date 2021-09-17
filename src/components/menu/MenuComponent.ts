@@ -42,7 +42,7 @@ export default class MenuComponent extends BasisPanelChildComponent {
   }
 
   private onMenuItemClick(
-    pageId: number,
+    pageId: string,
     param: IMenuLoaderParam,
     target: EventTarget
   ) {

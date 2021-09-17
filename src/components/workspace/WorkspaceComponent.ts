@@ -9,6 +9,7 @@ import "./assets/style.css";
 import IPageContainer from "./IPageContainer";
 import PageComponent from "../page/PageComponent";
 import IPageInfo from "../page/IPageInfo";
+import IPageParam from "../menu/IPageParam";
 
 export default class WorkspaceComponent
   extends BasisPanelChildComponent
@@ -34,12 +35,18 @@ export default class WorkspaceComponent
     return true;
   }
 
-  private async displayPageAsync(pageParam: IPageLoaderParam): Promise<void> {
+  private async displayPageAsync(
+    pageLoaderParam: IPageLoaderParam
+  ): Promise<void> {
     var url = HttpUtil.formatString(
-      `${pageParam.ownerUrl}${pageParam.pageMethod}`,
-      pageParam
+      `${pageLoaderParam.ownerUrl}${pageLoaderParam.pageMethod}`,
+      pageLoaderParam
     );
-    var content = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
-    const page = new PageComponent(this, content);
+    this.container.innerHTML = "";
+    const pageParam: IPageParam = {
+      ...pageLoaderParam,
+      ...{ pageInfo: await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET") },
+    };
+    const page = new PageComponent(this, pageParam, this.options);
   }
 }

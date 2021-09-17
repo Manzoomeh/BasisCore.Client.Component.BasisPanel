@@ -109,7 +109,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected createMenuLoaderParam(): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
-      ownerId: parseInt(this.element.value),
+      ownerId: this.element.value,
       profile: this.profile,
       ownerUrl: this.getOwnerUrl(),
       rKey: this.options.rKey,

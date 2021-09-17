@@ -13,7 +13,7 @@ export default class MenuElementMaker {
   readonly rKey: string;
   readonly profile: IProfileInfo;
   readonly onMenuItemClick: (
-    pageId: number,
+    pageId: string,
     param: IMenuLoaderParam,
     target: EventTarget
   ) => void;
@@ -22,7 +22,7 @@ export default class MenuElementMaker {
     rKey: string,
     profile: IProfileInfo,
     onMenuItemClick: (
-      pageId: number,
+      pageId: string,
       param: IMenuLoaderParam,
       target: EventTarget
     ) => void

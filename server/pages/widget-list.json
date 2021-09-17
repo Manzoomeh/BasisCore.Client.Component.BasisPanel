@@ -1,19 +1,21 @@
 {
-  "widgets": [
-    {
-      "id": 1000,
-      "title": "فایل های من",
-      "name": "myFile"
-    },
-    {
-      "id": 1001,
-      "title": "فایل های 1من",
-      "name": "myFile1"
-    },
-    {
-      "id": 1002,
-      "title": "فایل های 2من",
-      "name": "myFile2"
-    }
-  ]
+  "userInfo": {
+    "widgets": [
+      {
+        "id": "my-file.html",
+        "title": "فایل های من",
+        "name": "myFile"
+      },
+      {
+        "id": "my-file1.html",
+        "title": "فایل های 1من",
+        "name": "myFile1"
+      },
+      {
+        "id": "my-file2.html",
+        "title": "فایل های 2من",
+        "name": "myFile2"
+      }
+    ]
+  }
 }

@@ -24,7 +24,7 @@ export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
 export interface ILoaderParam {
   profile: IProfileInfo;
   owner: MenuOwnerType;
-  ownerId: number;
+  ownerId: string;
   ownerUrl: string;
   rKey: string;
 }

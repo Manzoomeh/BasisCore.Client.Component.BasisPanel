@@ -48,7 +48,7 @@ router.get("/:rKey/menu", function (req, res) {
     nodes: [
       {
         title: "اطلاعات کاربری",
-        pid: "1",
+        pid: "userInfo",
       },
       {
         title: "مدیریت فایل ها",
@@ -82,6 +82,16 @@ router.get("/:rKey/page/:pageId", function (req, res) {
       encoding: "utf8",
     }
   );
-  res.json(JSON.parse(widgetList));
+  res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
+});
+
+router.get("/:rKey/widget/:widgetId", function (req, res) {
+  const widgetList = fs.readFileSync(
+    path.join(__dirname, "pages", req.params.widgetId),
+    {
+      encoding: "utf8",
+    }
+  );
+  res.send(widgetList);
 });
 module.exports = router;
