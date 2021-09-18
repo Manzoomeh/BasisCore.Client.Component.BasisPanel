@@ -1,7 +1,7 @@
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import html from "./assets/layout.html";
+import layout from "./assets/layout.html";
 import "./assets/style.css";
 import { DefaultSource } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
@@ -14,7 +14,7 @@ export default class MenuComponent extends BasisPanelChildComponent {
   private cache: MenuCacheManager;
   private current: MenuElement;
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-menu-container");
+    super(owner, layout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
     this.cache = new MenuCacheManager();
   }

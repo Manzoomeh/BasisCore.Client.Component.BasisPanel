@@ -1,4 +1,4 @@
-import html from "./assets/layout.html";
+import layout from "./assets/layout.html";
 import HttpUtil from "../../HttpUtil";
 import IWidgetParam from "./IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
@@ -44,7 +44,7 @@ export default class WidgetComponent extends BasisPanelChildComponent {
   }
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-page-container");
+    super(owner, layout, "data-bc-bp-page-container");
   }
 
   private async removeAsync(): Promise<void> {

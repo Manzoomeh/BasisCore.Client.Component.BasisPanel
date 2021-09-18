@@ -3,7 +3,7 @@ import { QuestionUtil } from "../../QuestionUtil";
 import { DefaultSource, IQuestionItem } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
-import html from "./assets/layout.html";
+import layout from "./assets/layout.html";
 import "./assets/style.css";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
@@ -13,7 +13,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-profile-container");
+    super(owner, layout, "data-bc-bp-profile-container");
   }
 
   public runAsync(source?: ISource): Promise<any> {

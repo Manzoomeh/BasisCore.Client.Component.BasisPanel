@@ -17,10 +17,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   constructor(
     owner: IUserDefineComponent,
-    html: string,
+    layout: string,
     entityType: MenuOwnerType
   ) {
-    super(owner, html, `data-bc-bp-${entityType}-container`);
+    super(owner, layout, `data-bc-bp-${entityType}-container`);
     this.ownerType = entityType;
   }
 

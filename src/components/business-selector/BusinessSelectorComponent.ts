@@ -5,7 +5,7 @@ import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
-import html from "./assets/layout.html";
+import layout from "./assets/layout.html";
 import "./assets/style.css";
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
@@ -13,7 +13,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
   private cache: Map<number, Array<IEntityInfo>>;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "business");
+    super(owner, layout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
   }
 

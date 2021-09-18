@@ -1,5 +1,5 @@
 import IPageInfo from "./IPageInfo";
-import html from "./assets/layout.html";
+import layout from "./assets/layout.html";
 import IWidgetInfo from "../widget/IWidgetInfo";
 import IPage from "./IPage";
 import WidgetUIManager from "./WidgetUIManager";
@@ -20,7 +20,7 @@ export default class PageComponent
   private widgetUIManager: WidgetUIManager;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, html, "data-bc-bp-page-container");
+    super(owner, layout, "data-bc-bp-page-container");
   }
 
   public async initializeAsync(): Promise<void> {
