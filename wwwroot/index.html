@@ -31,8 +31,23 @@
             menu: "/${rKey}/menu",
             page: "/${rKey}/page/${pageId}",
             widget: "/${rKey}/widget/${widgetId}"
-
-
+          },
+          notification:
+          {
+            providers: [
+              {
+                title: "لیست پیام ها",
+                url: "http://api-ticketing.basiscore.com/${rkey}/messagelist"
+              },
+              {
+                title: "لیست یادداشت ها",
+                url: "http://api.basiscore.com/${rkey}/notes"
+              },
+              {
+                title: "لیست تسک ها",
+                url: "http://api.basiscore.com/${rkey}/tasks"
+              }
+            ]
           },
         },
       },

@@ -7,6 +7,7 @@ import MenuComponent from "./components/menu/MenuComponent";
 import PageComponent from "./components/page/PageComponent";
 import WidgetComponent from "./components/widget/WidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
+import NotificationComponent from "./components/notification/NotificationComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -17,6 +18,7 @@ const footer = FooterComponent;
 const menu = MenuComponent;
 const page = PageComponent;
 const widget = WidgetComponent;
+const notification = NotificationComponent;
 
 export {
   panel,
@@ -28,4 +30,5 @@ export {
   menu,
   page,
   widget,
+  notification,
 };
