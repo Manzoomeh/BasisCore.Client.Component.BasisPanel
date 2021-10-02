@@ -12,6 +12,8 @@ export class DefaultSource {
   static readonly BUSINESS_SOURCE = "basispanel.business";
   static readonly DISPLAY_PAGE = "basispanel.display_page";
   static readonly WIDGET_CLOSED = "basispanel.widget_closed";
+  static readonly TASK_START = "basispanel.task_start";
+  static readonly TASK_INIT = "basispanel.task_init";
 }
 
 export interface IDictionary<TValue> {

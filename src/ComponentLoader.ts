@@ -8,6 +8,7 @@ import PageComponent from "./components/page/PageComponent";
 import WidgetComponent from "./components/widget/WidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
+import SchedulerComponent from "./components/scheduler/SchedulerComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -19,6 +20,7 @@ const menu = MenuComponent;
 const page = PageComponent;
 const widget = WidgetComponent;
 const notification = NotificationComponent;
+const scheduler = SchedulerComponent;
 
 export {
   panel,
@@ -31,4 +33,5 @@ export {
   page,
   widget,
   notification,
+  scheduler
 };
