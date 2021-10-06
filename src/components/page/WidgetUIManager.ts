@@ -20,7 +20,7 @@ export default class WidgetUIManager {
         })
       );
 
-    this.fillWidgetList(owner.info.widgets);
+    // this.fillWidgetList(owner.info.widgets);
     owner.container
       .querySelectorAll("[data-bc-page-widget-dlg-btn-add]")
       .forEach((btn) =>
@@ -31,19 +31,19 @@ export default class WidgetUIManager {
       );
   }
 
-  private fillWidgetList(widgetList: Array<IWidgetInfo>) {
-    const ul = document.querySelector("[data-bc-page-widget-list]");
-    widgetList.forEach((widget) => {
-      const li = document.createElement("li");
-      li.appendChild(document.createTextNode(widget.title));
-      ul.appendChild(li);
-      this._items.set(widget.id, li);
-      li.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.addWidget(widget);
-      });
-    });
-  }
+  // private fillWidgetList(widgetList: Array<IWidgetInfo>) {
+  //   const disableWidgets = document.querySelector("[data-bc-page-widget-disableList]");
+  //   widgetList.forEach((widget) => {
+  //     const div = document.createElement("div");
+  //     div.appendChild(document.createTextNode(widget.title));
+  //     disableWidgets.appendChild(div);
+  //     this._items.set(widget.id, div);
+  //     div.addEventListener("click", (e) => {
+  //       e.preventDefault();
+  //       this.addWidget(widget);
+  //     });
+  //   });
+  // }
 
   private displayWidgetList() {
     this.showList();

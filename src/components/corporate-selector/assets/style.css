@@ -1,0 +1,108 @@
+[data-bc-corporate-list] {
+    width: 180px;
+    height: 25px;
+    background: #f9f9f9;
+    padding: 15px;
+    float: right;
+    margin-right: 15px;
+    position: relative;
+    cursor: pointer;
+    direction: rtl;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-notification] {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    position: absolute;
+    left: 12px;
+    top: 10px;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-icon] {
+    fill: #ee1a29;
+    color: #ee1a29;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-select] {
+    cursor: pointer;
+    margin-top: px;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-msg] {
+    font-size: 12px;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-msg][data-bc-corporate-msg-deactive] {
+    color: #bcbcbc;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-icon-drop-down] {
+    float: left;
+    position: relative;
+    top: 15px;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down] {
+    position: absolute;
+    width: 210px;
+    right: 0;
+    top: 50px;
+    background: #f9f9f9;
+    padding-top: 0;
+    opacity: 0;
+    z-index: -1;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down][data-status="open"] {
+    opacity: 1;
+    z-index: 99;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-search] {
+    padding: 5px 5px;
+    border-bottom: 1px dashed #dfdfdf;
+    /* padding-top: 10px; */
+}
+
+[data-bc-corporate-list] [data-bc-corporate-search] input {
+    width: calc(100% - 20px);
+    height: 30px;
+    padding: 0px 10px;
+    font-size: 11px;
+    color: #555;
+    background: #F5F8F9;
+    border: 1px solid #C7D6DB;
+    border-radius: 3px;
+    transition: border 0.3s linear 0s;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down] ul {
+    height: auto;
+    max-height: 200px;
+    overflow: auto;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down] li {
+    padding: 5px 15px;
+    border-bottom: 1px dashed #dfdfdf;
+    padding-top: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down] li:last-child {
+    border-bottom: none;
+}
+
+[data-bc-corporate-list] [data-bc-corporate-drop-down] li div {
+    position: relative;
+    display: inline;
+}
+
+.autocomplete-active {
+    background-color: #eee !important;
+}

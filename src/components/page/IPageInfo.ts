@@ -1,6 +1,6 @@
-import IWidgetInfo from "../widget/IWidgetInfo";
+import { IPageGroupInfo } from "./IPageGroupInfo";
 
 export default interface IPageInfo {
-  widgets: Array<IWidgetInfo>;
+  groups: Array<IPageGroupInfo>
   content?: string;
 }

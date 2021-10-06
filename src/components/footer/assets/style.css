@@ -1,0 +1,13 @@
+[data-bc-bp-footer-wrapper] {
+	width: 100%;
+	background: #333;
+	color: #fff;
+	padding: 15px 0
+}
+
+[data-bc-bp-footer] {
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

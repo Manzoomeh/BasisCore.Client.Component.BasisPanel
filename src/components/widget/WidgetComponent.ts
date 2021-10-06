@@ -15,6 +15,20 @@ export default class WidgetComponent extends BasisPanelChildComponent {
   }
   public async initializeAsync(): Promise<void> {
     this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
+
+    this.container.setAttribute("gs-x",this.param.x.toString());
+    this.container.setAttribute("gs-y",this.param.y.toString());
+    this.container.setAttribute("gs-w",this.param.w.toString());
+    this.container.setAttribute("gs-h",this.param.h.toString());
+
+    const parent = document.querySelector("[data-bc-page-body]") as HTMLElement
+    const cell = parent.offsetWidth / 12;
+    console.log(parent.offsetTop);
+
+    (this.container as HTMLElement).style.height=`${this.param.h*cell}px`;
+    (this.container as HTMLElement).style.top=`${this.param.y*cell+parent.offsetTop}px`;
+    (this.container as HTMLElement).style.left=`${this.param.x*cell}px`;
+
     this.title = this.param.title;
     const url = HttpUtil.formatString(
       `${this.param.page.ownerUrl}${this.options.method.widget}`,
@@ -48,7 +62,9 @@ export default class WidgetComponent extends BasisPanelChildComponent {
   }
 
   private async removeAsync(): Promise<void> {
+    console.log(this.owner);
     await this.owner.disposeAsync();
+    console.log(this.container);
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }

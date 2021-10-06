@@ -1,0 +1,69 @@
+[data-bc-bp-profile-container] {
+    float: right;
+}
+
+[data-bc-user-info] {
+    float: right;
+    padding: 10px 15px;
+    width: 180px;
+    height: 35px;
+    /* display: inline-block; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+[data-bc-user-info] [data-bc-user-info-image] {
+    float: right;
+    height: 35px;
+}
+
+[data-bc-user-info] [data-bc-user-info-image] img {
+    border-radius: 5px;
+}
+
+[data-bc-user-info] [data-bc-user-info-name] {
+    float: right;
+    margin-right: 10px;
+    width: calc(100% - 45px);
+    /* display: inline-block; */
+    line-height: 30px;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+}
+
+[data-bc-user-info] [data-bc-user-name] {
+    cursor: pointer;
+    float: right;
+}
+
+[data-bc-user-info] [data-bc-user-notification] {
+    float: left;
+    position: relative;
+    line-height: 40px;
+}
+
+[data-bc-user-info] [data-bc-user-notif] {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ee1a29;
+    position: absolute;
+    top: 0px;
+    right: -5px;
+}
+
+[data-bc-user-info] [data-bc-user-icon] {
+    stroke: var(--dark_gray);
+    color: var(--dark_gray);
+}
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,8 @@ import { IMenuLoaderParam } from "./menu/IMenuInfo";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
-  private element: HTMLOptionElement;
+  // true?????????????
+  private element: HTMLUListElement;
 
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
@@ -35,38 +36,50 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   public initializeAsync(): void | Promise<void> {
-    this.element = this.container.querySelector<HTMLOptionElement>(
+    this.element = this.container.querySelector<HTMLUListElement>(
       "[data-bc-main-list]"
     );
-    this.element.addEventListener("click", async (e) => {
+    const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
+    elClick.addEventListener("click", async (e) => {
+      
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
       }
-    });
-    this.element.addEventListener("change", async (e) => {
-      e.preventDefault();
-      const id = parseInt(this.element.value);
-      const entity = this.entityList.find((x) => x.id == id);
-      this.owner.setSource(this.getSourceId(), entity ?? {});
-
-      if (this.profile) {
-        if (entity) {
-          const url = HttpUtil.formatString(this.options.baseUrl.active, {
-            rKey: this.options.rKey,
-          });
-          const result = await HttpUtil.fetchDataAsync(url, "POST", {
-            type: this.ownerType,
-            id: id,
-          });
-          console.log(result);
-          this.owner.setSource(
-            DefaultSource.SHOW_MENU,
-            this.createMenuLoaderParam()
-          );
-        }
+      const elStatus = this.element.closest("[data-bc-drop-down-container]");
+      const status = elStatus.getAttribute("data-status");
+      if (status == "close") {
+        elStatus.setAttribute("data-status", "open");
+      } else {
+        elStatus.setAttribute("data-status", "close");
       }
     });
+
+    // this.element.addEventListener("change", async (e) => {
+    //   e.preventDefault();
+    //   // const id = parseInt(this.element.value);
+    //   const id = parseInt("5");
+    //   const entity = this.entityList.find((x) => x.id == id);
+    //   this.owner.setSource(this.getSourceId(), entity ?? {});
+
+    //   if (this.profile) {
+    //     if (entity) {
+    //       const url = HttpUtil.formatString(this.options.baseUrl.active, {
+    //         rKey: this.options.rKey,
+    //       });
+    //       const result = await HttpUtil.fetchDataAsync(url, "POST", {
+    //         type: this.ownerType,
+    //         id: id,
+    //       });
+    //       console.log(result);
+    //       this.owner.setSource(
+    //         DefaultSource.SHOW_MENU,
+    //         this.createMenuLoaderParam()
+    //       );
+    //     }
+    //   }
+    // });
+
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
 
@@ -88,28 +101,111 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       this.getExtraData()
     );
   }
-  protected async fillComboAsync() {
-    this.entityList = await this.getEntitiesAsync();
-    this.clearCombo();
-    const option = document.createElement("option");
-    option.text = "";
-    this.element.appendChild(option);
-    this.entityList.forEach((item) => {
-      const option = document.createElement("option");
-      option.value = item.id.toString();
-      option.text = item.title;
-      this.element.appendChild(option);
-    });
-  }
 
+  // zahra
+  filterItems(inp,list){
+    let filterList = list.filter(function (e) {
+      return e.title.toLowerCase().includes(inp.toLowerCase());
+  });
+  return filterList
+  }
+  protected async fillComboAsync() {
+    this.entityList = await this.getEntitiesAsync();   
+    this.clearCombo();
+    const searchWrapper = document.createElement("div")
+    const searchInput = document.createElement("input")    
+    searchInput.setAttribute("type","text")
+    if(this.entityList.length > 5){
+      if(this.ownerType == "corporate"  ){
+        searchWrapper.setAttribute("data-bc-corporate-search","")
+        searchInput.setAttribute("placeHolder","جستجوی شرکت ...")
+        searchWrapper.appendChild(searchInput)  
+      }
+      else if(this.ownerType == "business"){
+        searchWrapper.setAttribute("data-bc-business-search","")
+        searchInput.setAttribute("placeHolder","جستجوی کسب‌و‌کار ...")
+        searchWrapper.appendChild(searchInput)  
+      }
+    }
+    let listFilter = this.entityList
+    searchInput.addEventListener("keyup" , e => {
+      listFilter=[]
+      if(e.target["value"] == ""){
+        listFilter= this.entityList
+      }
+      listFilter= this.filterItems(e.target["value"],this.entityList)
+      this.entryListMaker(listFilter)
+      
+    })
+    this.entryListMaker(listFilter)
+    this.element.previousSibling.remove()
+    this.element.parentNode.insertBefore(searchWrapper, this.element);
+ 
+
+    // const option = document.createElement("option");
+    // option.text = "";
+    // this.element.appendChild(option);
+    // this.entityList.forEach((item) => {
+    //   const option = document.createElement("option");
+    //   option.value = item.id.toString();
+    //   option.text = item.title;
+    //   this.element.appendChild(option);
+    // });
+  }
+  entryListMaker(list){
+    this.element.innerHTML = ""
+    if(list.length > 0){
+      list.forEach((item) => {
+        const li = document.createElement("li");
+        // const div = document.createElement("div");
+        li.setAttribute('data-id', item.id.toString());
+        li.addEventListener("click", async (e) => {
+          e.preventDefault();
+          // const id = parseInt(this.element.value);
+          const id = parseInt(li.getAttribute("data-id"));
+          const entity = this.entityList.find((x) => x.id == id);
+          this.owner.setSource(this.getSourceId(), entity ?? {});
+          if (this.profile) {
+            if (entity) {
+              const url = HttpUtil.formatString(this.options.baseUrl.active, {
+                rKey: this.options.rKey,
+              });
+              const result = await HttpUtil.fetchDataAsync(url, "POST", {
+                type: this.ownerType,
+                id: id,
+              });
+           
+              this.owner.setSource(
+                DefaultSource.SHOW_MENU,
+                this.createMenuLoaderParam(id)
+              );
+            }
+          }
+          if(this.ownerType == "corporate"){
+            this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]").textContent="کسب‌وکار مورد نظر را انتخاب کنید"
+          }
+          this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]").textContent = li.textContent;
+          this.element.closest("[data-bc-drop-down-container]").setAttribute("data-status", "close");
+        });
+        // div.textContent = item.title;
+        // li.appendChild(div);
+        li.textContent = item.title;      
+        this.element.appendChild(li);
+      });
+    }
+    
+  }
   protected clearCombo() {
     this.element.innerHTML = "";
   }
 
-  protected createMenuLoaderParam(): IMenuLoaderParam {
+  // type id?????????
+  protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
+    // console.log(typeof id)
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
-      ownerId: this.element.value,
+      // ownerId: this.element.value,
+      ownerId: id.toString(),
       ownerUrl: this.getOwnerUrl(),
       rKey: this.options.rKey,
       menuMethod: this.options.method.menu,

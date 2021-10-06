@@ -1,0 +1,211 @@
+@font-face {
+    font-family: "IRANSansWeb";
+    src: url(../fonts/IRANSansWeb.eot);
+    src: local("?"), url(../fonts/IRANSansWeb.woff) format("woff"), url(../fonts/IRANSansWeb.ttf) format("truetype"), url(../fonts/IRANSansWeb.otf) format("otf");
+    font-weight: 0;
+    font-style: normal;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    /* box-sizing: border-box; */
+    font-size: 14px;
+    font-family: "IRANSansWeb";
+    direction: rtl;
+    color: #212121;
+    border-collapse: collapse;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background: var(--snow);
+    font-size: 14px;
+    color: var(--vdark_gray);
+    font-weight: normal;
+    overflow-x: hidden;
+}
+
+/***** colors *****/
+
+:root {
+    --theme1: #4d576e;
+    --theme2: #6c768e;
+    --theme3: #8c96b0;
+    --theme4: #aeb8d2;
+    --theme5: #d1dbf6;
+    --theme6: #a5abbd;
+    --theme7: #f1f1e6;
+    --theme8: #e2f1ff;
+    --theme9: #3b7b98;
+    --black: #000;
+    --white: #fff;
+    --vlight_gray: #f8f9fa;
+    --light_gray: #eee;
+    --gray: #bcbcbc;
+    --vdark_gray: #212121;
+    --dark_gray: #555;
+    --vlight_red: #fde8e8;
+    --light_red: #f37571;
+    --red: #dc3545;
+    --light_yellow: #FFFDE7;
+    --yellow: #FBC02D;
+    --light_orange: #FEE9C7;
+    --orange: #F39C12;
+    --light_green: #E8F5E9;
+    --green: #4F8A10;
+    --vlight_blue: #F5F8F9;
+    --light_blue: #C7D6DB;
+    --blue: #31708f;
+    --brown: #9F6000;
+    --slate_gray: #5a5f73;
+    --dark_slate_gray: #151F33;
+    --sky_blue: #66afe9;
+    --papaya: #fff8ee;
+    --light_pink: #FCE4EC;
+    --pink: #fcdddd;
+    --snow: #f9f9f9;
+    --iris_blue: #00BCD4;
+    --light_cyan: #D7F7FB;
+    --light_purple: #EDE7F6;
+    --purple: #512DA8;
+    --ruby: #C2185B;
+    --theme10: #1f2933;
+    /*main background*/
+    --theme11: #323f4b;
+    /*widget background*/
+    --theme12: #3e4c59;
+    --theme13: #52606d;
+    /*table th*/
+    --theme14: #616e7c;
+    --theme15: #7b8794;
+    --theme16: #9aa5b1;
+    --theme17: #cbd2d9;
+    --theme18: #e4e7eb;
+    --theme19: #f5f7fa;
+}
+
+[data-bc-grid] {
+    padding: 20px 10px;
+}
+
+.clr {
+    clear: both;
+}
+
+/* The Modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: default;
+    background-color: transparent;
+}
+
+/* Modal Content */
+
+.modal-content {
+    position: relative;
+    background-color: #fbfdff;
+    text-align: left;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    border-radius: 6px;
+    width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+/* Add Animation */
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+/* modal-title */
+
+.modal-title {
+    width: 100%;
+    background: #4d576e;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    height: 40px;
+    align-items: center;
+}
+
+.modal-title span {
+    color: #fff;
+}
+
+.modal-title .close {
+    color: white;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-title .close:hover, .modal-title .close:focus {
+    color: #bcbcbc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* modal-body */
+
+.modal-body {
+    padding: 15px 15px;
+}

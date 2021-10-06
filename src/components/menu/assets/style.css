@@ -1,0 +1,105 @@
+[data-bc-bp-menu-container] {
+	clear: both;
+}
+
+[data-bc-bp-menu-wrapper] {
+	width: 100%;
+	background: #4d576e;
+}
+
+[data-bc-menu] {
+	display: flex;
+	align-items: stretch;
+	position: relative;
+	z-index: 9;
+	direction: rtl;
+}
+
+[data-bc-menu] li {
+	position: relative;
+	line-height: 50px;
+}
+
+[data-bc-menu] li a {
+	color: #fff;
+	padding: 0 15px;
+	border-left: 1px solid rgba(255, 255, 255, 0.13);
+	cursor: pointer;
+}
+
+[data-bc-bp-submenu] {
+	padding: 0;
+	position: absolute;
+	z-index: 9999;
+	right: 0;
+	top: 50px;
+	width: 230px;
+	height: 0;
+	background: #4d576e;
+	overflow: hidden;
+}
+
+[data-bc-menu] li ul a {
+	width: 100%;
+	display: inline-block;
+	border-bottom: 1px solid #6c768e;
+	position: relative;
+	display: inherit !important;
+	padding: 5px 15px;
+	line-height: 24px;
+	box-sizing: border-box;
+}
+
+[data-bc-bp-menu-external] {
+	width: 0;
+	overflow: hidden;
+	vertical-align: top;
+	position: relative;
+	z-index: 9;
+	background-color: #3a4459;
+	height: 50px;
+	display: inline-block;
+}
+
+[data-bc-bp-menu-external] li {
+	padding: 0;
+}
+
+[data-bc-bp-menu-external] li a {
+	border-bottom: 0 !important;
+	height: 100%;
+	line-height: 40px !important;
+}
+
+[data-bc-bp-menu-external] li ul li a {
+	border-bottom: 1px solid #6c768e !important;
+	line-height: 24px !important;
+}
+
+[data-bc-level]:after {
+	font-family: 'LineIcons';
+	content: "\ea5a";
+	position: relative;
+	right: 5px;
+	font-size: 10px;
+	display: inline-block;
+	transition: all 0.3s ease-in-out
+}
+
+[data-bc-level-open]:after {
+	transform: rotate(-90deg)
+}
+
+[data-bc-bp-menu-external-open]:after {
+	transform: rotate(180deg)
+}
+
+[data-bc-bp-menu-external-level]:after {
+	font-family: 'LineIcons';
+	content: "\ea5a";
+	position: relative;
+	right: 5px;
+	font-size: 10px;
+	display: inline-block;
+	transition: all 0.3s ease-in-out
+}

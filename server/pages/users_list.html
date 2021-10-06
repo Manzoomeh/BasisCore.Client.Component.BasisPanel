@@ -1,0 +1,95 @@
+
+    <basis core='dbsource' name='list' source='demo_trust_loginuiapi' run="atclient" cache="none" ownerid='4' mode='useradd' userid='1' rkey='demo-225396658383813-823854164789629' usercat='6734,6735' support='0'>
+        <member name='user' type='list' request='users' perpage='100' pageno='1' ></member>
+    </basis>
+    <!-- <div class="widget_buttons">
+        <div class="widgetBtn widgetBtn1">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn2">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn3">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn4">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn5">
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn6">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn7">
+            <i class="lni lni-plus"></i>
+            عضو جدید
+        </div>
+        <div class="widgetBtn widgetBtn8">
+            <span>عضو جدید</span><i class="lni lni-plus"></i>
+        </div>
+        <div class="widgetBtn widgetBtn9">
+            <i class="lni lni-plus"></i><span>عضو جدید</span>
+        </div>
+    </div> -->
+    <div class="clr"></div>
+    <basis core="component.bc.grid" run="atclient" dataMemberName="list.user" options-object="usersListOptions"></basis>
+    <script>
+        const usersListOptions = {
+            columns: {
+                rownumber: "ردیف",
+                OwnerTable: "آی دی کاربر",
+                name: "نام کاربر",
+                action: {
+                    title: "عملیات",
+                    actions: [
+                        {
+                            label: "ویرایش",
+                            iconClass: "lni lni-pencil-alt",
+                            action: onClickRowDownloadBtn
+                        }, {
+                            label: "لیست فعالیت ها",
+                            // url: (data) => `?p=${data.id}`,
+                            iconClass: "lni lni-list",
+                            action: onClickRowDownloadBtn
+                        }, {
+                            label: "فعال",
+                            // url: "#",
+                            iconClass: "lni lni-check-box",
+                            action: onClickRowDownloadBtn
+                        },
+                    ]
+                }
+            },
+            defaultSort: {
+                name: "count"
+            },
+            pageSize: [100],
+            pageCount: 5
+        };
+
+        function onClickRowDownloadBtn(data, tr) {
+            console.log(data, tr);
+        }
+
+        function showModal(id) {
+            let modal_wrapper = document.getElementById(id);
+            modal_wrapper.style.display = "block";
+        }
+
+        function hideModal(id) {
+            let modal_el = document.getElementById(id);
+            modal_el.style.display = "none";
+        }
+
+        function onClickRowEditBtn(data, tr) {
+            console.log(data, tr);
+            showModal("editModal");
+        }
+    </script>
+

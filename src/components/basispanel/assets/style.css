@@ -1,3 +1,14 @@
 [data-bc-display-none] {
   display: none;
 }
+
+/*  */
+[data-bc-bp-main-header] {
+  background-color: #fff;
+}
+
+[data-bc-bp-logo] {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
