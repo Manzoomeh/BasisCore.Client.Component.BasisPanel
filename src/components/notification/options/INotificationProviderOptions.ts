@@ -1,4 +1,7 @@
-export interface INotificationProviderOptions {
+export default interface INotificationProviderOptions {
+  name:string;
   title: string;
-  source: string;
+  url: string;
+  config: object;
+  link: string;
 }

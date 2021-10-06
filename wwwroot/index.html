@@ -1,66 +1,104 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8" />
-  <title></title>
-  <link href="assets/css/LineIcons.css" rel="stylesheet" />
-  <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
-<link href="assets/css/commonStyle.css" rel="stylesheet" />
-</head>
+    <head>
+        <meta charset="utf-8"/>
+        <title></title>
+        <link href="assets/css/LineIcons.css" rel="stylesheet"/>
+        <link href="assets/css/simple-line-icons.css" rel="stylesheet"/>
+        <link href="assets/css/commonStyle.css" rel="stylesheet"/>
+    </head>
 
-<body>
+    <body>
 
-  <Basis core="component.basispanel.panel" run="atclient"> </Basis>
-  <div class="clr"></div>
+        <Basis core="component.basispanel.panel" run="atclient"></Basis>
+        <div class="clr"></div>
 
-  <script>
-    const host = {
-      settings: {
-        "basispanel.option": {
-          rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
-          baseUrl: {
-            profile: "/server/trust",
-            corporate: "/server/corporate",
-            business: "/server/business",
-            active: "/server/active/${rKey}/set-active",
-          },
-          dataUrl: {
-            profile: "/server/trust/${rKey}/profile",
-            corporate: "/server/corporate/${rKey}/list",
-            business: "/server/business/${rKey}/list"
-          },
-          method: {
-            userImage: "/${rKey}/users/${profile.thumbnail}",
-            menu: "/${rKey}/menu",
-            page: "/${rKey}/page/${pageId}",
-            widget: "/${rKey}/widget/${widgetId}"
-          },
-          notification:
-          {
-            providers: [
-              {
-                title: "لیست پیام ها",
-                url: "http://api-ticketing.basiscore.com/${rkey}/messagelist"
-              },
-              {
-                title: "لیست یادداشت ها",
-                url: "http://api.basiscore.com/${rkey}/notes"
-              },
-              {
-                title: "لیست تسک ها",
-                url: "http://api.basiscore.com/${rkey}/tasks"
-              }
-            ]
-          },
-        },
-      },
-      repositories: {
-        basispanel: "/basiscore.basispanel.component.js",
-      },
-    };
-  </script>
-  <script src="basiscore.min.js"></script>
-</body>
+        <script>
+            const host = {
+                settings: {
+                    "basispanel.option": {
+                        rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
+                        baseUrl: {
+                            profile: "/server/trust",
+                            corporate: "/server/corporate",
+                            business: "/server/business",
+                            active: "/server/active/${rKey}/set-active"
+                        },
+                        dataUrl: {
+                            profile: "/server/trust/${rKey}/profile",
+                            corporate: "/server/corporate/${rKey}/list",
+                            business: "/server/business/${rKey}/list"
+                        },
+                        method: {
+                            userImage: "/${rKey}/users/${profile.thumbnail}",
+                            menu: "/${rKey}/menu",
+                            page: "/${rKey}/page/${pageId}",
+                            widget: "/${rKey}/widget/${widgetId}"
+                        },
+                        notification: {
+                            providers: [
+                                {
+                                    name: "messages",
+                                    title: "پیام ها",
+                                    url: "/server/notifications/${rKey}/unread-messages",
+                                    config: {
+                                        filter: "none",
+                                        paging: null,
+                                        columns: {
+                                            img: {
+                                                source: "img",
+                                                title: "تصویر",
+                                                cellMaker: (row, data, td) => `<img src="${
+                                                    row.id
+                                                }" width="40" height="40" />`
+                                            },
+                                            title: "فرستنده",
+                                            date: "تاریخ"
+                                        },
+                                        rowNumber: '#'
+                                    },
+                                    link: "#"
+                                }, {
+                                    name: "notes",
+                                    title: "یادداشت ها",
+                                    url: "/server/notifications/${rKey}/new-notes",
+                                    config: {
+                                        filter: "none",
+                                        paging: null,
+                                        columns: {
+                                            title: "ایجاد کننده",
+                                            date: "تاریخ"
+                                        },
+                                        rowNumber: '#'
+                                    },
+                                    link: "#"
+                                }, {
+                                    name: "tasks",
+                                    title: "تسک ها",
+                                    url: "/server/notifications/${rKey}/new-tasks",
+                                    config: {
+                                        filter: "none",
+                                        paging: null,
+                                        columns: {
+                                            title: "پروژه",
+                                            date: "تاریخ"
+                                        },
+                                        rowNumber: '#'
+                                    },
+                                    link: "#"
+                                },
+                            ]
+                        }
+                    }
+                },
+                repositories: {
+                    basispanel: "/basiscore.basispanel.component.js",
+                    "bc.grid": "/basiscore.grid.component.js"
+                }
+            };
+        </script>
+        <script src="basiscore.min.js"></script>
+    </body>
 
 </html>

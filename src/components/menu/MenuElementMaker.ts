@@ -102,7 +102,7 @@ export default class MenuElementMaker {
       this.onMenuItemClick(node.pid, menuParam, e.target);
     });
     li.appendChild(content);
-    return li;
+    return li
   }
 
   private createExternalMenuItem(
@@ -153,6 +153,9 @@ export default class MenuElementMaker {
     HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
       this.createMenu(ul, menu.nodes, newMenuParam)
     );
-    return li;
+    return li
   }
+ 
+
+
 }
