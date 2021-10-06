@@ -20,6 +20,14 @@ export default class NotificationComponent extends BasisPanelChildComponent impl
     super(owner, layout, "data-bc-bp-notification-container");
     this.rkey = this.options.rKey;
   }
+
+  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string {
+    return this.owner.storeAsGlobal(data,name,prefix,postfix);
+  }
+  
+  getRandomName(prefix?: string, postfix?: string): string {
+    return this.owner.getRandomName(prefix,postfix);
+  }
   
   public toNode(rawHtml: string): Node {
     return this.owner.toNode(rawHtml);

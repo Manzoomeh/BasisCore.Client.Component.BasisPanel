@@ -70,19 +70,13 @@ export default class NotificationTab {
     this.header.appendChild(this.button);
 
     // create contents
-    const optionName = `${this.optionsName}_option`;
+    const optionName = this._owner.storeAsGlobal(this.optionConfig); //`${this.optionsName}_option`;
     let contentTemplate = (contentLayout as any)
       .replaceAll("@dataMemberName", `notification.${this.optionsName}`)
       .replaceAll("@name", this.optionsName)
       .replaceAll("@option", optionName);
     this.content = this._owner.toNode(contentTemplate)
       .firstChild as HTMLElement;
-
-    // console.log(JSON.stringify(this.optionConfig), this.optionConfig);
-    Reflect.set(window,optionName,this.optionConfig)
-    // this.content.querySelector(
-    //   "script"
-    // ).innerText = `const ${optionName} = ${JSON.stringify(this.optionConfig)}`;
     if (index == 0) {
       this.content.setAttribute("data-bc-notification-tab-content", "active");
     }

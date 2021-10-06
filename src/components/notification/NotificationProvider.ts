@@ -25,6 +25,14 @@ export default class NotificationProvider implements INotificationProvider {
     this.tab = new NotificationTab(this, index);
   }
 
+  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string {
+    return this._owner.storeAsGlobal(data,name,prefix,postfix);
+  }
+  
+  getRandomName(prefix?: string, postfix?: string): string {
+    return this._owner.getRandomName(prefix,postfix);
+  }
+
   setSource(sourceId: string, data: any, options?: ISourceOptions): void {
     this._owner.setSource(sourceId,data,options)
   }

@@ -4,15 +4,13 @@ import ISource from "./ISource";
 import ISourceOptions from "./ISourceOptions";
 import IToken from "./IToken";
 import { SourceId } from "./type-alias";
-//import { DependencyContainer } from "tsyringe";
 
 export default interface IUserDefineComponent {
   content: DocumentFragment;
-  range: Range;
   triggers: string[];
   priority: Priority;
-  //container: DependencyContainer;
-  toNode(rawHtml: string): Node;
+  toNode(rawHtml: string): DocumentFragment;
+  toHTMLElement(rawXml: string): HTMLElement;
   setContent(newContent: Node): void;
   getAttributeValueAsync(name: string, defaultValue?: string): Promise<string>;
   getAttributeBooleanValueAsync(
@@ -34,4 +32,7 @@ export default interface IUserDefineComponent {
   processNodesAsync(nodes: Array<Node>): Promise<IDisposable>;
   disposeAsync(): Promise<void>;
   disposed: boolean;
+  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string;
+  getRandomName(prefix?:string,postfix?:string):string;
 }
+
