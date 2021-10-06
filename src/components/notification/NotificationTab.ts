@@ -79,9 +79,10 @@ export default class NotificationTab {
       .firstChild as HTMLElement;
 
     // console.log(JSON.stringify(this.optionConfig), this.optionConfig);
-    this.content.querySelector(
-      "script"
-    ).innerText = `const ${optionName} = ${JSON.stringify(this.optionConfig)}`;
+    Reflect.set(window,optionName,this.optionConfig)
+    // this.content.querySelector(
+    //   "script"
+    // ).innerText = `const ${optionName} = ${JSON.stringify(this.optionConfig)}`;
     if (index == 0) {
       this.content.setAttribute("data-bc-notification-tab-content", "active");
     }
