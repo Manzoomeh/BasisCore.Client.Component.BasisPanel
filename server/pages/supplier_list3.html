@@ -1,56 +1,31 @@
 
-    <basis core="dbsource" source="fingerfoodapi" name="list" run="atclient" cache="refresh">
-        <member request="supplier_list" type="list" name="supplier" ></member>
-    </basis>
+<style>
+	[bc-tab-header-wrapper]{display: flex;
+position: relative;
+top: -40px;
+background: #fff;
+height: 35px;width: 80%;}
+[bc-tab-header]{border-top: none; border-right: none; border-bottom: none; border-radius: 0; border-left:1px solid var(--light_gray);}
+[data-bc-widget-inner-container]{overflow-y: scroll !important;}
+</style>
+<basis core="component.bc.tabManager" run="atclient" options="mySetting111" > </basis>
+<div class="clr"></div>
 
-    <Basis core="component.bc.grid" run="atclient" datamembername="list.supplier" options-object="supplierListOptions"></Basis>
+<script>
 
-    <script>
-        const supplierListOptions = {
-            columns: {
-                rownumber: "ردیف",
-                id: {
-                    title: "کد تامین‌کننده"
-
-                },
-                title: {
-                    title: "عنوان",
-                    sort: true
-                },
-                phone: "شماره تماس",
-                action: {
-                    title: "عملیات",
-                    actions: [
-                        {
-                            label: "edit",
-                            action: onClickRowEditBtn,
-                            iconClass: "lni lni-pencil-alt"
-                        }, {
-                            label: "calendar",
-                            url: (data) => `?p=${
-                                data.id
-                            }`,
-                            iconClass: "lni lni-calendar"
-                        }, {
-                            label: "accessories",
-                            url: "#",
-                            iconClass: "lni lni-bar-chart"
-                        },
-                    ]
-                }
-
-            },
-
-            defaultSort: {
-                name: "count"
-            },
-            pageSize: [10]
-        };
-        function onClickRowEditBtn(data, tr) {
-            console.log(data, tr);
-            console.log(data.id);
-            $bc.setSource("list.search", data.id)
-
-        }
-    </script>
-
+    var mySetting111 = [
+		{
+            "title":"لیست تامین‌کننده",
+			"widgetId":13,
+			"active" : true,
+            "triggers":[]
+		},
+		{
+            "title":"نمایش تامین کننده",
+			"widgetId":14,
+			"active" : false,
+            "triggers":["db.supplierid"]
+		}
+	
+	]
+</script>
