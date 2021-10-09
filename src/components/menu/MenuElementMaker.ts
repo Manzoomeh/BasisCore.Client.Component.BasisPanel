@@ -63,29 +63,26 @@ export default class MenuElementMaker {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-bc-level", "");
-    content.appendChild(document.createTextNode(node.title));    
+    content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
-    innerUl.setAttribute("data-bc-bp-submenu","")
+    innerUl.setAttribute("data-bc-bp-submenu", "");
     this.createMenu(innerUl, node.nodes, menuParam);
     li.appendChild(content);
     li.appendChild(innerUl);
-    let subMenuFlag  = false    
-    li.addEventListener("click",function(e){
-      if(subMenuFlag == false){
+    let subMenuFlag = false;
+    li.addEventListener("click", function (e) {
+      if (subMenuFlag == false) {
         innerUl.style.transition = "all 0.3s ease-in-out";
         innerUl.style.height = `${innerUl.scrollHeight}px`;
-        content.setAttribute("data-bc-level-open","")
-        subMenuFlag=true;
-      }
-      else{
+        content.setAttribute("data-bc-level-open", "");
+        subMenuFlag = true;
+      } else {
         innerUl.style.transition = "all 0.3s ease-in-out";
         innerUl.style.height = "0";
-        content.removeAttribute("data-bc-level-open")
-        subMenuFlag=false;
+        content.removeAttribute("data-bc-level-open");
+        subMenuFlag = false;
       }
-      
-      
-    })
+    });
     return li;
   }
 
@@ -102,7 +99,7 @@ export default class MenuElementMaker {
       this.onMenuItemClick(node.pid, menuParam, e.target);
     });
     li.appendChild(content);
-    return li
+    return li;
   }
 
   private createExternalMenuItem(
@@ -121,29 +118,25 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");
-    ul.setAttribute("data-bc-bp-menu-external","")
-    content.setAttribute("data-bc-bp-menu-external-level","")
+    ul.setAttribute("data-bc-bp-menu-external", "");
+    content.setAttribute("data-bc-bp-menu-external-level", "");
     li.appendChild(ul);
-    let subMenuFlag = false
-    content.addEventListener("click",function(){
-      console.log(ul)
-      console.log(ul.scrollWidth)
-      if(subMenuFlag == false){
+    let subMenuFlag = false;
+    content.addEventListener("click", function () {
+      if (subMenuFlag == false) {
         ul.style.transition = "all 0.3s ease-in-out";
         ul.style.width = `auto`;
         ul.style.overflow = `visible`;
-        content.setAttribute("data-bc-bp-menu-external-open","")
-        subMenuFlag=true;
-      }
-      else{
+        content.setAttribute("data-bc-bp-menu-external-open", "");
+        subMenuFlag = true;
+      } else {
         ul.style.transition = "all 0.3s ease-in-out";
         ul.style.width = `0`;
         ul.style.overflow = `hidden`;
-        content.removeAttribute("data-bc-bp-menu-external-open")
-        subMenuFlag=false;
-      }      
-      
-    })
+        content.removeAttribute("data-bc-bp-menu-external-open");
+        subMenuFlag = false;
+      }
+    });
     const url = HttpUtil.formatString(
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
       {
@@ -153,9 +146,6 @@ export default class MenuElementMaker {
     HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
       this.createMenu(ul, menu.nodes, newMenuParam)
     );
-    return li
+    return li;
   }
- 
-
-
 }
