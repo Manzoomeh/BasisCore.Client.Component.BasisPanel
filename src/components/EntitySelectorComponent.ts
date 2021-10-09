@@ -8,8 +8,7 @@ import { IMenuLoaderParam } from "./menu/IMenuInfo";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
-  // true?????????????
-  private element: HTMLUListElement;
+  private element: Element;
 
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
@@ -36,7 +35,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   public initializeAsync(): void | Promise<void> {
-    this.element = this.container.querySelector<HTMLUListElement>(
+    this.element = this.container.querySelector<Element>(
       "[data-bc-main-list]"
     );
     const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
@@ -102,43 +101,42 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     );
   }
 
-  // zahra
-  filterItems(inp,list){
+  filterItems(input, list){
     let filterList = list.filter(function (e) {
-      return e.title.toLowerCase().includes(inp.toLowerCase());
-  });
-  return filterList
+      return e.title.toLowerCase().includes(input.toLowerCase());
+    });
+    return filterList
   }
+
   protected async fillComboAsync() {
     this.entityList = await this.getEntitiesAsync();   
     this.clearCombo();
-    const searchWrapper = document.createElement("div")
-    const searchInput = document.createElement("input")    
-    searchInput.setAttribute("type","text")
-    if(this.entityList.length > 5){
-      if(this.ownerType == "corporate"  ){
-        searchWrapper.setAttribute("data-bc-corporate-search","")
-        searchInput.setAttribute("placeHolder","جستجوی شرکت ...")
-        searchWrapper.appendChild(searchInput)  
+    const searchWrapper = document.createElement("div");
+    const searchInput = document.createElement("input");    
+    searchInput.setAttribute("type", "text");
+    if (this.entityList?.length > 5) {
+      if (this.ownerType == "corporate") {
+        searchWrapper.setAttribute("data-bc-corporate-search", "");
+        searchInput.setAttribute("placeHolder", "جستجوی شرکت ...");
+        searchWrapper.appendChild(searchInput);
       }
-      else if(this.ownerType == "business"){
-        searchWrapper.setAttribute("data-bc-business-search","")
-        searchInput.setAttribute("placeHolder","جستجوی کسب‌و‌کار ...")
-        searchWrapper.appendChild(searchInput)  
+      else if (this.ownerType == "business") {
+        searchWrapper.setAttribute("data-bc-business-search", "");
+        searchInput.setAttribute("placeHolder", "جستجوی کسب‌و‌کار ...");
+        searchWrapper.appendChild(searchInput);
       }
     }
-    let listFilter = this.entityList
-    searchInput.addEventListener("keyup" , e => {
-      listFilter=[]
-      if(e.target["value"] == ""){
-        listFilter= this.entityList
+    let listFilter = this.entityList;
+    searchInput.addEventListener("keyup", e => {
+      listFilter = [];
+      if (e.target["value"] == "") {
+        listFilter = this.entityList;
       }
-      listFilter= this.filterItems(e.target["value"],this.entityList)
-      this.entryListMaker(listFilter)
-      
+      listFilter = this.filterItems(e.target["value"],this.entityList);
+      this.entryListMaker(listFilter);
     })
-    this.entryListMaker(listFilter)
-    this.element.previousSibling.remove()
+    this.entryListMaker(listFilter);
+    this.element.previousSibling.remove();
     this.element.parentNode.insertBefore(searchWrapper, this.element);
  
 
@@ -152,9 +150,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     //   this.element.appendChild(option);
     // });
   }
-  entryListMaker(list){
-    this.element.innerHTML = ""
-    if(list.length > 0){
+
+  entryListMaker(list) {
+    this.element.innerHTML = "";
+    if (list?.length > 0) {
       list.forEach((item) => {
         const li = document.createElement("li");
         // const div = document.createElement("div");
@@ -182,7 +181,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             }
           }
           if(this.ownerType == "corporate"){
-            this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]").textContent="کسب‌وکار مورد نظر را انتخاب کنید"
+            this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]").textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
           }
           this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]").textContent = li.textContent;
           this.element.closest("[data-bc-drop-down-container]").setAttribute("data-status", "close");
@@ -193,13 +192,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.element.appendChild(li);
       });
     }
-    
   }
+
   protected clearCombo() {
     this.element.innerHTML = "";
   }
 
-  // type id?????????
   protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
     // console.log(typeof id)
     const menuParam: IMenuLoaderParam = {

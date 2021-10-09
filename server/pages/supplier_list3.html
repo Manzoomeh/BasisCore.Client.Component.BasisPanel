@@ -1,31 +1,35 @@
-
 <style>
-	[bc-tab-header-wrapper]{display: flex;
-position: relative;
-top: -40px;
-background: #fff;
-height: 35px;width: 80%;}
-[bc-tab-header]{border-top: none; border-right: none; border-bottom: none; border-radius: 0; border-left:1px solid var(--light_gray);}
-[data-bc-widget-inner-container]{overflow-y: scroll !important;}
+    [bc-tab-header-wrapper] {
+        display: flex;
+        position: relative;
+        top: -40px;
+        background: #fff;
+        height: 35px;
+        width: 80%;
+    }
+    [bc-tab-header] {
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        border-radius: 0;
+        border-left: 1px solid var(--light_gray);
+    }
 </style>
-<basis core="component.bc.tabManager" run="atclient" options="mySetting111" > </basis>
+<basis core="component.bc.tabManager" run="atclient" options="mySetting111"></basis>
 <div class="clr"></div>
 
 <script>
-
     var mySetting111 = [
-		{
-            "title":"لیست تامین‌کننده",
-			"widgetId":13,
-			"active" : true,
-            "triggers":[]
-		},
-		{
-            "title":"نمایش تامین کننده",
-			"widgetId":14,
-			"active" : false,
-            "triggers":["db.supplierid"]
-		}
-	
-	]
+        {
+            "title": "لیست تامین‌کننده",
+            "widgetId": 13,
+            "active": true,
+            "triggers": []
+        }, {
+            "title": "نمایش تامین کننده",
+            "widgetId": 14,
+            "active": false,
+            "triggers": ["db.supplierid"]
+        }
+    ]
 </script>
