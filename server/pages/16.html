@@ -1,0 +1,475 @@
+<div class="widget_wrapper" id="myFiles">
+    <style>
+        /* Tooltip container */
+
+        [data-bc-table] tr td:last-child a {
+            position: relative;
+            display: inline-block;
+        }
+
+
+        [data-bc-table] tr td:last-child a:nth-child(1):after {
+            content: "ویرایش";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+        [data-bc-table] tr td:last-child a:nth-child(2):after {
+            content: "سفارشات";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+        [data-bc-table] tr td:last-child a:nth-child(3):after {
+            content: "تجهیزات";
+            position: absolute;
+            bottom: 100%; /* At the top of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+            height: 30px;
+            background: black;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Show the tooltip text when you mouse over the tooltip container */
+        [data-bc-table] tr td:last-child a:hover:after {
+            visibility: visible;
+            /* Fade in */
+            opacity: 1;
+        }
+        .icon-fastfood:before {
+            content: "\ec62";
+        }
+        /* sample form */
+        .sample-form {
+            font-size: 14px;
+            color: #333;
+        }
+
+		.sample-form basis-core {
+			width: calc(100% - 100px);
+			margin-right: 0;
+		}
+        .sample-form basis-core select{
+			width: 100%;
+			margin-right: 0;
+		}
+        .sample-form input,
+        .sample-form textarea,
+        .sample-form select
+		 {
+            font-size: 12px;
+            color: #333;
+            padding: 5px;
+            margin-right: 5px;
+            text-align: right;
+            direction: ltr;
+            width: calc(100% - 100px);
+            min-height: 30px;
+            position: relative;
+            direction: rtl;
+            background: #F5F8F9;
+            border: 1px solid #C7D6DB;
+            border-radius: 3px;
+            transition: border 0.3s linear 0s;
+        }
+        .sample-form textarea {
+
+            min-height: 100px;
+
+        }
+
+        .sample-form input:focus,
+        .sample-form textarea:focus {
+            background: #fff8ee;
+            border-color: #66afe9;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+            outline: 0 none;
+        }
+
+        .sample-form .submitForm {
+            border: none;
+            cursor: pointer;
+            height: 30px;
+            width: 70px;
+            border-radius: 3px;
+            border: 1px solid #4d576e;
+            background: #4d576e;
+            color: #fff;
+            text-align: center;
+            font-size: 13px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .sample-form .drop-down-mime {
+            font-size: 13px;
+            display: none;
+            margin: 0 auto;
+            text-align: justify;
+            direction: ltr;
+            padding: 5px 0 0 80px;
+            color: #3687cc;
+        }
+
+        .sample-form-box {
+            display: flex;
+            margin-top: 5px;
+            flex-direction: row;
+            justify-content: space-between;
+            line-height: 30px;
+            direction: rtl;
+            text-align: right;
+        }
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: "IRANSansWeb";
+            direction: rtl;
+            color: #212121;
+            border-collapse: collapse;
+        }
+
+
+        /* The Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-background {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            cursor: default;
+            background-color: transparent;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fbfdff;
+            text-align: left;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            border-radius: 6px;
+            width: 500px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* modal-title */
+        .modal-title {
+            width: 100%;
+            background: #4d576e;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            direction: rtl;
+            padding: 10px;
+            box-sizing: border-box;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            border-top-left-radius: 5px;
+            height: 40px;
+            align-items: center;
+        }
+
+        .modal-title span {
+            color: #fff;
+        }
+
+        .modal-title .close {
+            color: white;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-title .close:hover,
+        .modal-title .close:focus {
+            color: #bcbcbc;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* modal-body */
+        .modal-body {
+            padding: 15px;
+        }
+        .widget_buttons {
+            display: flex;
+            direction: ltr;
+        }
+   
+/*date Picker styles*/
+.date-picker-input {
+                border: none;
+                background: none;
+            }
+            .date-picker-wrapper {
+                background: rgba(0, 0, 0, 0.04);
+                width: calc(100% - 100px);
+                display: flex;
+                border: 1px solid #C7D6DB;
+                height: 32px;
+                border-radius: 3px;
+            }
+            .date-picker-wrapper svg{
+                position: relative;
+                top: 5px;
+                right: 10px;
+            }
+            .date-picker-wrapper input{
+                background: none;
+                border: none;
+            }
+            .date-picker-wrapper button {
+                background: none;
+                border: none;
+            }
+            .date-picker-wrapper span {
+                font-size: 12px;
+            }
+            .date-picker-input-wrapper {
+                direction: rtl;
+                text-align: right;
+                width: 100%;
+            }
+            .date-picker-input-wrapper input:focus{
+                background: none;
+                box-shadow: none;
+                border: none;
+            }
+    </style>
+
+
+    <div class="widget_title">
+
+        <div class="widget_buttons">
+
+            <div class="new-supplier-btn">
+                <div class="widgetBtn" onclick="supplierNew()">
+                    <i class="lni lni-plus"></i>
+                    درخواست تجهیزات جدید
+                </div>
+            </div>
+           
+        </div>
+
+    </div>
+    
+    <div class="widget_body section-2">
+
+        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" sid="[##db.supplieraccessories.value##]">
+            <member request="supplier_accessories" type="list" name="supplier_accessories" preview="true"></member>
+        </basis>
+        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh">
+            <member request="brand_list" type="list" name="brand_list" preview=""></member>
+        </basis>
+        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" 
+        triggers="db.brandid" usedforid="[##db.brandid.value|(1)##]">
+            <member request="brand_model_list" type="list" name="brand_model_list" preview=""></member>
+        </basis>
+        <div class="supplier_resize">
+            <Basis core="component.bc.grid" run="atclient" datamembername="db.supplier_accessories" 
+            options-object="supplierAccessoriesGrid"></Basis>
+        </div>
+		<div id="editModal" class="modal">
+			<div class="modal-background" onclick="hideModal('editModal')"></div>
+			<div class="modal-content">
+				<div class="modal-title">
+					<span>فرم تعریف تجهیزات جدید</span>
+					<span id="modalClose" class="close no-select" onclick="hideModal('editModal')">×</span>
+				</div>
+				<div class="modal-body">
+					<form class="sample-form" bc-triggers="submit"  name="cms.form"  autocomplete="off">
+					   
+						<div class="sample-form-box">
+							<span> برند : </span>
+							<basis core="print" datamembername="db.brand_list" run="atclient">
+								<layout>
+									<select name="db.brandid" bc-triggers="change">@child@</select>
+								</layout>
+                                <face filter="id == 1">
+									<option value="@id@" selected >@title@</option>
+								</face>
+								<face>
+									<option value="@id@" >@title@</option>
+								</face>
+							</basis>
+						
+						</div>
+						<div class="sample-form-box">
+							<span>مدل  : </span>							
+                            <basis core="print" datamembername="db.brand_model_list" run="atclient" >
+								<layout>
+									<select data-name="sss">@child@</select>
+								</layout>
+								<face>
+									<option value="@id@" >@model@</option>
+								</face>
+							</basis>
+						</div>
+						<div class="sample-form-box">
+							<span>تعداد : </span>	
+                            <input type="text" placeholder="تعداد تجهیزات را اینجا وارد کنید" name="" />
+                        </div>
+                        <div class="sample-form-box">
+                            <span>تاریخ تحویل : </span>	
+                            <div class="date-picker-wrapper">
+                                <button>
+                                    <svg viewbox="0 0 24 24" width="24px" height="24px" fill="currentColor" focusable="false" class="mat-datepicker-toggle-default-icon ng-star-inserted">
+                                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"></path>
+                                    </svg>
+                                </button>
+                                <div class="date-picker-input-wrapper">           
+                                    <basis core="component.bc.datepicker" run="atclient" name="to" setting-object="mySetting"></basis>
+                                </div>
+                            </div>
+                        </div>
+						<input type="submit" class="submitForm" value="ذخیره" />
+						<div id="message" class="message">
+							<basis core="print" datamembername="db.save_supplier" run="atclient">
+								<face>
+									<script type="text/template">
+									تجهیزات جدید با موفقیت اضافه شد.
+								</script>
+								</face987>
+							</basis>
+						</div>
+						<div class="clr"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+    </div>
+
+    <script>
+        
+const supplierAccessoriesGrid = {
+                 columns: {
+                     rownumber : "ردیف" , 
+                     title: {
+                         title: "عنوان تجهیزات",
+                         
+                     },
+                     model: "مدل",
+                     count : "تعداد",
+                     remaining : "باقی‌مانده",
+                     sstring: {
+                         title: "تاریخ تحویل",
+                         
+                     },
+                    
+                     
+                
+    
+                 },
+                 filter: "none",
+                 defaultSort:false,
+                 direction: "rtl",
+                 paging: [20],
+                 culture: {
+                    labels: {
+                    "next": "بعدی",
+                    "previous": "قبلی",
+                    "first": "اولین صفحه",
+                    "last": "آخرین صفحه"
+                    }
+                },
+             };
+             
+             function supplierNew() {
+            showModal("editModal");
+            $bc.setSource("cms.form1", true)
+
+        }
+        var mySetting = {
+
+
+
+
+
+dateProvider: "basisCalendar",
+displayNote: true,
+culture: "fa",
+lid: 1
+
+
+
+
+
+}
+    </script>
+
+</div>
