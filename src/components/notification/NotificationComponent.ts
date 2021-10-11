@@ -9,26 +9,33 @@ import "./assets/style.css";
 import INotificationComponent from "./INotificationComponent";
 import NotificationProvider from "./NotificationProvider";
 
-export default class NotificationComponent extends BasisPanelChildComponent implements INotificationComponent {
+export default class NotificationComponent
+  extends BasisPanelChildComponent
+  implements INotificationComponent
+{
   private _provider: Array<NotificationProvider>;
-  public readonly rkey: string;
-  // get rkey(): string{
-  //   return this.options.rKey;
-  // }
+
+  public get rKey(): string {
+    return this.options.rKey;
+  }
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-notification-container");
-    this.rkey = this.options.rKey;
   }
 
-  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string {
-    return this.owner.storeAsGlobal(data,name,prefix,postfix);
+  storeAsGlobal(
+    data: any,
+    name?: string,
+    prefix?: string,
+    postfix?: string
+  ): string {
+    return this.owner.storeAsGlobal(data, name, prefix, postfix);
   }
-  
+
   getRandomName(prefix?: string, postfix?: string): string {
-    return this.owner.getRandomName(prefix,postfix);
+    return this.owner.getRandomName(prefix, postfix);
   }
-  
+
   public toNode(rawHtml: string): Node {
     return this.owner.toNode(rawHtml);
   }
@@ -36,9 +43,9 @@ export default class NotificationComponent extends BasisPanelChildComponent impl
   processNodesAsync(nodes: Node[]): Promise<IDisposable> {
     return this.owner.processNodesAsync(nodes);
   }
-  
+
   setSource(sourceId: string, data: any, options?: ISourceOptions): void {
-    this.owner.setSource(sourceId,data,options)
+    this.owner.setSource(sourceId, data, options);
   }
 
   public async initializeAsync(): Promise<void> {

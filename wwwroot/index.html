@@ -46,15 +46,12 @@
                                         filter: "none",
                                         paging: null,
                                         columns: {
-                                            img: {
-                                                source: "img",
-                                                title: "تصویر",
-                                                cellMaker: (row, data, td) => `<img src="${
-                                                    row.img
-                                                }" width="40" height="40" />`
-                                            },
                                             title: "فرستنده",
-                                            date: "تاریخ"
+                                            date: "تاریخ",
+                                            action: {
+                                                title: "عملیات",
+                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
+                                            }
                                         },
                                         rowNumber: '#'
                                     },
@@ -68,7 +65,11 @@
                                         paging: null,
                                         columns: {
                                             title: "ایجاد کننده",
-                                            date: "تاریخ"
+                                            date: "تاریخ",
+                                            action: {
+                                                title: "عملیات",
+                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
+                                            }
                                         },
                                         rowNumber: '#'
                                     },
@@ -81,8 +82,17 @@
                                         filter: "none",
                                         paging: null,
                                         columns: {
+                                            img: {
+                                                source: "img",
+                                                title: "تصویر",
+                                                cellMaker: (row, data, td) => `<img src="${row.img}" width="40" height="40" />`
+                                            },
                                             title: "پروژه",
-                                            date: "تاریخ"
+                                            date: "تاریخ",
+                                            action: {
+                                                title: "عملیات",
+                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`
+                                            }
                                         },
                                         rowNumber: '#'
                                     },
@@ -97,6 +107,22 @@
                     "bc.grid": "/basiscore.grid.component.js"
                 }
             };
+
+            function onClickRowEditBtn(e) {
+                console.log(e);
+            }
+            
+            function onClickRowShareBtn(e) {
+                console.log(e);
+            }
+
+            function onClickRowDownloadBtn(e) {
+                console.log(e);
+            }
+
+            function onClickRowRemoveBtn(e) {
+                console.log(e);
+            }
         </script>
         <script src="basiscore.js"></script>
         <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>

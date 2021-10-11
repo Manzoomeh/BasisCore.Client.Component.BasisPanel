@@ -85,14 +85,23 @@
     height: 30px;
     padding: 0px 10px;
     font-size: 11px;
-    color: #555;
-    background: #F5F8F9;
-    border: 1px solid #C7D6DB;
+    color: var(--dark_gray);
+    background: var(--vlight_blue);
+    border: 1px solid var(--light_blue);
     border-radius: 3px;
     transition: border 0.3s linear 0s;
 }
 
+[data-bc-business-list] [data-bc-business-search] input:focus {
+    background: var(--papaya);
+    border-color: var(--sky_blue);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+
 [data-bc-business-list] [data-bc-business-drop-down] ul {
+    scrollbar-width: thin;
+    /* scrollbar-color: #eff2f5 transparent; */
     height: auto;
     max-height: 200px;
     overflow: auto;

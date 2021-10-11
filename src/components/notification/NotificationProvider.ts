@@ -10,35 +10,44 @@ import ISource from "../../basiscore/ISource";
 export default class NotificationProvider implements INotificationProvider {
   readonly _owner: INotificationComponent;
   readonly options: INotificationProviderOptions;
-  get container(): Element{
+  get container(): Element {
     return this._owner.container;
   }
-  get rkey(): string{
-    return this._owner.rkey;
+  get rKey(): string {
+    return this._owner.rKey;
   }
   public readonly tab: NotificationTab;
-    
-  constructor (owner: INotificationComponent, options: INotificationProviderOptions, index: number) {
+
+  constructor(
+    owner: INotificationComponent,
+    options: INotificationProviderOptions,
+    index: number
+  ) {
     this._owner = owner;
     this.options = options;
-    
+
     this.tab = new NotificationTab(this, index);
   }
 
-  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string {
-    return this._owner.storeAsGlobal(data,name,prefix,postfix);
+  storeAsGlobal(
+    data: any,
+    name?: string,
+    prefix?: string,
+    postfix?: string
+  ): string {
+    return this._owner.storeAsGlobal(data, name, prefix, postfix);
   }
-  
+
   getRandomName(prefix?: string, postfix?: string): string {
-    return this._owner.getRandomName(prefix,postfix);
+    return this._owner.getRandomName(prefix, postfix);
   }
 
   setSource(sourceId: string, data: any, options?: ISourceOptions): void {
-    this._owner.setSource(sourceId,data,options)
+    this._owner.setSource(sourceId, data, options);
   }
-  
+
   processNodesAsync(nodes: Node[]): Promise<IDisposable> {
-    return this._owner.processNodesAsync(nodes)
+    return this._owner.processNodesAsync(nodes);
   }
 
   index: number;
@@ -57,15 +66,14 @@ export default class NotificationProvider implements INotificationProvider {
   //   console.log("runAsync")
   //   return true;
   // }
-  
+
   public async loadDataAsync(): Promise<void> {
     //TODO: start fetch data from url and display related list
-    console.log("this", this._owner)
     const url = HttpUtil.formatString(this.options.url, {
-      rKey: this.rkey,
+      rKey: this.rKey,
     });
     const result = await HttpUtil.fetchDataAsync(url, "GET");
-    
+
     this.tab.refreshUI(result as Array<any>);
   }
 }

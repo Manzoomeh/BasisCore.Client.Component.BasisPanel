@@ -96,6 +96,6 @@ export default class NotificationTab {
       
       console.log("setSource", data);
     }
-    console.log("refresh ui", data);
+    console.log("refresh tab ui", data);
   }
 }
