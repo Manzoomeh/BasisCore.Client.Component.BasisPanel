@@ -5,7 +5,8 @@
           "options": {
               "repositories": {
                   "bc.grid": "basiscore.grid.component.js",
-                  "bc.tabManager": "basiscore.tabManager.js"
+                  "bc.tabManager": "basiscore.tabManager.js",
+                  "bc.datepicker": "basiscore.datepicker.component.js"
               },
           "settings": {
             "connection.web.callcommand":"http://localhost:8080/server/trust/1229BF0C-D2F1-4172-9817-9E8E87BF35BE/widget/",

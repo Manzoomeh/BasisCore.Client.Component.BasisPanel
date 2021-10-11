@@ -58,10 +58,10 @@
 
 
     <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" 
-    usedforid="[##list.search.value|(0)##]" triggers="list.search" >
-        <member request="view_supplier" type="view" name="view_supplier" sort="qid desc" ></member>
+    usedforid="[##db.supplierid.value|(0)##]" triggers="db.supplierid" >
+        <member request="view_supplier" type="view" name="view_supplier"  ></member>
     </basis>
-<div class="widget_body">
+<div class="widget_body widget_body_supplier_details">
 <basis core="print" datamembername="db.view_supplier" run="atclient">
     <else-layout>
         <script type="text/template">

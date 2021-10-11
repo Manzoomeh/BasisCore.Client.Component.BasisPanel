@@ -13,7 +13,10 @@ height: 35px;width: 80%;}
 
 <script>
 
-    var mySetting111 = [
+    var mySetting111 = 
+	{
+        "tabSettings":{"settings": {"connection.web.fingerfoodapi": "https://dbsource.basiscore.net/data.json"}},
+    "tabs": [
 		{
             "title":"لیست تامین‌کننده",
 			"widgetId":13,
@@ -22,10 +25,11 @@ height: 35px;width: 80%;}
 		},
 		{
             "title":"نمایش تامین کننده",
-			"widgetId":14,
+			"widgetId":16,
 			"active" : false,
-            "triggers":["db.supplierid"]
+            "triggers":["db.supplieraccessories"]
 		}
 	
 	]
+    }
 </script>

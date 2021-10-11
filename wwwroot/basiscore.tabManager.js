@@ -566,6 +566,7 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
     }
     createBody() {
         return __awaiter(this, void 0, void 0, function* () {
+            //comment this
             let triggersArray = [];
             const firstTab = this.tabComponentOptions.find(element => element.active == true);
             const componentId = Math.floor(Math.random() * 10000);
@@ -592,6 +593,7 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
         const span = document.createElement("span");
         header.setAttribute("bc-tab-header", "");
         span.setAttribute("data-id", id.toString());
+        closeBtn.setAttribute("data-id", id.toString());
         span.textContent = headerText;
         closeBtn.textContent = "x";
         closeBtn.setAttribute("bc-tab-close-button", "");
@@ -601,14 +603,26 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
         }
         this.activeHeader = header;
         closeBtn.addEventListener("click", (e) => {
+            const closeElement = e.target;
+            const headerElement = closeElement.getAttribute("data-id");
+            const header = closeElement.parentElement;
+            this.tabNodes.map(x => {
+                let dataId = x.getAttribute("data-id");
+                if (parseInt(dataId) == parseInt(headerElement)) {
+                    this.activeComponent = x;
+                    this.activeHeader = header;
+                }
+            });
             this.activeComponent.remove();
             this.activeHeader.remove();
             this.activeTab(this.tabNodes[0]);
         });
         span.addEventListener("click", (e) => {
+            const headerElement = e.target;
+            const headerId = headerElement.getAttribute("data-id");
             this.tabNodes.map(x => {
                 const componentId = x.getAttribute("component-id");
-                if (id == parseInt(componentId)) {
+                if (parseInt(headerId) == parseInt(componentId)) {
                     this.activeTab(x);
                 }
             });
@@ -629,7 +643,7 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
             });
             this.activeComponent.setAttribute("bc-tab-active-component", "true");
             //const nodes= Array.from(this.container.childNodes)
-            //this.owner.setContent(this.container);       
+            //this.owner.setContent(this.container);    
             yield this.owner.processNodesAsync([activeComponent]);
         });
     }
@@ -643,7 +657,6 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
     runAsync(source) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.firstTabInitialize) {
-                console.log("first tab");
                 yield this.createBody();
                 this.firstTabInitialize = true;
             }
@@ -651,11 +664,18 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
                 const componentId = Math.floor(Math.random() * 10000);
                 const activeTab = this.tabComponentOptions.find(element => element.triggers.find(element1 => element1 == source._id));
                 this.headerWrapper.appendChild(this.createHeader(activeTab.title, componentId));
+                const basisOptions = `{"settings": {"connection.web.fingerfoodapii": "https://dbsource.basiscore.net/data.json"}}`;
+                let groupElement = document.createElement("basis");
+                groupElement.setAttribute("core", "group");
+                groupElement.setAttribute("run", "atclient");
+                let tabSettings = `${this.tabsSettings}`;
+                groupElement.setAttribute("options", JSON.stringify(basisOptions));
                 let basisTag = document.createElement("basis");
                 basisTag.setAttribute("core", "call");
                 basisTag.setAttribute("file", `${activeTab.widgetId}.html`);
                 basisTag.setAttribute("run", "atclient");
-                yield this.initializeComponent(basisTag, componentId);
+                groupElement.appendChild(basisTag);
+                yield this.initializeComponent(groupElement, componentId);
             }
             return true;
         });
@@ -663,7 +683,8 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
     getOptions() {
         return __awaiter(this, void 0, void 0, function* () {
             const settingObject = yield this.owner.getAttributeValueAsync("options");
-            this.tabComponentOptions = eval(settingObject);
+            this.tabComponentOptions = eval(settingObject).tabs;
+            this.tabsSettings = eval(settingObject).tabSettings;
         });
     }
     initializeAsync() {

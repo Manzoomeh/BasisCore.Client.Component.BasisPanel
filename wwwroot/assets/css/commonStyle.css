@@ -209,3 +209,14 @@ body {
 .modal-body {
     padding: 15px 15px;
 }
+.widgetBtn {
+    color: var(--dark_gray);
+    background-color: #fff;
+    border: 1px solid var(--gray);
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    float: left;
+}
