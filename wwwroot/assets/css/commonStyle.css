@@ -200,19 +200,6 @@ body {
 .modal-body {
     padding: 15px 15px;
 }
-<<<<<<< HEAD
-.widgetBtn {
-    color: var(--dark_gray);
-    background-color: #fff;
-    border: 1px solid var(--gray);
-    border-radius: 3px;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px;
-    margin-right: 5px;
-    float: left;
-}
-=======
 
 /* grid icons */
 [data-bc-grid] .icons {
@@ -244,4 +231,14 @@ body {
     width: 17px;
     height: 17px;
 }
->>>>>>> 1d3e51adec8652751150863f88738fee6f9921c3
+.widgetBtn {
+    color: var(--dark_gray);
+    background-color: #fff;
+    border: 1px solid var(--gray);
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    float: left;
+}

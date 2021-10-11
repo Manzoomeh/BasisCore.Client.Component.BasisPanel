@@ -2,7 +2,6 @@
     [bc-tab-header-wrapper] {
         display: flex;
         position: relative;
-        top: -40px;
         background: #fff;
         height: 35px;
         width: 80%;
@@ -19,7 +18,7 @@
 <div class="clr"></div>
 
 <script>
-<<<<<<< HEAD
+
 
     var mySetting111 = 
 	{
@@ -31,8 +30,14 @@
 			"active" : true,
             "triggers":[]
 		},
+        {
+            "title":"لیست برنامه غذایی",
+			"widgetId":17,
+			"active" : false,
+            "triggers":["db.suppliercalendar"]
+		},
 		{
-            "title":"نمایش تامین کننده",
+            "title":"لیست تجهیزات تامین‌کنندگان",
 			"widgetId":16,
 			"active" : false,
             "triggers":["db.supplieraccessories"]
@@ -40,19 +45,5 @@
 	
 	]
     }
-=======
-    var mySetting111 = [
-        {
-            "title": "لیست تامین‌کننده",
-            "widgetId": 13,
-            "active": true,
-            "triggers": []
-        }, {
-            "title": "نمایش تامین کننده",
-            "widgetId": 14,
-            "active": false,
-            "triggers": ["db.supplierid"]
-        }
-    ]
->>>>>>> 1d3e51adec8652751150863f88738fee6f9921c3
+
 </script>

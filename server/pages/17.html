@@ -310,7 +310,7 @@
             <div class="new-supplier-btn">
                 <div class="widgetBtn" onclick="supplierNew()">
                     <i class="lni lni-plus"></i>
-                    درخواست تجهیزات جدید
+               ثبت برنامه جدید
                 </div>
             </div>
            
@@ -319,86 +319,15 @@
     </div>
     
     <div class="widget_body section-2">
-
-        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" sid="[##db.supplieraccessories.value##]">
-            <member request="supplier_accessories" type="list" name="supplier_accessories" preview="true"></member>
+        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" sid="[##db.suppliercalendar.value##]">
+            <member request="supplier_calendar" type="list" name="supplier_calendar" preview="true"></member>
         </basis>
-        <basis core="dbsource" source="fingerfoodapi" name="db" run="atclient" cache="refresh" 
-    triggers="db.brandid" usedforid="[##db.brandid.value|(1)##]">
-        <member request="brand_model_list" type="list" name="brand_model_list" preview=""></member>
-    </basis>
+       
         <div class="supplier_resize">
-            <Basis core="component.bc.grid" run="atclient" datamembername="db.supplier_accessories" 
-            options="supplierAccessoriesGrid"></Basis>
+            <Basis core="component.bc.grid" run="atclient" datamembername="db.supplier_calendar" 
+            options="supplierCalendarGrid"></Basis>
         </div>
-		<div id="editModal" class="modal">
-			<div class="modal-background" onclick="hideModal('editModal')"></div>
-			<div class="modal-content">
-				<div class="modal-title">
-					<span>فرم تعریف تجهیزات جدید</span>
-					<span id="modalClose" class="close no-select" onclick="hideModal('editModal')">×</span>
-				</div>
-				<div class="modal-body">
-					<form class="sample-form" bc-triggers="submit"  name="cms.form"  autocomplete="off">
-					   
-						<div class="sample-form-box">
-							<span> برند : </span>
-							<basis core="print" datamembername="db.brand_list" run="atclient">
-								<layout>
-									<select name="db.brandid" bc-triggers="change">@child@</select>
-								</layout>
-                                <face filter="id == 1">
-									<option value="@id@" selected >@title@</option>
-								</face>
-								<face>
-									<option value="@id@" >@title@</option>
-								</face>
-							</basis>
-						
-						</div>
-						<div class="sample-form-box">
-							<span>مدل  : </span>							
-                            <basis core="print" datamembername="db.brand_model_list" run="atclient" >
-								<layout>
-									<select data-name="sss">@child@</select>
-								</layout>
-								<face>
-									<option value="@id@" >@model@</option>
-								</face>
-							</basis>
-						</div>
-						<div class="sample-form-box">
-							<span>تعداد : </span>	
-                            <input type="text" placeholder="تعداد تجهیزات را اینجا وارد کنید" name="" />
-                        </div>
-                        <div class="sample-form-box">
-                            <span>تاریخ تحویل : </span>	
-                            <div class="date-picker-wrapper">
-                                <button>
-                                    <svg viewbox="0 0 24 24" width="24px" height="24px" fill="currentColor" focusable="false" class="mat-datepicker-toggle-default-icon ng-star-inserted">
-                                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"></path>
-                                    </svg>
-                                </button>
-                                <div class="date-picker-input-wrapper">           
-                                
-                                </div>
-                            </div>
-                        </div>
-						<input type="submit" class="submitForm" value="ذخیره" />
-						<div id="message" class="message">
-							<basis core="print" datamembername="db.save_supplier" run="atclient">
-								<face>
-									<script type="text/template">
-									تجهیزات جدید با موفقیت اضافه شد.
-								</script>
-								</face987>
-							</basis>
-						</div>
-						<div class="clr"></div>
-					</form>
-				</div>
-			</div>
-		</div>
+		
 
     </div>
 
