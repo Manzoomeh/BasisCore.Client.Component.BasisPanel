@@ -8,7 +8,7 @@
                     "bc.datepicker": "basiscore.datepicker.component.js"
                 },
             "settings": {
-              "connection.web.callcommand":"http://localhost:8080/server/trust/1229BF0C-D2F1-4172-9817-9E8E87BF35BE/widget/",
+              "connection.web.callcommand":"/server/trust/1229BF0C-D2F1-4172-9817-9E8E87BF35BE/widget/",
               "connection.web.fingerfoodapi": "https://dbsource.basiscore.net/data.json",
               "connection.web.trust_loginuiapi": "https://dbsource.basiscore.net/data.json",
               "connection.web.basiscoreapi": "https://dbsource.basiscore.net/data.json",

@@ -607,7 +607,7 @@ class TabComponent extends _src_BasisPanelChildComponent__WEBPACK_IMPORTED_MODUL
             const headerElement = closeElement.getAttribute("data-id");
             const header = closeElement.parentElement;
             this.tabNodes.map(x => {
-                let dataId = x.getAttribute("data-id");
+                let dataId = x.getAttribute("component-id");
                 if (parseInt(dataId) == parseInt(headerElement)) {
                     this.activeComponent = x;
                     this.activeHeader = header;
