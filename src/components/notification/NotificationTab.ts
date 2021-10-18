@@ -92,10 +92,8 @@ export default class NotificationTab {
       if (this.alarm.style.display == "none") {
         this.alarm.style.display = "block"
       }
-      this._owner.setSource(`notification.${this.optionsName}`, data);
-      
-      console.log("setSource", data);
     }
+    this._owner.setSource(`notification.${this.optionsName}`, data);
     console.log("refresh tab ui", data);
   }
 }
