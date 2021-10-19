@@ -1,89 +1,79 @@
 {
-    "userInfo": {"groups": [        {
-            "groupName": "fingerfood",
-            "options": {
-                "repositories": {
-                    "bc.grid": "basiscore.grid.component.js",
-                    "bc.tabManager": "basiscore.tabManager.js",
-                    "bc.datepicker": "basiscore.datepicker.component.js"
+    "userInfo": {
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
                 },
-            "settings": {
-              "connection.web.callcommand":"/server/trust/1229BF0C-D2F1-4172-9817-9E8E87BF35BE/widget/",
-              "connection.web.fingerfoodapi": "https://dbsource.basiscore.net/data.json",
-              "connection.web.trust_loginuiapi": "https://dbsource.basiscore.net/data.json",
-              "connection.web.basiscoreapi": "https://dbsource.basiscore.net/data.json",
-              "connection.web.accountingapi": "https://dbsource.basiscore.net/data.json",
-                "default.dmnid": 4235,
-                "default.call.verb":"get",
-                "default.dbsource.verb": "post"
-            }  },
-            "widgets": [
-                {
-                    "id": "supplier_list3.html",
-                    "title": "لیست تامین کنندگان",
-                    "name": "supplierlist",
-                    "x": 4,
-                    "y": 0,
-                    "w": 8,
-                    "h": 4
+                "widgets": [
+                    {
+                        "id": "my-file.html",
+                        "title": "ویجت 1",
+                        "name": "myFile",
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
+                    }
+                ],
+                "deactiveWidgets": []
+            },
+            {
+                "groupName": "group2",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {
+                        "connection.web.demo": "https://dbsource.basiscore.net/data.json",
+                        "default.dmnid": 123
+                    }
                 },
-                {
-                    "id": "supplier_details.html",
-                    "title": "اطلاعات تامین کنندگان",
-                    "name": "supplierdetails",
-                    "x": 0,
-                    "y": 0,
-                    "w": 4,
-                    "h": 4
-                }
-            ],
-            "deactiveWidgets": [
-                
-            ]
-        },
-        {
-            "groupName": "trustLogin",
-            "options":{
-                "repositories": {
-                    "bc.grid": "basiscore.grid.component.js"
-                },
-                "settings": {
-                "connection.web.demo_trust_loginuiapi": "https://dbsource.basiscore.net/data.json",
-                "default.dmnid": 15
-            }}
-            ,
-            "widgets": [
-              {
-                  "id": "users_list.html",
-                  "title": "لیست کاربران پنل",
-                  "name": "userslist",
-                  "x": 0,
-                  "y": 4,
-                  "w": 12,
-                  "h": 4
-              }
-            ],
-            "deactiveWidgets": [
-                {
-                    "id": "my-file.html",
-                    "title": "فایل های من",
-                    "name": "myFile",
-                    "x": 0,
-                    "y": 1,
-                    "w": 4,
-                    "h": 4
-                },
-                {
-                    "id": "my-file1.html",
-                    "title": "فایل های 1من",
-                    "name": "myFile1",
-                    "x": 4,
-                    "y": 5,
-                    "w": 4,
-                    "h": 4
-                }
-            ]
-        }
-    ]
-  }
-  }
+                "widgets": [
+                    {
+                        "id": "my-file1.html",
+                        "title": "ویجت 2",
+                        "name": "myFile1",
+                        "x": 8,
+                        "y": 2,
+                        "w": 4,
+                        "h": 3
+                    },
+                    {
+                        "id": "my-file2.html",
+                        "title": "ویجت 3",
+                        "name": "myFile2",
+                        "x": 0,
+                        "y": 2,
+                        "w": 8,
+                        "h": 3
+                    }
+                ],
+                "deactiveWidgets": [
+                    {
+                        "id": "my-file.html",
+                        "title": "فایل های من",
+                        "name": "myFile",
+                        "x": 0,
+                        "y": 1,
+                        "w": 4,
+                        "h": 4
+                    },
+                    {
+                        "id": "my-file1.html",
+                        "title": "فایل های 1من",
+                        "name": "myFile1",
+                        "x": 4,
+                        "y": 5,
+                        "w": 4,
+                        "h": 4
+                    }
+                ]
+            }
+        ]
+    }
+}

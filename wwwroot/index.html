@@ -45,6 +45,7 @@
                                     config: {
                                         filter: "none",
                                         paging: null,
+                                        information: false,
                                         columns: {
                                             title: "فرستنده",
                                             date: "تاریخ",
@@ -53,6 +54,7 @@
                                                 cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
                                             }
                                         },
+                                        noData: "پیام جدیدی ندارید",
                                         rowNumber: '#'
                                     },
                                     link: "#"
@@ -63,6 +65,7 @@
                                     config: {
                                         filter: "none",
                                         paging: null,
+                                        information: false,
                                         columns: {
                                             title: "ایجاد کننده",
                                             date: "تاریخ",
@@ -71,6 +74,7 @@
                                                 cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
                                             }
                                         },
+                                        noData: "یادداشت جدیدی ندارید",
                                         rowNumber: '#'
                                     },
                                     link: "#"
@@ -81,6 +85,7 @@
                                     config: {
                                         filter: "none",
                                         paging: null,
+                                        information: false,
                                         columns: {
                                             img: {
                                                 source: "img",
@@ -94,6 +99,7 @@
                                                 cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`
                                             }
                                         },
+                                        noData: "تسک جدیدی ندارید",
                                         rowNumber: '#'
                                     },
                                     link: "#"
