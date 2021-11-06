@@ -2,3 +2,4 @@ node_modules
 dist
 *.rar
 *.zip
+package-lock.json

@@ -6,6 +6,8 @@ const businessHttpServer = require("./server/business");
 const { router: activeManagerHttpServer } = require("./server/active-manager");
 const externalMenuHttpServer = require("./server/external-menu");
 const notificationsHttpServer = require("./server/notifications");
+const externalHttpServer = require("./server/external");
+
 //const router = require("./server/trust-login");
 
 module.exports = {
@@ -36,6 +38,7 @@ module.exports = {
       server.app.use("/server/active", activeManagerHttpServer);
       server.app.use("/server/external", externalMenuHttpServer);
       server.app.use("/server/notifications", notificationsHttpServer);
+      server.app.use("/server/external", externalHttpServer);
     },
     open: true,
   },
