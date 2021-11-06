@@ -8,6 +8,7 @@ import "./assets/style.css";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
+import IPageLoaderParam from "../menu/IPageLoaderParam";
 
 export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -51,7 +52,20 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         menuMethod: this.options.method.menu,
       };
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
+      this.signalToDisplayPage();
     }
+  }
+
+  private signalToDisplayPage() {
+    const newParam: IPageLoaderParam = {
+      pageId: "default",
+      owner: "profile",
+      ownerId: "",
+      ownerUrl: this.options.baseUrl.profile,
+      rKey: this.options.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private refreshUI() {

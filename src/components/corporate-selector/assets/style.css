@@ -1,13 +1,14 @@
 [data-bc-corporate-list] {
-    width: 180px;
+    width: 185px;
     height: 25px;
     background: #f9f9f9;
     padding: 15px;
     float: right;
     margin-right: 15px;
     position: relative;
-    cursor: pointer;
+    /* cursor: pointer; */
     direction: rtl;
+    /* box-sizing: unset; */
 }
 
 [data-bc-corporate-list] [data-bc-corporate-notification] {
@@ -28,8 +29,9 @@
 }
 
 [data-bc-corporate-list] [data-bc-corporate-select] {
-    cursor: pointer;
+    /* cursor: pointer; */
     margin-top: px;
+    position: relative;
 }
 
 [data-bc-corporate-list] [data-bc-corporate-msg] {
@@ -40,15 +42,23 @@
     color: #bcbcbc;
 }
 
+[data-bc-corporate-list] [data-bc-corporate-notif-drop-down] {
+    position: absolute;
+    top: 10px;
+    left: -4px;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
 [data-bc-corporate-list] [data-bc-corporate-icon-drop-down] {
-    float: left;
-    position: relative;
-    top: 15px;
+    /* float: left; */
+    /* position: relative; */
+    /* top: 15px; */
 }
 
 [data-bc-corporate-list] [data-bc-corporate-drop-down] {
     position: absolute;
-    width: 210px;
+    width: 100%;
     right: 0;
     top: 50px;
     background: #f9f9f9;
@@ -63,7 +73,7 @@
 }
 
 [data-bc-corporate-list] [data-bc-corporate-search] {
-    padding: 5px 5px;
+    padding: 5px 15px;
     border-bottom: 1px dashed #dfdfdf;
     /* padding-top: 10px; */
 }

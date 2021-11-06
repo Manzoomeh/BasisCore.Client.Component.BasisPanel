@@ -1,3 +1,5 @@
+var fs = require("fs");
+const path = require("path");
 const express = require("express");
 const router = express.Router();
 const { active } = require("./active-manager");
@@ -128,6 +130,26 @@ router.get("/:rKey/menu", function (req, res) {
     });
   }
   res.json(result);
+});
+
+router.get("/:rKey/page/:pageId", function (req, res) {
+  const widgetList = fs.readFileSync(
+    path.join(__dirname, "pages/business-widget-list.json"),
+    {
+      encoding: "utf8",
+    }
+  );
+  res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
+});
+
+router.get("/:rKey/widget/:widgetId", function (req, res) {
+  const widgetList = fs.readFileSync(
+    path.join(__dirname, "pages", req.params.widgetId),
+    {
+      encoding: "utf8",
+    }
+  );
+  res.send(widgetList);
 });
 
 module.exports = router;

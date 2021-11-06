@@ -1,0 +1,27 @@
+{
+    "default": {
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "businessWidget1.html",
+                        "title": "ویجت داشبورد",
+                        "name": "businessWidget1",
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
+                    }
+                ],
+                "deactiveWidgets": []
+            }
+        ]
+    }
+}

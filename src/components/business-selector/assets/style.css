@@ -1,13 +1,14 @@
 [data-bc-business-list] {
-    width: 180px;
+    width: 190px;
     height: 25px;
     background: #f9f9f9;
     padding: 15px;
     float: right;
     margin-right: 15px;
     position: relative;
-    cursor: pointer;
+    /* cursor: pointer; */
     direction: rtl;
+    /* box-sizing: unset; */
 }
 
 [data-bc-business-list] [data-bc-business-loading] {
@@ -40,8 +41,9 @@
 }
 
 [data-bc-business-list] [data-bc-business-select] {
-    cursor: pointer;
+    /* cursor: pointer; */
     margin-top: px;
+    position: relative;
 }
 
 [data-bc-business-list] [data-bc-business-msg] {
@@ -52,15 +54,23 @@
     color: #bcbcbc;
 }
 
+[data-bc-business-list] [data-bc-business-notif-drop-down] {
+    position: absolute;
+    top: 10px;
+    left: -4px;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
 [data-bc-business-list] [data-bc-business-icon-drop-down] {
-    float: left;
-    position: relative;
-    top: 15px;
+    /* float: left; */
+    /* position: relative; */
+    /* top: 15px; */
 }
 
 [data-bc-business-list] [data-bc-business-drop-down] {
     position: absolute;
-    width: 210px;
+    width: 100%;
     right: 0;
     top: 50px;
     background: #f9f9f9;
@@ -75,7 +85,7 @@
 }
 
 [data-bc-business-list] [data-bc-business-search] {
-    padding: 5px 5px;
+    padding: 5px 15px;
     border-bottom: 1px dashed #dfdfdf;
     /* padding-top: 10px; */
 }

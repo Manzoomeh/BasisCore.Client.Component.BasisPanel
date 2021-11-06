@@ -11,6 +11,7 @@
     /* display: flex; */
     /* justify-content: center; */
     /* align-items: center; */
+    /* box-sizing: unset; */
 }
 
 [data-bc-user-info] [data-bc-user-info-image] {

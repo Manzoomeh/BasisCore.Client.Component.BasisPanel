@@ -5,6 +5,7 @@ import { DefaultSource, MenuOwnerType } from "../type-alias";
 import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
+import IPageLoaderParam from "./menu/IPageLoaderParam";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -38,7 +39,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element = this.container.querySelector<Element>(
       "[data-bc-main-list]"
     );
-    const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
+    // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
+    const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-drop-down-click]");
     elClick.addEventListener("click", async (e) => {
       
       if (this.mustReload) {
@@ -78,6 +80,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     //     }
     //   }
     // });
+
+    const msgElClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
+    msgElClick.addEventListener("click", async (e) => {
+      const msgElId = msgElClick.getAttribute("data-id");
+      if (msgElId != "0") {
+        this.owner.setSource(DefaultSource.SHOW_MENU, this.createMenuLoaderParam(parseInt(msgElId)));
+        this.signalToDisplayPage(parseInt(msgElId));
+      }
+    });
 
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
@@ -174,16 +185,20 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
                 id: id,
               });
            
-              this.owner.setSource(
-                DefaultSource.SHOW_MENU,
-                this.createMenuLoaderParam(id)
-              );
+              this.owner.setSource(DefaultSource.SHOW_MENU, this.createMenuLoaderParam(id));
+              this.signalToDisplayPage(id);
             }
           }
           if(this.ownerType == "corporate"){
-            this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]").textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
+            const businessMsgElement = this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]");
+            businessMsgElement.textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
+            businessMsgElement.setAttribute("data-id", "0");
+            (businessMsgElement as HTMLElement).style.cursor = "auto";
           }
-          this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]").textContent = li.textContent;
+          const containerMsgElement = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
+          containerMsgElement.textContent = li.textContent;
+          containerMsgElement.setAttribute("data-id", li.getAttribute("data-id"));
+          (containerMsgElement as HTMLElement).style.cursor = "pointer";
           this.element.closest("[data-bc-drop-down-container]").setAttribute("data-status", "close");
         });
         // div.textContent = item.title;
@@ -209,6 +224,18 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       menuMethod: this.options.method.menu,
     };
     return menuParam;
+  }
+
+  private signalToDisplayPage(id: Number) {
+    const newParam: IPageLoaderParam = {
+      pageId: "default",
+      owner: this.ownerType,
+      ownerId: id.toString(),
+      ownerUrl: this.getOwnerUrl(),
+      rKey: this.options.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }
 
