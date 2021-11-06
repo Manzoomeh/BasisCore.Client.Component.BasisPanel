@@ -28,3 +28,9 @@ export interface ILoaderParam {
   ownerUrl: string;
   rKey: string;
 }
+
+export interface IBasisPanel {
+  scheduler: IScheduler;
+}
+
+export interface IScheduler {}

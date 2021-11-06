@@ -1,1 +1,17 @@
-<span>ویجت داشبورد سطح user</span>
+<span id="span_id">ویجت داشبورد سطح user</span>
+<script>
+  const processTask = new Promise((resolve, reject) => {
+    setTimeout((_) => {
+      resolve();
+      console.log("end");
+    }, 3000);
+  });
+
+  const taskOptions = {
+    container: document.getElementById("span_id"),
+    task: processTask,
+  };
+
+  const k = $bc.basisPanel?.scheduler?.startTask(taskOptions);
+  console.log(k);
+</script>
