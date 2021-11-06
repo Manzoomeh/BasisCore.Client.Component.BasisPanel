@@ -1,0 +1,15 @@
+[data-bc-bp-logout-container] {
+    float: right;
+}
+
+[data-bc-bp-main-wrapper] {
+    padding: 5px 10px;
+	line-height: 45px;
+}
+
+[data-bc-bp-main-wrapper] i {
+    vertical-align: middle;
+	cursor: pointer;
+	font-style: normal;
+	font-size: 13px;
+}
