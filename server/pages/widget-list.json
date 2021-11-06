@@ -18,6 +18,16 @@
                         "y": 0,
                         "w": 12,
                         "h": 2
+                    },
+                    {
+                        "id": "external-file.html",
+                        "title": "اکسترنال ویجت",
+                        "name": "externalFile",
+                        "x": 0,
+                        "y": 5,
+                        "w": 12,
+                        "h": 2,
+                        "url":"server/external"
                     }
                 ],
                 "deactiveWidgets": []
