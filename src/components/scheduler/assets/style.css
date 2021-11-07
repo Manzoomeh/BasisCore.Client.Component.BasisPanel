@@ -1,5 +1,6 @@
 [data-bc-bp-scheduler-container] {
     float: right;
+    width: 40px;
 }
 
 /* ********** task list icon ********** */
@@ -24,6 +25,7 @@
     height: 18px;
     overflow: hidden;
     font-size: 18px;
+    color: #2b2b2b;
 }
 
 [data-bc-task-list] [data-bc-task-list-icon] * {
@@ -51,13 +53,6 @@
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-
-
-    /* opacity: 1;
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
-    visibility: visible;
-    height: auto; */
 }
 
 [data-bc-task-list]:hover [data-bc-task-list-dropdown] {

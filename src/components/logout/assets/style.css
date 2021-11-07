@@ -1,5 +1,6 @@
 [data-bc-bp-logout-container] {
     float: right;
+	width: 40px;
 }
 
 [data-bc-bp-main-wrapper] {
@@ -7,9 +8,14 @@
 	line-height: 45px;
 }
 
-[data-bc-bp-main-wrapper] i {
+[data-bc-bp-main-wrapper] [data-bc-logout-icon] {
     vertical-align: middle;
 	cursor: pointer;
 	font-style: normal;
-	font-size: 13px;
+	font-size: 15px;
+}
+
+[data-bc-bp-main-wrapper] [data-bc-logout-icon] * {
+    color: #2b2b2b;
+    fill: #2b2b2b;
 }
