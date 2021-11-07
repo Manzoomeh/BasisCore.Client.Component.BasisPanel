@@ -3,6 +3,7 @@ import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
+import "./assets/style.css";
 import ITaskOptions from "./ITaskOptions";
 import TaskProcess from "./TaskProcess";
 declare const $bc: any;
