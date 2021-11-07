@@ -31,10 +31,12 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     this.title = this.param.title;
+
     const url = HttpUtil.formatString(
-      `${this.param.page.ownerUrl}${this.options.method.widget}`,
-      { rKey: this.options.rKey, widgetId: this.param.id }
+        `${this.param.url??this.param.page.ownerUrl}${this.options.method.widget}`,
+        { rKey: this.options.rKey, widgetId: this.param.id }
     );
+    
     var content = await HttpUtil.fetchStringAsync(url, "GET");
     const range = new Range();
     const container = this.container.querySelector(

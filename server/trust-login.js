@@ -94,4 +94,13 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
   );
   res.send(widgetList);
 });
+
+router.get("/:rKey/logout", function (req, res) {
+  const result = [
+    // { message: "ok", redirectUrl: "https://trust-login.com" }
+    { message: "ok", redirectUrl: "" }
+  ];
+  res.json(result);
+});
+
 module.exports = router;

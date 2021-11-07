@@ -6,6 +6,7 @@ export default interface IWidgetInfo {
   y: number; 
   w: number; 
   h: number;
+  url: string;
 }
 
 

@@ -1,3 +1,4 @@
+import ILogoutOptions from "../logout/ILogoutOptions";
 import { INotificationOptions } from "../notification/options/INotificationOptions";
 
 export default interface IBasisPanelOptions {
@@ -5,6 +6,7 @@ export default interface IBasisPanelOptions {
   baseUrl: IPanelPartUrlOptions;
   dataUrl: IUrlCollectionOption;
   method: IPanelPartMethodOptions;
+  logout: ILogoutOptions;
   notification: INotificationOptions;
 }
 
