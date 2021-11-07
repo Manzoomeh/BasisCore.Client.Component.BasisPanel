@@ -48,9 +48,14 @@ export default class MenuElementMaker {
         ul.appendChild(
           this.createLevelMenuItem(node as IMenuLevelInfo, menuParam)
         );
-      } else if ((node as IMenuExternalItemInfo).mid) {
+      } else if ((node as IMenuExternalItemInfo).mid && (node as IMenuExternalItemInfo).multi == true) {
         ul.appendChild(
           this.createExternalMenuItem(node as IMenuExternalItemInfo, menuParam)
+        );
+      }
+      else if ((node as IMenuExternalItemInfo).mid && (node as IMenuExternalItemInfo).multi == false) {
+        ul.appendChild(
+          this.createExternalMenuItemSingleItem(node as IMenuExternalItemInfo, menuParam)
         );
       }
     });
@@ -101,7 +106,33 @@ export default class MenuElementMaker {
     li.appendChild(content);
     return li;
   }
-
+  private createExternalMenuItemSingleItem(
+    node: IMenuExternalItemInfo,
+    menuParam: IMenuLoaderParam) : HTMLElement{
+      
+      const newMenuParam: IMenuLoaderParam = {
+        owner: "external",
+        ownerId: node.mid,
+        ownerUrl: node.url,
+        menuMethod: menuParam.menuMethod,
+        rKey: menuParam.rKey,
+      };     
+      const li = document.createElement("li");
+      const ul = document.createElement("ul");
+      ul.setAttribute("data-bc-bp-menu-external-single-node", "");
+      li.appendChild(ul);
+      let subMenuFlag = false;
+      const url = HttpUtil.formatString(
+        `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
+        {
+          rKey: this.rKey,
+        }
+      );
+      HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
+        this.createMenu(ul, menu.nodes, newMenuParam)
+      );
+      return li;
+  }
   private createExternalMenuItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam
