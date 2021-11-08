@@ -1,6 +1,7 @@
 [data-bc-bp-notification-container] {
     float: right;
     width: 40px;
+    text-align: center;
 }
 
 /* ********** notification icon ********** */
