@@ -1,12 +1,12 @@
 [data-bc-bp-logout-container] {
     float: right;
 	width: 40px;
-    text-align: center;
 }
 
 [data-bc-bp-logout-main-wrapper] {
     padding: 5px 10px;
 	line-height: 45px;
+    text-align: center;
 }
 
 [data-bc-bp-logout-main-wrapper] [data-bc-logout-icon] {

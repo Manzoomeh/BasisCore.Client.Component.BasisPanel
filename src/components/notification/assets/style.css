@@ -1,7 +1,6 @@
 [data-bc-bp-notification-container] {
     float: right;
     width: 40px;
-    text-align: center;
 }
 
 /* ********** notification icon ********** */
@@ -18,6 +17,7 @@
     position: relative;
     cursor: pointer;
     line-height: 40px;
+    text-align: center;
 }
 
 [data-bc-notification] [data-bc-notification-icon] {
@@ -70,15 +70,6 @@
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-
-
-
-
-    /* opacity: 1;
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
-    visibility: visible;
-    height: auto; */
 }
 
 [data-bc-notification]:hover [data-bc-notification-dropdown] {
