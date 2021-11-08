@@ -5,7 +5,9 @@ import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
 import { DefaultSource } from "../../type-alias";
+import ITaskOptions from "../scheduler/ITaskOptions";
 
+declare const $bc: any;
 export default class WidgetComponent extends BasisPanelChildComponent {
   private param: IWidgetParam;
   set title(value: string) {
@@ -33,29 +35,45 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     this.title = this.param.title;
 
     const url = HttpUtil.formatString(
-        `${this.param.url??this.param.page.ownerUrl}${this.options.method.widget}`,
-        { rKey: this.options.rKey, widgetId: this.param.id }
+      `${this.param.url ?? this.param.page.ownerUrl}${
+        this.options.method.widget
+      }`,
+      { rKey: this.options.rKey, widgetId: this.param.id }
     );
-    
-    var content = await HttpUtil.fetchStringAsync(url, "GET");
-    const range = new Range();
+
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
     );
-    range.setStart(container, 0);
-    range.setEnd(container, 0);
-    const newContent = range.createContextualFragment(content);
-    const nodes = Array.from(newContent.childNodes);
-    range.insertNode(newContent);
-    this.owner.processNodesAsync(nodes);
-    this.container
-      .querySelectorAll("[data-bc-widget-btn-close]")
-      .forEach((btn) =>
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          this.removeAsync();
-        })
-      );
+    const processTask = new Promise<void>(async (resolve, reject) => {
+      try {
+        var content = await HttpUtil.fetchStringAsync(url, "GET");
+        const range = new Range();
+
+        range.setStart(container, 0);
+        range.setEnd(container, 0);
+        const newContent = range.createContextualFragment(content);
+        const nodes = Array.from(newContent.childNodes);
+        range.insertNode(newContent);
+        this.owner.processNodesAsync(nodes);
+        this.container
+          .querySelectorAll("[data-bc-widget-btn-close]")
+          .forEach((btn) =>
+            btn.addEventListener("click", (e) => {
+              e.preventDefault();
+              this.removeAsync();
+            })
+          );
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+    const taskOptions: ITaskOptions = {
+      container: container,
+      task: processTask,
+      notify: false,
+    };
+    $bc?.basisPanel?.scheduler?.startTask(taskOptions);
   }
 
   public runAsync(source?: ISource) {

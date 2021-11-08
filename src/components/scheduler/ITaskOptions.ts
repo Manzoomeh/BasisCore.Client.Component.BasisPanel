@@ -1,10 +1,11 @@
 export default interface ITaskOptions {
-  container?: HTMLElement;
+  container?: Element;
   title?: string;
   cancelable?: boolean;
   type?: TaskType;
   reportCallback?: IReportCallback;
   task: Promise<any>;
+  notify?: boolean;
 }
 
 export enum TaskType {
