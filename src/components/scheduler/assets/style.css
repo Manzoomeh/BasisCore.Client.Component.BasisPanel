@@ -1,0 +1,257 @@
+[data-bc-bp-scheduler-container] {
+    float: right;
+    width: 40px;
+}
+
+/* ********** task list icon ********** */
+[data-bc-task-list] {
+    position: relative;
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 4px;
+    /* margin-right: 20px; */
+    float: right;
+}
+
+[data-bc-task-list] [data-bc-task-list-alert] {
+    position: relative;
+    cursor: pointer;
+    line-height: 40px;
+    text-align: center;
+}
+
+[data-bc-task-list] [data-bc-task-list-icon] {
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    font-size: 18px;
+    color: #2b2b2b;
+}
+
+[data-bc-task-list] [data-bc-task-list-icon] * {
+    color: #2b2b2b;
+}
+
+/* ********** task list dropdown ********** */
+[data-bc-task-list] [data-bc-task-list-dropdown] {
+    -webkit-box-shadow: 0 0 12px 3px rgba(25, 124, 207, 0.05);
+    box-shadow: 0 0 12px 3px rgba(25, 124, 207, 0.05);
+    -webkit-transform: translateY(30px);
+    transform: translateY(30px);
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 45px;
+    /* width: 300px; */
+    height: 0;
+    right: -17px !important;
+    z-index: 99;
+    background-color: #fff;
+    border: 1px solid #f5f7fb;
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    direction: rtl;
+}
+
+[data-bc-task-list]:hover [data-bc-task-list-dropdown] {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    visibility: visible;
+    height: auto;
+}
+
+[data-bc-task-list]:hover [data-bc-task-list-dropdown]::before {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #83868e;
+    content: "";
+    top: -7px;
+    position: absolute;
+    left: 10px;
+    z-index: 2;
+}
+
+[data-bc-task-list]:hover [data-bc-task-list-dropdown]::after {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #f5f7fb;
+    content: "";
+    top: -7px;
+    position: absolute;
+    left: 10px;
+    z-index: 1;
+}
+
+[data-bc-task-list] [data-bc-task-list-dropdown]::before,
+[data-bc-task-list] [data-bc-task-list-dropdown]::after {
+    right: 28px !important;
+    left: unset !important;
+}
+
+/* ********** task list contents ********** */
+[data-bc-task-list] [data-bc-task-list-wrapper] {
+    position: relative;
+    margin: 0 auto;
+    min-width: 350px;
+    width: 350px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+[data-bc-task-list] [data-bc-task-list-contents] {
+    height: auto;
+    width: 100%;
+    float: left;
+    /* position: relative; */
+    z-index: 5;
+    background: #fefefe;
+    /* top: -10px; */
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    /* scrollbar-color: #eff2f5 transparent; */
+    max-height: 325px;
+    overflow-y: auto;
+    padding: 10px;
+    border-top: 4px solid #83868e;
+}
+
+/* ********** task list item ********** */
+[data-bc-task-list] [data-bc-task-list-item] {
+    border-bottom: 1px dashed var(--light_gray);
+    padding: 10px 0;
+}
+
+[data-bc-task-list] [data-bc-task-list-item]:first-child {
+    padding: 0 0 10px 0;
+}
+
+[data-bc-task-list] [data-bc-task-list-item]:last-child {
+    border-bottom: none;
+    padding: 10px 0 0 0;
+}
+
+[data-bc-task-list] [data-bc-task-list-info] {
+    margin-bottom: 5px;
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+[data-bc-task-list] [data-bc-task-list-title] {
+    font-size: 12px;
+}
+
+[data-bc-task-list] [data-bc-task-list-percent] {
+    font-size: 11px;
+}
+
+[data-bc-task-list] [data-bc-task-list-progress-content] {
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+}
+
+[data-bc-task-list] [data-bc-task-list-progress-view] {
+    width: calc(100% - 50px);
+}
+
+[data-bc-task-list] [data-bc-task-list-progress] {
+    display: flex;
+    overflow: hidden;
+    background-color: #e9ecef;
+    font-size: 16px;
+    height: 5px;
+    border-radius: 3px;
+}
+
+[data-bc-task-list] [data-bc-task-list-progress-bar] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    /* background-color: #007bff; */
+    transition: width 0.6s ease;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+    animation: progress-bar-stripes 1s linear infinite;
+    background-color: #2d674e !important;
+}
+
+[data-bc-task-list] [data-bc-task-list-btn] {
+    width: 50px;
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: left;
+    justify-content: left;
+}
+
+[data-bc-task-list] [data-bc-task-list-btn] i {
+    margin-right: 5px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+/* ********** task list keyframes ********** */
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 1rem 0;
+    }
+
+    to {
+        background-position: 0 0;
+    }
+}
+
