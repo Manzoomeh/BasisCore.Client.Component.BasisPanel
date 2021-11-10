@@ -75,15 +75,14 @@ export default class MenuElementMaker {
     li.appendChild(content);
     li.appendChild(innerUl);
     let subMenuFlag = false;
+    console.log("2 bar miad inja" ,node.title , innerUl.clientHeight , li.clientHeight)
     li.addEventListener("click", function (e) {
-      if (subMenuFlag == false) {
-        innerUl.style.transition = "all 0.3s ease-in-out";
-        innerUl.style.height = `${innerUl.scrollHeight}px`;
+      if (subMenuFlag == false) {    
+        innerUl.style.transform = ` scaleY(1)`;
         content.setAttribute("data-bc-level-open", "");
         subMenuFlag = true;
       } else {
-        innerUl.style.transition = "all 0.3s ease-in-out";
-        innerUl.style.height = "0";
+        innerUl.style.transform = ` scaleY(0)`;
         content.removeAttribute("data-bc-level-open");
         subMenuFlag = false;
       }
@@ -108,8 +107,7 @@ export default class MenuElementMaker {
   }
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
-    menuParam: IMenuLoaderParam) : HTMLElement{
-      
+    menuParam: IMenuLoaderParam) : HTMLElement{      
       const newMenuParam: IMenuLoaderParam = {
         owner: "external",
         ownerId: node.mid,
@@ -128,8 +126,11 @@ export default class MenuElementMaker {
           rKey: this.rKey,
         }
       );
-      HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
+      
+      HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>{
         this.createMenu(ul, menu.nodes, newMenuParam)
+      }
+        
       );
       return li;
   }
