@@ -75,7 +75,6 @@ export default class MenuElementMaker {
     li.appendChild(content);
     li.appendChild(innerUl);
     let subMenuFlag = false;
-    console.log("2 bar miad inja" ,node.title , innerUl.clientHeight , li.clientHeight)
     li.addEventListener("click", function (e) {
       if (subMenuFlag == false) {    
         innerUl.style.transform = ` scaleY(1)`;
@@ -155,6 +154,7 @@ export default class MenuElementMaker {
     li.appendChild(ul);
     let subMenuFlag = false;
     content.addEventListener("click", function () {
+
       if (subMenuFlag == false) {
         ul.style.transition = "all 0.3s ease-in-out";
         ul.style.width = `auto`;
