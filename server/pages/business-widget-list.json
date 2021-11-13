@@ -14,6 +14,7 @@
                         "id": "businessWidget1.html",
                         "title": "ویجت داشبورد",
                         "name": "businessWidget1",
+                        "container": "widget",
                         "x": 0,
                         "y": 0,
                         "w": 12,

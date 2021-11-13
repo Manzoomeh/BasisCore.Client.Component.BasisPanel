@@ -34,9 +34,12 @@
 	right: 0;
 	top: 50px;
 	width: 230px;
-	height: 0;
+	height: auto;
 	background: #4d576e;
 	overflow: hidden;
+	transform-origin: top;
+	transform: scaleY(0);
+	transition: all 0.3s ease-in-out;
 }
 
 [data-bc-menu] li ul a {
@@ -105,5 +108,7 @@
 }
 [data-bc-bp-menu-external-single-node] li{height: 100%; line-height: 50px;}
 [data-bc-menu] [data-bc-bp-menu-external-single-node] li a{ border: none;
-	border-left: 1px solid rgba(255, 255, 255, 0.13); padding: 0 15px;position: relative; top: 12px;}
+	border-left: 1px solid rgba(255, 255, 255, 0.13); padding: 0 15px;position: relative; top: 12px;
+}
 [data-bc-bp-menu-external-single-node] ul li a {padding: 5px 15px !important;top: 0 !important;}
+[data-bc-menu] [data-bc-bp-menu-external-single-node] li ul li a{border-bottom: 1px solid #6c768e;}

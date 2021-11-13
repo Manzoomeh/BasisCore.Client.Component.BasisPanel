@@ -1,4 +1,4 @@
-export default interface IWidgetInfo {
+export default interface IFullPageWidgetInfo {
   id: number;
   name: string;
   title: string;

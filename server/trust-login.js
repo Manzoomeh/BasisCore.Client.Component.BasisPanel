@@ -53,7 +53,7 @@ router.get("/:rKey/menu", function (req, res) {
       {
         title: "مدیریت فایل ها",
         nodes: [
-          { title: "فایل های من", pid: 4 },
+          { title: "فایل های من", pid: "myFiles" },
           { title: "اشتراک با من", pid: 5 },
         ],
       },

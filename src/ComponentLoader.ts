@@ -6,6 +6,8 @@ import FooterComponent from "./components/footer/FooterComponent";
 import MenuComponent from "./components/menu/MenuComponent";
 import PageComponent from "./components/page/PageComponent";
 import WidgetComponent from "./components/widget/WidgetComponent";
+import SidebarComponent from "./components/sidebar/SidebarComponent";
+import FullPageWidgetComponent from "./components/full-page-widget/FullPageWidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
 import SchedulerComponent from "./components/scheduler/SchedulerComponent";
@@ -20,6 +22,8 @@ const footer = FooterComponent;
 const menu = MenuComponent;
 const page = PageComponent;
 const widget = WidgetComponent;
+const sidebar = SidebarComponent;
+const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
 const scheduler = SchedulerComponent;
 const logout = LogoutComponent;
@@ -34,6 +38,8 @@ export {
   menu,
   page,
   widget,
+  sidebar,
+  fullPageWidget,
   notification,
   scheduler,
   logout
