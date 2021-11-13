@@ -1,7 +1,7 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
-import IWidgetParam from "./IWidgetParam";
+import ISidebarParam from "./ISidebarParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
@@ -9,13 +9,13 @@ import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
 
 declare const $bc: any;
-export default class WidgetComponent extends BasisPanelChildComponent {
-  private param: IWidgetParam;
-  set title(value: string) {
-    this.container.querySelector(
-      "[data-bc-widget-header] > [data-bc-widget-title]"
-    ).textContent = value;
-  }
+export default class SidebarComponent extends BasisPanelChildComponent {
+  private param: ISidebarParam;
+  // set title(value: string) {
+  //   this.container.querySelector(
+  //     "[data-bc-sidebar-header] > [data-bc-sidebar-title]"
+  //   ).textContent = value;
+  // }
   public async initializeAsync(): Promise<void> {
     this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
 
@@ -33,7 +33,7 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     }px`;
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
-    this.title = this.param.title;
+    // this.title = this.param.title;
 
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${
@@ -43,7 +43,7 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     );
 
     const container = this.container.querySelector(
-      "[data-bc-widget-body-container]"
+      "[data-bc-sidebar-body-container]"
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
@@ -56,14 +56,14 @@ export default class WidgetComponent extends BasisPanelChildComponent {
         const nodes = Array.from(newContent.childNodes);
         range.insertNode(newContent);
         this.owner.processNodesAsync(nodes);
-        this.container
-          .querySelectorAll("[data-bc-widget-btn-close]")
-          .forEach((btn) =>
-            btn.addEventListener("click", (e) => {
-              e.preventDefault();
-              this.removeAsync();
-            })
-          );
+        // this.container
+        //   .querySelectorAll("[data-bc-sidebar-btn-close]")
+        //   .forEach((btn) =>
+        //     btn.addEventListener("click", (e) => {
+        //       e.preventDefault();
+        //       this.removeAsync();
+        //     })
+        //   );
         resolve();
       } catch (e) {
         reject(e);
@@ -82,12 +82,12 @@ export default class WidgetComponent extends BasisPanelChildComponent {
   }
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-widget-container");
+    super(owner, layout, "data-bc-bp-sidebar-container");
   }
 
-  private async removeAsync(): Promise<void> {
-    await this.owner.disposeAsync();
-    this.container.remove();
-    this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
-  }
+  // private async removeAsync(): Promise<void> {
+  //   await this.owner.disposeAsync();
+  //   this.container.remove();
+  //   this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
+  // }
 }

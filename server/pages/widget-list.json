@@ -14,20 +14,21 @@
                         "id": "my-file.html",
                         "title": "ویجت 1",
                         "name": "myFile",
+                        "container": "widget",
                         "x": 0,
                         "y": 0,
-                        "w": 12,
+                        "w": 10,
                         "h": 2
                     },
                     {
-                        "id": "external-file.html",
-                        "title": "اکسترنال ویجت",
-                        "name": "externalFile",
-                        "x": 0,
-                        "y": 5,
-                        "w": 12,
-                        "h": 2,
-                        "url":"server/external"
+                        "id": "sidebar.html",
+                        "title": "سایدبار",
+                        "name": "sidebar",
+                        "container": "sidebar",
+                        "x": 10,
+                        "y": 0,
+                        "w": 2,
+                        "h": 5
                     }
                 ],
                 "deactiveWidgets": []
@@ -48,18 +49,20 @@
                         "id": "my-file1.html",
                         "title": "ویجت 2",
                         "name": "myFile1",
-                        "x": 8,
+                        "container": "widget",
+                        "x": 7,
                         "y": 2,
-                        "w": 4,
+                        "w": 3,
                         "h": 3
                     },
                     {
                         "id": "my-file2.html",
                         "title": "ویجت 3",
                         "name": "myFile2",
+                        "container": "widget",
                         "x": 0,
                         "y": 2,
-                        "w": 8,
+                        "w": 7,
                         "h": 3
                     }
                 ],
@@ -101,6 +104,44 @@
                         "id": "userWidget1.html",
                         "title": "ویجت داشبورد",
                         "name": "userWidget1",
+                        "container": "widget",
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
+                    },
+                    {
+                        "id": "external-file.html",
+                        "title": "اکسترنال ویجت",
+                        "name": "externalFile",
+                        "container": "widget",
+                        "x": 0,
+                        "y": 2,
+                        "w": 12,
+                        "h": 2,
+                        "url":"server/external"
+                    }
+                ],
+                "deactiveWidgets": []
+            }
+        ]
+    },
+    "myFiles": {
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "my-file.html",
+                        "title": "فایل های من",
+                        "name": "myFiles",
+                        "container": "fullPageWidget",
                         "x": 0,
                         "y": 0,
                         "w": 12,

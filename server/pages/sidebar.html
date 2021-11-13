@@ -1,0 +1,122 @@
+<div data-bc-sidebar="" id="mySidenav">
+    <div data-bc-sidebar-levels="firstLevel">
+        <div data-bc-sidebar-items="" onclick="toggleSecondLevel(this)">
+            <span>منو 1</span>
+            <i class="lni lni-chevron-left"></i>
+        </div>
+        <div data-bc-sidebar-levels="secondLevel">
+            <div data-bc-sidebar-items="" data-bc-sidebar-active="">
+                <span>زیر منو 1</span>
+            </div>
+            <a href="#" data-bc-sidebar-items="">
+                <span>زیر منو 2</span>
+            </a>
+        </div>
+        <a href="#" data-bc-sidebar-items="">
+            <span>منو 2</span>
+        </a>
+        <a href="#" data-bc-sidebar-items="" data-bc-sidebar-active="">
+            <span>منو 3</span>
+        </a>
+        <div data-bc-sidebar-items="" onclick="toggleSecondLevel(this)">
+            <span>منو 4</span>
+            <i class="lni lni-chevron-left"></i>
+        </div>
+        <div data-bc-sidebar-levels="secondLevel">
+            <div data-bc-sidebar-items="">
+                <span>زیر منو 3</span>
+            </div>
+            <a href="#" data-bc-sidebar-items="">
+                <span>زیر منو 4</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    var activeElement = document.querySelector('#mySidenav [data-bc-sidebar-active]');
+    var secondLevel = activeElement.closest('[data-bc-sidebar-levels="secondLevel"]');
+    if (secondLevel) {
+        secondLevel.style.display = 'block';
+        var prev = secondLevel.previousElementSibling;
+        if (prev.getAttribute('data-bc-sidebar-items')) {
+            prev.querySelector('.lni').classList.toggle("lni-chevron-left");
+            prev.querySelector('.lni').classList.toggle("lni-chevron-down");
+        }
+    }
+
+    function toggleSecondLevel(e) {
+        var el = e;
+        var next = e.nextElementSibling;
+        slideToggle(next, 350);
+        el.querySelector('.lni').classList.toggle("lni-chevron-left");
+        el.querySelector('.lni').classList.toggle("lni-chevron-down");
+    }
+
+    // common script for slideToggle, slideUp & slideDown
+    function slideToggle(el, duration, callback) {
+        if (el.clientHeight === 0) {
+            _s(el, duration, callback, true);
+        } else {
+            _s(el, duration, callback);
+        }
+    }
+
+    function slideUp(el, duration, callback) {
+        _s(el, duration, callback);
+    }
+
+    function slideDown(el, duration, callback) {
+        _s(el, duration, callback, true);
+    }
+
+    function _s(el, duration, callback, isDown) {
+        if (typeof duration === 'undefined') duration = 400;
+        if (typeof isDown === 'undefined') isDown = false;
+        el.style.overflow = "hidden";
+        if (isDown) el.style.display = "block";
+        var elStyles = window.getComputedStyle(el);
+        var elHeight = parseFloat(elStyles.getPropertyValue('height'));
+        var elPaddingTop = parseFloat(elStyles.getPropertyValue('padding-top'));
+        var elPaddingBottom = parseFloat(elStyles.getPropertyValue('padding-bottom'));
+        var elMarginTop = parseFloat(elStyles.getPropertyValue('margin-top'));
+        var elMarginBottom = parseFloat(elStyles.getPropertyValue('margin-bottom'));
+        var stepHeight = elHeight / duration;
+        var stepPaddingTop = elPaddingTop / duration;
+        var stepPaddingBottom = elPaddingBottom / duration;
+        var stepMarginTop = elMarginTop / duration;
+        var stepMarginBottom = elMarginBottom / duration;
+        var start;
+
+        function step(timestamp) {
+            if (start === undefined) start = timestamp;
+            var elapsed = timestamp - start;
+            if (isDown) {
+                el.style.height = (stepHeight * elapsed) + "px";
+                el.style.paddingTop = (stepPaddingTop * elapsed) + "px";
+                el.style.paddingBottom = (stepPaddingBottom * elapsed) + "px";
+                el.style.marginTop = (stepMarginTop * elapsed) + "px";
+                el.style.marginBottom = (stepMarginBottom * elapsed) + "px";
+            } else {
+                el.style.height = elHeight - (stepHeight * elapsed) + "px";
+                el.style.paddingTop = elPaddingTop - (stepPaddingTop * elapsed) + "px";
+                el.style.paddingBottom = elPaddingBottom - (stepPaddingBottom * elapsed) + "px";
+                el.style.marginTop = elMarginTop - (stepMarginTop * elapsed) + "px";
+                el.style.marginBottom = elMarginBottom - (stepMarginBottom * elapsed) + "px";
+            }
+            if (elapsed >= duration) {
+                el.style.height = "";
+                el.style.paddingTop = "";
+                el.style.paddingBottom = "";
+                el.style.marginTop = "";
+                el.style.marginBottom = "";
+                el.style.overflow = "";
+                if (!isDown) el.style.display = "none";
+                if (typeof callback === 'function') callback();
+            } else {
+                window.requestAnimationFrame(step);
+            }
+        }
+        window.requestAnimationFrame(step);
+    }
+</script>

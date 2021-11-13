@@ -1,4 +1,4 @@
-export default interface IWidgetInfo {
+export default interface ISidebarInfo {
   id: number;
   name: string;
   title: string;
