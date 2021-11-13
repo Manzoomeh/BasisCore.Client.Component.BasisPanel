@@ -45,15 +45,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.ts$/i,
         use: ["ts-loader"],
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|html)$/,
+        test: /\.png$/i,
+        type: "asset/inline",
+      },
+      {
+        test: /\.html$/i,
         type: "asset/source",
       },
     ],
