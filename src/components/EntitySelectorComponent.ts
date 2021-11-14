@@ -10,10 +10,12 @@ import IPageLoaderParam from "./menu/IPageLoaderParam";
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
   private element: Element;
+
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
+
   protected mustReload = true;
-  businessComponentFlag : boolean = false
+
   constructor(
     owner: IUserDefineComponent,
     layout: string,
@@ -39,7 +41,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     );
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
     const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-drop-down-click]");
-    elClick.addEventListener("click", async (e) => {      
+    elClick.addEventListener("click", async (e) => {
+      
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
@@ -96,8 +99,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.profile = source.rows[0];
         break;
       }
-
-     
     }
     return true;
   }
@@ -119,15 +120,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async fillComboAsync() {
-    const businessMsgElement = this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-list]") as HTMLElement
     this.entityList = await this.getEntitiesAsync();   
-    if(this.businessComponentFlag == true && this.entityList.length > 0){     
-      businessMsgElement.style.transform= "scaleY(1)"
-  }
-  else if(this.businessComponentFlag == true && this.entityList.length == 0){
-    businessMsgElement.style.transform= "scaleY(0)"
-  }
-    console.log("injaaa" , this.entityList)
     this.clearCombo();
     const searchWrapper = document.createElement("div");
     const searchInput = document.createElement("input");    
@@ -201,7 +194,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             businessMsgElement.textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
             businessMsgElement.setAttribute("data-id", "0");
             (businessMsgElement as HTMLElement).style.cursor = "auto";
-            
           }
           const containerMsgElement = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
           containerMsgElement.textContent = li.textContent;
