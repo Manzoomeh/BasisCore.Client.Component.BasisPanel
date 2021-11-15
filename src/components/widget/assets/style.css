@@ -143,3 +143,28 @@
 [data-bc-bp-widget-container][gs-x="12"] {
     left: 100%;
 }
+[data-bc-widget-btn-add-dashboard]{
+    margin-left: 5px; cursor: pointer; position: relative;
+}
+[data-bc-widget-btn-add-dashboard]:after {
+    content: "افزودن به داشبورد";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+    height: 30px;
+    background: black;
+    color: #fff;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    width: 100px;
+    transition: all 0.3s ease-in-out;
+}
+[data-bc-widget-btn-add-dashboard]:hover::after {
+    visibility: visible;
+    opacity: 1;
+}

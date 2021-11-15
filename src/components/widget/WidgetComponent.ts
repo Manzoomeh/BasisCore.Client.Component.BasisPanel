@@ -23,7 +23,6 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
-
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     const cell = parent.offsetWidth / 12;
 
@@ -64,10 +63,19 @@ export default class WidgetComponent extends BasisPanelChildComponent {
               this.removeAsync();
             })
           );
+        this.container
+        .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
+        .forEach((btn) =>
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.addToDashboard();
+          })
+        );
         resolve();
       } catch (e) {
         reject(e);
       }
+      
     });
     const taskOptions: ITaskOptions = {
       container: container,
@@ -89,5 +97,11 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     await this.owner.disposeAsync();
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
+  }
+  private async addToDashboard(): Promise<void>{
+    console.log(this.param)
+    this.owner.setSource("db.dashboard_inactive_widget",[{"id" : this.param["id"] , "title" : this.param["title"],
+    "x" : this.param["x"] , "y" : this.param["y"]}] );
+
   }
 }
