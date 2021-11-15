@@ -21,13 +21,13 @@ export default class TaskProcess {
 
   private startDisplayAjax() {
     if (this._options.container) {
-      console.log("start display ajax", this._options);
+      //console.log("start display ajax", this._options);
     }
   }
 
   private endDisplayAjax() {
     if (this._options.container) {
-      console.log("end display ajax", this._options);
+      //console.log("end display ajax", this._options);
     }
   }
 }
