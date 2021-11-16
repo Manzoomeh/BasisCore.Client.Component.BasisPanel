@@ -64,18 +64,17 @@ export default class WidgetComponent extends BasisPanelChildComponent {
             })
           );
         this.container
-        .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
-        .forEach((btn) =>
-          btn.addEventListener("click", (e) => {
-            e.preventDefault();
-            this.addToDashboard();
-          })
-        );
+          .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
+          .forEach((btn) =>
+            btn.addEventListener("click", (e) => {
+              e.preventDefault();
+              this.addToDashboard();
+            })
+          );
         resolve();
       } catch (e) {
         reject(e);
       }
-      
     });
     const taskOptions: ITaskOptions = {
       container: container,
@@ -98,10 +97,14 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
-  private async addToDashboard(): Promise<void>{
-    console.log(this.param)
-    this.owner.setSource("db.dashboard_inactive_widget",[{"id" : this.param["id"] , "title" : this.param["title"],
-    "x" : this.param["x"] , "y" : this.param["y"]}] );
-
+  private async addToDashboard(): Promise<void> {
+    this.owner.setSource("db.dashboard_inactive_widget", [
+      {
+        id: this.param["id"],
+        title: this.param["title"],
+        x: this.param["x"],
+        y: this.param["y"],
+      },
+    ]);
   }
 }

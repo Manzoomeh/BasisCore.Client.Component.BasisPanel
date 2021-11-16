@@ -13,7 +13,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
   protected mustReload = true;
-  businessComponentFlag : boolean = false
+  businessComponentFlag: boolean = false;
   constructor(
     owner: IUserDefineComponent,
     layout: string,
@@ -34,12 +34,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   public initializeAsync(): void | Promise<void> {
-    this.element = this.container.querySelector<Element>(
-      "[data-bc-main-list]"
-    );
+    this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
-    const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-drop-down-click]");
-    elClick.addEventListener("click", async (e) => {      
+    const elClick = this.element
+      .closest("[data-bc-main-list-container]")
+      .querySelector("[data-bc-drop-down-click]");
+    elClick.addEventListener("click", async (e) => {
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
@@ -53,36 +53,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       }
     });
 
-    // this.element.addEventListener("change", async (e) => {
-    //   e.preventDefault();
-    //   // const id = parseInt(this.element.value);
-    //   const id = parseInt("5");
-    //   const entity = this.entityList.find((x) => x.id == id);
-    //   this.owner.setSource(this.getSourceId(), entity ?? {});
-
-    //   if (this.profile) {
-    //     if (entity) {
-    //       const url = HttpUtil.formatString(this.options.baseUrl.active, {
-    //         rKey: this.options.rKey,
-    //       });
-    //       const result = await HttpUtil.fetchDataAsync(url, "POST", {
-    //         type: this.ownerType,
-    //         id: id,
-    //       });
-    //       console.log(result);
-    //       this.owner.setSource(
-    //         DefaultSource.SHOW_MENU,
-    //         this.createMenuLoaderParam()
-    //       );
-    //     }
-    //   }
-    // });
-
-    const msgElClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
+    const msgElClick = this.element
+      .closest("[data-bc-main-list-container]")
+      .querySelector("[data-bc-main-list-msg]");
     msgElClick.addEventListener("click", async (e) => {
       const msgElId = msgElClick.getAttribute("data-id");
       if (msgElId != "0") {
-        this.owner.setSource(DefaultSource.SHOW_MENU, this.createMenuLoaderParam(parseInt(msgElId)));
+        this.owner.setSource(
+          DefaultSource.SHOW_MENU,
+          this.createMenuLoaderParam(parseInt(msgElId))
+        );
         this.signalToDisplayPage(parseInt(msgElId));
       }
     });
@@ -96,8 +76,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.profile = source.rows[0];
         break;
       }
-
-     
     }
     return true;
   }
@@ -111,62 +89,53 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     );
   }
 
-  filterItems(input, list){
+  filterItems(input, list) {
     let filterList = list.filter(function (e) {
       return e.title.toLowerCase().includes(input.toLowerCase());
     });
-    return filterList
+    return filterList;
   }
 
   protected async fillComboAsync() {
-    const businessMsgElement = this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-list]") as HTMLElement
-    this.entityList = await this.getEntitiesAsync();   
-    if(this.businessComponentFlag == true && this.entityList.length > 0){     
-      businessMsgElement.style.transform= "scaleY(1)"
-  }
-  else if(this.businessComponentFlag == true && this.entityList.length == 0){
-    businessMsgElement.style.transform= "scaleY(0)"
-  }
-    console.log("injaaa" , this.entityList)
+    const businessMsgElement = this.element
+      .closest("[data-bc-bp-main-header]")
+      .querySelector("[data-bc-business-list]") as HTMLElement;
+    this.entityList = await this.getEntitiesAsync();
+    if (this.businessComponentFlag == true && this.entityList.length > 0) {
+      businessMsgElement.style.transform = "scaleY(1)";
+    } else if (
+      this.businessComponentFlag == true &&
+      this.entityList.length == 0
+    ) {
+      businessMsgElement.style.transform = "scaleY(0)";
+    }
     this.clearCombo();
     const searchWrapper = document.createElement("div");
-    const searchInput = document.createElement("input");    
+    const searchInput = document.createElement("input");
     searchInput.setAttribute("type", "text");
     if (this.entityList?.length > 5) {
       if (this.ownerType == "corporate") {
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("placeHolder", "جستجوی شرکت ...");
         searchWrapper.appendChild(searchInput);
-      }
-      else if (this.ownerType == "business") {
+      } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("placeHolder", "جستجوی کسب‌و‌کار ...");
         searchWrapper.appendChild(searchInput);
       }
     }
     let listFilter = this.entityList;
-    searchInput.addEventListener("keyup", e => {
+    searchInput.addEventListener("keyup", (e) => {
       listFilter = [];
       if (e.target["value"] == "") {
         listFilter = this.entityList;
       }
-      listFilter = this.filterItems(e.target["value"],this.entityList);
+      listFilter = this.filterItems(e.target["value"], this.entityList);
       this.entryListMaker(listFilter);
-    })
+    });
     this.entryListMaker(listFilter);
     this.element.previousSibling.remove();
     this.element.parentNode.insertBefore(searchWrapper, this.element);
- 
-
-    // const option = document.createElement("option");
-    // option.text = "";
-    // this.element.appendChild(option);
-    // this.entityList.forEach((item) => {
-    //   const option = document.createElement("option");
-    //   option.value = item.id.toString();
-    //   option.text = item.title;
-    //   this.element.appendChild(option);
-    // });
   }
 
   entryListMaker(list) {
@@ -175,43 +144,54 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       list.forEach((item) => {
         const li = document.createElement("li");
         // const div = document.createElement("div");
-        li.setAttribute('data-id', item.id.toString());
+        li.setAttribute("data-id", item.id.toString());
         li.addEventListener("click", async (e) => {
           e.preventDefault();
           // const id = parseInt(this.element.value);
           const id = parseInt(li.getAttribute("data-id"));
           const entity = this.entityList.find((x) => x.id == id);
-          this.owner.setSource(this.getSourceId(), entity ?? {});
+
           if (this.profile) {
             if (entity) {
               const url = HttpUtil.formatString(this.options.baseUrl.active, {
                 rKey: this.options.rKey,
               });
-              const result = await HttpUtil.fetchDataAsync(url, "POST", {
+              await HttpUtil.fetchDataAsync(url, "POST", {
                 type: this.ownerType,
                 id: id,
               });
-           
-              this.owner.setSource(DefaultSource.SHOW_MENU, this.createMenuLoaderParam(id));
+              this.owner.setSource(
+                DefaultSource.SHOW_MENU,
+                this.createMenuLoaderParam(id)
+              );
               this.signalToDisplayPage(id);
             }
           }
-          if(this.ownerType == "corporate"){
-            const businessMsgElement = this.element.closest("[data-bc-bp-main-header]").querySelector("[data-bc-business-msg]");
+          this.owner.setSource(this.getSourceId(), entity ?? {});
+          if (this.ownerType == "corporate") {
+            const businessMsgElement = this.element
+              .closest("[data-bc-bp-main-header]")
+              .querySelector("[data-bc-business-msg]");
             businessMsgElement.textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
             businessMsgElement.setAttribute("data-id", "0");
             (businessMsgElement as HTMLElement).style.cursor = "auto";
-            
           }
-          const containerMsgElement = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
+          const containerMsgElement = this.element
+            .closest("[data-bc-main-list-container]")
+            .querySelector("[data-bc-main-list-msg]");
           containerMsgElement.textContent = li.textContent;
-          containerMsgElement.setAttribute("data-id", li.getAttribute("data-id"));
+          containerMsgElement.setAttribute(
+            "data-id",
+            li.getAttribute("data-id")
+          );
           (containerMsgElement as HTMLElement).style.cursor = "pointer";
-          this.element.closest("[data-bc-drop-down-container]").setAttribute("data-status", "close");
+          this.element
+            .closest("[data-bc-drop-down-container]")
+            .setAttribute("data-status", "close");
         });
         // div.textContent = item.title;
         // li.appendChild(div);
-        li.textContent = item.title;      
+        li.textContent = item.title;
         this.element.appendChild(li);
       });
     }

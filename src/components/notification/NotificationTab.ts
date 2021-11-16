@@ -17,7 +17,7 @@ export default class NotificationTab {
 
   constructor(owner: INotificationProvider, index: number) {
     this._owner = owner;
-    
+
     this.notificationContainer = this._owner.container;
     this.optionsName = this._owner.options.name;
     this.optionConfig = this._owner.options.config;
@@ -90,10 +90,9 @@ export default class NotificationTab {
   public refreshUI(data: Array<any>) {
     if (data.length > 0) {
       if (this.alarm.style.display == "none") {
-        this.alarm.style.display = "block"
+        this.alarm.style.display = "block";
       }
     }
     this._owner.setSource(`notification.${this.optionsName}`, data);
-    console.log("refresh tab ui", data);
   }
 }
