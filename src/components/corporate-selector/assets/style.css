@@ -8,6 +8,10 @@
     position: relative;
     /* cursor: pointer; */
     direction: rtl;
+    z-index: 99;
+    transform-origin: top;
+	transform: scaleY(0);
+	transition: all 0.3s ease-in-out;
     /* box-sizing: unset; */
 }
 

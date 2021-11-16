@@ -13,7 +13,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
   protected mustReload = true;
-  businessComponentFlag: boolean = false;
+  public businessComponentFlag: boolean = false
   constructor(
     owner: IUserDefineComponent,
     layout: string,
@@ -34,6 +34,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   public initializeAsync(): void | Promise<void> {
+   
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
     const elClick = this.element
@@ -70,23 +71,35 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
   }
 
-  public async runAsync(source?: ISource) {
+  public async runAsync(source?: ISource) {    
+
+ 
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
         this.profile = source.rows[0];
+        if(this.ownerType == "corporate"){      
+          const corporateList = await this.getEntitiesAsync(); 
+          if(corporateList.length > 0){
+            const corporateElement = this.element
+            .closest("[data-bc-bp-main-header]")
+            .querySelector("[data-bc-corporate-list]") as HTMLElement;
+            corporateElement.style.transform = "scaleY(1)";
+          }
+        }
         break;
       }
     }
     return true;
   }
 
-  protected getEntitiesAsync(): Promise<Array<IEntityInfo>> {
+  protected getEntitiesAsync(): Promise<Array<IEntityInfo>> {    
     return HttpUtil.formatAndGetDataAsync<Array<IEntityInfo>>(
       this.getListUrl(),
       this.options.rKey,
       this.profile,
       this.getExtraData()
     );
+    
   }
 
   filterItems(input, list) {
@@ -101,14 +114,17 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-    if (this.businessComponentFlag == true && this.entityList.length > 0) {
+
+    if (this.businessComponentFlag == true && this.entityList.length > 0) {     
       businessMsgElement.style.transform = "scaleY(1)";
     } else if (
       this.businessComponentFlag == true &&
       this.entityList.length == 0
     ) {
+     
       businessMsgElement.style.transform = "scaleY(0)";
     }
+
     this.clearCombo();
     const searchWrapper = document.createElement("div");
     const searchInput = document.createElement("input");
