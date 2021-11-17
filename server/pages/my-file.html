@@ -1,4 +1,48 @@
 <button>sdsdsd</button>
+<p>Sample for check OnRendering and OnRendered in reload page</p>
+<button bc-value="0" bc-triggers="click" name="event.click">
+  Click to refresh
+</button>
+<Basis
+  core="component.local.DemoComponent"
+  run="atclient"
+  triggers="event.click"
+  OnRendering="rendering"
+  OnRendered="rendered"
+>
+</Basis>
 <script>
-    console.log("hi");
+  async function rendering(args) {
+    console.log("rendering", args);
+  }
+
+  function rendered(args) {
+    console.log("rendered", args);
+  }
+
+  if (typeof window.DemoComponent === "undefined") {
+    class _DemoComponent {
+      constructor(owner) {
+        console.log("constructor");
+        this.owner = owner;
+      }
+
+      async initializeAsync() {
+        console.log("initializeAsync");
+      }
+
+      async runAsync() {
+        console.log("runAsync");
+        const date = new Date();
+        const node = this.owner.toNode(
+          `<div>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()} <div>`
+        );
+        this.owner.setContent(node);
+      }
+    }
+    var DemoComponent = _DemoComponent;
+  }
+</script>
+<script>
+  console.log("hi");
 </script>
