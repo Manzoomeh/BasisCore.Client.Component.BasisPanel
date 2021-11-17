@@ -144,7 +144,7 @@
     left: 100%;
 }
 [data-bc-widget-btn-add-dashboard]{
-    margin-left: 5px; cursor: pointer; position: relative;
+    margin-left: 5px; cursor: pointer; position: relative;display: none;
 }
 [data-bc-widget-btn-add-dashboard]:after {
     content: "افزودن به داشبورد";

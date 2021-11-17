@@ -17,8 +17,9 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     ).textContent = value;
   }
   public async initializeAsync(): Promise<void> {
+  
     this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
-
+    
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
@@ -46,10 +47,8 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        // var content = await HttpUtil.fetchStringAsync(url, "GET");
         var content = await HttpUtil.fetchStringAsync(url, "GET");
         const range = new Range();
-
         range.setStart(container, 0);
         range.setEnd(container, 0);
         const newContent = range.createContextualFragment(content);
@@ -64,14 +63,22 @@ export default class WidgetComponent extends BasisPanelChildComponent {
               this.removeAsync();
             })
           );
-        this.container
-          .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
-          .forEach((btn) =>
-            btn.addEventListener("click", (e) => {
-              e.preventDefault();
-              this.addToDashboard();
-            })
-          );
+        
+          if(this.param.addToDashboard == null || this.param.addToDashboard == true){
+            this.container
+            .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
+            .forEach((btn) =>{
+              const currentAddToDashboardBtn = btn as HTMLElement
+              currentAddToDashboardBtn.style.display="inline-block"
+              btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                this.addToDashboard();
+              })
+            }              
+              
+            );
+          }
+        
         resolve();
       } catch (e) {
         reject(e);
