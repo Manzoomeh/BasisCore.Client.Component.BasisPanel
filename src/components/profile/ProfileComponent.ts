@@ -33,8 +33,9 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       "rKey",
       `return \`${this.options.dataUrl.profile}\``
     );
-    const questions = await HttpUtil.getDataAsync<Array<IQuestionItem>>(
-      urlFormatter(this.options.rKey)
+    const questions = await HttpUtil.fetchDataAsync<Array<IQuestionItem>>(
+      urlFormatter(this.options.rKey),
+      "GET"
     );
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();

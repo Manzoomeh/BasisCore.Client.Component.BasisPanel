@@ -51,7 +51,8 @@ class MenuCacheItem {
           rKey: menuParam.rKey,
         }
       );
-      const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
+      //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
+      const menuData = await HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET");
       menu = this.menuMaker.create(menuData, menuParam);
       this.cache.set(menuParam.ownerId, menu);
     }

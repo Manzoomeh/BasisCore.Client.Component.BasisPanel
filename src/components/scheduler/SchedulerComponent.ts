@@ -32,7 +32,7 @@ export default class SchedulerComponent extends BasisPanelChildComponent {
   }
 
   public taskComplete(key: string, options: ITaskOptions) {
-    console.log(`${key} task is ended`);
+    // console.log(`${key} task is ended`);
     this.processList.delete(key);
   }
 

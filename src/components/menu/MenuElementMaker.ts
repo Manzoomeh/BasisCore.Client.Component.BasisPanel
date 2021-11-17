@@ -48,14 +48,22 @@ export default class MenuElementMaker {
         ul.appendChild(
           this.createLevelMenuItem(node as IMenuLevelInfo, menuParam)
         );
-      } else if ((node as IMenuExternalItemInfo).mid && (node as IMenuExternalItemInfo).multi == true) {
+      } else if (
+        (node as IMenuExternalItemInfo).mid &&
+        (node as IMenuExternalItemInfo).multi == true
+      ) {
         ul.appendChild(
           this.createExternalMenuItem(node as IMenuExternalItemInfo, menuParam)
         );
-      }
-      else if ((node as IMenuExternalItemInfo).mid && (node as IMenuExternalItemInfo).multi == false) {
+      } else if (
+        (node as IMenuExternalItemInfo).mid &&
+        (node as IMenuExternalItemInfo).multi == false
+      ) {
         ul.appendChild(
-          this.createExternalMenuItemSingleItem(node as IMenuExternalItemInfo, menuParam)
+          this.createExternalMenuItemSingleItem(
+            node as IMenuExternalItemInfo,
+            menuParam
+          )
         );
       }
     });
@@ -76,7 +84,7 @@ export default class MenuElementMaker {
     li.appendChild(innerUl);
     let subMenuFlag = false;
     li.addEventListener("click", function (e) {
-      if (subMenuFlag == false) {    
+      if (subMenuFlag == false) {
         innerUl.style.transform = ` scaleY(1)`;
         content.setAttribute("data-bc-level-open", "");
         subMenuFlag = true;
@@ -106,32 +114,31 @@ export default class MenuElementMaker {
   }
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
-    menuParam: IMenuLoaderParam) : HTMLElement{      
-      const newMenuParam: IMenuLoaderParam = {
-        owner: "external",
-        ownerId: node.mid,
-        ownerUrl: node.url,
-        menuMethod: menuParam.menuMethod,
-        rKey: menuParam.rKey,
-      };     
-      const li = document.createElement("li");
-      const ul = document.createElement("ul");
-      ul.setAttribute("data-bc-bp-menu-external-single-node", "");
-      li.appendChild(ul);
-      let subMenuFlag = false;
-      const url = HttpUtil.formatString(
-        `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
-        {
-          rKey: this.rKey,
-        }
-      );
-      
-      HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>{
-        this.createMenu(ul, menu.nodes, newMenuParam)
+    menuParam: IMenuLoaderParam
+  ): HTMLElement {
+    const newMenuParam: IMenuLoaderParam = {
+      owner: "external",
+      ownerId: node.mid,
+      ownerUrl: node.url,
+      menuMethod: menuParam.menuMethod,
+      rKey: menuParam.rKey,
+    };
+    const li = document.createElement("li");
+    const ul = document.createElement("ul");
+    ul.setAttribute("data-bc-bp-menu-external-single-node", "");
+    li.appendChild(ul);
+    let subMenuFlag = false;
+    const url = HttpUtil.formatString(
+      `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
+      {
+        rKey: this.rKey,
       }
-        
-      );
-      return li;
+    );
+
+    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) => {
+      this.createMenu(ul, menu.nodes, newMenuParam);
+    });
+    return li;
   }
   private createExternalMenuItem(
     node: IMenuExternalItemInfo,
@@ -154,7 +161,6 @@ export default class MenuElementMaker {
     li.appendChild(ul);
     let subMenuFlag = false;
     content.addEventListener("click", function () {
-
       if (subMenuFlag == false) {
         ul.style.transition = "all 0.3s ease-in-out";
         ul.style.width = `auto`;
@@ -175,7 +181,7 @@ export default class MenuElementMaker {
         rKey: this.rKey,
       }
     );
-    HttpUtil.getDataAsync<IMenuInfo>(url).then((menu) =>
+    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) =>
       this.createMenu(ul, menu.nodes, newMenuParam)
     );
     return li;

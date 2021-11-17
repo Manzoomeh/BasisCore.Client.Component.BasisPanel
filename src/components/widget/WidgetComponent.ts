@@ -46,6 +46,7 @@ export default class WidgetComponent extends BasisPanelChildComponent {
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
+        // var content = await HttpUtil.fetchStringAsync(url, "GET");
         var content = await HttpUtil.fetchStringAsync(url, "GET");
         const range = new Range();
 

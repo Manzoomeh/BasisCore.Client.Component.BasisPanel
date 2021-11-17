@@ -5003,9 +5003,8 @@ class TextComponent extends Component/* default */.Z {
         const range = document.createRange();
         range.setStart(node, start);
         range.setEnd(node, end);
-        const content = range.extractContents();
         this.rangeObject = new RangeObject/* default */.Z(range, this);
-        this.token = content.textContent.ToStringToken(context);
+        this.token = this.rangeObject.initialContent.textContent.ToStringToken(context);
     }
     initializeAsync() {
         return TextComponent_awaiter(this, void 0, void 0, function* () {
@@ -5242,22 +5241,28 @@ ComponentCollection = ComponentCollection_1 = __decorate([
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (/* binding */ RangeObject)
 /* harmony export */ });
-/* harmony import */ var _BasisCoreTag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(359);
-/* harmony import */ var _BasisCoreTag__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_BasisCoreTag__WEBPACK_IMPORTED_MODULE_0__);
-
 class RangeObject {
     constructor(range, owner) {
-        this.element = document.createElement("basis-core");
-        this.element.setOwner(owner);
-        range.surroundContents(this.element);
+        this._startNode = document.createTextNode("");
+        this._endNode = document.createTextNode("");
+        this.initialContent = range.extractContents();
+        range.insertNode(this._endNode);
+        range.insertNode(this._startNode);
         range.detach();
     }
+    getRange() {
+        const range = new Range();
+        range.setStartAfter(this._startNode);
+        range.setEndBefore(this._endNode);
+        return range;
+    }
     deleteContents() {
-        this.element.innerHTML = "";
+        const range = this.getRange();
+        range.deleteContents();
+        range.detach();
     }
     setContent(content, append = false) {
-        const range = new Range();
-        range.selectNodeContents(this.element);
+        const range = this.getRange();
         if (!append) {
             range.deleteContents();
         }
@@ -5286,6 +5291,15 @@ class RangeObject {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (/* binding */ Util)
 /* harmony export */ });
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 class Util {
     static HasValue(data) {
         return data !== undefined && data != null;
@@ -5322,7 +5336,45 @@ class Util {
     static IsNullOrEmpty(data) {
         return data === undefined || data == null || data === "";
     }
+    static getDataAsync(url) {
+        return Util.fetchDataAsync(url, "GET");
+    }
+    static fetchDataAsync(url, method, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const init = { method: method };
+            if (data) {
+                init.headers = {
+                    "Content-Type": "application/json",
+                };
+                init.body = JSON.stringify(data);
+            }
+            const result = yield fetch(url, init);
+            return yield result.json();
+        });
+    }
+    static formatString(pattern, params) {
+        const paraNameList = [...Object.getOwnPropertyNames(params)];
+        const formatter = new Function(...paraNameList, `return \`${pattern}\``);
+        return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
+    }
+    static formatUrl(url, paramsObject, queryStringObject) {
+        let retVal = paramsObject ? Util.formatString(url, paramsObject) : url;
+        if (queryStringObject) {
+            const queryPartList = Object.getOwnPropertyNames(queryStringObject).map((x) => `${encodeURIComponent(x)}=${encodeURIComponent(Reflect.get(queryStringObject, x))}`);
+            retVal = `${retVal}?${queryPartList.join("&")}`;
+        }
+        return retVal;
+    }
+    static parse(template) {
+        return Util.parser.parseFromString(template, "text/html");
+    }
+    static Move(oldParent, newParent) {
+        while (oldParent.childNodes.length > 0) {
+            newParent.appendChild(oldParent.childNodes[0]);
+        }
+    }
 }
+Util.parser = new DOMParser();
 
 
 /***/ }),
@@ -5334,18 +5386,21 @@ class Util {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (/* binding */ CommandComponent)
 /* harmony export */ });
-/* harmony import */ var _RangeObject_RangeObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(812);
-/* harmony import */ var _ElementBaseComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(986);
+/* harmony import */ var _RangeObject_RangeObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(812);
+/* harmony import */ var _ElementBaseComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(986);
 
 
-class CommandComponent extends _ElementBaseComponent__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z {
+class CommandComponent extends _ElementBaseComponent__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z {
     constructor(element, context) {
         super(element, context);
         this.core = this.node.getAttribute("core");
         const range = document.createRange();
         range.selectNode(this.node);
-        this.content = range.extractContents();
-        this.range = new _RangeObject_RangeObject__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(range, this);
+        this.range = new _RangeObject_RangeObject__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z(range, this);
+        this.content = this.range.initialContent;
+    }
+    setContent(newContent, append) {
+        this.range.setContent(newContent, append);
     }
 }
 
@@ -5441,7 +5496,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 
-class ElementBaseComponent extends _Component__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z {
+class ElementBaseComponent extends _Component__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z {
     constructor(element, context) {
         super(element, context);
     }
@@ -5478,8 +5533,14 @@ class ElementBaseComponent extends _Component__WEBPACK_IMPORTED_MODULE_0__/* .de
             const rawValue = yield ((_a = this.ifToken) === null || _a === void 0 ? void 0 : _a.getValueAsync());
             let retVal = true;
             if (rawValue != null && rawValue != undefined) {
-                const fn = new Function(`try{return ${rawValue};}catch{return false;}`);
-                retVal = fn();
+                try {
+                    const fn = new Function(`try{return ${rawValue};}catch{return false;}`);
+                    retVal = fn();
+                }
+                catch (e) {
+                    console.error(`Error in parse 'if' attribute expression in command: '${rawValue}'`);
+                    throw e;
+                }
             }
             return retVal;
         });
@@ -5518,7 +5579,6 @@ class ElementBaseComponent extends _Component__WEBPACK_IMPORTED_MODULE_0__/* .de
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const token = this.node.GetObjectToken(attributeName, this.context);
-            console.log("token", token);
             return (_a = (yield (token === null || token === void 0 ? void 0 : token.getValueAsync()))) !== null && _a !== void 0 ? _a : defaultValue;
         });
     }
@@ -5579,7 +5639,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
-let GroupComponent = class GroupComponent extends _CommandComponent__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z {
+let GroupComponent = class GroupComponent extends _CommandComponent__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z {
     constructor(element, context, container) {
         super(element, context);
         this.container = container;
@@ -5605,7 +5665,7 @@ let GroupComponent = class GroupComponent extends _CommandComponent__WEBPACK_IMP
                 this.currentDC.register("IHostOptions", {
                     useValue: newOptions,
                 });
-                this.oldLocalContext = this.currentDC.resolve(_context_LocalRootContext__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z);
+                this.oldLocalContext = this.currentDC.resolve(_context_LocalRootContext__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z);
             }
             else {
                 this.oldLocalContext = this.currentDC.resolve("ILocalContext");
@@ -5613,7 +5673,7 @@ let GroupComponent = class GroupComponent extends _CommandComponent__WEBPACK_IMP
             this.currentDC.register("context", {
                 useValue: this.oldLocalContext,
             });
-            this.collection = this.currentDC.resolve(_ComponentCollection__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z);
+            this.collection = this.currentDC.resolve(_ComponentCollection__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z);
             yield this.collection.processNodesAsync(this.childNodes);
         });
     }
@@ -5676,7 +5736,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
-let CallbackComponent = class CallbackComponent extends _CommandComponent__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z {
+let CallbackComponent = class CallbackComponent extends _CommandComponent__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z {
     constructor(element, context) {
         super(element, context);
         this.priority = _enum__WEBPACK_IMPORTED_MODULE_1__/* .Priority.none */ .UL.none;
@@ -5705,8 +5765,7 @@ let CallbackComponent = class CallbackComponent extends _CommandComponent__WEBPA
             }
             else {
                 callbackFunction = (arg) => {
-                    console.log(arg);
-                    console.table(arg === null || arg === void 0 ? void 0 : arg.rows);
+                    this.context.logger.logSource(arg);
                 };
             }
             if (source) {
@@ -5760,7 +5819,7 @@ class Context {
         this.repository = repository;
         this.logger = logger;
         this.options = options;
-        this.onDataSourceSet = new _event_EventManager__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z();
+        this.onDataSourceSet = new _event_EventManager__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z();
     }
     checkSourceHeartbeatAsync(source) {
         //TODO: must complete
@@ -5793,7 +5852,7 @@ class Context {
         });
     }
     setAsSource(sourceId, data, options, preview) {
-        var source = new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(sourceId, data, options);
+        var source = new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z(sourceId, data, options);
         this.setSource(source, preview);
     }
     setSource(source, preview) {
@@ -5837,7 +5896,7 @@ var __param = (undefined && undefined.__param) || function (paramIndex, decorato
 
 
 
-let LocalRootContext = class LocalRootContext extends _RootContext__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z {
+let LocalRootContext = class LocalRootContext extends _RootContext__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z {
     constructor(repository, owner, options) {
         super(repository, options, owner.logger);
         this.owner = owner;
@@ -5855,7 +5914,7 @@ LocalRootContext = __decorate([
     (0,tsyringe__WEBPACK_IMPORTED_MODULE_0__/* .injectable */ .b2)(),
     __param(0, (0,tsyringe__WEBPACK_IMPORTED_MODULE_0__/* .inject */ .f3)("IContextRepository")),
     __param(1, (0,tsyringe__WEBPACK_IMPORTED_MODULE_0__/* .inject */ .f3)("OwnerContext")),
-    __metadata("design:paramtypes", [Object, _Context__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z,
+    __metadata("design:paramtypes", [Object, _Context__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z,
         _options_HostOptions__WEBPACK_IMPORTED_MODULE_1__/* .HostOptions */ .G])
 ], LocalRootContext);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LocalRootContext);
@@ -5930,6 +5989,8 @@ class Pair {
     }
 }
 
+// EXTERNAL MODULE: ./src/data/Data.ts
+var Data = __webpack_require__(231);
 ;// CONCATENATED MODULE: ./src/options/connection-options/LocalStorageConnectionOptions.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -5940,6 +6001,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 
 
 class LocalStorageConnectionOptions extends ConnectionOptions {
@@ -5974,7 +6036,12 @@ class LocalStorageConnectionOptions extends ConnectionOptions {
         });
     }
     loadDataAsync(context, sourceId, parameters, onDataReceived) {
-        throw new Error("Method not implemented.");
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.LoadLibAsync();
+            var tmp = yield this.Function(parameters);
+            var data = this.ConvertObject(tmp);
+            onDataReceived(data.Tables.map((x) => new Data/* default */.Z(x.Key, x.Value)));
+        });
     }
     loadPageAsync(context, pageName, parameters) {
         throw new ClientException/* default */.Z("LoadPageAsync Method not Supported In LocalStorage Provider.");
@@ -6016,8 +6083,6 @@ class RESTConnectionOptions extends UrlBaseConnectionOptions {
     }
 }
 
-// EXTERNAL MODULE: ./src/data/Data.ts
-var Data = __webpack_require__(231);
 // EXTERNAL MODULE: ./src/Util.ts
 var Util = __webpack_require__(102);
 ;// CONCATENATED MODULE: ./src/options/connection-options/WebConnectionOptions.ts
@@ -6060,8 +6125,8 @@ class WebConnectionOptions extends UrlBaseConnectionOptions {
         var _a;
         return WebConnectionOptions_awaiter(this, void 0, void 0, function* () {
             var rawJson = yield WebConnectionOptions.ajax(this.Url, (_a = this.Verb) !== null && _a !== void 0 ? _a : context.options.getDefault("source.verb"), parameters);
-            var json = this.ParseJsonString(rawJson);
-            onDataReceived(json.Tables.map((x) => new Data/* default */.Z(x.Key, x.Value)));
+            const json = JSON.parse(rawJson);
+            onDataReceived(json.sources.map((x) => new Data/* default */.Z(x.options.tableName, x.data, x.options)));
         });
     }
     loadPageAsync(context, pageName, parameters, method) {
@@ -6173,14 +6238,7 @@ class WebSocketConnectionOptions extends ConnectionOptions {
                             socket.close();
                         }
                         if (json.sources) {
-                            const dataList = Object.keys(json === null || json === void 0 ? void 0 : json.sources)
-                                .map((key) => {
-                                return {
-                                    key: key,
-                                    data: json.sources[key],
-                                };
-                            })
-                                .map((x) => new Data/* default */.Z(x.key, x.data.data, x.data.options));
+                            const dataList = json === null || json === void 0 ? void 0 : json.sources.map((x) => new Data/* default */.Z(x.options.tableName, x.data, x.options));
                             if (dataList.length > 0) {
                                 const receiverIsOk = onDataReceived(dataList);
                                 if (!receiverIsOk) {
@@ -6365,6 +6423,7 @@ class Source {
         this.mergeType = (_a = options === null || options === void 0 ? void 0 : options.mergeType) !== null && _a !== void 0 ? _a : _enum__WEBPACK_IMPORTED_MODULE_0__/* .MergeType.replace */ .dx.replace;
         this.keyFieldName = options === null || options === void 0 ? void 0 : options.keyFieldName;
         this.statusFieldName = options === null || options === void 0 ? void 0 : options.statusFieldName;
+        this.extra = options === null || options === void 0 ? void 0 : options.extra;
         if (Array.isArray(data)) {
             this._rows = data;
         }
@@ -6390,6 +6449,7 @@ class Source {
             keyFieldName: this.keyFieldName,
             mergeType: this.mergeType,
             statusFieldName: this.statusFieldName,
+            extra: this.extra,
         };
     }
     removeRowFormIndex(index) {
@@ -6413,6 +6473,7 @@ class Source {
         return index != -1 ? this._versions[index] : 0;
     }
     replace(source) {
+        var _a;
         const oldCount = this._rows.length;
         const newCount = source.rows.length;
         this._rows.splice(0, oldCount, ...source.rows);
@@ -6423,6 +6484,10 @@ class Source {
             this._versions.splice(newCount, 0, ...Array(newCount - oldCount).fill(-1));
         }
         this._versions.forEach((ver, index, arr) => (arr[index] = ++ver));
+        this.mergeType = (_a = source.mergeType) !== null && _a !== void 0 ? _a : _enum__WEBPACK_IMPORTED_MODULE_0__/* .MergeType.replace */ .dx.replace;
+        this.keyFieldName = source.keyFieldName;
+        this.statusFieldName = source.statusFieldName;
+        this.extra = source.extra;
     }
 }
 
@@ -6541,7 +6606,7 @@ class ClientException extends Error {
 /* harmony export */ });
 /* harmony import */ var _ClientException__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(479);
 
-class ConfigNotFoundException extends _ClientException__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z {
+class ConfigNotFoundException extends _ClientException__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z {
     constructor(configFile, configKey) {
         super(`In '${configFile}' object, property '${configKey}' not configured!`);
     }
@@ -6564,10 +6629,10 @@ Object.defineProperty(String.prototype, "Evaluating", {
     value: function Evaluating() {
         var _a;
         try {
-            return _Util__WEBPACK_IMPORTED_MODULE_2__/* .default.isEqual */ .Z.isEqual((_a = eval(this.toString())) === null || _a === void 0 ? void 0 : _a.toString(), "true");
+            return _Util__WEBPACK_IMPORTED_MODULE_2__/* ["default"].isEqual */ .Z.isEqual((_a = eval(this.toString())) === null || _a === void 0 ? void 0 : _a.toString(), "true");
         }
         catch (er) {
-            throw new _exception_ClientException__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(`Error In Evaluating '${this.toString()}': ${er}`);
+            throw new _exception_ClientException__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z(`Error In Evaluating '${this.toString()}': ${er}`);
         }
     },
     writable: true,
@@ -6575,28 +6640,28 @@ Object.defineProperty(String.prototype, "Evaluating", {
 });
 Object.defineProperty(String.prototype, "ToObjectToken", {
     value: function ToObjectToken(context) {
-        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* .default.ToObjectToken */ .Z.ToObjectToken(this.toString(), context);
+        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* ["default"].ToObjectToken */ .Z.ToObjectToken(this.toString(), context);
     },
     writable: true,
     configurable: true,
 });
 Object.defineProperty(String.prototype, "ToStringToken", {
     value: function ToStringToken(context) {
-        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* .default.ToStringToken */ .Z.ToStringToken(this.toString(), context);
+        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* ["default"].ToStringToken */ .Z.ToStringToken(this.toString(), context);
     },
     writable: true,
     configurable: true,
 });
 Object.defineProperty(String.prototype, "ToIntegerToken", {
     value: function ToIntegerToken(context) {
-        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* .default.ToIntegerToken */ .Z.ToIntegerToken(this.toString(), context);
+        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* ["default"].ToIntegerToken */ .Z.ToIntegerToken(this.toString(), context);
     },
     writable: true,
     configurable: true,
 });
 Object.defineProperty(String.prototype, "ToBooleanToken", {
     value: function ToBooleanToken(context) {
-        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* .default.ToBooleanToken */ .Z.ToBooleanToken(this.toString(), context);
+        return _token_TokenUtil__WEBPACK_IMPORTED_MODULE_1__/* ["default"].ToBooleanToken */ .Z.ToBooleanToken(this.toString(), context);
     },
     writable: true,
     configurable: true,
@@ -6624,11 +6689,11 @@ Object.defineProperty(String.prototype, "isEqual", {
 /* harmony export */ });
 /* harmony import */ var tsyringe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(195);
 /* harmony import */ var _exception_ConfigNotFoundException__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(441);
-/* harmony import */ var _Util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(102);
-/* harmony import */ var lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(98);
-/* harmony import */ var lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(465);
-/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(102);
+/* harmony import */ var lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(98);
+/* harmony import */ var lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(465);
+/* harmony import */ var lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4__);
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -6649,13 +6714,13 @@ var HostOptions_1;
 
 let HostOptions = HostOptions_1 = class HostOptions {
     constructor(options) {
-        const originalOptions = lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3___default()(options);
+        const originalOptions = lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4___default()(options);
         if (options !== HostOptions_1.defaultSettings) {
-            options = lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_2___default()(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3___default()(options), HostOptions_1.defaultSettings);
+            options = lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_3___default()(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4___default()(options), HostOptions_1.defaultSettings);
             Object.assign(this, options);
         }
         else {
-            Object.assign(this, lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3___default()(options));
+            Object.assign(this, lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4___default()(options));
         }
         this.originalOptions = originalOptions;
     }
@@ -6679,7 +6744,7 @@ let HostOptions = HostOptions_1 = class HostOptions {
                 repositories: {},
             };
             if (typeof host != "undefined") {
-                defaults = lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_2___default()(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_3___default()(host), defaults);
+                defaults = lodash_defaultsdeep__WEBPACK_IMPORTED_MODULE_3___default()(lodash_clonedeep__WEBPACK_IMPORTED_MODULE_4___default()(host), defaults);
             }
             HostOptions_1._defaultSettings = defaults;
         }
@@ -6689,14 +6754,14 @@ let HostOptions = HostOptions_1 = class HostOptions {
         return this.getSetting(`default.${key}`, defaultValue);
     }
     getSetting(key, defaultValue) {
-        var find = Object.getOwnPropertyNames(this.settings).filter((x) => _Util__WEBPACK_IMPORTED_MODULE_4__/* .default.isEqual */ .Z.isEqual(x, key));
+        var find = Object.getOwnPropertyNames(this.settings).filter((x) => _Util__WEBPACK_IMPORTED_MODULE_2__/* ["default"].isEqual */ .Z.isEqual(x, key));
         var retVal = find.length == 1 ? this.settings[find[0]] : null;
         if (!retVal) {
             if (defaultValue !== undefined) {
                 retVal = defaultValue;
             }
             else {
-                throw new _exception_ConfigNotFoundException__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z("host.settings", key);
+                throw new _exception_ConfigNotFoundException__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Z("host.settings", key);
             }
         }
         return retVal;
@@ -7233,7 +7298,7 @@ class ObjectToken {
 /* harmony export */ });
 /* harmony import */ var _base_ArrayToken__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(629);
 
-class ObjectArray extends _base_ArrayToken__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z {
+class ObjectArray extends _base_ArrayToken__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z {
     constructor(context, ...collection) {
         super(context, ...collection);
     }
@@ -7254,7 +7319,7 @@ class ObjectArray extends _base_ArrayToken__WEBPACK_IMPORTED_MODULE_0__/* .defau
 /* harmony export */ });
 /* harmony import */ var _base_ObjectToken__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(421);
 
-class ObjectObject extends _base_ObjectToken__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z {
+class ObjectObject extends _base_ObjectToken__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z {
     constructor(rawValue, context) {
         super(rawValue, context);
     }
@@ -7302,12 +7367,12 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 class SourceWrapper {
     new(sourceId, data, options) {
-        return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(sourceId, data, options);
+        return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z(sourceId, data, options);
     }
     sortAsync(source, sort, context) {
         return __awaiter(this, void 0, void 0, function* () {
             const lib = yield context.getOrLoadDbLibAsync();
-            return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(source.id, lib(`SELECT * FROM ? order by ${sort}`, [source.rows]), source.cloneOptions());
+            return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z(source.id, lib(`SELECT * FROM ? order by ${sort}`, [source.rows]), source.cloneOptions());
         });
     }
     filterAsync(source, filter, context) {
@@ -7331,11 +7396,11 @@ class SourceWrapper {
     runSqlAsync(source, sql, context) {
         return __awaiter(this, void 0, void 0, function* () {
             const lib = yield context.getOrLoadDbLibAsync();
-            return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* .default */ .Z(source.id, lib(_Util__WEBPACK_IMPORTED_MODULE_1__/* .default.ReplaceEx */ .Z.ReplaceEx(sql, `\\[${source.id}\\]`, "?"), [source.rows]), source.cloneOptions());
+            return new _data_Source__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z(source.id, lib(_Util__WEBPACK_IMPORTED_MODULE_1__/* ["default"].ReplaceEx */ .Z.ReplaceEx(sql, `\\[${source.id}\\]`, "?"), [source.rows]), source.cloneOptions());
         });
     }
     data(id, data, options) {
-        return new _data_Data__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z(id, data, options);
+        return new _data_Data__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z(id, data, options);
     }
 }
 
@@ -7488,7 +7553,14 @@ class UtilWrapper {
             if (retVal) {
                 return retVal;
             }
-            throw new _exception_ClientException__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z(`'${key}' related repository setting not found`);
+            throw new _exception_ClientException__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Z(`'${key}' related repository setting not found`);
+        });
+    }
+    format(pattern, ...params) {
+        return pattern.replace(/{(\d+)}/g, function (match, number) {
+            return typeof params[number] !== 'undefined'
+                ? params[number]
+                : match;
         });
     }
 }
@@ -7509,7 +7581,7 @@ __webpack_require__.d(__webpack_exports__, {
   "ri": () => (/* reexport */ decorators_singleton)
 });
 
-// UNUSED EXPORTS: Lifecycle, autoInjectable, delay, injectAll, injectAllWithTransform, injectWithTransform, instanceCachingFactory, isClassProvider, isFactoryProvider, isNormalToken, isTokenProvider, isValueProvider, predicateAwareClassFactory, registry, scoped
+// UNUSED EXPORTS: Lifecycle, autoInjectable, delay, injectAll, injectAllWithTransform, injectWithTransform, instanceCachingFactory, instancePerContainerCachingFactory, isClassProvider, isFactoryProvider, isNormalToken, isTokenProvider, isValueProvider, predicateAwareClassFactory, registry, scoped
 
 ;// CONCATENATED MODULE: ./node_modules/tsyringe/dist/esm5/types/lifecycle.js
 var Lifecycle;
@@ -8478,30 +8550,6 @@ if (typeof Reflect === "undefined" || !Reflect.getMetadata) {
 
 
 
-/***/ }),
-
-/***/ 359:
-/***/ (() => {
-
-class BasisCoreTag extends HTMLElement {
-  setOwner(owner) {
-    this.owner = owner;
-  }
-
-  disconnectedCallback() {
-    if (!this.owner.disposed) {
-      this.owner.disposeAsync();
-    }
-  }
-
-  // connectedCallback() {
-  //   console.log("connect", this.owner);
-  // }
-}
-
-window.customElements.define("basis-core", BasisCoreTag);
-
-
 /***/ })
 
 /******/ 	});
@@ -8857,9 +8905,6 @@ class SourceBaseComponent extends CommandComponent/* default */.Z {
             return result;
         });
     }
-    setContent(newContent, append) {
-        this.range.setContent(newContent, append);
-    }
 }
 
 ;// CONCATENATED MODULE: ./src/component/collection/RepeaterComponent.ts
@@ -8954,6 +8999,8 @@ RepeaterComponent = RepeaterComponent_decorate([
 ], RepeaterComponent);
 /* harmony default export */ const collection_RepeaterComponent = (RepeaterComponent);
 
+// EXTERNAL MODULE: ./src/data/Source.ts
+var Source = __webpack_require__(877);
 // EXTERNAL MODULE: ./src/component/ElementBaseComponent.ts
 var ElementBaseComponent = __webpack_require__(986);
 ;// CONCATENATED MODULE: ./src/component/html-element/HTMLComponent.ts
@@ -8966,6 +9013,7 @@ var HTMLComponent_awaiter = (undefined && undefined.__awaiter) || function (this
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 
 
 class HTMLComponent extends ElementBaseComponent/* default */.Z {
@@ -9021,11 +9069,29 @@ class HTMLComponent extends ElementBaseComponent/* default */.Z {
                     mergeType = src_enum/* MergeType */.dx[rawValue.toLowerCase()];
                 }
             }
-            this.context.setAsSource(id !== null && id !== void 0 ? id : "cms.unknown", value, {
+            var source = new Source/* default */.Z(id !== null && id !== void 0 ? id : "cms.unknown", value, {
                 keyFieldName: yield ((_a = this.keyFieldNameToken) === null || _a === void 0 ? void 0 : _a.getValueAsync()),
                 statusFieldName: yield ((_b = this.statusFieldNameToken) === null || _b === void 0 ? void 0 : _b.getValueAsync()),
                 mergeType: mergeType,
             });
+            let canRender = yield this.getIfValueAsync();
+            if (canRender && this.onRenderingAsync) {
+                const renderingArgs = this.createCallbackArgument({
+                    prevent: false,
+                    source: source,
+                });
+                yield this.onRenderingAsync(renderingArgs);
+                canRender = !renderingArgs.prevent;
+            }
+            if (canRender) {
+                this.context.setSource(source);
+                if (this.onRenderedAsync) {
+                    yield this.onRenderedAsync(this.createCallbackArgument({
+                        result: null,
+                        source: source,
+                    }));
+                }
+            }
             if (this.onProcessedAsync) {
                 const args = _super.createCallbackArgument.call(this, {
                     id: id,
@@ -10173,8 +10239,6 @@ ViewComponent = ViewComponent_decorate([
 
 // EXTERNAL MODULE: ./src/data/Data.ts
 var Data = __webpack_require__(231);
-// EXTERNAL MODULE: ./src/data/Source.ts
-var Source = __webpack_require__(877);
 ;// CONCATENATED MODULE: ./src/component/source/SourceComponent.ts
 
 
@@ -10218,6 +10282,7 @@ let APIComponent = class APIComponent extends SourceComponent {
         this.methodToken = this.getAttributeToken("method");
         this.bodyToken = this.getAttributeToken("body");
         this.nameToken = this.getAttributeToken("name");
+        this.contentType = this.getAttributeToken("Content-Type");
     }
     runAsync() {
         var _a, _b, _c, _d, _e, _f;
@@ -10228,11 +10293,16 @@ let APIComponent = class APIComponent extends SourceComponent {
             const body = yield ((_d = this.bodyToken) === null || _d === void 0 ? void 0 : _d.getValueAsync());
             const init = {
                 method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 body: body,
             };
+            const contentType = this.contentType
+                ? yield this.contentType.getValueAsync()
+                : "application/json";
+            if (contentType && contentType.length > 0) {
+                init.headers = {
+                    "Content-Type": contentType,
+                };
+            }
             const request = new Request(url, init);
             if (this.onProcessingAsync) {
                 const args = this.createCallbackArgument({
@@ -10257,15 +10327,8 @@ let APIComponent = class APIComponent extends SourceComponent {
             }
             else {
                 const json = yield response.json();
-                if (typeof (json === null || json === void 0 ? void 0 : json.sources) === "object") {
-                    dataList = Object.keys(json === null || json === void 0 ? void 0 : json.sources)
-                        .map((key) => {
-                        return {
-                            key: key,
-                            data: json.sources[key],
-                        };
-                    })
-                        .map((x) => new Data/* default */.Z(x.key, x.data.data, x.data.options));
+                if (json === null || json === void 0 ? void 0 : json.sources) {
+                    dataList = json === null || json === void 0 ? void 0 : json.sources.map((x) => new Data/* default */.Z(x.options.tableName, x.data, x.options));
                 }
                 else {
                     const name = (_f = (yield ((_e = this.nameToken) === null || _e === void 0 ? void 0 : _e.getValueAsync()))) !== null && _f !== void 0 ? _f : "cms.api";
@@ -10560,6 +10623,9 @@ let UserDefineComponent = class UserDefineComponent extends CommandComponent/* d
     getRandomName(prefix, postfix) {
         return $bc.util.getRandomName(prefix, postfix);
     }
+    format(pattern, ...params) {
+        return $bc.util.format(pattern, params);
+    }
 };
 UserDefineComponent = UserDefineComponent_decorate([
     (0,esm5/* injectable */.b2)(),
@@ -10790,8 +10856,165 @@ Repository = Repository_decorate([
 ], Repository);
 /* harmony default export */ const repository_Repository = (Repository);
 
+;// CONCATENATED MODULE: ./src/component/renderable/schema-list/SchemaFace.ts
+var SchemaFace_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+class SchemaFaceCollection {
+    constructor(element, context) {
+        this._faces = Array.from(element.querySelectorAll("face")).map((x) => new SchemaFace(x, context));
+    }
+    getValueAsync(data) {
+        return SchemaFace_awaiter(this, void 0, void 0, function* () {
+            let retVal = null;
+            for (const item of data) {
+                for (const face of this._faces) {
+                    const result = yield face.tryGetValueAsync(item);
+                    if (result) {
+                        retVal += result;
+                        break;
+                    }
+                }
+            }
+            return retVal;
+        });
+    }
+}
+class SchemaFace {
+    constructor(element, context) {
+        var _a;
+        this._schemaIdList = (_a = element.getAttribute("schemaIds")) === null || _a === void 0 ? void 0 : _a.split(" ");
+        const template = element.getTemplate();
+        this._template = new ContentTemplate(context, template, null);
+    }
+    tryGetValueAsync(data) {
+        return !this._schemaIdList ||
+            this._schemaIdList.indexOf(data.schemaId) != -1
+            ? this._template.getValueAsync(data)
+            : null;
+    }
+}
+
+;// CONCATENATED MODULE: ./src/component/renderable/schema-list/SourceMaker.ts
+var SourceMaker_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+class SourceMaker {
+    static makeAsync(answers, schemaUrl) {
+        return SourceMaker_awaiter(this, void 0, void 0, function* () {
+            const retVal = new Array();
+            const url = Util/* default.formatUrl */.Z.formatUrl(schemaUrl, null, {
+                id: answers.schemaId,
+                ver: answers.schemaVersion,
+                lid: answers.lid,
+            });
+            const response = yield Util/* default.getDataAsync */.Z.getDataAsync(url);
+            const schema = response.sources[0].data[0];
+            schema.questions.forEach((question) => {
+                const answer = answers === null || answers === void 0 ? void 0 : answers.properties.find((x) => x.prpId == question.prpId);
+                const item = {
+                    schemaId: null,
+                    prpId: question.prpId,
+                    typeId: question.typeId,
+                    title: question.title,
+                    answers: answer.answers.map((x) => x.parts.map((x) => x.values.map((x) => x.value))),
+                };
+                retVal.push(item);
+            });
+            return retVal;
+        });
+    }
+}
+
+;// CONCATENATED MODULE: ./src/component/renderable/schema-list/SchemaListComponent.ts
+var SchemaListComponent_decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var SchemaListComponent_metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var SchemaListComponent_param = (undefined && undefined.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var SchemaListComponent_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+let SchemaListComponent = class SchemaListComponent extends SourceBaseComponent {
+    constructor(element, context) {
+        super(element, context);
+    }
+    initializeAsync() {
+        const _super = Object.create(null, {
+            initializeAsync: { get: () => super.initializeAsync }
+        });
+        return SchemaListComponent_awaiter(this, void 0, void 0, function* () {
+            yield _super.initializeAsync.call(this);
+            this.urlToken = this.getAttributeToken("schemaUrl");
+            this._faces = new SchemaFaceCollection(this.node, this.context);
+            console.log(this._faces);
+        });
+    }
+    renderSourceAsync(dataSource) {
+        return SchemaListComponent_awaiter(this, void 0, void 0, function* () {
+            if (dataSource) {
+                const answers = dataSource.rows;
+                answers.forEach(this.renderAnswerAsync.bind(this));
+            }
+        });
+    }
+    renderAnswerAsync(answer) {
+        var _a;
+        return SchemaListComponent_awaiter(this, void 0, void 0, function* () {
+            const urlStr = yield ((_a = this.urlToken) === null || _a === void 0 ? void 0 : _a.getValueAsync());
+            const source = yield SourceMaker.makeAsync(answer, urlStr);
+            console.log(source);
+            source.forEach((item) => {
+                const div = document.createElement("div");
+                div.appendChild(document.createTextNode(item.title));
+                this.setContent(div, true);
+            });
+            this._faces;
+        });
+    }
+};
+SchemaListComponent = SchemaListComponent_decorate([
+    (0,esm5/* injectable */.b2)(),
+    SchemaListComponent_param(0, (0,esm5/* inject */.f3)("element")),
+    SchemaListComponent_param(1, (0,esm5/* inject */.f3)("context")),
+    SchemaListComponent_metadata("design:paramtypes", [Element, Object])
+], SchemaListComponent);
+
+
 ;// CONCATENATED MODULE: ./src/tsyringe.config.ts
 //https://github.com/microsoft/tsyringe#example-with-interfaces
+
 
 
 
@@ -10822,6 +11045,8 @@ esm5/* container.register */.nC.register("print", { useToken: renderable_PrintCo
 esm5/* container.register */.nC.register("tree", { useToken: renderable_TreeComponent });
 esm5/* container.register */.nC.register("view", { useToken: renderable_ViewComponent });
 esm5/* container.register */.nC.register("list", { useToken: renderable_ListComponent });
+esm5/* container.register */.nC.register("list", { useToken: renderable_ListComponent });
+esm5/* container.register */.nC.register("schemalist", { useToken: SchemaListComponent });
 esm5/* container.register */.nC.register("cookie", { useToken: management_CookieComponent });
 esm5/* container.register */.nC.register("call", { useToken: collection_CallComponent });
 esm5/* container.register */.nC.register("group", { useToken: GroupComponent/* default */.Z });
@@ -11028,7 +11253,7 @@ class LocalDataBase {
     InitializeAsync() {
         return LocalDataBase_awaiter(this, void 0, void 0, function* () {
             if (!this._db) {
-                var lib = alasql; //await $bc.GetOrLoadDbLibAsync();
+                var lib = alasql;
                 var create = lib.exec(`CREATE localStorage DATABASE IF NOT EXISTS ${this._dataBaseName}`);
                 lib.exec(`ATTACH localStorage DATABASE ${this._dataBaseName}`);
                 this._db = lib.databases[this._dataBaseName];
@@ -11036,7 +11261,6 @@ class LocalDataBase {
                     for (let [tblName, schema] of this._getSchemas().entries()) {
                         var tmp = Object.getOwnPropertyNames(schema).map((columnName) => `${columnName} ${schema[columnName]}`);
                         var cols = tmp.join(",");
-                        console.log(`CREATE TABLE IF NOT EXISTS ${tblName} (${cols})`);
                         yield this.executeAsync(`CREATE TABLE IF NOT EXISTS ${tblName} (${cols})`);
                     }
                 }
@@ -11168,7 +11392,7 @@ class BCWrapperFactory {
 
 console.log(`%cWelcome To BasisCore Ecosystem%c
 follow us on https://BasisCore.com/
-version:2.3.1`, " background: yellow;color: #0078C1; font-size: 2rem; font-family: Arial; font-weight: bolder", "color: #0078C1; font-size: 1rem; font-family: Arial;");
+version:2.4.3`, " background: yellow;color: #0078C1; font-size: 2rem; font-family: Arial; font-weight: bolder", "color: #0078C1; font-size: 1rem; font-family: Arial;");
 const src_$bc = new BCWrapperFactory();
 window.LocalDataBase = LocalDataBase;
 __webpack_require__.g.$bc = src_$bc;

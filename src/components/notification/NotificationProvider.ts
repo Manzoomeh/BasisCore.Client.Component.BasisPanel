@@ -72,8 +72,8 @@ export default class NotificationProvider implements INotificationProvider {
     const url = HttpUtil.formatString(this.options.url, {
       rKey: this.rKey,
     });
-    const result = await HttpUtil.fetchDataAsync(url, "GET");
+    const result = await HttpUtil.fetchDataAsync<Array<any>>(url, "GET");
 
-    this.tab.refreshUI(result as Array<any>);
+    this.tab.refreshUI(result);
   }
 }
