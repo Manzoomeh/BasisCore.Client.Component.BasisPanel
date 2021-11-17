@@ -1,21 +1,31 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
-import ISidebarParam from "./ISidebarParam";
+import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
-import { DefaultSource } from "../../type-alias";
-import ITaskOptions from "../scheduler/ITaskOptions";
+import { DefaultSource, MenuOwnerType } from "../../type-alias";
+import IMenuInfo, {
+  IMenuItemInfo,
+  IMenuLevelInfo,
+  IMenuPageInfo,
+} from "../menu/IMenuInfo";
+import IPageLoaderParam from "../menu/IPageLoaderParam";
 
 declare const $bc: any;
+
 export default class SidebarComponent extends BasisPanelChildComponent {
-  private param: ISidebarParam;
-  // set title(value: string) {
-  //   this.container.querySelector(
-  //     "[data-bc-sidebar-header] > [data-bc-sidebar-title]"
-  //   ).textContent = value;
-  // }
+  private param: IWidgetParam;
+
+  constructor(owner: IUserDefineComponent) {
+    super(owner, layout, "data-bc-bp-sidebar-container");
+  }
+
+  public runAsync(source?: ISource) {
+    return true;
+  }
+
   public async initializeAsync(): Promise<void> {
     this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
 
@@ -33,62 +43,92 @@ export default class SidebarComponent extends BasisPanelChildComponent {
     }px`;
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
-    // this.title = this.param.title;
+    const mainDiv = this.container.querySelector(
+      "[data-bc-sidebar-levels='firstLevel']"
+    );
 
     const url = HttpUtil.formatString(
-      `${this.param.url ?? this.param.page.ownerUrl}${
-        this.options.method.widget
-      }`,
-      { rKey: this.options.rKey, widgetId: this.param.id }
+      `${this.param.page.ownerUrl}${this.options.method.sidebarMenu}`,
+      { rKey: this.param.page.rKey, pageId: this.param.page.pageId }
     );
 
-    const container = this.container.querySelector(
-      "[data-bc-sidebar-body-container]"
-    );
-    const processTask = new Promise<void>(async (resolve, reject) => {
-      try {
-        //var content = await HttpUtil.fetchStringAsync(url, "GET");
-        var content = await HttpUtil.fetchStringAsync(url, "GET");
-        const range = new Range();
+    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((sidebar) => {
+      this.createSidebar(mainDiv as HTMLElement, sidebar.nodes);
+    });
+  }
 
-        range.setStart(container, 0);
-        range.setEnd(container, 0);
-        const newContent = range.createContextualFragment(content);
-        const nodes = Array.from(newContent.childNodes);
-        range.insertNode(newContent);
-        this.owner.processNodesAsync(nodes);
-        // this.container
-        //   .querySelectorAll("[data-bc-sidebar-btn-close]")
-        //   .forEach((btn) =>
-        //     btn.addEventListener("click", (e) => {
-        //       e.preventDefault();
-        //       this.removeAsync();
-        //     })
-        //   );
-        resolve();
-      } catch (e) {
-        reject(e);
+  private createSidebar(div: HTMLElement, items: Array<IMenuItemInfo>) {
+    items.forEach((node) => {
+      if ((node as IMenuPageInfo).pid) {
+        div.appendChild(this.createPageSidebarItem(node as IMenuPageInfo));
+      } else if ((node as IMenuLevelInfo).nodes) {
+        div.appendChild(this.createLevelSidebarItem(node as IMenuLevelInfo));
       }
     });
-    const taskOptions: ITaskOptions = {
-      container: container,
-      task: processTask,
-      notify: false,
+  }
+
+  private createLevelSidebarItem(node: IMenuLevelInfo): HTMLElement {
+    let subSidebarFlag = false;
+    const div = document.createElement("div");
+    div.setAttribute("data-bc-sidebar-items", "");
+    const content = document.createElement("span");
+    content.setAttribute("data-bc-level", "");
+    content.appendChild(document.createTextNode(node.title));
+    div.appendChild(content);
+    const innerUl = document.createElement("div");
+    innerUl.setAttribute("data-bc-sidebar-levels", "secondLevel");
+    this.createSidebar(innerUl, node.nodes);
+    const active = innerUl.querySelector("[data-bc-sidebar-active]");
+    if(active) {
+      innerUl.style.opacity = "1";
+      innerUl.style.height = "auto";
+      content.setAttribute("data-bc-level-open", "");
+      subSidebarFlag = true;
+    }
+    div.appendChild(innerUl);
+    
+    div.addEventListener("click", function (e) {
+      if (subSidebarFlag == false) {
+        innerUl.style.opacity = "1";
+        innerUl.style.height = "auto";
+        content.setAttribute("data-bc-level-open", "");
+        subSidebarFlag = true;
+      } else {
+        innerUl.style.opacity = "0";
+        innerUl.style.height = "0";
+        content.removeAttribute("data-bc-level-open");
+        subSidebarFlag = false;
+      }
+    });
+    return div;
+  }
+
+  private createPageSidebarItem(node: IMenuPageInfo): HTMLElement {
+    const div = document.createElement("div");
+    div.setAttribute("data-bc-sidebar-items", "");
+    if (node.pid === this.param.page.pageId) {
+      div.setAttribute("data-bc-sidebar-active", "");
+    }
+    const content = document.createElement("span");
+    content.setAttribute("data-bc-pid", node.pid.toString());
+    content.appendChild(document.createTextNode(node.title));
+    content.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.onSidebarItemClick(node.pid, e.target);
+    });
+    div.appendChild(content);
+    return div;
+  }
+
+  private onSidebarItemClick(pageId: string, target: EventTarget) {
+    const newParam: IPageLoaderParam = {
+      pageId: pageId,
+      owner: this.param.page.owner,
+      ownerId: this.param.page.ownerId,
+      ownerUrl: this.param.page.ownerUrl,
+      rKey: this.param.page.rKey,
+      pageMethod: this.param.page.pageMethod,
     };
-    $bc?.basisPanel?.scheduler?.startTask(taskOptions);
+    $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
-
-  public runAsync(source?: ISource) {
-    return true;
-  }
-
-  constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-sidebar-container");
-  }
-
-  // private async removeAsync(): Promise<void> {
-  //   await this.owner.disposeAsync();
-  //   this.container.remove();
-  //   this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
-  // }
 }

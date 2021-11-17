@@ -57,7 +57,7 @@ router.get("/:rKey/menu", function (req, res) {
           { title: "اشتراک با من", pid: 5 },
         ],
       },
-      { title: "تقویم", pid: 6 },
+      { title: "تقویم", pid: "calendare" },
       {
         mid: 2,
         title: "Ticketing",
@@ -74,6 +74,44 @@ router.get("/:rKey/menu", function (req, res) {
   };
   res.json(result);
 });
+
+router.get("/:rKey/sidebarMenu/:pageId", function (req, res) {
+  const result = {
+    nodes: [
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "منوی 2",
+        nodes: [
+          { title: "فایل های من", pid: "myFiles" },
+          { title: "تقویم", pid: "calendare" },
+        ],
+      },
+      { title: "منو 2", pid: 3 },
+      { title: "منو 3", pid: 4 },
+      {
+        title: "منو 4",
+        nodes: [
+          { title: "زیر منو 41", pid: 5 },
+          { title: "زیر منو 42", pid: 6 },
+        ],
+      },
+    ],
+  };
+  res.json(result);
+});
+
+// router.get("/:rKey/inactiveWidgets/:pageId", function (req, res) {
+//   const widgetList = fs.readFileSync(
+//     path.join(__dirname, "pages/inactive-widget-list.json"),
+//     {
+//       encoding: "utf8",
+//     }
+//   );
+//   res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
+// });
 
 router.get("/:rKey/page/:pageId", function (req, res) {
   const widgetList = fs.readFileSync(

@@ -1,16 +1,16 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
-import IFullPageWidgetParam from "./IFullPageWidgetParam";
+import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
-import { DefaultSource } from "../../type-alias";
+// import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
 
 declare const $bc: any;
 export default class FullPageWidgetComponent extends BasisPanelChildComponent {
-  private param: IFullPageWidgetParam;
+  private param: IWidgetParam;
   // set title(value: string) {
   //   this.container.querySelector(
   //     "[data-bc-fullpage-header] > [data-bc-fullpage-title]"
@@ -47,7 +47,6 @@ export default class FullPageWidgetComponent extends BasisPanelChildComponent {
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        //var content = await HttpUtil.fetchStringAsync(url, "GET");
         var content = await HttpUtil.fetchStringAsync(url, "GET");
         const range = new Range();
 

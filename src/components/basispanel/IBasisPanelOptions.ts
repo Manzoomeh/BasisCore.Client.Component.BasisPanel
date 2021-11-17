@@ -23,5 +23,6 @@ interface IPanelPartMethodOptions {
   userImage: string;
   menu: string;
   page: string;
+  sidebarMenu: string;
   widget: string;
 }

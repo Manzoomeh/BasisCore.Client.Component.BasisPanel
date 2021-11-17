@@ -30,8 +30,7 @@
                         "w": 2,
                         "h": 5
                     }
-                ],
-                "deactiveWidgets": []
+                ]
             },
             {
                 "groupName": "group2",
@@ -64,26 +63,6 @@
                         "y": 2,
                         "w": 7,
                         "h": 3
-                    }
-                ],
-                "deactiveWidgets": [
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFile",
-                        "x": 0,
-                        "y": 1,
-                        "w": 4,
-                        "h": 4
-                    },
-                    {
-                        "id": "my-file1.html",
-                        "title": "فایل های 1من",
-                        "name": "myFile1",
-                        "x": 4,
-                        "y": 5,
-                        "w": 4,
-                        "h": 4
                     }
                 ]
             }
@@ -121,8 +100,7 @@
                         "h": 2,
                         "url":"server/external"
                     }
-                ],
-                "deactiveWidgets": []
+                ]
             }
         ]
     },
@@ -147,8 +125,42 @@
                         "w": 12,
                         "h": 2
                     }
-                ],
-                "deactiveWidgets": []
+                ]
+            }
+        ]
+    },
+    "calendare": {
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "my-file.html",
+                        "title": "فایل های من",
+                        "name": "myFiles",
+                        "container": "widget",
+                        "x": 0,
+                        "y": 0,
+                        "w": 10,
+                        "h": 5
+                    },
+                    {
+                        "id": "sidebar.html",
+                        "title": "سایدبار",
+                        "name": "sidebar",
+                        "container": "sidebar",
+                        "x": 10,
+                        "y": 0,
+                        "w": 2,
+                        "h": 5
+                    }
+                ]
             }
         ]
     }
