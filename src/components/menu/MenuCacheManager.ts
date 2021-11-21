@@ -49,6 +49,7 @@ class MenuCacheItem {
         `${menuParam.ownerUrl}${menuParam.menuMethod}`,
         {
           rKey: menuParam.rKey,
+          level:menuParam.owner
         }
       );
       //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);

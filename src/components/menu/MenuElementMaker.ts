@@ -132,6 +132,7 @@ export default class MenuElementMaker {
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
       {
         rKey: this.rKey,
+        level:menuParam.owner
       }
     );
 
@@ -179,6 +180,7 @@ export default class MenuElementMaker {
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
       {
         rKey: this.rKey,
+        level:menuParam.owner
       }
     );
     HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) =>
