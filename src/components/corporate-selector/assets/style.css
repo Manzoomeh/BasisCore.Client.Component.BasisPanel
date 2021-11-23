@@ -69,11 +69,13 @@
     padding-top: 0;
     opacity: 0;
     z-index: -1;
+    visibility: hidden;
 }
 
 [data-bc-corporate-list] [data-bc-corporate-drop-down][data-status="open"] {
     opacity: 1;
     z-index: 99;
+    visibility: visible;
 }
 
 [data-bc-corporate-list] [data-bc-corporate-search] {
