@@ -3,13 +3,13 @@ import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
 // import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
+import PageWidgetComponent from "./PageWidgetComponent";
 
 declare const $bc: any;
-export default class FullPageWidgetComponent extends BasisPanelChildComponent {
+export default class FullPageWidgetComponent extends PageWidgetComponent {
   private param: IWidgetParam;
   // set title(value: string) {
   //   this.container.querySelector(

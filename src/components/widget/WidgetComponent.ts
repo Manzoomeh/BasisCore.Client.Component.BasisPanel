@@ -3,23 +3,17 @@ import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 import IWidgetParam from "./IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
 import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
-
-declare const $bc: any;
-export default class WidgetComponent extends BasisPanelChildComponent {
+import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
+import IScheduler from "../scheduler/IScheduler";
+export default class WidgetComponent extends PageWidgetComponent {
   private param: IWidgetParam;
-  set title(value: string) {
-    this.container.querySelector(
-      "[data-bc-widget-header] > [data-bc-widget-title]"
-    ).textContent = value;
-  }
+
   public async initializeAsync(): Promise<void> {
-  
     this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
-    
+
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
@@ -63,22 +57,23 @@ export default class WidgetComponent extends BasisPanelChildComponent {
               this.removeAsync();
             })
           );
-        
-          if(this.param.addToDashboard == null || this.param.addToDashboard == true){
-            this.container
+
+        if (
+          this.param.addToDashboard == null ||
+          this.param.addToDashboard == true
+        ) {
+          this.container
             .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
-            .forEach((btn) =>{
-              const currentAddToDashboardBtn = btn as HTMLElement
-              currentAddToDashboardBtn.style.display="inline-block"
+            .forEach((btn) => {
+              const currentAddToDashboardBtn = btn as HTMLElement;
+              currentAddToDashboardBtn.style.display = "inline-block";
               btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 this.addToDashboard();
-              })
-            }              
-              
-            );
-          }
-        
+              });
+            });
+        }
+
         resolve();
       } catch (e) {
         reject(e);
@@ -89,7 +84,7 @@ export default class WidgetComponent extends BasisPanelChildComponent {
       task: processTask,
       notify: false,
     };
-    $bc?.basisPanel?.scheduler?.startTask(taskOptions);
+    this.owner.dc.resolve<IScheduler>("scheduler").startTask(taskOptions);
   }
 
   public runAsync(source?: ISource) {

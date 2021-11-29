@@ -1,23 +1,28 @@
+import IDependencyContainer from "../../basiscore/IDependencyContainer";
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
+import IScheduler from "./IScheduler";
 import ITaskOptions from "./ITaskOptions";
 import TaskProcess from "./TaskProcess";
-declare const $bc: any;
 
-export default class SchedulerComponent extends BasisPanelChildComponent {
+export default class SchedulerComponent
+  extends BasisPanelChildComponent
+  implements IScheduler
+{
   private processList: Map<string, TaskProcess>;
   private readonly ulElement: HTMLUListElement;
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-scheduler-container");
     this.processList = new Map<string, TaskProcess>();
     this.ulElement = this.container.querySelector("[data-bc-main-task-list");
-    $bc.basisPanel.scheduler = {
-      startTask: this.startTask.bind(this),
-    };
+    //add this to parent container to see in all other components
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("scheduler", this);
   }
 
   public initializeAsync(): void | Promise<void> {

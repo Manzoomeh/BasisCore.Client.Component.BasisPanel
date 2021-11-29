@@ -14,7 +14,8 @@ import IPageInfo from "./IPageInfo";
 
 export default class PageComponent
   extends BasisPanelChildComponent
-  implements IPage {
+  implements IPage
+{
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   private widgetUIManager: WidgetUIManager;
@@ -22,6 +23,7 @@ export default class PageComponent
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-page-container");
+    this.owner.dc.registerInstance("page", this);
   }
 
   public async initializeAsync(): Promise<void> {
@@ -64,33 +66,37 @@ export default class PageComponent
     const command = `<basis core="component.basispanel.widget" run="atclient" param='${paramStr}' ></basis>`;
     const doc = this.owner.toNode(command);
     const nodes = Array.from(doc.childNodes);
-    const pageBody = this.container.querySelector('[data-bc-page-body=""]')
+    const pageBody = this.container.querySelector('[data-bc-page-body=""]');
     pageBody.appendChild(doc);
     this.owner.processNodesAsync(nodes);
   }
 
   public addingGroups(pageInfo: IPageInfo): void {
-    const widgets: Array<IWidgetInfo> = []
+    const widgets: Array<IWidgetInfo> = [];
     let maxHeight;
-    const pageBody = this.container.querySelector('[data-bc-page-body=""]')
+    const pageBody = this.container.querySelector('[data-bc-page-body=""]');
     pageInfo.groups.forEach((group) => {
-      group.widgets = group.widgets.map(x => {
+      group.widgets = group.widgets.map((x) => {
         widgets.push(x);
-        return { ...x, ...{ page: this.loaderParam } }
-      })
+        return { ...x, ...{ page: this.loaderParam } };
+      });
       const command = groupLayout;
       const doc = this.owner.toNode(command) as DocumentFragment;
-      const dataMemberName = this.owner.getRandomName(null,".widgets");
+      const dataMemberName = this.owner.getRandomName(null, ".widgets");
       const optionsName = this.owner.storeAsGlobal(group.options);
-      doc.querySelector('[data-main-print]').setAttribute('dataMemberName', dataMemberName)
-      doc.querySelector('[data-main-group]').setAttribute('options', optionsName)
+      doc
+        .querySelector("[data-main-print]")
+        .setAttribute("dataMemberName", dataMemberName);
+      doc
+        .querySelector("[data-main-group]")
+        .setAttribute("options", optionsName);
       const nodes = Array.from(doc.childNodes);
       pageBody.appendChild(doc);
       this.owner.processNodesAsync(nodes);
       this.owner.setSource(dataMemberName, group.widgets);
       const cell = (pageBody as HTMLElement).offsetWidth / 12;
-      maxHeight = Math.max(...widgets.map(x => x.y + x.h));
-      (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`
-    })
+      maxHeight = Math.max(...widgets.map((x) => x.y + x.h));
+      (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+    });
   }
 }

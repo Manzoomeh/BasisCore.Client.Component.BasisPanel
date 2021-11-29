@@ -1,4 +1,5 @@
 import { Priority } from "./enum";
+import IDependencyContainer from "./IDependencyContainer";
 import IDisposable from "./IDisposable";
 import ISource from "./ISource";
 import ISourceOptions from "./ISourceOptions";
@@ -9,6 +10,7 @@ export default interface IUserDefineComponent {
   content: DocumentFragment;
   triggers: string[];
   priority: Priority;
+  dc: IDependencyContainer;
   toNode(rawHtml: string): DocumentFragment;
   toHTMLElement(rawXml: string): HTMLElement;
   setContent(newContent: Node): void;
@@ -32,7 +34,11 @@ export default interface IUserDefineComponent {
   processNodesAsync(nodes: Array<Node>): Promise<IDisposable>;
   disposeAsync(): Promise<void>;
   disposed: boolean;
-  storeAsGlobal(data: any, name?: string, prefix?: string, postfix?: string): string;
-  getRandomName(prefix?:string,postfix?:string):string;
+  storeAsGlobal(
+    data: any,
+    name?: string,
+    prefix?: string,
+    postfix?: string
+  ): string;
+  getRandomName(prefix?: string, postfix?: string): string;
 }
-

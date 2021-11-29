@@ -3,7 +3,6 @@ import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import ISource from "../../basiscore/ISource";
 import { DefaultSource, MenuOwnerType } from "../../type-alias";
 import IMenuInfo, {
@@ -12,10 +11,11 @@ import IMenuInfo, {
   IMenuPageInfo,
 } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
+import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
 
 declare const $bc: any;
 
-export default class SidebarComponent extends BasisPanelChildComponent {
+export default class SidebarComponent extends PageWidgetComponent {
   private param: IWidgetParam;
 
   constructor(owner: IUserDefineComponent) {
@@ -79,14 +79,14 @@ export default class SidebarComponent extends BasisPanelChildComponent {
     innerUl.setAttribute("data-bc-sidebar-levels", "secondLevel");
     this.createSidebar(innerUl, node.nodes);
     const active = innerUl.querySelector("[data-bc-sidebar-active]");
-    if(active) {
+    if (active) {
       innerUl.style.opacity = "1";
       innerUl.style.height = "auto";
       content.setAttribute("data-bc-level-open", "");
       subSidebarFlag = true;
     }
     div.appendChild(innerUl);
-    
+
     div.addEventListener("click", function (e) {
       if (subSidebarFlag == false) {
         innerUl.style.opacity = "1";

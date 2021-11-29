@@ -4,31 +4,24 @@
   Click to refresh
 </button>
 <Basis
-  core="component.local.DemoComponent"
+  core="component.local.DemoComponent1"
   run="atclient"
   triggers="event.click"
-  OnRendering="rendering"
-  OnRendered="rendered"
 >
 </Basis>
 <script>
-  async function rendering(args) {
-    console.log("rendering", args);
-  }
-
-  function rendered(args) {
-    console.log("rendered", args);
-  }
-
-  if (typeof window.DemoComponent === "undefined") {
-    class _DemoComponent {
+  if (typeof window.DemoComponent1 === "undefined") {
+    class _DemoComponent1 {
       constructor(owner) {
-        console.log("constructor");
         this.owner = owner;
-      }
+        const widget = owner.dc.resolve("widget");
+        const page = owner.dc.resolve("page");
+        //const scheduler = owner.container.resolve("scheduler");
+        console.log("constructor", owner.container);
 
-      async initializeAsync() {
-        console.log("initializeAsync");
+        //console.log("constructor", widget, page);
+        widget.title = "asasa";
+        page.owner.setSource("to.page", 12);
       }
 
       async runAsync() {
@@ -40,7 +33,7 @@
         this.owner.setContent(node);
       }
     }
-    var DemoComponent = _DemoComponent;
+    var DemoComponent1 = _DemoComponent1;
   }
 </script>
 <script>
