@@ -15,14 +15,6 @@ module.exports = (env, options) => {
   return {
     entry: {
       basispanel: {
-        import: "./src/Loader.ts",
-        filename: "basiscore.basispanel.js",
-        library: {
-          name: "basispanel",
-          type: "assign",
-        },
-      },
-      gridComponent: {
         import: "./src/ComponentLoader.ts",
         filename: "basiscore.basispanel.component.js",
         library: {
@@ -31,14 +23,6 @@ module.exports = (env, options) => {
         },
       },
       "basispanel.min": {
-        import: "./src/Loader.ts",
-        filename: "basiscore.basispanel.min.js",
-        library: {
-          name: "basispanel",
-          type: "assign",
-        },
-      },
-      "gridComponent.min": {
         import: "./src/ComponentLoader.ts",
         filename: "basiscore.basispanel.component.min.js",
         library: {
@@ -60,7 +44,7 @@ module.exports = (env, options) => {
       },
       open: true,
     },
-    module: options.mode,
+    mode: options.mode,
     optimization: {
       minimize: options.mode === "production",
       minimizer: [

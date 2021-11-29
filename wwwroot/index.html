@@ -1,142 +1,145 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="assets/css/LineIcons.css" rel="stylesheet" />
+    <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
+    <link href="assets/css/commonStyle.css" rel="stylesheet" />
+  </head>
 
-    <head>
-        <meta charset="utf-8"/>
-        <title></title>
-        <link href="assets/css/LineIcons.css" rel="stylesheet"/>
-        <link href="assets/css/simple-line-icons.css" rel="stylesheet"/>
-        <link href="assets/css/commonStyle.css" rel="stylesheet"/>
-    </head>
+  <body>
+    <Basis core="component.basispanel.panel" run="atclient"></Basis>
+    <div class="clr"></div>
 
-    <body>
-
-        <Basis core="component.basispanel.panel" run="atclient"></Basis>
-        <div class="clr"></div>
-
-        <script>
-            const host = {
-                settings: {
-                    "basispanel.option": {
-                        rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
-                        baseUrl: {
-                            profile: "/server/trust",
-                            corporate: "/server/corporate",
-                            business: "/server/business",
-                            active: "/server/active/${rKey}/set-active"
-                        },
-                        dataUrl: {
-                            profile: "/server/trust/${rKey}/profile",
-                            corporate: "/server/corporate/${rKey}/list",
-                            business: "/server/business/${rKey}/list"
-                        },
-                        method: {
-                            userImage: "/${rKey}/users/${profile.thumbnail}",
-                            menu: "/${rKey}/menu?level=${level}",
-                            page: "/${rKey}/page/${pageId}",
-                            sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
-                            widget: "/${rKey}/widget/${widgetId}"
-                        },
-                        logout: {
-                            url: "/server/trust/${rKey}/logout",
-                            defaultRedirectUrl: "https://www.google.com"
-                        },
-                        notification: {
-                            providers: [
-                                {
-                                    name: "messages",
-                                    title: "پیام ها",
-                                    url: "/server/notifications/${rKey}/unread-messages",
-                                    config: {
-                                        filter: "none",
-                                        paging: null,
-                                        information: false,
-                                        columns: {
-                                            title: "فرستنده",
-                                            date: "تاریخ",
-                                            action: {
-                                                title: "عملیات",
-                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
-                                            }
-                                        },
-                                        noData: "پیام جدیدی ندارید",
-                                        rowNumber: '#'
-                                    },
-                                    link: "#"
-                                }, {
-                                    name: "notes",
-                                    title: "یادداشت ها",
-                                    url: "/server/notifications/${rKey}/new-notes",
-                                    config: {
-                                        filter: "none",
-                                        paging: null,
-                                        information: false,
-                                        columns: {
-                                            title: "ایجاد کننده",
-                                            date: "تاریخ",
-                                            action: {
-                                                title: "عملیات",
-                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`
-                                            }
-                                        },
-                                        noData: "یادداشت جدیدی ندارید",
-                                        rowNumber: '#'
-                                    },
-                                    link: "#"
-                                }, {
-                                    name: "tasks",
-                                    title: "تسک ها",
-                                    url: "/server/notifications/${rKey}/new-tasks",
-                                    config: {
-                                        filter: "none",
-                                        paging: null,
-                                        information: false,
-                                        columns: {
-                                            img: {
-                                                source: "img",
-                                                title: "تصویر",
-                                                cellMaker: (row, data, td) => `<img src="${row.img}" width="40" height="40" />`
-                                            },
-                                            title: "پروژه",
-                                            date: "تاریخ",
-                                            action: {
-                                                title: "عملیات",
-                                                cellMaker: (row, data, td) => `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`
-                                            }
-                                        },
-                                        noData: "تسک جدیدی ندارید",
-                                        rowNumber: '#'
-                                    },
-                                    link: "#"
-                                },
-                            ]
-                        }
-                    }
+    <script>
+      const host = {
+        settings: {
+          "basispanel.option": {
+            rKey: "1229BF0C-D2F1-4172-9817-9E8E87BF35BE",
+            baseUrl: {
+              profile: "/server/trust",
+              corporate: "/server/corporate",
+              business: "/server/business",
+              active: "/server/active/${rKey}/set-active",
+            },
+            dataUrl: {
+              profile: "/server/trust/${rKey}/profile",
+              corporate: "/server/corporate/${rKey}/list",
+              business: "/server/business/${rKey}/list",
+            },
+            method: {
+              userImage: "/${rKey}/users/${profile.thumbnail}",
+              menu: "/${rKey}/menu?level=${level}",
+              page: "/${rKey}/page/${pageId}",
+              sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
+              widget: "/${rKey}/widget/${widgetId}",
+            },
+            logout: {
+              url: "/server/trust/${rKey}/logout",
+              defaultRedirectUrl: "https://www.google.com",
+            },
+            notification: {
+              providers: [
+                {
+                  name: "messages",
+                  title: "پیام ها",
+                  url: "/server/notifications/${rKey}/unread-messages",
+                  config: {
+                    filter: "none",
+                    paging: null,
+                    information: false,
+                    columns: {
+                      title: "فرستنده",
+                      date: "تاریخ",
+                      action: {
+                        title: "عملیات",
+                        cellMaker: (row, data, td) =>
+                          `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
+                      },
+                    },
+                    noData: "پیام جدیدی ندارید",
+                    rowNumber: "#",
+                  },
+                  link: "#",
                 },
-                repositories: {
-                    basispanel: "/basiscore.basispanel.component.js",
-                    "bc.grid": "/basiscore.grid.component.js"
-                }
-            };
+                {
+                  name: "notes",
+                  title: "یادداشت ها",
+                  url: "/server/notifications/${rKey}/new-notes",
+                  config: {
+                    filter: "none",
+                    paging: null,
+                    information: false,
+                    columns: {
+                      title: "ایجاد کننده",
+                      date: "تاریخ",
+                      action: {
+                        title: "عملیات",
+                        cellMaker: (row, data, td) =>
+                          `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
+                      },
+                    },
+                    noData: "یادداشت جدیدی ندارید",
+                    rowNumber: "#",
+                  },
+                  link: "#",
+                },
+                {
+                  name: "tasks",
+                  title: "تسک ها",
+                  url: "/server/notifications/${rKey}/new-tasks",
+                  config: {
+                    filter: "none",
+                    paging: null,
+                    information: false,
+                    columns: {
+                      img: {
+                        source: "img",
+                        title: "تصویر",
+                        cellMaker: (row, data, td) =>
+                          `<img src="${row.img}" width="40" height="40" />`,
+                      },
+                      title: "پروژه",
+                      date: "تاریخ",
+                      action: {
+                        title: "عملیات",
+                        cellMaker: (row, data, td) =>
+                          `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`,
+                      },
+                    },
+                    noData: "تسک جدیدی ندارید",
+                    rowNumber: "#",
+                  },
+                  link: "#",
+                },
+              ],
+            },
+          },
+        },
+        repositories: {
+          basispanel: "/basiscore.basispanel.component.js",
+          "bc.grid": "/basiscore.grid.component.js",
+        },
+      };
 
-            function onClickRowEditBtn(e) {
-                console.log(e);
-            }
-            
-            function onClickRowShareBtn(e) {
-                console.log(e);
-            }
+      function onClickRowEditBtn(e) {
+        console.log(e);
+      }
 
-            function onClickRowDownloadBtn(e) {
-                console.log(e);
-            }
+      function onClickRowShareBtn(e) {
+        console.log(e);
+      }
 
-            function onClickRowRemoveBtn(e) {
-                console.log(e);
-            }
-        </script>
-        <script src="basiscore.js"></script>
-        <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
-    </body>
+      function onClickRowDownloadBtn(e) {
+        console.log(e);
+      }
 
+      function onClickRowRemoveBtn(e) {
+        console.log(e);
+      }
+    </script>
+    <script src="basiscore.js"></script>
+    <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
+  </body>
 </html>
