@@ -8,15 +8,24 @@ import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
+import IDependencyContainer from "../../basiscore/IDependencyContainer";
 
-export default class MenuComponent extends BasisPanelChildComponent {
+export default class MenuComponent
+  extends BasisPanelChildComponent
+  implements IPageLoader
+{
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   private current: MenuElement;
+
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
     this.cache = new MenuCacheManager();
+    //add this to parent container to see in all other components
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("page_loader", this);
   }
 
   public initializeAsync(): void | Promise<void> {
@@ -56,4 +65,17 @@ export default class MenuComponent extends BasisPanelChildComponent {
     };
     this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
+
+  public tryLoadPage(pageId: string): boolean {
+    const retVal = this.current?.pageLookup.has(pageId) ?? false;
+    if (retVal) {
+      const param = this.current.pageLookup.get(pageId);
+      this.onMenuItemClick(pageId, param, null);
+    }
+    return retVal;
+  }
+}
+
+interface IPageLoader {
+  tryLoadPage(pageId: string): boolean;
 }

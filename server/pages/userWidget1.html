@@ -6,12 +6,20 @@
   triggers="event.click"
 >
 </Basis>
+<button id="btn">Load user info</button>
 
 <script>
   if (typeof window.DemoComponent === "undefined") {
     class _DemoComponent {
       constructor(owner) {
         this.owner = owner;
+
+        const pageLoader = owner.dc.resolve("page_loader");
+        console.log("page_loader", pageLoader);
+
+        document.getElementById("btn").addEventListener("click", (e) => {
+          console.log(pageLoader.tryLoadPage("userInfo"));
+        });
         const scheduler = owner.dc.resolve("scheduler");
         const taskOptions = {
           container: document.getElementById("span_id"),
