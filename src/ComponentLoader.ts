@@ -12,6 +12,7 @@ import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
 import SchedulerComponent from "./components/scheduler/SchedulerComponent";
 import LogoutComponent from "./components/logout/LogoutComponent";
+import ExposerComponent from "./components/ExposerComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -27,6 +28,7 @@ const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
 const scheduler = SchedulerComponent;
 const logout = LogoutComponent;
+const exposer = ExposerComponent;
 
 export {
   panel,
@@ -42,5 +44,6 @@ export {
   fullPageWidget,
   notification,
   scheduler,
-  logout
+  logout,
+  exposer,
 };

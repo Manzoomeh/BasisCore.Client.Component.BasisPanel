@@ -67,12 +67,20 @@ export default class MenuComponent
   }
 
   public tryLoadPage(pageId: string): boolean {
-    const retVal = this.current?.pageLookup.has(pageId) ?? false;
-    if (retVal) {
-      const param = this.current.pageLookup.get(pageId);
-      this.onMenuItemClick(pageId, param, null);
+    var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
+    if (source) {
+      const param = source.rows[0] as IPageLoaderParam;
+      const newParam: IPageLoaderParam = {
+        pageId: pageId,
+        owner: param.owner,
+        ownerId: param.ownerId,
+        ownerUrl: param.ownerUrl,
+        rKey: param.rKey,
+        pageMethod: param.pageMethod,
+      };
+      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
-    return retVal;
+    return source != null;
   }
 }
 
