@@ -41,7 +41,17 @@ export default class WidgetComponent extends PageWidgetComponent {
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        var content = await HttpUtil.fetchStringAsync(url, "GET");
+        const headers = {};
+        var content = await HttpUtil.fetchStringAsync(
+          url,
+          "GET",
+          null,
+          headers
+        );
+        const title = headers["bc-widget-title"];
+        if (title) {
+          this.title = title;
+        }
         const range = new Range();
         range.setStart(container, 0);
         range.setEnd(container, 0);

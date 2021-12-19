@@ -130,13 +130,14 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
       encoding: "utf8",
     }
   );
+  //res.set("bc-title", "qam_title");
   res.send(widgetList);
 });
 
 router.get("/:rKey/logout", function (req, res) {
   const result = [
     // { message: "ok", redirectUrl: "https://trust-login.com" }
-    { message: "ok", redirectUrl: "" }
+    { message: "ok", redirectUrl: "" },
   ];
   res.json(result);
 });

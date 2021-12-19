@@ -4,7 +4,8 @@ export default class HttpUtil {
   static async fetchStringAsync(
     url: string,
     method: "POST" | "GET",
-    data?: any
+    data?: any,
+    headers?: any
   ): Promise<string> {
     const init: RequestInit = { method: method };
     if (data) {
@@ -14,6 +15,9 @@ export default class HttpUtil {
       init.body = JSON.stringify(data);
     }
     const result = await fetch(url, init);
+    if (headers) {
+      result.headers.forEach((value, key) => (headers[key] = value));
+    }
     return await result.text();
   }
 
