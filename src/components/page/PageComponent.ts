@@ -18,6 +18,9 @@ export default class PageComponent
 {
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
+  public get arguments(): any {
+    return this.loaderParam.arguments;
+  }
   private widgetUIManager: WidgetUIManager;
   private _groupsAdded: boolean = false;
 
@@ -30,6 +33,7 @@ export default class PageComponent
     this.loaderParam = JSON.parse(
       await this.owner.getAttributeValueAsync("params")
     );
+
     const url = HttpUtil.formatString(
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam

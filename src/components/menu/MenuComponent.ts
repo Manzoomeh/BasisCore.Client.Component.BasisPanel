@@ -9,6 +9,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IDependencyContainer from "../../basiscore/IDependencyContainer";
+import IPageLoader from "./IPageLoader";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -66,7 +67,7 @@ export default class MenuComponent
     this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
-  public tryLoadPage(pageId: string): boolean {
+  public tryLoadPage(pageId: string, args?: any): boolean {
     var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
     if (source) {
       const param = source.rows[0] as IPageLoaderParam;
@@ -77,13 +78,10 @@ export default class MenuComponent
         ownerUrl: param.ownerUrl,
         rKey: param.rKey,
         pageMethod: param.pageMethod,
+        arguments: args,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
     return source != null;
   }
-}
-
-interface IPageLoader {
-  tryLoadPage(pageId: string): boolean;
 }

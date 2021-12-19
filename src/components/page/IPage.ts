@@ -1,3 +1,4 @@
+import IPageLoaderParam from "../menu/IPageLoaderParam";
 import IWidgetInfo from "../widget/IWidgetInfo";
 import IPageInfo from "./IPageInfo";
 
@@ -7,4 +8,6 @@ export default interface IPage {
 
   container: Element;
   info: IPageInfo;
+  loaderParam: IPageLoaderParam;
+  arguments: any;
 }

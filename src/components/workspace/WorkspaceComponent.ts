@@ -28,8 +28,9 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
     const doc = this.owner.toNode(
-      `<basis core="group" run="atclient"> <basis core="component.basispanel.page" run="atclient"  params='${param}' ></basis></basis>`
+      `<basis core="group" run="atclient"> <basis core="component.basispanel.page" run="atclient"  params='' ></basis></basis>`
     );
+    doc.querySelector("[params='']").setAttribute("params", param);
     const nodes = Array.from(doc.childNodes);
     this.container.innerHTML = "";
     this.container.appendChild(doc);

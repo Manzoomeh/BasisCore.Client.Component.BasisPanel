@@ -18,7 +18,7 @@
         console.log("page_loader", pageLoader);
 
         document.getElementById("btn").addEventListener("click", (e) => {
-          console.log(pageLoader.tryLoadPage("userInfo"));
+          console.log(pageLoader.tryLoadPage("userInfo", { id: 4 }));
         });
         const scheduler = owner.dc.resolve("scheduler");
         const taskOptions = {
