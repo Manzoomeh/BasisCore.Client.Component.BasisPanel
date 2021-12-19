@@ -130,7 +130,6 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
       encoding: "utf8",
     }
   );
-  //res.set("bc-title", "qam_title");
   res.send(widgetList);
 });
 
