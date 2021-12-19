@@ -1,7 +1,8 @@
 <label>you enter [##test.data.value| ('none') ##] </label>
 
-<basis
-  core="component.basispanel.exposer"
-  run="atclient"
-  Component="com"
-></basis>
+<basis core="component.basispanel.exposer" run="atclient" method="myFn"></basis>
+<script>
+  function myFn(component, source) {
+    console.log("sdsds", component, source);
+  }
+</script>

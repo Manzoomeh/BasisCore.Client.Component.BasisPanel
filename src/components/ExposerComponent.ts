@@ -10,8 +10,16 @@ export default class ExposerComponent implements IComponentManager {
 
   async initializeAsync(): Promise<void> {
     const component = await this.owner.getAttributeValueAsync("Component");
-    this.owner.storeAsGlobal(this, component);
+    if (component) {
+      this.owner.storeAsGlobal(this, component);
+    }
   }
 
-  runAsync(source?: ISourceOptions) {}
+  async runAsync(source?: ISourceOptions) {
+    const method = await this.owner.getAttributeValueAsync("Method");
+    if (method) {
+      const callBack = eval(method);
+      Reflect.apply(callBack, null, [this, source]);
+    }
+  }
 }
