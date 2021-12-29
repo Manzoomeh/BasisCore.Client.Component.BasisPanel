@@ -117,7 +117,6 @@ export default class MenuElementMaker {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-bc-pid", node.pid.toString());
-    console.log("aaa",node.title)
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
@@ -141,6 +140,7 @@ export default class MenuElementMaker {
     };
     const li = document.createElement("li");
     const ul = document.createElement("ul");
+    li.setAttribute("data-bc-bp-menu-external-title","")
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
     li.appendChild(ul);
     let subMenuFlag = false;
@@ -171,7 +171,6 @@ export default class MenuElementMaker {
     };
     const li = document.createElement("li");
     const content = document.createElement("a");
-    console.log("aaaa",node.title)
     li.setAttribute("data-bc-bp-menu-external-title","")
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
