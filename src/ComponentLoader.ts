@@ -13,7 +13,8 @@ import NotificationComponent from "./components/notification/NotificationCompone
 import SchedulerComponent from "./components/scheduler/SchedulerComponent";
 import LogoutComponent from "./components/logout/LogoutComponent";
 import ExposerComponent from "./components/ExposerComponent";
-
+import DashboardComponent from "./components/dashboard/DashboardComponent";
+import ContainerComponent from "./components/container/ContainerComponent";
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
 const corporate = CorporateSelectorComponent;
@@ -29,7 +30,8 @@ const notification = NotificationComponent;
 const scheduler = SchedulerComponent;
 const logout = LogoutComponent;
 const exposer = ExposerComponent;
-
+const dashboard = DashboardComponent;
+const container = ContainerComponent
 export {
   panel,
   profile,
@@ -46,4 +48,6 @@ export {
   scheduler,
   logout,
   exposer,
+  dashboard,
+  container
 };

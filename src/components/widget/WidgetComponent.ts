@@ -8,6 +8,8 @@ import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
 import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
 import IScheduler from "../scheduler/IScheduler";
+import { MergeType } from "../../basiscore/enum";
+declare const $bc: any;
 export default class WidgetComponent extends PageWidgetComponent {
   private param: IWidgetParam;
 
@@ -23,7 +25,7 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
     (this.container as HTMLElement).style.top = `${
-      this.param.y * cell + parent.offsetTop
+      this.param.y * cell + parent.clientTop
     }px`;
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
@@ -58,21 +60,21 @@ export default class WidgetComponent extends PageWidgetComponent {
             })
           );
 
-        if (
-          this.param.addToDashboard == null ||
-          this.param.addToDashboard == true
-        ) {
-          this.container
+          if(this.param.addToDashboard == null || this.param.addToDashboard == true){
+            
+            this.container
             .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
-            .forEach((btn) => {
-              const currentAddToDashboardBtn = btn as HTMLElement;
-              currentAddToDashboardBtn.style.display = "inline-block";
+            .forEach((btn) =>{
+              const currentAddToDashboardBtn = btn as HTMLElement
+              currentAddToDashboardBtn.style.display="inline-block"
               btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 this.addToDashboard();
-              });
-            });
-        }
+              })
+            }              
+              
+            );
+          }
 
         resolve();
       } catch (e) {
@@ -100,14 +102,17 @@ export default class WidgetComponent extends PageWidgetComponent {
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
-  private async addToDashboard(): Promise<void> {
-    this.owner.setSource("db.dashboard_inactive_widget", [
+  private async addToDashboard(): Promise<void> {  
+
+    $bc.setSource("db.dashboard_inactive_widget", [
       {
         id: this.param["id"],
         title: this.param["title"],
-        x: this.param["x"],
-        y: this.param["y"],
+        w: this.param["w"],
+        h: this.param["h"],
       },
-    ]);
+    ],
+    {"mergeType" : MergeType.append }
+    );  
   }
 }

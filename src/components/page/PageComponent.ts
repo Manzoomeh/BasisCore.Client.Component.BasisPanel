@@ -11,8 +11,9 @@ import { DefaultSource } from "../../type-alias";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import groupLayout from "./assets/group-layout.html";
 import IPageInfo from "./IPageInfo";
+import { PageType } from "./PageType";
 
-export default class PageComponent
+export  default  abstract  class PageComponent
   extends BasisPanelChildComponent
   implements IPage
 {
@@ -21,13 +22,14 @@ export default class PageComponent
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
-  private widgetUIManager: WidgetUIManager;
-  private _groupsAdded: boolean = false;
-
-  constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-page-container");
+  public abstract  get type():PageType 
+  public widgetUIManager: WidgetUIManager;
+  public _groupsAdded: boolean = false;
+  constructor(owner: IUserDefineComponent , layout :string , dataAttr: string) {
+    super(owner, layout, dataAttr);
     this.owner.dc.registerInstance("page", this);
   }
+  
 
   public async initializeAsync(): Promise<void> {
     this.loaderParam = JSON.parse(
@@ -40,6 +42,8 @@ export default class PageComponent
     );
     this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
     const body = this.container.querySelector("[data-bc-page-body]");
+    
+    
     if (this.info.content) {
       const range = new Range();
       range.setStart(body, 0);
@@ -104,3 +108,5 @@ export default class PageComponent
     });
   }
 }
+
+

@@ -28,5 +28,19 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
     if (style) {
       this.container.setAttribute("style", style);
     }
+    this.container.addEventListener("click", function (e) {  
+      const currentElement = e.target as HTMLElement
+      if(currentElement.getAttribute("data-bc-level-open") === null){
+        const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")
+        openMenu.forEach((x ) => {
+          const openMenu = x as HTMLElement
+          openMenu.style.transform = ` scaleY(0)`;
+          openMenu.previousElementSibling.removeAttribute("data-bc-level-open");
+          openMenu.removeAttribute("data-bc-ul-level-open");
+        })
+      }
+      
+    })
+    
   }
 }

@@ -5,8 +5,9 @@ import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
-
+import HttpUtil from "../../HttpUtil";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
+  private pageType : string 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-workspace-container");
   }
@@ -15,9 +16,15 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     this.owner.addTrigger([DefaultSource.DISPLAY_PAGE]);
   }
 
-  public runAsync(source?: ISource) {
+  public async runAsync(source?: ISource) {
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
       const pageParam = source.rows[0] as IPageLoaderParam;
+      const url = HttpUtil.formatString(
+        `${pageParam.ownerUrl}${pageParam.pageMethod}`,
+        pageParam
+      );
+      let info = await HttpUtil.fetchDataAsync(url, "GET");
+      this.pageType = info["container"]
       this.displayPageAsync(pageParam);
     }
     return true;
@@ -27,10 +34,11 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     pageLoaderParam: IPageLoaderParam
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
+    console.log("ssss",this.pageType)
     const doc = this.owner.toNode(
-      `<basis core="group" run="atclient"> <basis core="component.basispanel.page" run="atclient"  params='' ></basis></basis>`
+      `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient"  params='${param}' ></basis></basis>`
     );
-    doc.querySelector("[params='']").setAttribute("params", param);
+    // doc.querySelector("[params='']").setAttribute("params", param);
     const nodes = Array.from(doc.childNodes);
     this.container.innerHTML = "";
     this.container.appendChild(doc);

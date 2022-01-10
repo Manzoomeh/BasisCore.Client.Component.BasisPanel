@@ -94,16 +94,20 @@ export default class MenuElementMaker {
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
     li.appendChild(innerUl);
-    let subMenuFlag = false;
-    li.addEventListener("click", function (e) {
-      if (subMenuFlag == false) {
+
+    
+    li.addEventListener("click", function (e) {     
+     
+      if (innerUl.getAttribute("data-bc-ul-level-open") === null) {
         innerUl.style.transform = ` scaleY(1)`;
+        innerUl.setAttribute("data-bc-ul-level-open", "");
         content.setAttribute("data-bc-level-open", "");
-        subMenuFlag = true;
+      
       } else {
         innerUl.style.transform = ` scaleY(0)`;
+        innerUl.removeAttribute("data-bc-ul-level-open");
         content.removeAttribute("data-bc-level-open");
-        subMenuFlag = false;
+      
       }
     });
     return li;
@@ -143,7 +147,6 @@ export default class MenuElementMaker {
     li.setAttribute("data-bc-bp-menu-external-title","")
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
     li.appendChild(ul);
-    let subMenuFlag = false;
     const url = HttpUtil.formatString(
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
       {

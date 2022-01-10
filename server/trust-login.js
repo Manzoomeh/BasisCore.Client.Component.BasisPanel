@@ -47,6 +47,10 @@ router.get("/:rKey/menu", function (req, res) {
   const result = {
     nodes: [
       {
+        title: "میز کار ",
+        pid: "default",
+      },
+      {
         title: "اطلاعات کاربری",
         pid: "userInfo",
       },
@@ -57,7 +61,7 @@ router.get("/:rKey/menu", function (req, res) {
           { title: "اشتراک با من", pid: 5 },
         ],
       },
-      { title: "تقویم", pid: "calendare" },
+      { title: "تقویم", pid: "myFiles" },
       {
         mid: 2,
         title: "Ticketing",
@@ -67,7 +71,7 @@ router.get("/:rKey/menu", function (req, res) {
       {
         mid: 4,
         title: "TaskManager",
-        multi: false,
+        multi: true,
         url: "/server/external/task",
       },
     ],

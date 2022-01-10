@@ -1,74 +1,9 @@
 {
-    "userInfo": {
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "my-file.html",
-                        "title": "ویجت 1",
-                        "name": "myFile",
-                        "container": "widget",
-                        "x": 0,
-                        "y": 0,
-                        "w": 10,
-                        "h": 2
-                    },
-                    {
-                        "id": "sidebar.html",
-                        "title": "سایدبار",
-                        "name": "sidebar",
-                        "container": "sidebar",
-                        "x": 10,
-                        "y": 0,
-                        "w": 2,
-                        "h": 5
-                    }
-                ]
-            },
-            {
-                "groupName": "group2",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {
-                        "connection.web.demo": "https://dbsource.basiscore.net/data.json",
-                        "default.dmnid": 123
-                    }
-                },
-                "widgets": [
-                    {
-                        "id": "my-file1.html",
-                        "title": "ویجت 2",
-                        "name": "myFile1",
-                        "container": "widget",
-                        "x": 7,
-                        "y": 2,
-                        "w": 3,
-                        "h": 3
-                    },
-                    {
-                        "id": "my-file2.html",
-                        "title": "ویجت 3",
-                        "name": "myFile2",
-                        "container": "widget",
-                        "x": 0,
-                        "y": 2,
-                        "w": 7,
-                        "h": 3
-                    }
-                ]
-            }
-        ]
-    },
+  
     "default": {
+        
+        "container":"dashboard" , 
+        "queryString":"?mid=20", 
         "groups": [
             {
                 "groupName": "group1",
@@ -84,6 +19,7 @@
                         "title": "ویجت داشبورد",
                         "name": "userWidget1",
                         "container": "widget",
+                        "addToDashboard" : false , 
                         "x": 0,
                         "y": 0,
                         "w": 12,
@@ -94,6 +30,7 @@
                         "title": "اکسترنال ویجت",
                         "name": "externalFile",
                         "container": "widget",
+                        "addToDashboard" : false , 
                         "x": 0,
                         "y": 2,
                         "w": 12,
@@ -105,6 +42,7 @@
         ]
     },
     "myFiles": {
+        "container":"container" , 
         "groups": [
             {
                 "groupName": "group1",
@@ -119,7 +57,7 @@
                         "id": "my-file.html",
                         "title": "فایل های من",
                         "name": "myFiles",
-                        "container": "fullPageWidget",
+                        "container": "widget",
                         "x": 0,
                         "y": 0,
                         "w": 12,
@@ -130,6 +68,7 @@
         ]
     },
     "calendare": {
+        "container":"page" , 
         "groups": [
             {
                 "groupName": "group1",
