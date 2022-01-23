@@ -37,6 +37,9 @@
             },
             logout: {
               url: "/server/trust/${rKey}/logout",
+              cookieName: "rkey",
+              successId: 4,
+              dmnToken: "asdfr",
               defaultRedirectUrl: "https://www.google.com",
             },
             notification: {
@@ -119,7 +122,7 @@
         },
         repositories: {
           basispanel: "/basiscore.basispanel.component.js",
-          "bc.grid": "/basiscore.grid.component.js",
+          "bc.grid": "https://basispanel.ir/asset/js/basiscore.grid.component.js",
         },
       };
 
@@ -139,7 +142,8 @@
         console.log(e);
       }
     </script>
-    <script src="basiscore.js"></script>
+    <!-- <script src="basiscore.js"></script> -->
+    <script src="https://cdn.basiscore.net/_js/basiscore-2.4.15.min.js"></script>
     <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
   </body>
 </html>

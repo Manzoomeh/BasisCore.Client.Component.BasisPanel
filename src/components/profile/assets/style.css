@@ -5,7 +5,7 @@
 [data-bc-user-info] {
     float: right;
     padding: 10px 15px;
-    width: 145px;
+    /* width: 145px; */
     height: 35px;
     /* display: inline-block; */
     /* display: flex; */

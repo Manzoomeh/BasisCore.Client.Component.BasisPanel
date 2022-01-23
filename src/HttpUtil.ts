@@ -38,6 +38,27 @@ export default class HttpUtil {
     }
   }
 
+  static async sendFormData<T>(
+    url: string,
+    method: "POST" | "GET",
+    data?: any
+  ): Promise<T> {
+    const init: RequestInit = { method: method };
+    if (data) {
+      init.headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+      };
+      init.body = data;
+    }
+    const result = await fetch(url, init);
+    try {
+      return await result.json();
+    } catch (ex) {
+      console.error(`Error in parse json result from ${url}`, ex);
+      throw ex;
+    }
+  }
+
   static formatString(
     string: string,
     params: IDictionary<string> | any

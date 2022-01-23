@@ -15,8 +15,21 @@ export default class LogoutComponent extends BasisPanelChildComponent {
         this.container.querySelector("[data-bc-logout-click]")?.addEventListener("click", async (e) => {
             e.preventDefault();
             const url = HttpUtil.formatString(this.options.logout.url, {rKey: this.options.rKey});
-            const result = await HttpUtil.fetchDataAsync<IResponseLogout>(url, "GET");
-            window.location.href = result.redirectUrl && result.redirectUrl!="" ? result.redirectUrl : this.options.logout.defaultRedirectUrl ;
+            const result = await HttpUtil.sendFormData<IResponseLogout>(url, "POST", `dmntoken=${this.options.logout.dmnToken}`);
+            const cookieName = this.options.logout.cookieName;
+            if (result.errorid == this.options.logout.successId) {
+                if (cookieName && cookieName!="") {
+                    const cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = (cookies[i].trim().split("="))[0];
+                        if(cookie == cookieName) {
+                            document.cookie = cookie + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                            break;
+                        }
+                    };
+                }
+                window.location.href = result.redirectUrl && result.redirectUrl!="" ? result.redirectUrl : this.options.logout.defaultRedirectUrl;
+            }
         });
     }
 
@@ -27,5 +40,6 @@ export default class LogoutComponent extends BasisPanelChildComponent {
 
 interface IResponseLogout {
   message: string;
-  redirectUrl: string;
+  errorid: number;
+  redirectUrl?: string;
 }
