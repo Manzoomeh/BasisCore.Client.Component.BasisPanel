@@ -47,7 +47,6 @@ export default class MenuComponent
     if (this.current != newMenu) {
       this.current = newMenu;
       this.ul.innerHTML = "";
-      console.log(this.current.nodes)
       this.ul.append(...this.current.nodes);
     }
   }

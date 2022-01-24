@@ -97,7 +97,13 @@ export default class MenuElementMaker {
 
     
     li.addEventListener("click", function (e) {     
-     
+      const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
+      openMenu.forEach((x ) => {
+       const openMenu = x as HTMLElement
+       openMenu.style.transform = ` scaleY(0)`;
+       openMenu.previousElementSibling.removeAttribute("data-bc-level-open");
+       openMenu.removeAttribute("data-bc-ul-level-open");
+     })
       if (innerUl.getAttribute("data-bc-ul-level-open") === null) {
         innerUl.style.transform = ` scaleY(1)`;
         innerUl.setAttribute("data-bc-ul-level-open", "");
