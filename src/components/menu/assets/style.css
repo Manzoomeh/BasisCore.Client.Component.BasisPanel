@@ -1,10 +1,11 @@
 [data-bc-bp-menu-container] {
 	clear: both;
+	border-top: 0.5px solid #D0D0D0;;
 }
 
 [data-bc-bp-menu-wrapper] {
 	width: 100%;
-	background: #4d576e;
+	background: #fff;
 }
 
 [data-bc-menu] {
@@ -17,13 +18,25 @@
 
 [data-bc-menu] li {
 	position: relative;
-	line-height: 50px;
+	line-height: 60px;
+	border-bottom: 0.7px solid #fff;
 }
-
+[data-bc-level] {
+	transition: all 0.3s ease-in-out;
+}
+[data-bc-menu] li:hover [data-bc-level] {
+	color: #004B85;
+	/* background-color: rgba(0, 75, 133, 0.1); */
+}
+[data-bc-menu] > li:hover{
+	border-bottom:  0.7px solid #004B85;
+}
+[data-bc-bp-menu-external-single-node]{
+	height: 100%;
+}
 [data-bc-menu] li a {
-	color: #fff;
+	color: #000;
 	padding: 0 15px;
-	border-left: 1px solid rgba(255, 255, 255, 0.13);
 	cursor: pointer;
 }
 
@@ -32,46 +45,57 @@
 	position: absolute;
 	z-index: 9999;
 	right: 0;
-	top: 50px;
+	top: 61px;
 	width: 230px;
 	height: auto;
-	background: #4d576e;
+	background: #fff;
 	overflow: hidden;
 	transform-origin: top;
 	transform: scaleY(0);
 	transition: all 0.3s ease-in-out;
+	box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
 }
-
-[data-bc-menu] li ul a {
+[data-bc-menu] li ul li:hover{
+	border-left: 0.7px solid #004B85;;
+}
+[data-bc-menu] li ul li:hover a{
+	color:#004B85;;
+}
+[data-bc-menu] li ul li a {
 	width: 100%;
 	display: inline-block;
-	border-bottom: 1px solid #6c768e;
+	border-bottom: 0.7px solid #D0D0D0;;
 	position: relative;
 	display: inherit !important;
-	padding: 5px 15px;
+	padding: 5px 10px;
 	line-height: 24px;
 	box-sizing: border-box;
+	border-right:4px solid  #D0D0D0;
 }
-
+[data-bc-menu] li ul li:last-child a{
+	border-bottom: none;
+}
 [data-bc-bp-menu-external] {
 	width: 0;
 	overflow: hidden;
 	vertical-align: top;
 	position: relative;
 	z-index: 9;
-	background-color: #3a4459;
-	height: 50px;
+	background-color: #fff;
+	height: 59px;
 	display: inline-block;
+	transition: all 0.3s ease-in-out;
 }
 
 [data-bc-bp-menu-external] li {
 	padding: 0;
+	height: 100%;
 }
 
 [data-bc-bp-menu-external] li a {
 	border-bottom: 0 !important;
 	height: 100%;
-	line-height: 40px !important;
+	line-height: 50px !important;
 }
 
 [data-bc-bp-menu-external] li ul li a {
@@ -108,9 +132,11 @@
 }
 [data-bc-bp-menu-external-single-node] li{height: 100%; line-height: 50px;}
 [data-bc-menu] [data-bc-bp-menu-external-single-node] li a{ border: none;
-	border-left: 1px solid rgba(255, 255, 255, 0.13); padding: 0 15px;position: relative; top: 12px;
+	border-left: 1px solid rgba(255, 255, 255, 0.13); padding: 0 15px;position: relative; top: 16px;
 }
 [data-bc-bp-menu-external-single-node] ul li a {padding: 5px 15px !important;top: 0 !important;}
 [data-bc-menu] [data-bc-bp-menu-external-single-node] li ul li a{border-bottom: 1px solid #6c768e;}
-[data-bc-bp-menu-external-title]{background: #58637c;
-	}
+[data-bc-bp-menu-external-title]{background: #F4F4F4; border-bottom: 1px solid #F4F4F4 !important;}
+[data-bc-menu] li [data-bc-bp-menu-external-single-node] li:hover{
+	border-left: none !important;
+}

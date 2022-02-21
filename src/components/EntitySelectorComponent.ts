@@ -6,6 +6,7 @@ import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import IPageLoaderParam from "./menu/IPageLoaderParam";
+import { corporate } from "../ComponentLoader";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -70,13 +71,32 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
         this.profile = source.rows[0];
-        if (this.ownerType == "corporate") {
-          const corporateList = await this.getEntitiesAsync();
+        if (this.ownerType == "corporate") {          
+          const corporateList = await this.getEntitiesAsync();     
+         
+  
           if (corporateList.length > 0) {
             const corporateElement = this.element
-              .closest("[data-bc-bp-main-header]")
-              .querySelector("[data-bc-corporate-list]") as HTMLElement;
+            .closest("[data-bc-bp-main-header]")
+            .querySelector("[data-bc-corporate-list]") as HTMLElement;   
             corporateElement.style.transform = "scaleY(1)";
+          }
+          else{
+            const parentElement= this.element.closest("[data-bc-bp-corporate-container]")
+            const buyService = document.createElement("div")
+            buyService.innerHTML = `<div data-bc-corporate-buy="">
+            <span>خرید سرویس</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
+                </svg>
+                
+        </div>`
+            parentElement.prepend(buyService)
+            const buyServiceElement = buyService.querySelector("[data-bc-corporate-buy]") as HTMLElement
+             setTimeout(function(){
+              buyServiceElement.style.transform = "scaleY(1)";
+             }, 100);
+           
           }
         }
         break;
@@ -111,6 +131,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       this.businessComponentFlag == true &&
       this.entityList.length == 0
     ) {
+     
       businessMsgElement.style.transform = "scaleY(0)";
     }
 
@@ -125,7 +146,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         searchWrapper.appendChild(searchInput);
       } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
-        searchInput.setAttribute("placeHolder", "جستجوی کسب‌و‌کار ...");
+        searchInput.setAttribute("placeHolder", "جستجوی شرکت");
         searchWrapper.appendChild(searchInput);
       }
     }
@@ -177,14 +198,28 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             const businessMsgElement = this.element
               .closest("[data-bc-bp-main-header]")
               .querySelector("[data-bc-business-msg]");
-            businessMsgElement.textContent = "کسب‌وکار مورد نظر را انتخاب کنید";
+            businessMsgElement.textContent = "کسب‌و‌کارها";
             businessMsgElement.setAttribute("data-id", "0");
             (businessMsgElement as HTMLElement).style.cursor = "auto";
           }
+          const existCorporateElemant = this.element
+          .closest("[data-bc-main-list-container]")
+          .querySelector("[data-bc-corporate-name]") 
+          if(existCorporateElemant){
+            existCorporateElemant.remove()
+            }
           const containerMsgElement = this.element
             .closest("[data-bc-main-list-container]")
             .querySelector("[data-bc-main-list-msg]");
-          containerMsgElement.textContent = li.textContent;
+          const CorporateName= document.createElement("div")
+          CorporateName.textContent = li.textContent
+          const elClick = this.element
+        .closest("[data-bc-main-list-container]")
+        .querySelector("[data-bc-drop-down-click]") as HTMLElement;
+          elClick.style.top = "-5px"
+          CorporateName.setAttribute("data-bc-corporate-name" , "")
+          containerMsgElement.parentNode.insertBefore(CorporateName, containerMsgElement.nextSibling);
+          containerMsgElement.setAttribute("data-bc-main-list-msg-select","")
           containerMsgElement.setAttribute(
             "data-id",
             li.getAttribute("data-id")
@@ -207,7 +242,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
-    // console.log(typeof id)
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
       // ownerId: this.element.value,

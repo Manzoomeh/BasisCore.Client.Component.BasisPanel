@@ -168,3 +168,10 @@
     visibility: visible;
     opacity: 1;
 }
+[data-bc-widget-buttons]{
+    padding-right: 15px;
+    border-right: 0.5px solid #D0D0D0;;
+}
+[data-bc-widget-buttons] svg{    
+    position: relative ; top: 3px;
+}

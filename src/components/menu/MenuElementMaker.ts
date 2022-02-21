@@ -162,7 +162,10 @@ export default class MenuElementMaker {
     );
 
     HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) => {
-      this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+      if(menu) {
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+      }
+      
     });
     return li;
   }
@@ -210,8 +213,13 @@ export default class MenuElementMaker {
         level: menuParam.owner,
       }
     );
-    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) =>
-      this.createMenu(ul, menu.nodes, newMenuParam, pageLookup)
+    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((menu) =>{
+      if(menu){
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup)
+      }
+      
+    }
+      
     );
     return li;
   }

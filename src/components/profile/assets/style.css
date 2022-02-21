@@ -4,29 +4,29 @@
 
 [data-bc-user-info] {
     float: right;
-    padding: 10px 15px;
-    /* width: 145px; */
     height: 35px;
-    /* display: inline-block; */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* box-sizing: unset; */
+    border-left: 0.5px solid #D0D0D0;
+    padding-left: 15px;
+
 }
 
 [data-bc-user-info] [data-bc-user-info-image] {
     float: right;
-    height: 35px;
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
 }
 
 [data-bc-user-info] [data-bc-user-info-image] img {
     border-radius: 5px;
+    height: 40px;
+    width: 40px;
 }
 
 [data-bc-user-info] [data-bc-user-info-name] {
     float: right;
     margin-right: 10px;
-    width: calc(100% - 45px);
+
     /* display: inline-block; */
     line-height: 35px;
     /* display: flex; */
