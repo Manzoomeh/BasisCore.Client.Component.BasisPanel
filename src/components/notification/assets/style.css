@@ -109,20 +109,13 @@
 [data-bc-notification] [data-bc-notification-wrapper] {
     position: relative;
     margin: 0 auto;
-    min-width: 400px;
-    width: 500px;
+    min-width: 350px;
+    width: 400px;
     max-width: 100%;
     overflow: hidden;
 }
 
-[data-bc-notification] [data-bc-notification-tabs] {
-    border-radius: 5px 5px 0 0;
-    /* background-color: #2f46ac; */
-    /* background-color: #4d576e; */
-    padding: 10px 10px 0;
-    border-bottom: 2px solid #eff2f5;
-    /* direction: ltr; */
-}
+
 
 [data-bc-notification] [data-bc-notification-tab-button] {
     background: transparent;
@@ -206,8 +199,6 @@
     filter: alpha(opacity=100);
     opacity: 1;
     display: block;
-    width: 100%;
-    height: auto;
     width: 100%;
     height: auto;
 }
@@ -300,3 +291,35 @@
         transform-origin: 11px 0;
     }
 } */
+[data-bc-notification-items],[data-bc-notification-items-new]{
+    background: rgba(34, 34, 34, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    position: relative;
+}
+[data-bc-notification-items] svg{
+    position: absolute; left: 10px; top: 10px;
+}
+[data-bc-notification-items-new]{
+    background:  rgba(0, 75, 133, 0.1) !important;
+}
+[data-bc-notification-title]{
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+[data-bc-notification-date],[data-bc-notification-owner],[data-bc-notification-category]{
+    color: #767676;
+    margin-left: 15px;
+    font-size: 12px;
+}
+[data-bc-notification-type]{
+    color: #004B85;
+    font-weight: bold;
+    margin-left: 15px;
+}
+[data-bc-notification-info]{
+    display: flex;
+    margin-top: 10px;
+}
