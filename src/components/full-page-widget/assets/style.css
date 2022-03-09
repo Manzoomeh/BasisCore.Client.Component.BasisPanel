@@ -21,7 +21,6 @@
     direction: rtl;
     text-align: right;
     font-size: 14px;
-    background-color: var(--white);
     height: 100%;
     overflow: hidden;
 }
