@@ -7,6 +7,7 @@ import layout from "./assets/layout.html";
 import "./assets/style.css";
 import IScheduler from "./IScheduler";
 import ITaskOptions from "./ITaskOptions";
+import PostTaskOptions from "./PostTaskOptions";
 import TaskProcess from "./TaskProcess";
 
 export default class SchedulerComponent
@@ -14,7 +15,7 @@ export default class SchedulerComponent
   implements IScheduler
 {
   private processList: Map<string, TaskProcess>;
-  private readonly ulElement: HTMLUListElement;
+  public readonly ulElement: HTMLUListElement;
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-scheduler-container");
     this.processList = new Map<string, TaskProcess>();
@@ -49,5 +50,10 @@ export default class SchedulerComponent
       this.processList.set(key, process);
     }
     return key;
+  }
+
+  public startPost(data: FormData, url: string, title: string): string {
+    const taskOptions = new PostTaskOptions(data, url, title);
+    return this.startTask(taskOptions);
   }
 }
