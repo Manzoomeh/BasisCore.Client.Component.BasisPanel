@@ -1,5 +1,6 @@
 import IWidgetInfo from "../widget/IWidgetInfo";
 import IPage from "./IPage";
+import { IPageGroupInfo } from "./IPageGroupInfo";
 
 export default class WidgetUIManager {
   private _items: Map<number, Element> = new Map<number, Element>();
@@ -20,7 +21,7 @@ export default class WidgetUIManager {
         })
       );
 
-    // this.fillWidgetList(owner.info.widgets);
+    this.fillWidgetList(owner.info.groups);
     owner.container
       .querySelectorAll("[data-bc-page-widget-dlg-btn-add]")
       .forEach((btn) =>
@@ -44,6 +45,29 @@ export default class WidgetUIManager {
   //     });
   //   });
   // }
+
+  private fillWidgetList(groupList: Array<IPageGroupInfo>) {
+    const disableWidgets = document.querySelector(
+      "[data-bc-page-widget-disableList]"
+    );
+
+    groupList.forEach((group) => {
+      const groupLi = document.createElement("li");
+      disableWidgets.appendChild(groupLi);
+      groupLi.appendChild(document.createTextNode(group.groupName));
+      const groupUl = document.createElement("ul");
+      groupLi.appendChild(groupUl);
+      group.widgets.forEach((widget) => {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(widget.title));
+        groupUl.appendChild(li);
+        li.addEventListener("click", (e) => {
+          e.preventDefault();
+          console.log(widget);
+        });
+      });
+    });
+  }
 
   private displayWidgetList() {
     this.showList();
