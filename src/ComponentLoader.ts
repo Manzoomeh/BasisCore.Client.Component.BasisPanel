@@ -15,7 +15,6 @@ import LogoutComponent from "./components/logout/LogoutComponent";
 import DashboardComponent from "./components/dashboard/DashboardComponent";
 import ContainerComponent from "./components/container/ContainerComponent";
 import ThemeComponent from "./components/theme/ThemeComponent";
-import Widgetbox from "./components/widgetBox/widgetBox"
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -34,7 +33,7 @@ const logout = LogoutComponent;
 const dashboard = DashboardComponent;
 const container = ContainerComponent;
 const theme = ThemeComponent;
-const widgetBox = Widgetbox;
+
 
 export {
   panel,
@@ -53,6 +52,5 @@ export {
   logout,
   dashboard,
   container,
-  theme,
-  widgetBox
+  theme
 };
