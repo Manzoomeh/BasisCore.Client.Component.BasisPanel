@@ -11,8 +11,19 @@
 </form>
 
 <!-- <button id="btn-start-upload">Start upload....</button> -->
-
+<basis core="dbsource" source="demo" name="book" run="atclient">
+  <member name="list" type="list" request="print" preview="true"></member>
+</basis>
+<Basis core="component.grid.grid" run="atclient" dataMemberName="book.list" options="demo_grid_options" optionsUrl="/server/dbsource/grid-options.js">
+</Basis>
+<basis core="callback" run="atclient" triggers="sample.data"></basis>
 <basis core="component.core.exposer" run="atclient" component="pagesList_component"></basis>
+<!-- <script src="/server/dbsource/grid-options.js"></script> -->
+<!-- <script>
+  const demo_grid_options = {
+    paging: 10
+  };
+</script> -->
 <script>
   document.getElementById("file-form").addEventListener("change", e => {
     let data = new FormData(e.currentTarget);

@@ -8,6 +8,7 @@ const { router: activeManagerHttpServer } = require("./server/active-manager");
 const externalMenuHttpServer = require("./server/external-menu");
 const notificationsHttpServer = require("./server/notifications");
 const externalHttpServer = require("./server/external");
+const dbsource = require("./server/db-source");
 
 //const router = require("./server/trust-login");
 
@@ -41,6 +42,7 @@ module.exports = (env, options) => {
         server.app.use("/server/external", externalMenuHttpServer);
         server.app.use("/server/notifications", notificationsHttpServer);
         server.app.use("/server/external", externalHttpServer);
+        server.app.use("/server/dbsource", dbsource);
       },
       open: true,
     },

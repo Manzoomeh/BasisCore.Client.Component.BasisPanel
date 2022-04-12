@@ -16,6 +16,7 @@
   <script>
     const host = {
       settings: {
+        "connection.web.demo": "/server/dbsource/demo",
         "basispanel.option": {
           rKey: "80841FB3-3405-41DE-A7B0-AAB795B39007",
           baseUrl: {
@@ -123,7 +124,7 @@
       },
       repositories: {
         basispanel: "/basiscore.basispanel.component.js",
-        "bc.grid": "https://basispanel.ir/asset/js/basiscore.grid.component.js",
+        "grid.grid": "http://localhost:8082/basiscore.grid.component.js",
       },
     };
 
@@ -144,7 +145,7 @@
     }
   </script>
   <!-- <script src="basiscore.js"></script> -->
-  <script src="https://cdn.basiscore.net/_js/basiscore-2.4.17.min.js"></script>
+  <script src="http://localhost:3000/basiscore.js"></script>
   <script src="https://cdn.basiscore.net/_js/alasql.min.js"></script>
 </body>
 

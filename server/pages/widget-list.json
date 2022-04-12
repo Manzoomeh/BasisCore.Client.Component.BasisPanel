@@ -1,9 +1,7 @@
 {
-  
     "default": {
-        
-        "container":"dashboard" , 
-        "queryString":"?mid=20", 
+        "container": "dashboard",
+        "queryString": "?mid=20",
         "groups": [
             {
                 "groupName": "group1",
@@ -19,30 +17,30 @@
                         "title": "ویجت داشبورد",
                         "name": "userWidget1",
                         "container": "widget",
-                        "addToDashboard" : false , 
+                        "addToDashboard": false,
                         "x": 0,
                         "y": 0,
                         "w": 12,
-                        "h": 2
+                        "h": 4
                     },
                     {
                         "id": "external-file.html",
                         "title": "اکسترنال ویجت",
                         "name": "externalFile",
                         "container": "widget",
-                        "addToDashboard" : false , 
+                        "addToDashboard": false,
                         "x": 0,
-                        "y": 2,
+                        "y": 4,
                         "w": 12,
                         "h": 2,
-                        "url":"server/external"
+                        "url": "server/external"
                     }
                 ]
             }
         ]
     },
     "myFiles": {
-        "container":"container" , 
+        "container": "container",
         "groups": [
             {
                 "groupName": "group1",
@@ -68,7 +66,7 @@
         ]
     },
     "calendare": {
-        "container":"page" , 
+        "container": "page",
         "groups": [
             {
                 "groupName": "group1",
