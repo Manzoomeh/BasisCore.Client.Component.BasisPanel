@@ -27,6 +27,15 @@ export default abstract class PageComponent
   constructor(owner: IUserDefineComponent, layout: string, dataAttr: string) {
     super(owner, layout, dataAttr);
     this.owner.dc.registerInstance("page", this);
+    const body = this.container.querySelector<HTMLElement>(
+      "[data-bc-page-body]"
+    );
+
+    body.addEventListener("dragenter", (e) => e.preventDefault());
+    body.addEventListener("dragover", (e) => e.preventDefault());
+    body.addEventListener("drop", (e) =>
+      this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")))
+    );
   }
 
   public async initializeAsync(): Promise<void> {
@@ -62,13 +71,7 @@ export default abstract class PageComponent
       ...widgetInfo,
       ...{ page: this.loaderParam },
     };
-    const paramStr = JSON.stringify(param);
-    const command = `<basis core="component.basispanel.widget" run="atclient" param='${paramStr}' ></basis>`;
-    const doc = this.owner.toNode(command);
-    const nodes = Array.from(doc.childNodes);
-    const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-    pageBody.appendChild(doc);
-    this.owner.processNodesAsync(nodes);
+    console.log(param);
   }
 
   public async addGroupAsync(

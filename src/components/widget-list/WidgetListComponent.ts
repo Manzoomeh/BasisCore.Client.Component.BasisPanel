@@ -1,7 +1,6 @@
 import layout from "./assets/layout.html";
 import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
-import { IPageGroupInfo } from "../page/IPageGroupInfo";
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
@@ -16,7 +15,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
-    this.hideList();
+    this.displayWidgetList();
     this._page.container
       .querySelectorAll("[data-bc-page-widget-list-dlg-btn-close]")
       .forEach((btn) =>
@@ -26,7 +25,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         })
       );
 
-    this.fillWidgetList(this._page.info.groups);
+    this.fillWidgetList();
     this._page.container
       .querySelectorAll("[data-bc-page-widget-list-dlg-btn-add]")
       .forEach((btn) =>
@@ -47,39 +46,26 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     }
   }
 
-  // private fillWidgetList(widgetList: Array<IWidgetInfo>) {
-  //   const disableWidgets = document.querySelector("[data-bc-page-widget-disableList]");
-  //   widgetList.forEach((widget) => {
-  //     const div = document.createElement("div");
-  //     div.appendChild(document.createTextNode(widget.title));
-  //     disableWidgets.appendChild(div);
-  //     this._items.set(widget.id, div);
-  //     div.addEventListener("click", (e) => {
-  //       e.preventDefault();
-  //       this.addWidget(widget);
-  //     });
-  //   });
-  // }
-
-  private fillWidgetList(groupList: Array<IPageGroupInfo>) {
+  private fillWidgetList() {
+    const groupList = this._page.info.groups;
     const disableWidgets = document.querySelector(
       "[data-bc-page-widget-disableList]"
     );
 
-    groupList.forEach((group) => {
-      const groupLi = document.createElement("li");
-      disableWidgets.appendChild(groupLi);
-      groupLi.appendChild(document.createTextNode(group.groupName));
-      const groupUl = document.createElement("ul");
-      groupLi.appendChild(groupUl);
-      group.widgets.forEach((widget) => {
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(widget.title));
-        groupUl.appendChild(li);
-        li.addEventListener("click", (e) => {
-          e.preventDefault();
-          console.log(widget);
-        });
+    const widgetsList: IWidgetInfo[] = new Array<IWidgetInfo>();
+    groupList.forEach((group) => widgetsList.push(...group.widgets));
+
+    widgetsList.forEach((widget) => {
+      const widgetElement = document.createElement("div");
+      widgetElement.setAttribute("draggable", "true");
+      widgetElement.appendChild(document.createTextNode(widget.title));
+      widgetElement.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", JSON.stringify(widget));
+      });
+      disableWidgets.appendChild(widgetElement);
+      widgetElement.addEventListener("dblclick", (e) => {
+        e.preventDefault();
+        this._page.tryAddingWidget(widget);
       });
     });
   }
