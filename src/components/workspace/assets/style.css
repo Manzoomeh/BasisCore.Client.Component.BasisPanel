@@ -1,4 +1,4 @@
-[data-bc-page-widget-dlg-btn-add] {
+[data-bc-page-widget-list-dlg-btn-add] {
     float: left;
     color: #fff;
     font-size: 25px;
@@ -9,7 +9,7 @@
     position: relative;
 }
 
-[data-bc-page-widget-dlg-btn-close] {
+[data-bc-page-widget-list-dlg-btn-close] {
     width: 18px;
     height: 18px;
     float: left;
@@ -22,8 +22,8 @@
     position: relative;
 }
 
-[data-bc-page-widget-dlg-btn-close]::after,
-[data-bc-page-widget-dlg-btn-close]::before {
+[data-bc-page-widget-list-dlg-btn-close]::after,
+[data-bc-page-widget-list-dlg-btn-close]::before {
     top: 50%;
     content: '';
     transform: translateX(-50%) translateY(-50%) rotate(45deg);
@@ -36,7 +36,7 @@
     width: 2px;
 }
 
-[data-bc-page-widget-dlg-btn-close]::before {
+[data-bc-page-widget-list-dlg-btn-close]::before {
     -webkit-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
     -moz-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
     -ms-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
@@ -44,7 +44,7 @@
     transform: translateX(-50%) translateY(-50%) rotate(-45deg);
 }
 
-[data-bc-page-widget-dlg-btn-close]::after {
+[data-bc-page-widget-list-dlg-btn-close]::after {
     -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
     -moz-transform: translateX(-50%) translateY(-50%) rotate(45deg);
     -ms-transform: translateX(-50%) translateY(-50%) rotate(45deg);

@@ -4,12 +4,11 @@ import IPageInfo from "./IPageInfo";
 import { PageType } from "./PageType";
 
 export default interface IPage {
-  addingGroups(pageInfo: any);
   tryAddingWidget(widgetInfo: IWidgetInfo);
 
   container: Element;
   info: IPageInfo;
   loaderParam: IPageLoaderParam;
   arguments: any;
-  type:PageType;
+  type: PageType;
 }

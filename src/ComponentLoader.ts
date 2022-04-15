@@ -15,6 +15,8 @@ import LogoutComponent from "./components/logout/LogoutComponent";
 import DashboardComponent from "./components/dashboard/DashboardComponent";
 import ContainerComponent from "./components/container/ContainerComponent";
 import ThemeComponent from "./components/theme/ThemeComponent";
+import PageGroupComponent from "./components/page-group/PageGroupComponent";
+import WidgetListComponent from "./components/widget-list/WidgetListComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -33,7 +35,8 @@ const logout = LogoutComponent;
 const dashboard = DashboardComponent;
 const container = ContainerComponent;
 const theme = ThemeComponent;
-
+const pageGroup = PageGroupComponent;
+const widgetList = WidgetListComponent;
 
 export {
   panel,
@@ -52,5 +55,7 @@ export {
   logout,
   dashboard,
   container,
-  theme
+  theme,
+  pageGroup,
+  widgetList,
 };

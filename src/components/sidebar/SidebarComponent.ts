@@ -1,10 +1,9 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
-import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
-import { DefaultSource, MenuOwnerType } from "../../type-alias";
+import { DefaultSource } from "../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
   IMenuLevelInfo,
@@ -16,8 +15,6 @@ import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
 declare const $bc: any;
 
 export default class SidebarComponent extends PageWidgetComponent {
-  private param: IWidgetParam;
-
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-sidebar-container");
   }
@@ -27,8 +24,6 @@ export default class SidebarComponent extends PageWidgetComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
-
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());

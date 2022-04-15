@@ -1,6 +1,7 @@
 import { Priority } from "./enum";
+import IComponentCollection from "./IComponentCollection";
+import IComponentManager from "./IComponentManager";
 import IDependencyContainer from "./IDependencyContainer";
-import IDisposable from "./IDisposable";
 import ISource from "./ISource";
 import ISourceOptions from "./ISourceOptions";
 import IToken from "./IToken";
@@ -31,7 +32,7 @@ export default interface IUserDefineComponent {
   waitToGetSourceAsync(sourceId: SourceId): Promise<ISource>;
   getDefault<T>(key: string, defaultValue?: T): T;
   getSetting<T>(key: string, defaultValue: T): T;
-  processNodesAsync(nodes: Array<Node>): Promise<IDisposable>;
+  processNodesAsync(nodes: Array<Node>): Promise<IComponentCollection>;
   disposeAsync(): Promise<void>;
   disposed: boolean;
   storeAsGlobal(
@@ -41,4 +42,9 @@ export default interface IUserDefineComponent {
     postfix?: string
   ): string;
   getRandomName(prefix?: string, postfix?: string): string;
+  format(pattern: string, ...params: any[]): string;
+  getLibAsync(objectName: string, url: string): Promise<any>;
+  manager: IComponentManager;
+  onInitialized: Promise<IUserDefineComponent>;
+  node: Element;
 }

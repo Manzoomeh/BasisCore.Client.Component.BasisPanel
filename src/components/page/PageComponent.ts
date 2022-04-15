@@ -1,19 +1,17 @@
-import layout from "./assets/layout.html";
 import IWidgetInfo from "../widget/IWidgetInfo";
 import IPage from "./IPage";
-import WidgetUIManager from "./WidgetUIManager";
 import IWidgetParam from "../widget/IWidgetParam";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
 import HttpUtil from "../../HttpUtil";
-import { DefaultSource } from "../../type-alias";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
-import groupLayout from "./assets/group-layout.html";
 import IPageInfo from "./IPageInfo";
 import { PageType } from "./PageType";
+import { IPageGroupInfo } from "./IPageGroupInfo";
+import PageGroupComponent from "../page-group/PageGroupComponent";
 
-export  default  abstract  class PageComponent
+export default abstract class PageComponent
   extends BasisPanelChildComponent
   implements IPage
 {
@@ -22,14 +20,14 @@ export  default  abstract  class PageComponent
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
-  public abstract  get type():PageType 
-  public widgetUIManager: WidgetUIManager;
+  public abstract get type(): PageType;
   public _groupsAdded: boolean = false;
-  constructor(owner: IUserDefineComponent , layout :string , dataAttr: string) {
+  readonly _groups: Map<string, PageGroupComponent> = new Map();
+
+  constructor(owner: IUserDefineComponent, layout: string, dataAttr: string) {
     super(owner, layout, dataAttr);
     this.owner.dc.registerInstance("page", this);
   }
-  
 
   public async initializeAsync(): Promise<void> {
     this.loaderParam = JSON.parse(
@@ -42,25 +40,19 @@ export  default  abstract  class PageComponent
     );
     this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
     const body = this.container.querySelector("[data-bc-page-body]");
-    
-    
+
     if (this.info.content) {
       const range = new Range();
       range.setStart(body, 0);
       range.setEnd(body, 0);
       range.insertNode(range.createContextualFragment(this.info.content));
     }
-    this.widgetUIManager = new WidgetUIManager(this);
-    this.owner.addTrigger([DefaultSource.WIDGET_CLOSED]);
   }
 
-  public runAsync(source?: ISource) {
+  public async runAsync(source?: ISource) {
     if (!this._groupsAdded) {
-      this.addingGroups(this.info);
+      await this.addingPageGroupsAsync(this.info);
       this._groupsAdded = true;
-    }
-    if (source?.id === DefaultSource.WIDGET_CLOSED) {
-      this.widgetUIManager.widgetRemoved(source.rows[0]);
     }
     return true;
   }
@@ -79,34 +71,47 @@ export  default  abstract  class PageComponent
     this.owner.processNodesAsync(nodes);
   }
 
-  public addingGroups(pageInfo: IPageInfo): void {
-    const widgets: Array<IWidgetInfo> = [];
-    let maxHeight;
+  public async addGroupAsync(
+    groupInfo: IPageGroupInfo
+  ): Promise<PageGroupComponent> {
+    try {
+      const pageBody = this.container.querySelector('[data-bc-page-body=""]');
+      const groupElement = document.createElement("basis");
+      var optionsName = this.owner.storeAsGlobal(groupInfo.options);
+      groupElement.setAttribute("core", "component.basispanel.pageGroup");
+      groupElement.setAttribute("run", "atclient");
+      groupElement.setAttribute("name", groupInfo.groupName);
+      groupElement.setAttribute("options", optionsName);
+
+      pageBody.appendChild(groupElement);
+      const components = await this.owner.processNodesAsync([groupElement]);
+      const groupContainer =
+        components.GetComponentList()[0] as IUserDefineComponent;
+      const group = groupContainer.manager as PageGroupComponent;
+      this._groups.set(group.Name, group);
+      return group;
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+  public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
+    const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-    pageInfo.groups.forEach((group) => {
-      group.widgets = group.widgets.map((x) => {
-        widgets.push(x);
-        return { ...x, ...{ page: this.loaderParam } };
-      });
-      const command = groupLayout;
-      const doc = this.owner.toNode(command) as DocumentFragment;
-      const dataMemberName = this.owner.getRandomName(null, ".widgets");
-      const optionsName = this.owner.storeAsGlobal(group.options);
-      doc
-        .querySelector("[data-main-print]")
-        .setAttribute("dataMemberName", dataMemberName);
-      doc
-        .querySelector("[data-main-group]")
-        .setAttribute("options", optionsName);
-      const nodes = Array.from(doc.childNodes);
-      pageBody.appendChild(doc);
-      this.owner.processNodesAsync(nodes);
-      this.owner.setSource(dataMemberName, group.widgets);
-      const cell = (pageBody as HTMLElement).offsetWidth / 12;
-      maxHeight = Math.max(...widgets.map((x) => x.y + x.h));
-      (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
-    });
+
+    for (var i = 0; i < pageInfo.groups.length; i++) {
+      const groupInfo = pageInfo.groups[i];
+      const group = await this.addGroupAsync(groupInfo);
+      for (var y = 0; y < groupInfo.widgets.length; y++) {
+        const widgetInfo = groupInfo.widgets[y];
+        widgets.push(widgetInfo.y + widgetInfo.h);
+        var options = { ...widgetInfo, ...{ page: this.loaderParam } };
+        group.addWidgetAsync(options);
+      }
+    }
+
+    const cell = (pageBody as HTMLElement).offsetWidth / 12;
+    const maxHeight = Math.max(...widgets);
+    (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
   }
 }
-
-

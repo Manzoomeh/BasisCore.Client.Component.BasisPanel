@@ -1,24 +1,11 @@
-
 <div data-bc-page-header>
-    <i data-bc-page-widget-dlg-btn-add class="icon-settings"></i>
+    <i data-bc-page-widget-list-dlg-btn-add class="icon-settings"></i>
 </div>
-
-<div data-bc-page-widget-dlg data-bc-display-none>
-    <span data-bc-page-widget-dlg-btn-close></span>
-    <div data-bc-page-widget-list>
-        <div data-bc-page-widget-setting>
-            <div data-bc-page-widget-save-setting >ذخیره</div>
-        </div>
-        <div  data-bc-page-widget-disableList >
-            
-        </div>
-    </div>
-    
-</div>
+<basis core="component.basispanel.widgetList" run="atclient"></basis>
 <div clear=""></div>
 <div data-bc-dashboard-widgets>
 
-    <basis core="print" run="atclient" datamembername="db.dashboard_inactive_widget" >
+    <basis core="print" run="atclient" datamembername="db.dashboard_inactive_widget">
         <layout>
             <script type="text/template">
                 <div data-bc-page-dashboard-disablelist="">
@@ -28,7 +15,7 @@
         </layout>
         <face>
             <script type="text/template">
-            
+
                 <div>@title@</div>
             
             </script>
@@ -36,4 +23,4 @@
     </basis>
 
 </div>
-<div data-bc-page-body data-bc-page-body-dashboard ></div>
+<div data-bc-page-body data-bc-page-body-dashboard></div>

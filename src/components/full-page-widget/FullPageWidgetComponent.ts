@@ -1,24 +1,19 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
-import IWidgetParam from "../widget/IWidgetParam";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import ISource from "../../basiscore/ISource";
-// import { DefaultSource } from "../../type-alias";
 import ITaskOptions from "../scheduler/ITaskOptions";
 import PageWidgetComponent from "./PageWidgetComponent";
 
 declare const $bc: any;
 export default class FullPageWidgetComponent extends PageWidgetComponent {
-  private param: IWidgetParam;
   // set title(value: string) {
   //   this.container.querySelector(
   //     "[data-bc-fullpage-header] > [data-bc-fullpage-title]"
   //   ).textContent = value;
   // }
   public async initializeAsync(): Promise<void> {
-    this.param = JSON.parse(await this.owner.getAttributeValueAsync("param"));
-
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
