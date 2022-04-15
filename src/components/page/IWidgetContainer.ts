@@ -1,4 +1,4 @@
-import IWidgetInfo from "../widget/IWidgetInfo";
+import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 
 export default interface IWidgetContainer {
   addWidgetContent(content: Element);

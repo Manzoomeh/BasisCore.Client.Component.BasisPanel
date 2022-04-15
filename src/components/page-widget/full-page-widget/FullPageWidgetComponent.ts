@@ -1,10 +1,10 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
-import HttpUtil from "../../HttpUtil";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import ISource from "../../basiscore/ISource";
-import ITaskOptions from "../scheduler/ITaskOptions";
-import PageWidgetComponent from "./PageWidgetComponent";
+import HttpUtil from "../../../HttpUtil";
+import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import ISource from "../../../basiscore/ISource";
+import ITaskOptions from "../../scheduler/ITaskOptions";
+import PageWidgetComponent from "../PageWidgetComponent";
 
 declare const $bc: any;
 export default class FullPageWidgetComponent extends PageWidgetComponent {

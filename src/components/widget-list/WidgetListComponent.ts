@@ -1,5 +1,5 @@
 import layout from "./assets/layout.html";
-import IWidgetInfo from "../widget/IWidgetInfo";
+import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
 import { IPageGroupInfo } from "../page/IPageGroupInfo";
 import ISource from "../../basiscore/ISource";

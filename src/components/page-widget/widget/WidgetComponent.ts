@@ -1,13 +1,13 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
-import HttpUtil from "../../HttpUtil";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import ISource from "../../basiscore/ISource";
-import { DefaultSource } from "../../type-alias";
-import ITaskOptions from "../scheduler/ITaskOptions";
-import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
-import IScheduler from "../scheduler/IScheduler";
-import { MergeType } from "../../basiscore/enum";
+import HttpUtil from "../../../HttpUtil";
+import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import ISource from "../../../basiscore/ISource";
+import { DefaultSource } from "../../../type-alias";
+import ITaskOptions from "../../scheduler/ITaskOptions";
+import PageWidgetComponent from "../PageWidgetComponent";
+import IScheduler from "../../scheduler/IScheduler";
+import { MergeType } from "../../../basiscore/enum";
 
 declare const $bc: any;
 

@@ -1,16 +1,16 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
-import HttpUtil from "../../HttpUtil";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import ISource from "../../basiscore/ISource";
-import { DefaultSource } from "../../type-alias";
+import HttpUtil from "../../../HttpUtil";
+import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import ISource from "../../../basiscore/ISource";
+import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
   IMenuLevelInfo,
   IMenuPageInfo,
-} from "../menu/IMenuInfo";
-import IPageLoaderParam from "../menu/IPageLoaderParam";
-import PageWidgetComponent from "../full-page-widget/PageWidgetComponent";
+} from "../../menu/IMenuInfo";
+import IPageLoaderParam from "../../menu/IPageLoaderParam";
+import PageWidgetComponent from "../PageWidgetComponent";
 
 declare const $bc: any;
 

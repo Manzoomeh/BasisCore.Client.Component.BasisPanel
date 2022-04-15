@@ -1,6 +1,6 @@
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import IWidgetParam from "../widget/IWidgetParam";
+import IWidgetParam from "./widget/IWidgetParam";
 
 export default abstract class PageWidgetComponent
   extends BasisPanelChildComponent

@@ -1,7 +1,7 @@
 import ISource from "../../basiscore/ISource";
 import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import IWidgetParam from "../widget/IWidgetParam";
+import IWidgetParam from "../page-widget/widget/IWidgetParam";
 import layout from "./assets/layout.html";
 
 export default class PageGroupComponent extends BasisPanelChildComponent {

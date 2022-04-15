@@ -1,11 +1,11 @@
-import PageComponent from "../page/PageComponent";
+import PageComponent from "../PageComponent";
 import layout from "./assets/layout.html";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import HttpUtil from "../../HttpUtil";
-import IPageInfo from "../page/IPageInfo";
-import ISource from "../../basiscore/ISource";
+import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import HttpUtil from "../../../HttpUtil";
+import IPageInfo from "../IPageInfo";
+import ISource from "../../../basiscore/ISource";
 import "./assets/style.css";
-import { PageType } from "../page/PageType";
+import { PageType } from "../PageType";
 
 export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;

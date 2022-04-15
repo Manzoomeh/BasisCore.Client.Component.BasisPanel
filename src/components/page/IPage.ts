@@ -1,5 +1,5 @@
 import IPageLoaderParam from "../menu/IPageLoaderParam";
-import IWidgetInfo from "../widget/IWidgetInfo";
+import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPageInfo from "./IPageInfo";
 import { PageType } from "./PageType";
 
