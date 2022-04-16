@@ -5,21 +5,30 @@ import IWidgetParam from "../page-widget/widget/IWidgetParam";
 import layout from "./assets/layout.html";
 
 export default class PageGroupComponent extends BasisPanelChildComponent {
-  readonly Options: any;
   readonly Name: string;
+  private _group: any;
+
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-group-container");
     this.Name = owner.node.getAttribute("name");
-    var optionsName = owner.node.getAttribute("options");
-    this.Options = eval(optionsName);
   }
 
-  public initializeAsync(): void | Promise<void> {}
+  public async initializeAsync(): Promise<void> {
+    var optionsName = this.owner.node.getAttribute("options");
+    const groupElement = this.container.querySelector("basis");
+    if (optionsName) {
+      groupElement.setAttribute("options", optionsName);
+    }
+    const commandCollection = await this.owner.processNodesAsync([
+      groupElement,
+    ]);
+    this._group = commandCollection.GetCommandListByCore("group")[0];
+  }
+
   public runAsync(_?: ISource) {}
 
   public async addWidgetAsync(widgetParam: IWidgetParam): Promise<void> {
     const widgetElement = document.createElement("basis");
-
     widgetElement.setAttribute(
       "core",
       `component.basispanel.${widgetParam.container}`
@@ -28,6 +37,6 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
     var optionsName = this.owner.storeAsGlobal(widgetParam);
     widgetElement.setAttribute("options", optionsName);
     this.container.appendChild(widgetElement);
-    await this.owner.processNodesAsync([widgetElement]);
+    await this._group.processNodesAsync([widgetElement]);
   }
 }
