@@ -27,16 +27,22 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
 
   public runAsync(_?: ISource) {}
 
-  public async addWidgetAsync(widgetParam: IWidgetParam): Promise<void> {
-    const widgetElement = document.createElement("basis");
-    widgetElement.setAttribute(
-      "core",
-      `component.basispanel.${widgetParam.container}`
-    );
-    widgetElement.setAttribute("run", "atclient");
-    var optionsName = this.owner.storeAsGlobal(widgetParam);
-    widgetElement.setAttribute("options", optionsName);
-    this.container.appendChild(widgetElement);
-    await this._group.processNodesAsync([widgetElement]);
+  public async addWidgetAsync(
+    ...widgetParamList: IWidgetParam[]
+  ): Promise<void> {
+    const elementList = new Array<Node>();
+    widgetParamList.forEach((widgetParam) => {
+      const widgetElement = document.createElement("basis");
+      widgetElement.setAttribute(
+        "core",
+        `component.basispanel.${widgetParam.container}`
+      );
+      widgetElement.setAttribute("run", "atclient");
+      var optionsName = this.owner.storeAsGlobal(widgetParam);
+      widgetElement.setAttribute("options", optionsName);
+      this.container.appendChild(widgetElement);
+      elementList.push(widgetElement);
+    });
+    await this._group.processNodesAsync(elementList);
   }
 }

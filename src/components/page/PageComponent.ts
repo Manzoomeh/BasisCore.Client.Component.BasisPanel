@@ -105,12 +105,11 @@ export default abstract class PageComponent
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
-      for (var y = 0; y < groupInfo.widgets.length; y++) {
-        const widgetInfo = groupInfo.widgets[y];
+      const widgetParamList = groupInfo.widgets.map((widgetInfo) => {
         widgets.push(widgetInfo.y + widgetInfo.h);
-        var options = { ...widgetInfo, ...{ page: this.loaderParam } };
-        group.addWidgetAsync(options);
-      }
+        return { ...widgetInfo, ...{ page: this.loaderParam } };
+      });
+      group.addWidgetAsync(...widgetParamList);
     }
 
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
