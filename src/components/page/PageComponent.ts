@@ -71,7 +71,6 @@ export default abstract class PageComponent
       ...widgetInfo,
       ...{ page: this.loaderParam },
     };
-    console.log(param);
   }
 
   public async addGroupAsync(

@@ -19,6 +19,7 @@
         "connection.web.demo": "/server/dbsource/demo",
         "basispanel.option": {
           rKey: "80841FB3-3405-41DE-A7B0-AAB795B39007",
+          avatar : "https://trust-login.com",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
@@ -124,7 +125,7 @@
       },
       repositories: {
         basispanel: "/basiscore.basispanel.component.js",
-        //"grid.grid": "http://localhost:8082/basiscore.grid.component.js",
+        "grid.grid": "http://localhost:8082/basiscore.grid.component.js",
       },
     };
 
@@ -145,8 +146,9 @@
     }
   </script>
   <!-- <script src="basiscore.js"></script> -->
-  <script src="http://localhost:3000/basiscore.js"></script>
-  <script src="http://localhost:3000/alasql.min.js"></script>
+
+  <script src="/bclib.js?v=4"></script>
+  <script src="/alasql.min.js"></script>
 </body>
 
 </html>

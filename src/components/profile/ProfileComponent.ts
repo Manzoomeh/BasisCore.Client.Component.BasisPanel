@@ -37,6 +37,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       urlFormatter(this.options.rKey),
       "GET"
     );
+    
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
@@ -77,8 +78,9 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     const fn = new Function(
       "rKey",
       "profile",
-      `return \`${`${this.options.baseUrl.profile}${this.options.method.userImage}`}\``
+      `return \`${`${this.options.avatar}${this.options.method.userImage}`}\``
     );
+      
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
       fn(this.options.rKey, this.profile);
   }
