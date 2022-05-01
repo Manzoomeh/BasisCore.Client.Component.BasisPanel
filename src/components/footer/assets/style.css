@@ -11,7 +11,9 @@ direction: rtl;
 [data-bc-bp-footer-wrapper]{
 	color: #898989;
 }
-
+[data-bc-bp-footer-container]{
+	width: 100%;
+}
 [data-bc-bp-footer] {
 	display: flex;
 	justify-content: center;

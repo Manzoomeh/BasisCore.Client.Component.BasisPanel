@@ -30,7 +30,7 @@ export default abstract class PageComponent
     const body = this.container.querySelector<HTMLElement>(
       "[data-bc-page-body]"
     );
-
+    
     body.addEventListener("dragenter", (e) => e.preventDefault());
     body.addEventListener("dragover", (e) => e.preventDefault());
     body.addEventListener("drop", (e) =>
@@ -47,7 +47,11 @@ export default abstract class PageComponent
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
     );
+   
+    
     this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
+    // localStorage.setItem("rkey" ,this.options.rKey  )
+    // localStorage.setItem("currentPage" , JSON.stringify(this.info)  )
     const body = this.container.querySelector("[data-bc-page-body]");
 
     if (this.info.content) {
@@ -110,9 +114,15 @@ export default abstract class PageComponent
       });
       group.addWidgetAsync(...widgetParamList);
     }
-
+    const windowHeight = window.innerHeight
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
-    (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+    if((cell * maxHeight) > windowHeight){
+      (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+    }
+    else{
+      (pageBody as HTMLElement).style.height = `${windowHeight - 195 }px`;
+    }
+    
   }
 }
