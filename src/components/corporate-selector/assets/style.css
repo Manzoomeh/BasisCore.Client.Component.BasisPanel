@@ -178,3 +178,16 @@
     font-size: 12px;
     margin-top: 13px;
   }
+  .active-corporate,.active-busuness{
+      border: 1px solid rgba(0, 75, 133, 1) !important;
+      background-color: #E4E7F4;
+      color: rgba(0, 75, 133, 1);;
+  }
+  .active-corporate span ,.active-corporate [data-bc-corporate-name],.active-busuness span , .active-busuness [data-bc-corporate-name] [data-bc-corporate-name]{
+    color: rgba(0, 75, 133, 1) !important;
+  }
+  .active-corporate [data-bc-corporate-list-icon],.active-busuness [data-bc-corporate-list-icon]{
+    border: 1px solid rgba(0, 75, 133, 1);
+    border-top: 0;
+    border-right: 0;
+  }

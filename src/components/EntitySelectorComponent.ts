@@ -39,20 +39,24 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
-      }
+       
+      } 
       const elStatus = this.element.closest("[data-bc-drop-down-container]");
-      const status = elStatus.getAttribute("data-status");
+      const status = elStatus.getAttribute("data-status");      
       if (status == "close") {
         elStatus.setAttribute("data-status", "open");
       } else {
         elStatus.setAttribute("data-status", "close");
-      }
+      }       
+         
+        
     });
 
     const msgElClick = this.element
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg]");
     msgElClick.addEventListener("click", async (e) => {
+  
       const msgElId = msgElClick.getAttribute("data-id");
       if (msgElId != "0") {
         this.owner.setSource(
@@ -61,8 +65,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         );
         this.signalToDisplayPage(parseInt(msgElId));
       }
+      
     });
-
+    
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
     return Promise.resolve();
   }
@@ -193,6 +198,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               this.signalToDisplayPage(id);
             }
           }
+          if(this.ownerType == "corporate"){
+            this.element.closest("[data-bc-main-list-container]").classList.add("active-corporate")
+           }
+           else if(this.ownerType == "business"){
+             this.element.closest("[data-bc-bp-main-header]").querySelector(".active-corporate").classList.remove("active-corporate")
+            this.element.closest("[data-bc-main-list-container]").classList.add("active-busuness")
+           }
           this.owner.setSource(this.getSourceId(), entity ?? {});
           if (this.ownerType == "corporate") {
             const businessMsgElement = this.element
@@ -264,7 +276,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       ownerUrl: this.getOwnerUrl(),
       rKey: this.options.rKey,
       pageMethod: this.options.method.page,
-    };
+    };    
     this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }
