@@ -1,19 +1,19 @@
 import layout from "./assets/layout.html";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { IUserDefineComponent, ISource } from "basiscore";
 import { DefaultSource, IDictionary } from "../../type-alias";
-import ISource from "../../basiscore/ISource";
 import "./assets/style.css";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 
 export default class ThemeComponent extends BasisPanelChildComponent {
   themes: IDictionary<string>;
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     var selector = this.container.querySelector<HTMLSelectElement>(
       "[data-bc-basispanel-theme-selector]"
     );
     Object.getOwnPropertyNames(this.themes).forEach((theme) => {
       selector.appendChild(new Option(theme, this.themes[theme]));
     });
+    return Promise.resolve();
   }
   public runAsync(source?: ISource) {}
   constructor(owner: IUserDefineComponent) {

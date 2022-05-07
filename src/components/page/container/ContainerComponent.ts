@@ -1,4 +1,4 @@
-import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import { IUserDefineComponent } from "basiscore";
 import layout from "./assets/layout.html";
 import PageComponent from "../PageComponent";
 import { PageType } from "../PageType";

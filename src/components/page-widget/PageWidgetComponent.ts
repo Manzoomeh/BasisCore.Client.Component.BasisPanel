@@ -1,4 +1,4 @@
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IWidgetParam from "./widget/IWidgetParam";
 

@@ -5,8 +5,7 @@ import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import ISource from "../../basiscore/ISource";
+import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 
@@ -21,11 +20,12 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     return this.loadDataAsync();
   }
 
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     this.container.addEventListener("click", (e) => {
       e.preventDefault();
       this.signalToDisplayMenu();
     });
+    return Promise.resolve();
   }
 
   public async loadDataAsync(): Promise<void> {

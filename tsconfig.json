@@ -1,8 +1,14 @@
 {
   "compileOnSave": true,
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "ES5",
-    "module": "ES2015"
+    "target": "ES2015",
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": false,
+    "declaration": true,
+    "outDir": "src/types"
   }
 }

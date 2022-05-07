@@ -1,4 +1,4 @@
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import EntitySelectorComponent from "../EntitySelectorComponent";
 import layout from "./assets/layout.html";

@@ -1,7 +1,9 @@
-import IDisposable from "../../basiscore/IDisposable";
-import ISource from "../../basiscore/ISource";
-import ISourceOptions from "../../basiscore/ISourceOptions";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import {
+  IDisposable,
+  ISource,
+  ISourceOptions,
+  IUserDefineComponent,
+} from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
 import "./assets/style.css";

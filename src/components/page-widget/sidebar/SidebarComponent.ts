@@ -1,8 +1,7 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../../HttpUtil";
-import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
-import ISource from "../../../basiscore/ISource";
+import { IUserDefineComponent, ISource } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,

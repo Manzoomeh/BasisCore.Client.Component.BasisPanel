@@ -1,21 +1,36 @@
 {
   "name": "basispanel",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Fundamental infrastructure for manage and present user created widget or component, based in BasisCore(TM) technology.",
+  "main": "dist/basiscore.basispanel.component.js",
+  "types": "dist/basiscore.basispanel.component.d.ts",
   "scripts": {
     "dev": "webpack serve --mode=development",
+    "ws": "node websocket-server/server.js",
+    "prepub": "if exist dist rd /s /q dist",
     "pub": "webpack --mode=production",
-    "ws": "node websocket-server/server.js"
+    "postpub": "dts-bundle-generator -o dist/basiscore.basispanel.component.d.ts src/ComponentLoader.ts"
   },
   "keywords": [
+    "BasisCore",
     "TypeScript",
     "ClientSide",
     "basispanel",
     "panel"
   ],
-  "author": "Manzomeh",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "Manzoomeh Negaran <info@manzoomeh.ir> (https://www.manzoomeh.ir)",
   "license": "ISC",
+  "homepage": "https://github.com/Manzoomeh/BasisCore.Client.Component.BasisPanel",
+  "bugs": {
+    "url": "https://github.com/Manzoomeh/BasisCore.Client.Component.BasisPanel/issues"
+  },
+  "contributors": [
+    "s.alireza qamsari <s.alireza@qamsari.ir> (https://www.linkedin.com/in/qamsari/)"
+  ],
+  "repository": "https://github.com/Manzoomeh/BasisCore.Client.Component.BasisPanel",
   "devDependencies": {
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.5.1",
@@ -26,5 +41,8 @@
     "webpack": "^5.64.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.5.0"
+  },
+  "dependencies": {
+    "basiscore": "^2.10.2"
   }
 }

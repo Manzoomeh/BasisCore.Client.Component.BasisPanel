@@ -1,5 +1,4 @@
-import ISource from "../../basiscore/ISource";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
@@ -7,13 +6,14 @@ import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
-  private pageType : string 
+  private pageType: string;
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-workspace-container");
   }
 
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.DISPLAY_PAGE]);
+    return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
@@ -24,7 +24,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         pageParam
       );
       let info = await HttpUtil.fetchDataAsync(url, "GET");
-      this.pageType = info["container"]
+      this.pageType = info["container"];
       this.displayPageAsync(pageParam);
     }
     return true;

@@ -1,6 +1,4 @@
-import IComponentManager from "../basiscore/IComponentManager";
-import ISource from "../basiscore/ISource";
-import IUserDefineComponent from "../basiscore/IUserDefineComponent";
+import { IComponentManager, ISource, IUserDefineComponent } from "basiscore";
 import IBasisPanelOptions from "./basispanel/IBasisPanelOptions";
 
 export default abstract class BasisPanelChildComponent
@@ -26,6 +24,6 @@ export default abstract class BasisPanelChildComponent
       null
     );
   }
-  public abstract initializeAsync(): void | Promise<void>;
+  public abstract initializeAsync(): Promise<void>;
   public abstract runAsync(source?: ISource): any | Promise<any>;
 }

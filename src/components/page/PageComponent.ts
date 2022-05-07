@@ -2,8 +2,7 @@ import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "./IPage";
 import IWidgetParam from "../page-widget/widget/IWidgetParam";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
-import ISource from "../../basiscore/ISource";
+import { IUserDefineComponent, ISource } from "basiscore";
 import HttpUtil from "../../HttpUtil";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import IPageInfo from "./IPageInfo";
@@ -89,8 +88,8 @@ export default abstract class PageComponent
       pageBody.appendChild(groupElement);
       const components = await this.owner.processNodesAsync([groupElement]);
       const groupContainer =
-        components.GetComponentList()[0] as IUserDefineComponent;
-      const group = groupContainer.manager as PageGroupComponent;
+        components.GetComponentList()[0] as any as IUserDefineComponent;
+      const group = groupContainer.manager as any as PageGroupComponent;
       this._groups.set(group.Name, group);
       return group;
     } catch (ex) {

@@ -1,9 +1,8 @@
 import PageComponent from "../PageComponent";
 import layout from "./assets/layout.html";
-import IUserDefineComponent from "../../../basiscore/IUserDefineComponent";
+import { IUserDefineComponent, ISource } from "basiscore";
 import HttpUtil from "../../../HttpUtil";
 import IPageInfo from "../IPageInfo";
-import ISource from "../../../basiscore/ISource";
 import "./assets/style.css";
 import { PageType } from "../PageType";
 

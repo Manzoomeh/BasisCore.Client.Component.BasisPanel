@@ -1,6 +1,4 @@
-import IDependencyContainer from "../../basiscore/IDependencyContainer";
-import ISource from "../../basiscore/ISource";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
@@ -26,8 +24,9 @@ export default class SchedulerComponent
       .registerInstance("scheduler", this);
   }
 
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.TASK_START]);
+    return Promise.resolve();
   }
 
   public runAsync(source?: ISource) {

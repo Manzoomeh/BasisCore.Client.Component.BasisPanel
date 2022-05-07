@@ -10,8 +10,6 @@ const notificationsHttpServer = require("./server/notifications");
 const externalHttpServer = require("./server/external");
 const dbsource = require("./server/db-source");
 
-//const router = require("./server/trust-login");
-
 module.exports = (env, options) => {
   return {
     entry: {
@@ -32,8 +30,23 @@ module.exports = (env, options) => {
         },
       },
     },
+    externals: {
+      "bclib/dist/bclib": {
+        root: "_",
+      },
+    },
     devServer: {
-      static: path.resolve(__dirname, "wwwroot"),
+      static: [
+        {
+          directory: path.resolve(__dirname, "wwwroot"),
+        },
+        {
+          directory: path.resolve(__dirname, "node_modules/alasql/dist"),
+        },
+        {
+          directory: path.resolve(__dirname, "node_modules/basiscore/dist"),
+        },
+      ],
       onBeforeSetupMiddleware: function (server) {
         server.app.use("/server/trust", trustHttpServer);
         server.app.use("/server/corporate", corporateHttpServer);

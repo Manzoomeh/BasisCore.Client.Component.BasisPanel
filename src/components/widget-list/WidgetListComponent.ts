@@ -1,8 +1,7 @@
 import layout from "./assets/layout.html";
 import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
-import ISource from "../../basiscore/ISource";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import { DefaultSource } from "../../type-alias";
 
@@ -36,8 +35,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       );
   }
 
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.WIDGET_CLOSED]);
+    return Promise.resolve();
   }
 
   public runAsync(source?: ISource) {

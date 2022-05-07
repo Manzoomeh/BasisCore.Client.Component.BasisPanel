@@ -1,6 +1,5 @@
-import IDisposable from "../../basiscore/IDisposable";
-import ISourceOptions from "../../basiscore/ISourceOptions";
-import { SourceId } from "../../basiscore/type-alias";
+import { IDisposable, ISourceOptions } from "basiscore";
+import { SourceId } from "basiscore";
 
 export default interface INotificationComponent {
   rKey: string;

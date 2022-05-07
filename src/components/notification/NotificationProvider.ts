@@ -2,10 +2,10 @@ import NotificationTab from "./NotificationTab";
 import INotificationComponent from "./INotificationComponent";
 import INotificationProviderOptions from "./options/INotificationProviderOptions";
 import { INotificationProvider } from "./INotificationProvider";
-import IDisposable from "../../basiscore/IDisposable";
-import ISourceOptions from "../../basiscore/ISourceOptions";
+import { IDisposable, ISourceOptions } from "basiscore"; //"bclib/dist/bclib";
+//import ISourceOptions from "basiscore";
 import HttpUtil from "../../HttpUtil";
-import ISource from "../../basiscore/ISource";
+//import ISource from "basiscore";
 
 export default class NotificationProvider implements INotificationProvider {
   readonly _owner: INotificationComponent;

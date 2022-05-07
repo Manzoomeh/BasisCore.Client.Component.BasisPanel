@@ -1,5 +1,4 @@
-import ISource from "../../basiscore/ISource";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
@@ -32,16 +31,15 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
   public async initializeAsync(): Promise<void> {
     await super.initializeAsync();
     this.owner.addTrigger([DefaultSource.CORPORATE_SOURCE]);
-    
   }
 
   public async runAsync(source?: ISource): Promise<any> {
     switch (source?.id) {
       case DefaultSource.CORPORATE_SOURCE: {
-        this.businessComponentFlag = true
+        this.businessComponentFlag = true;
         this.currentCorporate = source.rows[0];
         this.mustReload = true;
-        this.fillComboAsync()        
+        this.fillComboAsync();
         // if (this.cache.has(this.currentCorporate.id)) {
         //   await this.fillComboAsync();
         // }
@@ -63,5 +61,4 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     }
     return retVal;
   }
-  
 }

@@ -1,5 +1,4 @@
-import ISource from "../../basiscore/ISource";
-import IUserDefineComponent from "../../basiscore/IUserDefineComponent";
+import { ISource, IUserDefineComponent, IDependencyContainer } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
@@ -8,7 +7,6 @@ import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
-import IDependencyContainer from "../../basiscore/IDependencyContainer";
 import IPageLoader from "./IPageLoader";
 
 export default class MenuComponent
@@ -29,8 +27,9 @@ export default class MenuComponent
       .registerInstance("page_loader", this);
   }
 
-  public initializeAsync(): void | Promise<void> {
+  public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.SHOW_MENU]);
+    return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
