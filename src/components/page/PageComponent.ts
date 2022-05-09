@@ -1,6 +1,4 @@
-import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "./IPage";
-import IWidgetParam from "../page-widget/widget/IWidgetParam";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import { IUserDefineComponent, ISource } from "basiscore";
 import HttpUtil from "../../HttpUtil";
@@ -16,6 +14,7 @@ export default abstract class PageComponent
 {
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
+  public readonly widgetDropAreaContainer: HTMLElement;
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
@@ -26,14 +25,8 @@ export default abstract class PageComponent
   constructor(owner: IUserDefineComponent, layout: string, dataAttr: string) {
     super(owner, layout, dataAttr);
     this.owner.dc.registerInstance("page", this);
-    const body = this.container.querySelector<HTMLElement>(
-      "[data-bc-page-body]"
-    );
-    
-    body.addEventListener("dragenter", (e) => e.preventDefault());
-    body.addEventListener("dragover", (e) => e.preventDefault());
-    body.addEventListener("drop", (e) =>
-      this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")))
+    this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
+      "[data-bc-widget-drop-area-container]"
     );
   }
 
@@ -41,18 +34,12 @@ export default abstract class PageComponent
     this.loaderParam = JSON.parse(
       await this.owner.getAttributeValueAsync("params")
     );
-
     const url = HttpUtil.formatString(
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
     );
-   
-    
     this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
-    // localStorage.setItem("rkey" ,this.options.rKey  )
-    // localStorage.setItem("currentPage" , JSON.stringify(this.info)  )
     const body = this.container.querySelector("[data-bc-page-body]");
-
     if (this.info.content) {
       const range = new Range();
       range.setStart(body, 0);
@@ -67,13 +54,6 @@ export default abstract class PageComponent
       this._groupsAdded = true;
     }
     return true;
-  }
-
-  public tryAddingWidget(widgetInfo: IWidgetInfo) {
-    const param: IWidgetParam = {
-      ...widgetInfo,
-      ...{ page: this.loaderParam },
-    };
   }
 
   public async addGroupAsync(
@@ -113,15 +93,13 @@ export default abstract class PageComponent
       });
       group.addWidgetAsync(...widgetParamList);
     }
-    const windowHeight = window.innerHeight
+    const windowHeight = window.innerHeight;
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
-    if((cell * maxHeight) > windowHeight){
+    if (cell * maxHeight > windowHeight) {
       (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+    } else {
+      (pageBody as HTMLElement).style.height = `${windowHeight - 195}px`;
     }
-    else{
-      (pageBody as HTMLElement).style.height = `${windowHeight - 195 }px`;
-    }
-    
   }
 }

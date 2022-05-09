@@ -3,9 +3,11 @@ import { INotificationOptions } from "../notification/options/INotificationOptio
 
 export default interface IBasisPanelOptions {
   rKey: string;
-  avatar: string ;
+  avatar: string;
   baseUrl: IPanelPartUrlOptions;
   dataUrl: IUrlCollectionOption;
+  widgetListUrl: string;
+  addWidgetUrl: string;
   method: IPanelPartMethodOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;

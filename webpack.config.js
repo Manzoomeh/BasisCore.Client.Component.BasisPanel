@@ -8,7 +8,8 @@ const { router: activeManagerHttpServer } = require("./server/active-manager");
 const externalMenuHttpServer = require("./server/external-menu");
 const notificationsHttpServer = require("./server/notifications");
 const externalHttpServer = require("./server/external");
-const dbsource = require("./server/db-source");
+const dbSource = require("./server/db-source");
+const widgetList = require("./server/widget-list");
 
 module.exports = (env, options) => {
   return {
@@ -55,7 +56,8 @@ module.exports = (env, options) => {
         server.app.use("/server/external", externalMenuHttpServer);
         server.app.use("/server/notifications", notificationsHttpServer);
         server.app.use("/server/external", externalHttpServer);
-        server.app.use("/server/dbsource", dbsource);
+        server.app.use("/server/dbsource", dbSource);
+        server.app.use("/server/widget-list", widgetList);
       },
       open: true,
     },
