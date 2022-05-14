@@ -98,21 +98,15 @@ export default class MenuElementMaker {
     
     li.addEventListener("click", function (e) {     
       const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
-      openMenu.forEach((x ) => {
-       const openMenu = x as HTMLElement
-       openMenu.style.transform = ` scaleY(0)`;
-       openMenu.previousElementSibling.removeAttribute("data-bc-level-open");
-       openMenu.removeAttribute("data-bc-ul-level-open");
-     })
-      if (innerUl.getAttribute("data-bc-ul-level-open") === null) {
-        innerUl.style.transform = ` scaleY(1)`;
-        innerUl.setAttribute("data-bc-ul-level-open", "");
-        innerUl.setAttribute("sys-submenu-parent","")
-        content.setAttribute("data-bc-level-open", "");
-      } else {
+      if (innerUl.getAttribute("data-bc-ul-level-open") == null) {       
+        innerUl.style.transform = `scaleY(1)`;
+        innerUl.setAttribute("data-bc-ul-level-open", "1");
+        content.setAttribute("data-bc-level-open", "");      
+      } 
+      else {
         innerUl.style.transform = ` scaleY(0)`;
         innerUl.removeAttribute("data-bc-ul-level-open");
-        content.removeAttribute("data-bc-level-open");
+        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
       
       }
     });

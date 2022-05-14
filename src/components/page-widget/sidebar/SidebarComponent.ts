@@ -68,6 +68,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     const content = document.createElement("span");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
+    content.setAttribute("sys-text","")
     div.appendChild(content);
     const innerUl = document.createElement("div");
     innerUl.setAttribute("data-bc-sidebar-levels", "secondLevel");
