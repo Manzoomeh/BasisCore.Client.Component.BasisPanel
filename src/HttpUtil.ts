@@ -1,4 +1,5 @@
-import { IDictionary } from "./type-alias";
+import { IDictionary, IResponseCheckRkey } from "./type-alias";
+import { ICheckRkeyOptions } from "./components/basispanel/IBasisPanelOptions";
 
 export default class HttpUtil {
   static async fetchStringAsync(
@@ -67,4 +68,19 @@ export default class HttpUtil {
     const formatter = new Function(...paraNameList, `return \`${string}\``);
     return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
   }
+
+  public static async isAuthenticate(
+    rKey: string,
+    options: ICheckRkeyOptions,
+  ): Promise<boolean> {
+    const url = HttpUtil.formatString(options.url, {
+      rKey: rKey,
+    });
+    const result = await HttpUtil.sendFormData<IResponseCheckRkey>(
+      url,
+      "GET"
+    );
+    return result.checked;
+  }
+
 }

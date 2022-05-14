@@ -9,6 +9,7 @@ export default interface IBasisPanelOptions {
   widgetListUrl: string;
   addWidgetUrl: string;
   method: IPanelPartMethodOptions;
+  checkRkey: ICheckRkeyOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;
 }
@@ -28,4 +29,10 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
+}
+
+export interface ICheckRkeyOptions {
+  url: string;
+  cookieName?: string;
+  defaultRedirectUrl: string;
 }

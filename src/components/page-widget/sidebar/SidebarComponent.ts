@@ -114,15 +114,35 @@ export default class SidebarComponent extends PageWidgetComponent {
     return div;
   }
 
-  private onSidebarItemClick(pageId: string, target: EventTarget) {
-    const newParam: IPageLoaderParam = {
-      pageId: pageId,
-      owner: this.param.page.owner,
-      ownerId: this.param.page.ownerId,
-      ownerUrl: this.param.page.ownerUrl,
-      rKey: this.param.page.rKey,
-      pageMethod: this.param.page.pageMethod,
-    };
-    $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  private async onSidebarItemClick(pageId: string, target: EventTarget) {
+    const isAuthenticate = await HttpUtil.isAuthenticate(
+      this.options.rKey,
+      this.options.checkRkey
+    )
+    const cookieName = this.options.checkRkey.cookieName;
+    if (isAuthenticate == false) {
+      if (cookieName && cookieName != "") {
+        const cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim().split("=")[0];
+          if (cookie == cookieName) {
+            document.cookie =
+              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            break;
+          }
+        }
+      }
+      window.location.href = this.options.checkRkey.defaultRedirectUrl;
+    } else {
+      const newParam: IPageLoaderParam = {
+        pageId: pageId,
+        owner: this.param.page.owner,
+        ownerId: this.param.page.ownerId,
+        ownerUrl: this.param.page.ownerUrl,
+        rKey: this.param.page.rKey,
+        pageMethod: this.param.page.pageMethod,
+      };
+      $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    }
   }
 }

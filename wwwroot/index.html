@@ -40,6 +40,11 @@
             sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
             widget: "/${rKey}/widget/${widgetId}",
           },
+          checkRkey: {
+            url: "/server/trust/checkrkey/${rKey}",
+            cookieName: "rkey",
+            defaultRedirectUrl: "https://www.google.com",
+          },
           logout: {
             url: "/server/trust/${rKey}/logout",
             cookieName: "rkey",
