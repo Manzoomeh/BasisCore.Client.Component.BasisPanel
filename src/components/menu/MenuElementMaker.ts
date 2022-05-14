@@ -107,8 +107,8 @@ export default class MenuElementMaker {
       if (innerUl.getAttribute("data-bc-ul-level-open") === null) {
         innerUl.style.transform = ` scaleY(1)`;
         innerUl.setAttribute("data-bc-ul-level-open", "");
+        innerUl.setAttribute("sys-submenu-parent","")
         content.setAttribute("data-bc-level-open", "");
-      
       } else {
         innerUl.style.transform = ` scaleY(0)`;
         innerUl.removeAttribute("data-bc-ul-level-open");
@@ -126,6 +126,7 @@ export default class MenuElementMaker {
   ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
+    content.setAttribute("sys-menu-link","")
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
@@ -151,7 +152,9 @@ export default class MenuElementMaker {
     const li = document.createElement("li");
     const ul = document.createElement("ul");
     li.setAttribute("data-bc-bp-menu-external-title","")
+    li.setAttribute("sys-menu-external","")
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
+
     li.appendChild(ul);
     const url = HttpUtil.formatString(
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
@@ -183,7 +186,9 @@ export default class MenuElementMaker {
     };
     const li = document.createElement("li");
     const content = document.createElement("a");
+    content.setAttribute("sys-menu-link","")
     li.setAttribute("data-bc-bp-menu-external-title","")
+    li.setAttribute("sys-menu-external","")
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");

@@ -10,23 +10,37 @@ export default class ThemeComponent extends BasisPanelChildComponent {
     var selector = this.container.querySelector<HTMLSelectElement>(
       "[data-bc-basispanel-theme-selector]"
     );
-    Object.getOwnPropertyNames(this.themes).forEach((theme) => {
-      selector.appendChild(new Option(theme, this.themes[theme]));
-    });
+    // Object.getOwnPropertyNames(this.themes).forEach((theme) => {
+    //   selector.appendChild(new Option(theme, this.themes[theme]));
+    // });
     return Promise.resolve();
   }
   public runAsync(source?: ISource) {}
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-theme-container");
-    this.themes = {
-      dark: "assets/themes/dark-theme.css",
-      light: "assets/themes/light-theme.css",
+    this.themes = {      
+      light: "assets/css/light.css",
+      dark: "assets/css/dark.css"
     };
+    console.log("theme is " ,this.options.themeUrl.light)
+    var style = document.querySelector("link[data-bc-basispanel-theme]");
+    style = document.createElement("link");
+        style.setAttribute("rel", "stylesheet");
+        style.setAttribute("type", "text/css");
+        style.setAttribute("data-bc-basispanel-theme", "light");
+        style.setAttribute("href", this.options.themeUrl.light);
+        document.body.appendChild(style);
     this.container
       .querySelector("[data-bc-basispanel-theme-selector]")
       .addEventListener("change", (e) => {
-        const op = e.target as HTMLSelectElement;
-        this.setTheme(op.selectedOptions[0].text);
+        const op = e.target as HTMLInputElement;
+        if(op.checked){
+          this.setTheme("dark");
+        }
+        else{
+          this.setTheme("light");
+        }
+        
       });
   }
 
@@ -40,7 +54,7 @@ export default class ThemeComponent extends BasisPanelChildComponent {
         style.setAttribute("rel", "stylesheet");
         style.setAttribute("type", "text/css");
         style.setAttribute("data-bc-basispanel-theme", theme);
-        style.setAttribute("href", path);
+        style.setAttribute("href", this.options.themeUrl.light);
         document.body.appendChild(style);
         ret_val = true;
       } else {

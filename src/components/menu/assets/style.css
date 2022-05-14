@@ -1,6 +1,6 @@
 [data-bc-bp-menu-container] {
 	clear: both;
-	border-top: 0.5px solid #e1e1e1;
+	
 }
 
 [data-bc-bp-menu-wrapper] {
@@ -32,15 +32,20 @@
 [data-bc-menu] > li:hover{
 	border-bottom:  0.7px solid #004B85;
 }
+[data-bc-menu] > ul > li:hover a,[data-bc-menu] > li:hover  > a{
+	color:#004B85;
+}
 [data-bc-bp-menu-external-single-node]{
 	height: 100%;
 }
 [data-bc-menu] li a {
-	color: #000;
 	padding: 0 15px;
 	cursor: pointer;
 }
-
+[data-bc-bp-menu-wrapper=""]{
+	border-top: 0.5px solid #e1e1e1;
+	background-color: var(--white);
+}
 [data-bc-bp-submenu] {
 	padding: 0;
 	position: absolute;

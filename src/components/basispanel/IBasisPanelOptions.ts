@@ -5,6 +5,7 @@ export default interface IBasisPanelOptions {
   rKey: string;
   avatar: string ;
   baseUrl: IPanelPartUrlOptions;
+  themeUrl: IUrlTheme,
   dataUrl: IUrlCollectionOption;
   method: IPanelPartMethodOptions;
   logout: ILogoutOptions;
@@ -15,6 +16,11 @@ interface IUrlCollectionOption {
   profile: string;
   corporate: string;
   business: string;
+}
+
+interface IUrlTheme {
+  light: string;
+  dark: string
 }
 interface IPanelPartUrlOptions extends IUrlCollectionOption {
   active: string;

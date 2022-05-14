@@ -5,7 +5,7 @@
 <!-- <button id="btn">Load user info</button> -->
 
 <form id="file-form" action="#">
-  <input class="file-input" type="file" id="file" name="file" multiple="multiple">
+  <input class="file-input" type="file" id="file-form" name="file" multiple="multiple">
   <i class="fas fa-cloud-upload-alt"></i>
   <p>Browse File to Upload</p>
 </form>
@@ -24,6 +24,7 @@
     paging: 10
   };
 </script> -->
+<basis core="component.core.exposer" run="atclient" component="pagesList_component"></basis>
 <script>
   document.getElementById("file-form").addEventListener("change", e => {
     let data = new FormData(e.currentTarget);

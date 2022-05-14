@@ -14,7 +14,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
-    this.displayWidgetList();
+    // this.displayWidgetList();
     this._page.container
       .querySelectorAll("[data-bc-page-widget-list-dlg-btn-close]")
       .forEach((btn) =>

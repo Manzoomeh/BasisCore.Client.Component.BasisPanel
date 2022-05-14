@@ -6,6 +6,7 @@
 [data-bc-bp-main-header] {
   background-color: #fff;
   padding: 20px;
+  position: relative;
 }
 
 [data-bc-bp-logo] {
