@@ -1,9 +1,14 @@
 import layout from "./assets/layout.html";
+import dropAreaLayout from "./assets/drop-area-layout.html";
+import widgetItemLayout from "./assets/widget-item-layout.html";
+import "./assets/style.css";
 import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
 import { ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import { DefaultSource } from "../../type-alias";
+import HttpUtil from "../../HttpUtil";
+import IWidgetListItemInfo from "../page-widget/widget/IWidgetListItemInfo";
 
 export default class WidgetListComponent extends BasisPanelChildComponent {
   private readonly _page: IPage;
@@ -14,17 +19,23 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
-    // this.displayWidgetList();
+    this._page.widgetDropAreaContainer.innerHTML = dropAreaLayout;
     this._page.container
-      .querySelectorAll("[data-bc-page-widget-list-dlg-btn-close]")
+      .querySelectorAll("[data-bc-btn-close]")
       .forEach((btn) =>
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           this.hideList();
         })
       );
+    this._page.container
+      .querySelector("[data-bc-page-widget-save-setting]")
+      .addEventListener("click", async (e) => {
+        e.preventDefault();
+        await this.sendSelectedWidgetToServerAsync();
+        this.hideList();
+      });
 
-    this.fillWidgetList();
     this._page.container
       .querySelectorAll("[data-bc-page-widget-list-dlg-btn-add]")
       .forEach((btn) =>
@@ -33,6 +44,54 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           this.displayWidgetList();
         })
       );
+
+    this._page.widgetDropAreaContainer.addEventListener("dragenter", (e) =>
+      e.preventDefault()
+    );
+    this._page.widgetDropAreaContainer.addEventListener("dragover", (e) =>
+      e.preventDefault()
+    );
+    this._page.widgetDropAreaContainer.addEventListener("drop", (e) =>
+      this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")))
+    );
+  }
+
+  private async sendSelectedWidgetToServerAsync(): Promise<void> {
+    const addedWidgetList = Array.from(
+      this._page.widgetDropAreaContainer.querySelectorAll("[data-bc-widget-id]")
+    ).map((x) => x.getAttribute("data-bc-widget-id"));
+    if (addedWidgetList.length > 0) {
+      const url = HttpUtil.formatString(this.options.widgetListUrl, {
+        rKey: this.options.rKey,
+        pageId: this._page.loaderParam.pageId,
+      });
+      const result = await HttpUtil.fetchDataAsync(url, "POST", {
+        widgetId: addedWidgetList,
+      });
+    }
+  }
+
+  public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
+    const container = this._page.widgetDropAreaContainer.querySelector(
+      "[data-bc-widget-drop-area]"
+    );
+    let element = container.querySelector<HTMLElement>(
+      `[data-bc-widget-id='${widgetInfo.id}']`
+    );
+
+    if (!element) {
+      const layout = widgetItemLayout
+        .replace("@title", widgetInfo.title)
+        .replace("@id", widgetInfo.id.toString());
+      element = this.owner.toHTMLElement(layout);
+      container.appendChild(element);
+      element
+        .querySelector("[data-bc-btn-remove]")
+        .addEventListener("click", (x) => {
+          x.preventDefault();
+          element.remove();
+        });
+    }
   }
 
   public initializeAsync(): Promise<void> {
@@ -42,19 +101,23 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
   public runAsync(source?: ISource) {
     if (source?.id === DefaultSource.WIDGET_CLOSED) {
-      this.widgetRemoved(source.rows[0]);
     }
   }
 
-  private fillWidgetList() {
-    const groupList = this._page.info.groups;
+  private async fillWidgetListAsync(): Promise<void> {
     const disableWidgets = document.querySelector(
       "[data-bc-page-widget-disableList]"
     );
+    disableWidgets.innerHTML = "";
 
-    const widgetsList: IWidgetInfo[] = new Array<IWidgetInfo>();
-    groupList.forEach((group) => widgetsList.push(...group.widgets));
+    const url = HttpUtil.formatString(this.options.widgetListUrl, {
+      rKey: this.options.rKey,
+      pageId: this._page.loaderParam.pageId,
+    });
 
+    const widgetsList = await HttpUtil.fetchDataAsync<
+      Array<IWidgetListItemInfo>
+    >(url, "GET");
     widgetsList.forEach((widget) => {
       const widgetElement = document.createElement("div");
       widgetElement.setAttribute("draggable", "true");
@@ -65,7 +128,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       disableWidgets.appendChild(widgetElement);
       widgetElement.addEventListener("dblclick", (e) => {
         e.preventDefault();
-        this._page.tryAddingWidget(widget);
+        this.tryAddingWidget(widget);
       });
     });
   }
@@ -75,115 +138,19 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   private hideList() {
+    this._page.widgetDropAreaContainer.querySelector(
+      "[data-bc-widget-drop-area]"
+    ).innerHTML = "";
     this._widgetDialog.setAttribute("data-bc-display-none", "");
+    this._page.widgetDropAreaContainer.setAttribute("data-bc-display-none", "");
   }
 
   private showList() {
-    this._widgetDialog.removeAttribute("data-bc-display-none");
-  }
-
-  private addWidget(widgetInfo: IWidgetInfo) {
-    this._page.tryAddingWidget(widgetInfo);
-    // const element = this._items.get(widgetInfo.id);
-    // element.setAttribute("data-bc-display-none", "");
-  }
-
-  public widgetRemoved(widgetInfo: IWidgetInfo) {
-    // const element = this._items.get(widgetInfo.id);
-    // element.removeAttribute("data-bc-display-none");
-  }
-}
-
-/*
-export default class WidgetListComponent {
-  private _items: Map<number, Element> = new Map<number, Element>();
-  private _widgetDialog: Element;
-  private owner: IPage;
-  constructor(owner: IPage) {
-    this.owner = owner;
-    this._widgetDialog = owner.container.querySelector(
-      "[data-bc-page-widget-dlg]"
-    );
-    this.hideList();
-    owner.container
-      .querySelectorAll("[data-bc-page-widget-dlg-btn-close]")
-      .forEach((btn) =>
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          this.hideList();
-        })
+    this.fillWidgetListAsync().then(() => {
+      this._widgetDialog.removeAttribute("data-bc-display-none");
+      this._page.widgetDropAreaContainer.removeAttribute(
+        "data-bc-display-none"
       );
-
-    this.fillWidgetList(owner.info.groups);
-    owner.container
-      .querySelectorAll("[data-bc-page-widget-dlg-btn-add]")
-      .forEach((btn) =>
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          this.displayWidgetList();
-        })
-      );
-  }
-
-  // private fillWidgetList(widgetList: Array<IWidgetInfo>) {
-  //   const disableWidgets = document.querySelector("[data-bc-page-widget-disableList]");
-  //   widgetList.forEach((widget) => {
-  //     const div = document.createElement("div");
-  //     div.appendChild(document.createTextNode(widget.title));
-  //     disableWidgets.appendChild(div);
-  //     this._items.set(widget.id, div);
-  //     div.addEventListener("click", (e) => {
-  //       e.preventDefault();
-  //       this.addWidget(widget);
-  //     });
-  //   });
-  // }
-
-  private fillWidgetList(groupList: Array<IPageGroupInfo>) {
-    const disableWidgets = document.querySelector(
-      "[data-bc-page-widget-disableList]"
-    );
-
-    groupList.forEach((group) => {
-      const groupLi = document.createElement("li");
-      disableWidgets.appendChild(groupLi);
-      groupLi.appendChild(document.createTextNode(group.groupName));
-      const groupUl = document.createElement("ul");
-      groupLi.appendChild(groupUl);
-      group.widgets.forEach((widget) => {
-        const li = document.createElement("li");
-        li.appendChild(document.createTextNode(widget.title));
-        groupUl.appendChild(li);
-        li.addEventListener("click", (e) => {
-          e.preventDefault();
-          console.log(widget);
-        });
-      });
     });
   }
-
-  private displayWidgetList() {
-    this.showList();
-  }
-
-  private hideList() {
-    this._widgetDialog.setAttribute("data-bc-display-none", "");
-  }
-
-  private showList() {
-    this._widgetDialog.removeAttribute("data-bc-display-none");
-  }
-
-  private addWidget(widgetInfo: IWidgetInfo) {
-    this.owner.tryAddingWidget(widgetInfo);
-    const element = this._items.get(widgetInfo.id);
-    element.setAttribute("data-bc-display-none", "");
-  }
-
-  public widgetRemoved(widgetInfo: IWidgetInfo) {
-    const element = this._items.get(widgetInfo.id);
-    element.removeAttribute("data-bc-display-none");
-  }
 }
-
-*/

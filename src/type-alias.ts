@@ -29,3 +29,7 @@ export interface ILoaderParam {
   ownerUrl: string;
   rKey: string;
 }
+
+export interface IResponseCheckRkey {
+  checked: boolean;
+}

@@ -268,16 +268,36 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     return menuParam;
   }
 
-  private signalToDisplayPage(id: Number) {
-    const newParam: IPageLoaderParam = {
-      pageId: "default",
-      owner: this.ownerType,
-      ownerId: id.toString(),
-      ownerUrl: this.getOwnerUrl(),
-      rKey: this.options.rKey,
-      pageMethod: this.options.method.page,
-    };    
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  private async signalToDisplayPage(id: Number) {
+    const isAuthenticate = await HttpUtil.isAuthenticate(
+      this.options.rKey,
+      this.options.checkRkey
+    )
+    const cookieName = this.options.checkRkey.cookieName;
+    if (isAuthenticate == false) {
+      if (cookieName && cookieName != "") {
+        const cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim().split("=")[0];
+          if (cookie == cookieName) {
+            document.cookie =
+              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            break;
+          }
+        }
+      }
+      window.location.href = this.options.checkRkey.defaultRedirectUrl;
+    } else {
+      const newParam: IPageLoaderParam = {
+        pageId: "default",
+        owner: this.ownerType,
+        ownerId: id.toString(),
+        ownerUrl: this.getOwnerUrl(),
+        rKey: this.options.rKey,
+        pageMethod: this.options.method.page,
+      };    
+      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    }
   }
 }
 

@@ -145,4 +145,9 @@ router.get("/:rKey/logout", function (req, res) {
   res.json(result);
 });
 
+router.get("/checkrkey/:rKey", function (req, res) {
+  const result = { checked: true };
+  res.json(result);
+});
+
 module.exports = router;

@@ -3,11 +3,14 @@ import { INotificationOptions } from "../notification/options/INotificationOptio
 
 export default interface IBasisPanelOptions {
   rKey: string;
-  avatar: string ;
+  avatar: string;
   baseUrl: IPanelPartUrlOptions;
   themeUrl: IUrlTheme,
   dataUrl: IUrlCollectionOption;
+  widgetListUrl: string;
+  addWidgetUrl: string;
   method: IPanelPartMethodOptions;
+  checkRkey: ICheckRkeyOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;
 }
@@ -32,4 +35,10 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
+}
+
+export interface ICheckRkeyOptions {
+  url: string;
+  cookieName?: string;
+  defaultRedirectUrl: string;
 }

@@ -8,6 +8,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
+import HttpUtil from "../../HttpUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -50,36 +51,76 @@ export default class MenuComponent
     }
   }
 
-  private onMenuItemClick(
+  private async onMenuItemClick(
     pageId: string,
     param: IMenuLoaderParam,
     target: EventTarget
   ) {
-    const newParam: IPageLoaderParam = {
-      pageId: pageId,
-      owner: param.owner,
-      ownerId: param.ownerId,
-      ownerUrl: param.ownerUrl,
-      rKey: param.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-  }
-
-  public tryLoadPage(pageId: string, args?: any): boolean {
-    var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
-    if (source) {
-      const param = source.rows[0] as IPageLoaderParam;
+    const isAuthenticate = await HttpUtil.isAuthenticate(
+      this.options.rKey,
+      this.options.checkRkey
+    )
+    const cookieName = this.options.checkRkey.cookieName;
+    if (isAuthenticate == false) {
+      if (cookieName && cookieName != "") {
+        const cookies = document.cookie.split(";");
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim().split("=")[0];
+          if (cookie == cookieName) {
+            document.cookie =
+              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            break;
+          }
+        }
+      }
+      window.location.href = this.options.checkRkey.defaultRedirectUrl;
+    } else {
       const newParam: IPageLoaderParam = {
         pageId: pageId,
         owner: param.owner,
         ownerId: param.ownerId,
         ownerUrl: param.ownerUrl,
         rKey: param.rKey,
-        pageMethod: param.pageMethod,
-        arguments: args,
+        pageMethod: this.options.method.page,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    }
+  }
+
+  public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
+    var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
+    if (source) {
+      const isAuthenticate = await HttpUtil.isAuthenticate(
+        this.options.rKey,
+        this.options.checkRkey
+      )
+      const cookieName = this.options.checkRkey.cookieName;
+      if (isAuthenticate == false) {
+        if (cookieName && cookieName != "") {
+          const cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim().split("=")[0];
+            if (cookie == cookieName) {
+              document.cookie =
+                cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+              break;
+            }
+          }
+        }
+        window.location.href = this.options.checkRkey.defaultRedirectUrl;
+      } else {
+        const param = source.rows[0] as IPageLoaderParam;
+        const newParam: IPageLoaderParam = {
+          pageId: pageId,
+          owner: param.owner,
+          ownerId: param.ownerId,
+          ownerUrl: param.ownerUrl,
+          rKey: param.rKey,
+          pageMethod: param.pageMethod,
+          arguments: args,
+        };
+        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+      }
     }
     return source != null;
   }

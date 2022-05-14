@@ -20,6 +20,8 @@
         "basispanel.option": {
           rKey: "80841FB3-3405-41DE-A7B0-AAB795B39007",
           avatar: "https://trust-login.com",
+          widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
+          addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
@@ -41,6 +43,11 @@
             page: "/${rKey}/page/${pageId}",
             sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
             widget: "/${rKey}/widget/${widgetId}",
+          },
+          checkRkey: {
+            url: "/server/trust/checkrkey/${rKey}",
+            cookieName: "rkey",
+            defaultRedirectUrl: "https://www.google.com",
           },
           logout: {
             url: "/server/trust/${rKey}/logout",
