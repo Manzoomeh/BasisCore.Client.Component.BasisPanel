@@ -24,10 +24,12 @@ direction: rtl;
 }
 [data-bc-footer-socials]{
 	display: flex;
+	direction: ltr;
 }
 [data-bc-footer-socials] div{
 	margin-right: 15px;
 	cursor: pointer;
+	display: flex;
 }
 [data-bc-bp-footer] div{
 	direction: ltr;

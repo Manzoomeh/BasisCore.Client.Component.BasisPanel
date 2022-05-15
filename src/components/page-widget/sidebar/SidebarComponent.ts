@@ -103,10 +103,12 @@ export default class SidebarComponent extends PageWidgetComponent {
     div.setAttribute("data-bc-sidebar-items", "");
     if (node.pid === this.param.page.pageId) {
       div.setAttribute("data-bc-sidebar-active", "");
+      div.setAttribute("sys-inherit","")
     }
     const content = document.createElement("span");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
+    content.setAttribute("sys-text","")
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onSidebarItemClick(node.pid, e.target);

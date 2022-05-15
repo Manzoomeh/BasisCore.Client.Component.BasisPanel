@@ -19,8 +19,8 @@ export default class ThemeComponent extends BasisPanelChildComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-theme-container");
     this.themes = {      
-      light: "asset/css/light.css",
-      dark: "asset/css/dark.css"
+      light: this.options.themeUrl.light,
+      dark: this.options.themeUrl.dark
     };
     
     var style = document.querySelector("link[data-bc-basispanel-theme]");
