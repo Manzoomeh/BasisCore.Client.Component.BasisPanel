@@ -1,12 +1,14 @@
 {
   "name": "basispanel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fundamental infrastructure for manage and present user created widget or component, based in BasisCore(TM) technology.",
   "main": "dist/basiscore.basispanel.component.js",
   "types": "dist/basiscore.basispanel.component.d.ts",
   "scripts": {
-    "dev": "webpack serve --mode=development",
     "ws": "node websocket-server/server.js",
+    "dev": "webpack serve --mode=development",
+    "rel": "webpack --mode=production",
+    "prerel": "if exist dist rd /s /q dist",
     "prepub": "if exist dist rd /s /q dist",
     "pub": "webpack --mode=production",
     "postpub": "dts-bundle-generator -o dist/basiscore.basispanel.component.d.ts src/ComponentLoader.ts"

@@ -32,7 +32,7 @@ module.exports = (env, options) => {
       },
     },
     externals: {
-      "bclib/dist/bclib": {
+      basiscore: {
         root: "_",
       },
     },
