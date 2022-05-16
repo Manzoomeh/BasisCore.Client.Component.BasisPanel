@@ -68,7 +68,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     const content = document.createElement("span");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
-    content.setAttribute("sys-text","")
+    content.setAttribute("data-sys-text","")
     div.appendChild(content);
     const innerUl = document.createElement("div");
     innerUl.setAttribute("data-bc-sidebar-levels", "secondLevel");
@@ -103,12 +103,12 @@ export default class SidebarComponent extends PageWidgetComponent {
     div.setAttribute("data-bc-sidebar-items", "");
     if (node.pid === this.param.page.pageId) {
       div.setAttribute("data-bc-sidebar-active", "");
-      div.setAttribute("sys-inherit","")
+      div.setAttribute("data-sys-inherit","")
     }
     const content = document.createElement("span");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
-    content.setAttribute("sys-text","")
+    content.setAttribute("data-sys-text","")
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onSidebarItemClick(node.pid, e.target);

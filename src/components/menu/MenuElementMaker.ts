@@ -120,7 +120,7 @@ export default class MenuElementMaker {
   ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
-    content.setAttribute("sys-menu-link","")
+    content.setAttribute("data-sys-menu-link","")
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
@@ -146,7 +146,7 @@ export default class MenuElementMaker {
     const li = document.createElement("li");
     const ul = document.createElement("ul");
     li.setAttribute("data-bc-bp-menu-external-title","")
-    li.setAttribute("sys-menu-external","")
+    li.setAttribute("data-sys-menu-external","")
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
 
     li.appendChild(ul);
@@ -180,9 +180,9 @@ export default class MenuElementMaker {
     };
     const li = document.createElement("li");
     const content = document.createElement("a");
-    content.setAttribute("sys-menu-link","")
+    content.setAttribute("data-sys-menu-link","")
     li.setAttribute("data-bc-bp-menu-external-title","")
-    li.setAttribute("sys-menu-external","")
+    li.setAttribute("data-sys-menu-external","")
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
     const ul = document.createElement("ul");
