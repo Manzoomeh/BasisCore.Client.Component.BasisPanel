@@ -1,6 +1,12 @@
-import ITaskOptions from "./ITaskOptions";
+import ITaskOptions, { IReportCallback } from "./ITaskOptions";
 
 export default interface IScheduler {
-  startTask(taskOptions: ITaskOptions): string;
-  startPost(data: FormData, url: string, title: string): string;
+  startTask(taskOptions: ITaskOptions): void;
+  startPost(
+    data: FormData,
+    url: string,
+    title: string,
+    callback?: IReportCallback,
+    cancelable?: boolean
+  ): ITaskOptions;
 }

@@ -26,15 +26,16 @@
 </script> -->
 <basis core="component.core.exposer" run="atclient" component="pagesList_component"></basis>
 <script>
-  document.getElementById("file-form").addEventListener("change", e => {
+  document.getElementById("file-form").addEventListener("change", (e) => {
     let data = new FormData(e.currentTarget);
     console.log(data);
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
-    console.log(scheduler)
-    scheduler.startPost(data, "/app", "Demo-upload");
+    console.log(scheduler);
+    const x = scheduler.startPost(data, "/app", "Demo-upload", (x) => {
+      console.log(x.percent, x);
+    });
+    x.task.then((y) => console.log(y));
   });
-
-
 
   // if (typeof window.DemoComponent === "undefined") {
   //   class _DemoComponent {

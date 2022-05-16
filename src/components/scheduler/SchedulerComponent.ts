@@ -4,7 +4,7 @@ import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import IScheduler from "./IScheduler";
-import ITaskOptions from "./ITaskOptions";
+import ITaskOptions, { IReportCallback } from "./ITaskOptions";
 import PostTaskOptions from "./PostTaskOptions";
 import TaskProcess from "./TaskProcess";
 
@@ -41,18 +41,29 @@ export default class SchedulerComponent
     this.processList.delete(key);
   }
 
-  public startTask(taskOptions: ITaskOptions): string {
-    let key: string = null;
+  public startTask(taskOptions: ITaskOptions): void {
     if (taskOptions.task) {
-      key = this.owner.getRandomName("task");
-      const process = new TaskProcess(this, taskOptions, key);
-      this.processList.set(key, process);
+      taskOptions.key = this.owner.getRandomName("task");
+      const process = new TaskProcess(this, taskOptions, taskOptions.key);
+      this.processList.set(taskOptions.key, process);
     }
-    return key;
   }
 
-  public startPost(data: FormData, url: string, title: string): string {
-    const taskOptions = new PostTaskOptions(data, url, title);
-    return this.startTask(taskOptions);
+  public startPost(
+    data: FormData,
+    url: string,
+    title: string,
+    callback?: IReportCallback,
+    cancelable?: boolean
+  ): ITaskOptions {
+    const taskOptions = new PostTaskOptions(
+      data,
+      url,
+      title,
+      callback,
+      cancelable
+    );
+    this.startTask(taskOptions);
+    return taskOptions;
   }
 }

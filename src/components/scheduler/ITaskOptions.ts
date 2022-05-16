@@ -1,4 +1,5 @@
 export default interface ITaskOptions {
+  key?: string;
   container?: Element;
   title?: string;
   type?: TaskType;
