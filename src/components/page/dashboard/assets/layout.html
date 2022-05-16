@@ -4,18 +4,25 @@
 </div>
 <div clear=""></div>
 <div data-bc-dashboard-widgets>
+    
     <basis core="print" run="atclient" datamembername="db.dashboard_inactive_widget">
         <layout>
             <script type="text/template">
+                
                 <div data-bc-page-dashboard-disablelist="">
+                    <div data-sys-btn-info="">با کشیدن و رها کردن ، ویجت جدید را در داشبورد خود جایگذاری کنید.</div>
+                    <div data-bc-page-widget-dashboard-wrapper="">
                     @child
+                    </div>
                 </div>
             </script>
         </layout>
         <face>
             <script type="text/template">
 
-                <div>@title@</div>
+                <div data-bc-page-widget-dashboard="">@title@
+                    <img src="asset/images/no_icon.png"  />
+                </div>
             
             </script>
         </face>

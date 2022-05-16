@@ -7,9 +7,10 @@ import { DefaultSource } from "../../../type-alias";
 import ITaskOptions from "../../scheduler/ITaskOptions";
 import PageWidgetComponent from "../PageWidgetComponent";
 import IScheduler from "../../scheduler/IScheduler";
-import { MergeType } from "basiscore";
+//import { MergeType } from "basiscore";
 
 declare const $bc: any;
+declare const MergeType:any
 
 export default class WidgetComponent extends PageWidgetComponent {
   public async initializeAsync(): Promise<void> {

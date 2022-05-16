@@ -1,23 +1,36 @@
 [data-bc-page-dashboard-disablelist] {
-    display: flex;
+    
     z-index: 1;
 	margin: 15px 10px;
-	background: #fff;
 	padding: 10px;
 	border-radius: 5px;
-	border : 1px solid var(--light_gray);
+	border : 1px dashed #767667;
     direction: rtl;
     
 }
 
-[data-bc-page-dashboard-disablelist] div {
+[data-bc-page-dashboard-disablelist] [data-bc-page-widget-dashboard] {
     padding: 5px 10px;
     border: 1px solid #eee;
     border-radius: 5px;
     cursor: pointer;
     margin-left: 15px;
     z-index: 99;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--white);
+}
+[data-bc-page-dashboard-disablelist] [data-bc-page-widget-dashboard] img{
+    margin-top: 10px;
 }
 [clear]{
 	clear: both;
+}
+[data-bc-page-widget-dashboard-wrapper]{
+    margin-top: 15px;
+    display: flex;
 }
