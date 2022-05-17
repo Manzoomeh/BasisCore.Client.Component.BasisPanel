@@ -30,7 +30,13 @@
 	/* background-color: rgba(0, 75, 133, 0.1); */
 }
 [data-bc-menu] > li:hover{
-	border-bottom:  0.7px solid #004B85;
+	border-bottom:  0.7px solid #004B85 ;
+}
+[data-bc-menu-active]{
+	border-bottom:  0.7px solid #004B85 !important;
+}
+[data-bc-menu-active] > a {
+	color:#004B85;
 }
 [data-bc-menu] > ul > li:hover a,[data-bc-menu] > li:hover  > a{
 	color:#004B85;

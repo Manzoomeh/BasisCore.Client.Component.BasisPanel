@@ -16,8 +16,8 @@
     cursor: pointer;
     margin-left: 15px;
     z-index: 99;
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,7 +25,8 @@
     background: var(--white);
 }
 [data-bc-page-dashboard-disablelist] [data-bc-page-widget-dashboard] img{
-    margin-top: 10px;
+    padding-top: 5px;
+    width: 60px;
 }
 [clear]{
 	clear: both;

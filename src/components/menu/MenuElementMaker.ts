@@ -96,7 +96,8 @@ export default class MenuElementMaker {
     li.appendChild(innerUl);
 
     
-    li.addEventListener("click", function (e) {     
+    li.addEventListener("click", function (e) {    
+     
       const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
       if (innerUl.getAttribute("data-bc-ul-level-open") == null) {       
         innerUl.style.transform = `scaleY(1)`;
@@ -109,6 +110,11 @@ export default class MenuElementMaker {
         innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
       
       }
+      const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
+      activeMenus.forEach(e => {
+        e.removeAttribute("data-bc-menu-active")
+      })
+      li.setAttribute("data-bc-menu-active","")
     });
     return li;
   }
@@ -126,8 +132,14 @@ export default class MenuElementMaker {
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onMenuItemClick(node.pid, menuParam, e.target);
+      const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
+      activeMenus.forEach(e => {
+        e.removeAttribute("data-bc-menu-active")
+      })
+      li.setAttribute("data-bc-menu-active","")
+     
     });
-    pageLookup.set(node.pid, menuParam);
+    pageLookup.set(node.pid, menuParam);    
     li.appendChild(content);
     return li;
   }
@@ -191,6 +203,7 @@ export default class MenuElementMaker {
     li.appendChild(ul);
     let subMenuFlag = false;
     content.addEventListener("click", function () {
+      
       if (subMenuFlag == false) {
         ul.style.transition = "all 0.3s ease-in-out";
         ul.style.width = `auto`;
