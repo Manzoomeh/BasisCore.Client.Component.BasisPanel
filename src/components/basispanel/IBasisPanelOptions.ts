@@ -35,6 +35,8 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
+  addtoDashboard:string;
+  tempwidgets: string
 }
 
 export interface ICheckRkeyOptions {

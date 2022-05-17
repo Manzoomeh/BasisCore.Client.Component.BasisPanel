@@ -28,7 +28,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     this.title = this.param.title;
-
+   
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${
         this.options.method.widget
@@ -94,24 +94,21 @@ export default class WidgetComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-widget-container");
   }
-
+  
   private async removeAsync(): Promise<void> {
     await this.owner.disposeAsync();
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
+  
   private async addToDashboard(): Promise<void> {
-    $bc.setSource(
-      "db.dashboard_inactive_widget",
-      [
-        {
-          id: this.param["id"],
-          title: this.param["title"],
-          w: this.param["w"],
-          h: this.param["h"],
-        },
-      ],
-      { mergeType: MergeType.append }
-    );
+    const widgetTitle = this.owner.dc.resolve<any>("widget");
+    const widgetId = this.param.id
+    const apiInputs = {"widgetid":widgetId, "title": widgetTitle.title}
+    const url = HttpUtil.formatString( this.options.method.addtoDashboard, {
+      rKey: this.options.rKey,
+    }); 
+    await HttpUtil.fetchStringAsync( url, "POST" ,apiInputs);
+
   }
 }

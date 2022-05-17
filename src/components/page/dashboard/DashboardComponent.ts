@@ -32,9 +32,29 @@ export default class DashboardComponent extends PageComponent {
       range.insertNode(range.createContextualFragment(this.info.content));
     }
   }
-  public addingDashboardWidgets(): void {
+  public async addingDashboardWidgets(): Promise<void>  {
+    const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]")
+    const widgetWrapper = this.container.querySelector("[data-bc-page-dashboard-disablelist]") as HTMLElement
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
+    const url = HttpUtil.formatString( this.options.method.tempwidgets, {
+      rKey: this.options.rKey,
+    }); 
+    const data = await HttpUtil.fetchStringAsync( url, "GET" );
+    const content = JSON.parse(data)
+    content.forEach((e) => {
+      const widgetDiv = document.createElement("div")
+      widgetDiv.setAttribute("data-bc-page-widget-dashboard","")
+      widgetDiv.textContent= e.title
+      const widgetIcon = document.createElement("img")
+      widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")
+      widgetDiv.appendChild(widgetIcon)
+      parent.appendChild(widgetDiv)
+      widgetWrapper.style.display="block"
+    })
+   
+    
+
   }
   public async runAsync(source?: ISource) {
     this.addingDashboardWidgets();
