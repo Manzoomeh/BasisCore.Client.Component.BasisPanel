@@ -225,9 +225,7 @@
     margin-right: 10px;
     cursor: pointer;
 }
-[data-bc-task-list]{
-    margin-top: -5px;
-}
+
 /* ********** task list keyframes ********** */
 @keyframes progress-bar-stripes {
     from {

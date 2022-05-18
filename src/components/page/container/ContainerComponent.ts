@@ -42,6 +42,8 @@ export default class ContainerComponent extends PageComponent {
     content.forEach((e) => {
       const widgetDiv = document.createElement("div")
       widgetDiv.setAttribute("data-bc-page-widget-dashboard","")
+      widgetDiv.setAttribute("data-sys-widget","")
+      widgetDiv.setAttribute("data-sys-text","")
       widgetDiv.textContent= e.title
       const widgetIcon = document.createElement("img")
       widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")

@@ -65,7 +65,7 @@
 
 [data-bc-corporate-list] [data-bc-corporate-notif-drop-down] {
     position: absolute;
-    top:3px;
+    top:6px;
     left: 10px;
     cursor: pointer;
 }
