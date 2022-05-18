@@ -11,6 +11,7 @@
     overflow-x: hidden;
     overflow-y: hidden;
     padding: 10px;
+    transition: all 0.5s ease-in-out;
 }
 
 [data-bc-bp-widget-container] [data-bc-widget-inner-container] {

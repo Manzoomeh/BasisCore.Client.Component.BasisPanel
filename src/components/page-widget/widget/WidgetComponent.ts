@@ -105,7 +105,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     const widgetTitle = this.owner.dc.resolve<any>("widget");
     const widgetId = this.param.id
     const apiInputs = {"widgetid":widgetId, "title": widgetTitle.title}
-    const url = HttpUtil.formatString( this.options.method.addtoDashboard, {
+    const url = HttpUtil.formatString( this.options.addtoDashboard, {
       rKey: this.options.rKey,
     }); 
     await HttpUtil.fetchStringAsync( url, "POST" ,apiInputs);

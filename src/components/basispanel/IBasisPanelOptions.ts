@@ -13,6 +13,8 @@ export default interface IBasisPanelOptions {
   checkRkey: ICheckRkeyOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;
+  addtoDashboard:string;
+  tempwidgets: string
 }
 
 interface IUrlCollectionOption {
@@ -35,8 +37,6 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
-  addtoDashboard:string;
-  tempwidgets: string
 }
 
 export interface ICheckRkeyOptions {

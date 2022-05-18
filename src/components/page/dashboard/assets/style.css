@@ -35,3 +35,30 @@
     margin-top: 15px;
     display: flex;
 }
+[data-bc-page-widget-list-dlg-btn-add]{
+    font-size: 12px;
+}
+[data-bc-page-widget-list-dlg-btn-add] {
+    float: left;
+    color: #000;
+    margin-top: -38px;
+    margin-left: 10px;
+    z-index: 99999;
+    cursor: pointer;
+    position: relative;
+    background-color: var(--white);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    position: absolute;
+    top: 5px;
+    left: -10px;
+    padding: 5px;
+}
+[data-bc-dashboard-widgets]{
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+}
+[data-bc-page-body-container]{
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+}

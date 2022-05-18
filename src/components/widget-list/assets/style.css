@@ -1,4 +1,65 @@
 [data-bc-widget-drop-area] {
-    height: 200px;
+    min-height: 200px;
     background-color: lightblue;
+    width: calc(100% - 320px);
+    border: 1px dashed #767667;
+    background-color: rgba(0,0,0,0.02);
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 20px 0 ;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    padding: 10px;
+}
+[data-bc-widgetbox-title]{
+    font-size: 24px;
+}
+[data-bc-widget-drop-area-message] span{
+    color: rgba(0,0,0,0.3);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+[data-bc-widget-drop-area-message]{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+[data-bc-widget-id]{
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 99;
+    width: 120px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #fff;
+    position: relative;
+    margin-left: 15px;
+}
+[data-bc-widget-id] img{
+    width: 60px;
+    margin-top: 5px;
+}
+[data-bc-widget-id] [data-bc-btn-remove]{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #EB5757;
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    font-size: 10px;
+    line-height: 22px;
+    text-align: center;
+
 }

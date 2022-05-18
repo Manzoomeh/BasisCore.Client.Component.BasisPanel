@@ -37,7 +37,7 @@ export default class DashboardComponent extends PageComponent {
     const widgetWrapper = this.container.querySelector("[data-bc-page-dashboard-disablelist]") as HTMLElement
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
-    const url = HttpUtil.formatString( this.options.method.tempwidgets, {
+    const url = HttpUtil.formatString( this.options.tempwidgets, {
       rKey: this.options.rKey,
     }); 
     const data = await HttpUtil.fetchStringAsync( url, "GET" );
