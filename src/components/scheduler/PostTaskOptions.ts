@@ -21,7 +21,9 @@ export default class PostTaskOptions implements ITaskOptions {
   ) {
     this.title = title;
     this.reportHandlers = new EventManager<IReportParam>();
-    this.reportHandlers.Add(callback);
+    if (callback) {
+      this.reportHandlers.Add(callback);
+    }
     this.cancelable = cancelable;
     this._xhr = new XMLHttpRequest();
     this.task = new Promise<any>((resolve, reject) => {
