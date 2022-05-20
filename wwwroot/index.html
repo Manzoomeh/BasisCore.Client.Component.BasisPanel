@@ -9,7 +9,7 @@
   <link href="assets/css/commonStyle.css" rel="stylesheet" />
 </head>
 
-<body >
+<body>
   <Basis core="component.basispanel.panel" run="atclient"></Basis>
   <div class="clr"></div>
 
@@ -23,7 +23,7 @@
           widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
           addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
           addtoDashboard: "user/${rKey}/addtodashboard",
-          tempwidgets:"https://basispanel.ir/user/5AEA1717-E7D5-464D-BCB0-E34985734582/tempwidgets",
+          tempwidgets: "https://basispanel.ir/user/5AEA1717-E7D5-464D-BCB0-E34985734582/tempwidgets",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
@@ -35,9 +35,9 @@
             corporate: "/server/corporate/${rKey}/list",
             business: "/server/business/${rKey}/list",
           },
-          themeUrl:{
-            light:"/assets/css/light.css",
-            dark:"/assets/css/dark.css"
+          themeUrl: {
+            light: "/assets/css/light.css",
+            dark: "/assets/css/dark.css"
           },
           method: {
             userImage: "/${rKey}/users/${profile.thumbnail}",
@@ -45,7 +45,7 @@
             page: "/${rKey}/page/${pageId}",
             sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
             widget: "/${rKey}/widget/${widgetId}"
-            
+
           },
           checkRkey: {
             url: "/server/trust/checkrkey/${rKey}",
@@ -160,7 +160,7 @@
     }
   </script>
   <!-- <script src="basiscore.js"></script> -->
-  <script src="https://cdn.basiscore.net/_js/basiscore-2.11.1.js?v=7"></script>
+  <script src="/basiscore.js"></script>
   <script src="/alasql.min.js"></script>
 </body>
 

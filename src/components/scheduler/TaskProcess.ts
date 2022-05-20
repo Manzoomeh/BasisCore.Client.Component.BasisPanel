@@ -1,6 +1,7 @@
 import ITaskOptions, { IReportParam } from "./ITaskOptions";
 import SchedulerComponent from "./SchedulerComponent";
 import layout from "./assets/item-layout.html";
+import { EventHandler } from "basiscore";
 
 export default class TaskProcess {
   private _owner: SchedulerComponent;
@@ -33,7 +34,7 @@ export default class TaskProcess {
 
     this._container.querySelector("[data-bc-task-list-title]").innerHTML =
       this._options.title;
-    this._options.reportCallback = (param: IReportParam) => {
+    const uiHandler: EventHandler<IReportParam> = (param: IReportParam) => {
       var title = param.title;
       if (param.error) {
         title += ` (${param.error})`;
@@ -50,6 +51,7 @@ export default class TaskProcess {
         this._container.querySelector("[data-bc-task-list-progress-bar]") as any
       ).style.width = `${param.percent}%`;
     };
+    this._options.reportHandlers.Add(uiHandler);
   }
 
   public dispose(): void {

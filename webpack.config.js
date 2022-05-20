@@ -32,9 +32,7 @@ module.exports = (env, options) => {
       },
     },
     externals: {
-      basiscore: {
-        root: "_",
-      },
+      basiscore: "basiscore",
     },
     devServer: {
       static: [

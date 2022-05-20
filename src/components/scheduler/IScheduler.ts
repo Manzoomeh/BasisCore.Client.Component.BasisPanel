@@ -1,12 +1,12 @@
-import ITaskOptions, { IReportCallback } from "./ITaskOptions";
+import { EventHandler } from "basiscore";
+import ITaskOptions, { IReportParam } from "./ITaskOptions";
 
 export default interface IScheduler {
-  startTask(taskOptions: ITaskOptions): void;
   startPost(
     data: FormData,
     url: string,
     title: string,
-    callback?: IReportCallback,
+    callback?: EventHandler<IReportParam>,
     cancelable?: boolean
   ): ITaskOptions;
 }

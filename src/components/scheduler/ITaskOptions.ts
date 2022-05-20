@@ -1,9 +1,11 @@
+import { EventManager } from "basiscore";
+
 export default interface ITaskOptions {
   key?: string;
   container?: Element;
   title?: string;
   type?: TaskType;
-  reportCallback?: IReportCallback;
+  reportHandlers?: EventManager<IReportParam>;
   task: Promise<any>;
   notify?: boolean;
   cancel?: () => void;
@@ -13,8 +15,6 @@ export enum TaskType {
   continuous = 0,
   progressive = 1,
 }
-
-export type IReportCallback = (param: IReportParam) => void;
 
 export interface IReportParam {
   percent: number;

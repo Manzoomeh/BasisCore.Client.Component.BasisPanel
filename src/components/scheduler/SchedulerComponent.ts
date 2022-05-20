@@ -1,10 +1,15 @@
-import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
+import {
+  EventHandler,
+  IDependencyContainer,
+  ISource,
+  IUserDefineComponent,
+} from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import IScheduler from "./IScheduler";
-import ITaskOptions, { IReportCallback } from "./ITaskOptions";
+import ITaskOptions, { IReportParam } from "./ITaskOptions";
 import PostTaskOptions from "./PostTaskOptions";
 import TaskProcess from "./TaskProcess";
 
@@ -53,7 +58,7 @@ export default class SchedulerComponent
     data: FormData,
     url: string,
     title: string,
-    callback?: IReportCallback,
+    callback?: EventHandler<IReportParam>,
     cancelable?: boolean
   ): ITaskOptions {
     const taskOptions = new PostTaskOptions(

@@ -4,13 +4,7 @@ import HttpUtil from "../../../HttpUtil";
 import { IUserDefineComponent } from "basiscore";
 import { ISource } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
-import ITaskOptions from "../../scheduler/ITaskOptions";
 import PageWidgetComponent from "../PageWidgetComponent";
-import IScheduler from "../../scheduler/IScheduler";
-//import { MergeType } from "basiscore";
-
-declare const $bc: any;
-declare const MergeType:any
 
 export default class WidgetComponent extends PageWidgetComponent {
   public async initializeAsync(): Promise<void> {
@@ -28,7 +22,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     this.title = this.param.title;
-   
+
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${
         this.options.method.widget
@@ -79,12 +73,12 @@ export default class WidgetComponent extends PageWidgetComponent {
         reject(e);
       }
     });
-    const taskOptions: ITaskOptions = {
-      container: container,
-      task: processTask,
-      notify: false,
-    };
-    this.owner.dc.resolve<IScheduler>("scheduler").startTask(taskOptions);
+    // const taskOptions: ITaskOptions = {
+    //   container: container,
+    //   task: processTask,
+    //   notify: false,
+    // };
+    // this.owner.dc.resolve<IScheduler>("scheduler").startTask(taskOptions);
   }
 
   public runAsync(source?: ISource) {
@@ -94,21 +88,20 @@ export default class WidgetComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-widget-container");
   }
-  
+
   private async removeAsync(): Promise<void> {
     await this.owner.disposeAsync();
     this.container.remove();
     this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
-  
+
   private async addToDashboard(): Promise<void> {
     const widgetTitle = this.owner.dc.resolve<any>("widget");
-    const widgetId = this.param.id
-    const apiInputs = {"widgetid":widgetId, "title": widgetTitle.title}
-    const url = HttpUtil.formatString( this.options.addtoDashboard, {
+    const widgetId = this.param.id;
+    const apiInputs = { widgetid: widgetId, title: widgetTitle.title };
+    const url = HttpUtil.formatString(this.options.addtoDashboard, {
       rKey: this.options.rKey,
-    }); 
-    await HttpUtil.fetchStringAsync( url, "POST" ,apiInputs);
-
+    });
+    await HttpUtil.fetchStringAsync(url, "POST", apiInputs);
   }
 }
