@@ -11,7 +11,6 @@ export default class LogoutComponent extends BasisPanelChildComponent {
 
   public initializeAsync(): Promise<void> {
     this.container
-      .querySelector("[data-bc-logout-click]")
       ?.addEventListener("click", async (e) => {
         e.preventDefault();
         const url = HttpUtil.formatString(this.options.logout.url, {
