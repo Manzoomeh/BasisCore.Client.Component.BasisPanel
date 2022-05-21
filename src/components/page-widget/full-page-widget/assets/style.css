@@ -41,7 +41,7 @@
     scrollbar-width: thin;
     /* scrollbar-color: #eff2f5 transparent; */
     /* max-height: 325px; */
-    max-height: calc(100% - 43px);
+    /* max-height: calc(100% - 43px); */
     height: 100%;
     overflow-y: auto;
     /* padding: 20px 20px; */
