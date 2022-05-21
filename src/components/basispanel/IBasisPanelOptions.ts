@@ -14,6 +14,7 @@ export default interface IBasisPanelOptions {
   logout: ILogoutOptions;
   notification: INotificationOptions;
   addtoDashboard:string;
+  removeFromDashbaord:string ;
   tempwidgets: string
 }
 

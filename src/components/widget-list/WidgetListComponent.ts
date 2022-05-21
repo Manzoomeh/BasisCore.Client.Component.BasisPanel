@@ -125,11 +125,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       rKey: this.options.rKey,
       pageId: this._page.loaderParam.pageId,
     });
-    console.log("before")
+    
     const widgetsList = await HttpUtil.fetchDataAsync<
       Array<IWidgetListItemInfo>
     >(url, "GET");
-    console.log("after")
+    
     try{
       widgetsList.forEach((widget) => {
         const widgetElement = document.createElement("div");
