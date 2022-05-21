@@ -50,9 +50,19 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     position: absolute;
-    top: 5px;
+    top: -10px;
     left: -10px;
     padding: 5px;
+    background: var(--dark_white);
+    height: 36px;
+    display: flex;
+    align-items: center;
+    width: 25px;
+    justify-content: center;
+    
+}
+[data-bc-page-widget-list-dlg-btn-add]:before{
+    transition: all 0.5s ease-in-out;
 }
 [data-bc-dashboard-widgets]{
     width: 100%;
@@ -61,4 +71,7 @@
 [data-bc-page-body-container]{
     width: 100%;
     transition: all 0.5s ease-in-out;
+}
+[data-bc-widget-drop-area-container]{
+    padding-top: 10px;
 }

@@ -63,3 +63,9 @@
     text-align: center;
 
 }
+[data-icon-right]:before{
+    transform: rotate(180deg);
+}
+[data-icon-left]:before{
+    transform: rotate(0);
+}

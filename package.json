@@ -45,6 +45,7 @@
     "webpack-dev-server": "^4.5.0"
   },
   "dependencies": {
-    "basiscore": "^2.14.0"
+    "basiscore": "^2.14.0",
+    "bclib": "^2.9.4"
   }
 }

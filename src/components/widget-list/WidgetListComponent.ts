@@ -157,10 +157,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private displayWidgetList(e ) {
     if(e.target.getAttribute("data-bc-page-widget-list-dlg-btn-add-active") == "1"){
       this.showList();
+      e.target.setAttribute("data-icon-right" , "")
+      e.target.removeAttribute("data-icon-left" )
       e.target.removeAttribute("data-bc-page-widget-list-dlg-btn-add-active")
+
     }
     else{
       this.hideList();
+      e.target.setAttribute("data-icon-left" , "")
+      e.target.removeAttribute("data-icon-right" )
       e.target.setAttribute("data-bc-page-widget-list-dlg-btn-add-active","1")
     }
     
