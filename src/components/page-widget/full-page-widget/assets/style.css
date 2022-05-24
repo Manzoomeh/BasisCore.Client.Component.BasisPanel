@@ -37,14 +37,19 @@
     position: sticky;
 }
 
-[data-bc-bp-fullpage-container] [data-bc-fullpage-body-container] {
+[data-bc-bp-fullpage-container] [data-bc-fullpage-body] {
     scrollbar-width: thin;
     /* scrollbar-color: #eff2f5 transparent; */
     /* max-height: 325px; */
     /* max-height: calc(100% - 43px); */
     height: 100%;
     overflow-y: auto;
-    /* padding: 20px 20px; */
+    direction: ltr;
+}
+
+[data-bc-bp-fullpage-container] [data-bc-fullpage-body-container] {
+    direction: rtl;
+    height: 100%;
 }
 
 [data-bc-bp-fullpage-container][gs-x="0"] {
