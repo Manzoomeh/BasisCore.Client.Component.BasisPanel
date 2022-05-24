@@ -25,7 +25,7 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
     (this.container as HTMLElement).style.top = `${
       this.param.y * cell + parent.offsetTop
     }px`;
-    (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+    // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     // this.title = this.param.title;
 

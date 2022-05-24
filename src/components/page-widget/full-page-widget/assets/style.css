@@ -47,6 +47,10 @@
     /* padding: 20px 20px; */
 }
 
+[data-bc-bp-fullpage-container][gs-x="0"] {
+    left: 0;
+}
+
 [data-bc-bp-fullpage-container][gs-x="1"] {
     left: 8.3333333333%;
 }

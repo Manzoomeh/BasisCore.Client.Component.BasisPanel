@@ -19,7 +19,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     (this.container as HTMLElement).style.top = `${
       this.param.y * cell + parent.clientTop
     }px`;
-    (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+    // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     this.title = this.param.title;
 

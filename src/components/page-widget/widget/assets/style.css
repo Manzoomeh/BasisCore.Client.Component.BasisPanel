@@ -55,6 +55,10 @@
     height: 100%;
 }
 
+[data-bc-bp-widget-container][gs-x="0"] {
+    left: 0;
+}
+
 [data-bc-bp-widget-container][gs-x="1"] {
     left: 8.3333333333%;
 }

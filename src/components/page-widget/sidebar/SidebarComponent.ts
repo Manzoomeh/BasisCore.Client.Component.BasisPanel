@@ -35,7 +35,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     (this.container as HTMLElement).style.top = `${
       this.param.y * cell + parent.offsetTop
     }px`;
-    (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+    // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     const mainDiv = this.container.querySelector(
       "[data-bc-sidebar-levels='firstLevel']"
