@@ -88,15 +88,14 @@
     transition: all 0.3s ease-in-out;
 }
 
-
-[data-bc-bp-notification-container]:hover [data-bc-notification-dropdown-wrapper] {
+/* movaghatan baraye faze 1 bardashte shod */
+/* [data-bc-bp-notification-container]:hover [data-bc-notification-dropdown-wrapper] {
     opacity: 1;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
     visibility: visible;
     height: auto;
-   
-}
+} */
 
 
 [data-bc-notification] [data-bc-notification-dropdown]::before,
