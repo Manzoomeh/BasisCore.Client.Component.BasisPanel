@@ -19,7 +19,10 @@ export default class TaskProcess {
     range.setEnd(this._container, 0);
     range.insertNode(range.createContextualFragment(layout));
     range.detach();
+    (owner.ulElement.querySelector("[data-bc-task-list-noTask]") as HTMLElement).style.display = "none";
     owner.ulElement.appendChild(this._container);
+    const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
+    alarmEl.innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     this.startDisplayAjax();
     this._options.task.finally(this.dispose.bind(this));
     const btn = this._container.querySelector("[data-bc-task-list-btn-cancel]");
@@ -57,7 +60,16 @@ export default class TaskProcess {
   public dispose(): void {
     this.endDisplayAjax();
     this._owner.taskComplete(this._key, this._options);
-    setTimeout((_) => this._container.remove(), 3_000);
+    setTimeout((_) => {
+      this._container.remove();
+      const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
+      alarmEl.innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
+      const countTask = this._owner.container.querySelectorAll("[data-bc-task-list-item]").length;
+      if (countTask == 0) {
+        (this._owner.container.querySelector("[data-bc-task-list-noTask]") as HTMLElement).style.display = "block";
+      }
+    }
+    , 3_000);
   }
 
   private startDisplayAjax() {

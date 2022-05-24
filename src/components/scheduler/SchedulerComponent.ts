@@ -22,7 +22,7 @@ export default class SchedulerComponent
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-scheduler-container");
     this.processList = new Map<string, TaskProcess>();
-    this.ulElement = this.container.querySelector("[data-bc-main-task-list");
+    this.ulElement = this.container.querySelector("[data-bc-main-task-list]");
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
