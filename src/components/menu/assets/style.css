@@ -46,6 +46,8 @@
 [data-bc-menu] li a {
 	padding: 0 15px;
 	cursor: pointer;
+	height: 100%;
+	display: inline-block;
 }
 [data-bc-bp-menu-wrapper=""]{
 	border-top: 0.5px solid #e1e1e1;
