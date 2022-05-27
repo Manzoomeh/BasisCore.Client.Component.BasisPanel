@@ -31,7 +31,7 @@ export default class ContainerComponent extends PageComponent {
   }
   public async addingDashboardWidgets(): Promise<void>  {
     const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]")
-    const widgetWrapper = this.container.querySelector("[data-bc-page-dashboard-disablelist]") as HTMLElement
+    
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
     const url = HttpUtil.formatString( this.options.tempwidgets, {
@@ -49,7 +49,7 @@ export default class ContainerComponent extends PageComponent {
       widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")
       widgetDiv.appendChild(widgetIcon)
       parent.appendChild(widgetDiv)
-      widgetWrapper.style.display="block"
+     
     })
    
     
