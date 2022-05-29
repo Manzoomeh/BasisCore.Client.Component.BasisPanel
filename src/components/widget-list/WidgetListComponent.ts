@@ -89,11 +89,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const widgetMessage = container.querySelector("[data-bc-widget-drop-area-message]")
       if(widgetMessage)
         widgetMessage.remove()
-        // console.log("ssss",container.querySelector("[data-bc-widget-drop-area-message]"))
-      // const widgetIcon = document.createElement("img")
-      // widgetIcon.setAttribute("src","/asset/images/no_icon.png")
-      // layout.appendChild(widgetIcon)
-      // element = this.owner.toHTMLElement(layout);
       element = this.owner.toHTMLElement(layout);
       container.appendChild(element);
       element

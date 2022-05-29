@@ -30,7 +30,7 @@ export default class ContainerComponent extends PageComponent {
     }
   }
   public async addingDashboardWidgets(): Promise<void>  {
-    const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]")
+    const parent = this.container.querySelector("[data-bc-widget-drop-area-container]")
     
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
@@ -39,6 +39,8 @@ export default class ContainerComponent extends PageComponent {
     }); 
     const data = await HttpUtil.fetchStringAsync( url, "GET" );
     const content = JSON.parse(data)
+    
+
     content.forEach((e) => {
       const widgetDiv = document.createElement("div")
       widgetDiv.setAttribute("data-bc-page-widget-dashboard","")

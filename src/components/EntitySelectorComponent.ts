@@ -21,6 +21,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   ) {
     super(owner, layout, `data-bc-bp-${entityType}-container`);
     this.ownerType = entityType;
+    
+  
   }
 
   protected abstract getListUrl(): string;
@@ -257,6 +259,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
+    
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
       // ownerId: this.element.value,
@@ -269,6 +272,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async signalToDisplayPage(id: Number) {
+    const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
+    activeMenus.forEach(e => {
+      e.removeAttribute("data-bc-menu-active")
+    })
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
@@ -298,6 +305,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       };    
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
+    
+
   }
 }
 

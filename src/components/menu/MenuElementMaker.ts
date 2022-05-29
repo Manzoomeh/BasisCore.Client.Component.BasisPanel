@@ -26,6 +26,7 @@ export default class MenuElementMaker {
   ) {
     this.rKey = rKey;
     this.onMenuItemClick = onMenuItemClick;
+    
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -93,11 +94,8 @@ export default class MenuElementMaker {
     innerUl.setAttribute("data-bc-bp-submenu", "");
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
-    li.appendChild(innerUl);
-
-    
-    li.addEventListener("click", function (e) {    
-     
+    li.appendChild(innerUl);    
+    li.addEventListener("click", function (e) {       
       const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
       if (innerUl.getAttribute("data-bc-ul-level-open") == null) {       
         innerUl.style.transform = `scaleY(1)`;
@@ -107,8 +105,7 @@ export default class MenuElementMaker {
       else {
         innerUl.style.transform = ` scaleY(0)`;
         innerUl.removeAttribute("data-bc-ul-level-open");
-        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
-      
+        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");      
       }
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
       activeMenus.forEach(e => {

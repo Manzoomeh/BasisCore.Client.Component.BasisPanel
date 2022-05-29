@@ -45,6 +45,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
   }
 
   private signalToDisplayMenu() {
+
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
@@ -56,9 +57,14 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
       this.signalToDisplayPage();
     }
+   
   }
 
   private async signalToDisplayPage() {
+    const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
+    activeMenus.forEach(e => {
+      e.removeAttribute("data-bc-menu-active")
+    })
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
@@ -88,6 +94,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
+   
   }
 
   private refreshUI() {

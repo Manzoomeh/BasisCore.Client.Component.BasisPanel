@@ -34,6 +34,7 @@ export default class MenuComponent
   }
 
   public async runAsync(source?: ISource) {
+   
     if (source?.id == DefaultSource.SHOW_MENU) {
       await this.loadDataAsync(source.rows[0]);
     }
