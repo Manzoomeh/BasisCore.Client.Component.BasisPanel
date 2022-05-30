@@ -6,7 +6,7 @@
   <title></title>
   <link href="assets/css/LineIcons.css" rel="stylesheet" />
   <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
-  <link href="assets/css/commonStyle.css" rel="stylesheet" />
+  <link href="asset/css/styles-1.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -18,43 +18,45 @@
       settings: {
         "connection.web.demo": "/server/dbsource/demo",
         "basispanel.option": {
-          rKey: "80841FB3-3405-41DE-A7B0-AAB795B39007",
+          rKey: "256386A9-322A-4184-B207-B2A1905AF210",
           avatar: "https://trust-login.com",
-          widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
-          addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
-          addtoDashboard: "user/${rKey}/addtodashboard",
+          widgetListUrl: "/server/widget-list/256386A9-322A-4184-B207-B2A1905AF210/${pageId}",
+          addWidgetUrl: "/server/widget-list/256386A9-322A-4184-B207-B2A1905AF210/${pageId}",
+          addtoDashboard: "user/256386A9-322A-4184-B207-B2A1905AF210/addtodashboard",
           removeFromDashbaord:"https://basispanel.ir/user/[rkey]/removetempwidget",
-          tempwidgets: "https://basispanel.ir/user/5AEA1717-E7D5-464D-BCB0-E34985734582/tempwidgets",
+          tempwidgets: "https://basispanel.ir/user/256386A9-322A-4184-B207-B2A1905AF210/tempwidgets",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
             business: "/server/business",
-            active: "/server/active/${rKey}/set-active",
+            active: "/server/active/256386A9-322A-4184-B207-B2A1905AF210/set-active",
           },
           dataUrl: {
-            profile: "/server/trust/${rKey}/profile",
-            corporate: "/server/corporate/${rKey}/list",
-            business: "/server/business/${rKey}/list",
+            profile: "/server/trust/256386A9-322A-4184-B207-B2A1905AF210/profile",
+            corporate: "/server/corporate/256386A9-322A-4184-B207-B2A1905AF210/list",
+            business: "/server/business/256386A9-322A-4184-B207-B2A1905AF210/list",
           },
           themeUrl: {
-            light: "/assets/css/light.css",
-            dark: "/assets/css/dark.css"
+            light: "http://basispanel.ir/asset/css/light.css",
+            dark: "http://basispanel.ir/asset/css/dark.css",
+            addThemeUrl : "https://basispanel.ir/user/${rKey}/editcolormode",
+            defaultTheme : "http://basispanel.ir/user/${rKey}/visualmode"
           },
           method: {
-            userImage: "/${rKey}/users/${profile.thumbnail}",
-            menu: "/${rKey}/menu?level=${level}",
-            page: "/${rKey}/page/${pageId}",
-            sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
-            widget: "/${rKey}/widget/${widgetId}"
+            userImage: "/256386A9-322A-4184-B207-B2A1905AF210/users/${profile.thumbnail}",
+            menu: "/256386A9-322A-4184-B207-B2A1905AF210/menu?level=${level}",
+            page: "/256386A9-322A-4184-B207-B2A1905AF210/page/${pageId}",
+            sidebarMenu: "/256386A9-322A-4184-B207-B2A1905AF210/sidebarMenu/${pageId}",
+            widget: "/256386A9-322A-4184-B207-B2A1905AF210/widget/${widgetId}"
 
           },
           checkRkey: {
-            url: "/server/trust/checkrkey/${rKey}",
+            url: "/server/trust/checkrkey/256386A9-322A-4184-B207-B2A1905AF210",
             cookieName: "rkey",
             defaultRedirectUrl: "https://www.google.com",
           },
           logout: {
-            url: "/server/trust/${rKey}/logout",
+            url: "/server/trust/256386A9-322A-4184-B207-B2A1905AF210/logout",
             cookieName: "rkey",
             successId: 4,
             dmnToken: "asdfr",
@@ -65,7 +67,7 @@
               {
                 name: "messages",
                 title: "پیام ها",
-                url: "/server/notifications/${rKey}/unread-messages",
+                url: "/server/notifications/256386A9-322A-4184-B207-B2A1905AF210/unread-messages",
                 config: {
                   filter: "none",
                   paging: null,
@@ -87,7 +89,7 @@
               {
                 name: "notes",
                 title: "یادداشت ها",
-                url: "/server/notifications/${rKey}/new-notes",
+                url: "/server/notifications/256386A9-322A-4184-B207-B2A1905AF210/new-notes",
                 config: {
                   filter: "none",
                   paging: null,
@@ -109,7 +111,7 @@
               {
                 name: "tasks",
                 title: "تسک ها",
-                url: "/server/notifications/${rKey}/new-tasks",
+                url: "/server/notifications/256386A9-322A-4184-B207-B2A1905AF210/new-tasks",
                 config: {
                   filter: "none",
                   paging: null,

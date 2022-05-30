@@ -26,7 +26,9 @@ interface IUrlCollectionOption {
 
 interface IUrlTheme {
   light: string;
-  dark: string
+  dark: string;
+  addThemeUrl: string;
+  defaultTheme : string
 }
 interface IPanelPartUrlOptions extends IUrlCollectionOption {
   active: string;
