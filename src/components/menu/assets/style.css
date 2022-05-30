@@ -14,6 +14,7 @@
 	z-index: 9;
 	direction: rtl;
 	border-bottom: 0.5px solid #e1e1e1;
+	min-height: 62px;
 }
 
 [data-bc-menu] li {
