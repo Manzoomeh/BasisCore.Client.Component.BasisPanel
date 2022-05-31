@@ -24,27 +24,38 @@ export default class ThemeComponent extends BasisPanelChildComponent {
       light: this.options.themeUrl.light,
       dark: this.options.themeUrl.dark
     };    
-    var style = document.querySelector("link[data-bc-basispanel-theme]");
-    this.setTheme(this.defaultTheme["colorMode"].split(" ")[0]);
+    const themeName= this.defaultTheme["colorMode"].split(" ")[0]
+    this.setTheme(themeName);
+    if(themeName == "dark"){
+      this.container
+      .querySelector("[data-bc-basispanel-theme-selector]").setAttribute("checked","")
+    }
     this.container
       .querySelector("[data-bc-basispanel-theme-selector]")
       .addEventListener("change", async (e) => {
         const op = e.target as HTMLInputElement;
+       
         if(op.checked){
           this.setTheme("dark");
-          const apiInputs = { mode: "dark mode" };
           const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
             rKey: this.options.rKey,
           });        
-          await HttpUtil.fetchStringAsync(url, "POST", apiInputs);
+          await HttpUtil.sendFormData(
+            url,
+            "POST",
+            `mode=dark mode`
+          );
         }
         else{
           this.setTheme("light");
-          const apiInputs = { mode: "light mode" };
           const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
             rKey: this.options.rKey,
           });
-          await HttpUtil.fetchStringAsync(url, "POST", apiInputs);
+          await HttpUtil.sendFormData(
+            url,
+            "POST",
+            `mode=light mode`
+          );
         }        
       });
   }
