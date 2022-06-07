@@ -1,0 +1,286 @@
+
+<style>
+  .iconsContainer .iconItem {
+      cursor: pointer;
+      padding: 5px 5px;
+      font-size: 12px;
+      color: #000;
+  }
+</style>
+<style>
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.odd td {
+      background-color: #fff !important;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.even td {
+      background-color: #F4F4F4 !important;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr td[data-bc-order]:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 6px 6px 0 6px;
+      border-color: #222 transparent transparent transparent;
+      opacity: 0.75;
+      /* position: absolute; */
+      /* right: 15px; */
+      /* top: calc(50% - 3px); */
+      -webkit-transition: transform 0.5s;
+      -moz-transition: transform 0.5s;
+      -o-transition: transform 0.5s;
+      transition: transform 0.5s;
+      float: right;
+      transform: translateY(100%);
+      margin-right: 10px;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr td.rotate[data-bc-order]:before {
+      transform: rotateZ(90deg) translateX(50%);
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list {
+      color: #5c5c5c;
+      height: 0px;
+      transition: height 0.3s linear, line-height 0.3s linear, opacity 0.5s linear;
+      opacity: 0;
+      line-height: 0;
+      border-bottom: none;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list.show {
+      height: 100px;
+      opacity: 1;
+      line-height: 1;
+      /* border-bottom: 1px solid #D0D0D0; */
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list td {
+      background-color: #fff !important;
+      padding: 0;
+      border: 0;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list.show td {
+      border: 1px solid #D9E4E6;
+      background-color: #fff !important;
+      /* padding: 10px 5px; */
+  }
+</style>
+<style>
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer {
+      padding: 15px 45px;
+      direction: rtl;
+      text-align: right;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer * {
+      box-sizing: border-box;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem {
+      width: 50%;
+      float: right;
+      padding: 0 45px 0 0;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem:nth-child(2n+1) {
+      border-left: 1px solid rgba(34, 34, 34, 0.05);
+      padding: 0 0 0 45px;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem .prpTitle {
+      width: 300px;
+      line-height: 31px;
+      float: right;
+      height: 31px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem .prpInput {
+      width: calc(100% - 300px);
+      float: right;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem input[type="text"] {
+      width: 100%;
+      /* display: inline-block; */
+      float: right;
+      padding: 5px;
+      font-size: 12px;
+      box-sizing: border-box;
+      color: #555;
+      background: #f5f8f9;
+      border: 1px solid #c7d6db;
+      border-radius: 3px;
+      transition: border 0.3s linear 0s;
+      text-align: center;
+      margin-bottom: 15px;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem input[type="text"]:focus {
+      background: #fff8ee;
+      border-color: #66afe9;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+      outline: 0 none;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem input[type="text"].hasData {
+      width: calc(100% - 35px) !important;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem .removeIcon {
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      text-align: center;
+      background: #f5f8f9;
+      border: 1px solid #c7d6db;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-right: 5px;
+  }
+
+  .schemaOrderChangeForm [data-bc-grid] .prpListContainer .prpItem .removeIcon i {
+      vertical-align: middle;
+      line-height: 30px;
+      font-size: 12px;
+      color: var(--red);
+  }
+</style>
+
+ <link href="/assets/css/LineIcons.css" rel="stylesheet" />
+ <link href="/assets/css/simple-line-icons.css" rel="stylesheet" />
+ <!-- <link href="/asset/css/commonStyle.css" rel="stylesheet" /> -->
+ <link href="assets/css/styles-1.css?v=3" rel="stylesheet" type="text/css" />
+<section class="tabWrapper">
+  <div class="tabs">
+    <div class="tabContainer">
+      <div
+        class="tabButton"
+        tab-button-status="active"
+        onclick="changeButton(this)"
+        bc-triggers="click"
+        name="changeOrder.mid"
+        bc-value="20"
+        data-bc-init=""
+      >
+        محصولات
+      </div>
+      <div
+        class="tabButton"
+        tab-button-status=""
+        onclick="changeButton(this)"
+        bc-triggers="click"
+        name="changeOrder.mid"
+        bc-value="19"
+        data-bc-init=""
+      >
+        خدمات
+      </div>
+      <div
+        class="tabButton"
+        tab-button-status=""
+        onclick="changeButton(this)"
+        bc-triggers="click"
+        name="changeOrder.mid"
+        bc-value="1"
+        data-bc-init=""
+      >
+        مقالات
+      </div>
+      <span class="tabActive"></span>
+    </div>
+  </div>
+</section>
+<div class="schemaOrderChangeForm">
+  <div data-bc-grid="" style="direction: rtl">
+    <div data-bc-table-container="">
+      <table data-bc-table="">
+        <colgroup>
+          <col width="5%" />
+          <col width="10%" />
+          <col width="50%" />
+          <col width="15%" />
+        </colgroup>
+        <thead>
+          <tr data-bc-no-selection="" data-bc-column-title="">
+            <td>#</td>
+            <td>ID</td>
+            <td data-bc-sorting="">عنوان اسکما</td>
+            <td>بازنشانی اولویت ها</td>
+          </tr>
+          <tr data-bc-no-selection="" data-bc-filter="">
+            <td></td>
+            <td></td>
+            <td><input type="text" placeholder="عنوان اسکما" /></td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div data-bc-grid-footer-container="">
+      <div data-bc-paging-container="" data-bc-no-selection="">
+        <a data-bc-previous="" data-bc-status=""
+          ><svg
+            width="6"
+            height="10"
+            viewBox="0 0 6 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.79971 1.10636C6.42812 0.51287 5.43313 -0.426818 4.80472 0.216126L0.196378 4.51891C-0.0654595 4.7662 -0.0654595 5.21131 0.196378 5.4586L4.80472 9.81084C5.43313 10.4043 6.42812 9.46464 5.79971 8.87115L1.71504 5.01348L5.79971 1.10636Z"
+              fill="#004B85"
+            ></path></svg></a
+        ><span></span
+        ><a data-bc-next="" data-bc-status=""
+          ><svg
+            width="6"
+            height="10"
+            viewBox="0 0 6 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.200293 1.10636C-0.428118 0.51287 0.566865 -0.426818 1.19528 0.216126L5.80362 4.51891C6.06546 4.7662 6.06546 5.21131 5.80362 5.4586L1.19528 9.81084C0.566865 10.4043 -0.428118 9.46464 0.200293 8.87115L4.28496 5.01348L0.200293 1.10636Z"
+              fill="#004B85"
+            ></path></svg></a
+        ><input type="text" data-bc-page-number="" />
+      </div>
+      <div data-bc-information-container=""></div>
+    </div>
+  </div>
+</div>
+<script>
+        if (typeof changeButton === "undefined") {
+        function changeButton(e) {
+            const container = e.closest(".tabWrapper");
+            const tabButton = container.querySelectorAll(".tabButton");
+            // const contents = container.querySelectorAll(".tabContent");
+            let left = 0;
+            // const id = e.getAttribute("tab-button-id");
+            // if (id) {
+            tabButton.forEach((btn, index) => {
+                btn.setAttribute("tab-button-status", "");
+                if (btn == e) {
+                    left = index;
+                }
+            });
+            e.setAttribute("tab-button-status", "active");
+
+            // contents.forEach((content) => {
+            //     content.setAttribute("tab-content-status", "");
+            // });
+            // container.querySelector(`[tab-content-id="${id}"]`).setAttribute("tab-content-status", "active");
+            // }
+            container.querySelector(".tabActive").style.transform = `translateX(-${left}00%)`;
+        }
+    }
+</script>

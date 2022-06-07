@@ -69,3 +69,34 @@
 [data-icon-left]:before{
     transform: rotate(0);
 }
+
+[data-bc-page-widget-list-dlg] [data-bc-page-widget-dashboard] {
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 15px;
+    z-index: 99;
+    width: 120px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--white);
+    position: relative;
+}
+[data-bc-page-widget-list-dlg] [data-bc-page-widget-dashboard] img{
+    padding-top: 5px;
+    width: 60px;
+}
+[data-bc-page-widget-dashboard-wrapper]{
+    margin-top: 15px;
+    display: flex;
+    direction: rtl;
+}
+.tabWrapperForWidgets{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

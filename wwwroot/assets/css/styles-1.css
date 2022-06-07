@@ -1,0 +1,1702 @@
+
+@font-face {
+    font-family: 'IRANSansWeb';
+    src: url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).eot");
+    src: url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).eot") format("embedded-opentype"), 
+    url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).woff") format("woff"), 
+    url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).ttf") format("truetype")
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "IRANSansWeb";
+}
+
+/***** colors *****/
+:root {
+    --theme1: #4d576e;
+    --theme2: #6c768e;
+    --theme3: #8c96b0;
+    --theme4: #aeb8d2;
+    --theme5: #d1dbf6;
+    --theme6: #a5abbd;
+    --theme7: #f1f1e6;
+    --theme8: #e2f1ff;
+    --theme9: #3b7b98;
+    --black: #000;
+    --white: #fff;
+    --vlight_gray: #f8f9fa;
+    --light_gray: #eee;
+    --gray: #bcbcbc;
+    --vdark_gray: #212121;
+    --dark_gray: #555;
+    --vlight_red: #fde8e8;
+    --light_red: #f37571;
+    --red: #dc3545;
+    --light_yellow: #FFFDE7;
+    --yellow: #FBC02D;
+    --light_orange: #FEE9C7;
+    --orange: #F39C12;
+    --light_green: #E8F5E9;
+    --green: #4F8A10;
+    --vlight_blue: #F5F8F9;
+    --light_blue: #f7f9ff;
+    --blue: #31708f;
+    --brown: #9F6000;
+    --slate_gray: #5a5f73;
+    --dark_slate_gray: #151F33;
+    --sky_blue: #66afe9;
+    --papaya: #fff8ee;
+    --light_pink: #FCE4EC;
+    --pink: #fcdddd;
+    --snow: #f9f9f9;
+    --iris_blue: #00BCD4;
+    --light_cyan: #D7F7FB;
+    --light_purple: #EDE7F6;
+    --purple: #512DA8;
+    --ruby: #C2185B;
+
+    --theme10: #1f2933;     /*main background*/
+    --theme11: #323f4b;     /*widget background*/
+    --theme12: #3e4c59;
+    --theme13: #52606d;     /*table th*/
+    --theme14: #616e7c;
+    --theme15: #7b8794;
+    --theme16: #9aa5b1;
+    --theme17: #cbd2d9;
+    --theme18: #e4e7eb;
+    --theme19: #f5f7fa;
+}
+
+body {
+    background: var(--light_blue);
+    font-size: 14px;
+    color: var(--vdark_gray);
+    font-weight: normal;
+    overflow-x: hidden;
+    direction: rtl;
+}
+
+:not(html):not(body)::-webkit-scrollbar {
+    width: 8px;
+    background: #f0f0f0;
+}
+
+:not(html):not(body)::-webkit-scrollbar-thumb {
+    background: #cdcdcd;
+}
+
+:not(html):not(body)::-webkit-scrollbar-corner {
+    background: #000;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+html , body{height: 100%;}
+body.darkmode {
+    color: var(--vlight_gray);
+}
+
+/***** info *****/
+.info {
+    color: var(--blue);
+    fill: var(--blue);
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+/***** success *****/
+.success {
+    color: var(--green);
+    fill: var(--green);
+    background-color: #DFF2BF;
+    border-color: #d1ebbb;
+}
+
+/***** warning *****/
+.warning {
+    color: var(--orange);
+    fill: var(--orange);
+    background-color: #FEEFB3;
+    border-color: #fae8c3;
+}
+
+/***** error *****/
+.error {
+    color: var(--red);
+    fill: var(--red);
+    background-color: var(--pink);
+    border-color: #f2cdd1;
+}
+
+.clr {
+    clear: both;
+}
+
+/***** messages *****/
+.alertMessages {
+    margin: 0px 0 20px 0 !important;
+    direction: rtl !important;
+}
+
+.alertMessages .messageItem {
+    direction: rtl !important;
+    text-align: right !important;
+    font-size: 13px !important;
+    padding: 5px !important;
+    line-height: 25px !important;
+    border-radius: 5px !important;
+    width: fit-content;
+    width: max-content;
+}
+
+.alertMessages svg {
+    /* width: 17px; */
+    display: inline-block !important;
+    /* font-size: 13px; */
+    /* padding-left: 5px; */
+    vertical-align: middle !important;
+    /* height: 21px; */
+    margin-left: 5px;
+}
+
+.warningMsg {
+    background-color: #FEEFB3 !important;
+    /* border-right: 3px solid var(--orange) !important; */
+    color: var(--brown) !important;
+    fill: var(--brown) !important;
+}
+
+.warningMsg svg {
+    fill: var(--orange) !important;
+}
+
+.warningMsg svg path {
+    color: var(--orange) !important;
+}
+
+.infoMsg {
+    background-color: #d9edf7 !important;
+    /* border-right: 3px solid var(--blue) !important; */
+    color: var(--blue) !important;
+    fill: var(--blue) !important;
+}
+
+.infoMsg svg {
+    fill: var(--blue) !important;
+}
+
+.infoMsg svg path {
+    color: var(--blue) !important;
+}
+
+.errorMsg {
+    background-color: #f3e2e7 !important;
+    /* border-right: 3px solid var(--red) !important; */
+    color: var(--red) !important;
+    fill: var(--red) !important;
+}
+
+.errorMsg svg {
+    fill: var(--red) !important;
+}
+
+.errorMsg svg path {
+    color: var(--red) !important;
+}
+
+/***** common styles for schema main container *****/
+[data-bc-schema-main-container] {
+    min-height: calc(100% - 55px);
+}
+
+.modalContent .modalBody [data-bc-schema-main-container] {
+    min-height: unset;
+}
+
+/***** common styles for button and icons in grid component *****/
+[data-bc-grid] table[data-bc-table] .icons a {
+    padding: 0 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .icons .view {
+    cursor: pointer;
+}
+
+[data-bc-grid] table[data-bc-table] .icons .illegal {
+    cursor: not-allowed;
+}
+
+[data-bc-grid] table[data-bc-table] .icons i {
+    cursor: pointer;
+}
+
+[data-bc-grid] table[data-bc-table] td.textRight {
+    text-align: right !important;
+}
+
+[data-bc-grid] table[data-bc-table] td .preview {
+    height: 67px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-height: 67px;
+}
+
+[data-bc-grid] table[data-bc-table] tbody tr.unread td {
+    font-weight: bold;
+    font-size: 14.5px;
+    color: #333;
+}
+
+/***** common styles for widgets buttons *****/
+.widgetButtonsContainer {
+    margin-bottom: 10px;
+}
+
+.widgetButtonsContainer .leftBox {
+    float: left;
+}
+
+.widgetButtonsContainer .widgetButton {
+    color: var(--white);
+    background-color: #004B85;
+    border: 1px solid #004B85;
+    border-radius: 5px;
+    height: 41px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    float: left;
+    direction: rtl;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: space-between; */
+}
+
+.widgetButtonsContainer .widgetButton i {
+    font-size: 15px;
+    /* display: block; */
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.widgetButtonsContainer .widgetButton svg {
+    /* display: block; */
+    width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    fill: var(--white);
+    vertical-align: middle;
+}
+
+/***** common styles for modals *****/
+.modals * {
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 99999999;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal .modalBackground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: default;
+    background-color: transparent;
+}
+
+.modal .modalContent {
+    position: relative;
+    background-color: #fbfdff;
+    margin: auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.5s;
+    animation-name: animatetop;
+    animation-duration: 0.5s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+/* modalContent modalTitle */
+.modalContent .modalTitle {
+    width: 100%;
+    /* background-color: #4d576e; */
+    /* color: #fff; */
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 0px 0px 15px;
+    box-sizing: border-box;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    height: 40px;
+    border-bottom: 0.5px solid #D0D0D0;
+}
+
+.modalContent .modalTitle .title {
+    color: #030229;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.modalContent .modalTitle .closeIcon {
+    color: #222222;
+    /* opacity: 0.8; */
+    /* float: left; */
+    /* font-size: 28px; */
+    /* font-weight: bold; */
+}
+
+.modalContent .modalTitle .closeIcon:hover,
+.modalContent .modalTitle .closeIcon:focus {
+    color: #bcbcbc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modalContent .modalTitle .closeIcon svg {
+    vertical-align: middle;
+}
+
+/* modalBody */
+.modalContent .modalBody {
+    padding: 15px 0;
+    text-align: right;
+    direction: rtl;
+}
+
+/* modalFooter */
+.modalContent .modalFooter {
+    padding: 15px 0px 0px;
+    border-top: 0.5px solid #D0D0D0;
+}
+
+/* modalContentWarning */
+.modal .modalContentWarning {
+    position: relative;
+    background-color: #fbfdff;
+    margin: auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.5s;
+    animation-name: animatetop;
+    animation-duration: 0.5s;
+}
+
+/* modalContentWarning modalTitle */
+.modalContentWarning .modalTitle {
+    width: 100%;
+    /* background-color: #4d576e; */
+    /* color: #fff; */
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 0px 0px 15px;
+    box-sizing: border-box;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    /* height: 40px; */
+    /* border-bottom: 0.5px solid #D0D0D0; */
+}
+
+.modalContentWarning .modalTitle .title {
+    color: #030229;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.modalContentWarning .modalTitle .closeIcon {
+    color: #222222;
+    /* opacity: 0.8; */
+    /* float: left; */
+    /* font-size: 28px; */
+    /* font-weight: bold; */
+}
+
+.modalContentWarning .modalTitle .closeIcon:hover,
+.modalContentWarning .modalTitle .closeIcon:focus {
+    color: #bcbcbc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modalContentWarning .modalTitle .closeIcon svg {
+    vertical-align: middle;
+}
+
+/* modalBody */
+.modalContentWarning .modalBody {
+    padding: 0 0 15px 0;
+    text-align: right;
+    direction: rtl;
+}
+
+/* modalFooter */
+.modalContentWarning .modalFooter {
+    padding: 15px 0px 0px;
+    /* border-top: 0.5px solid #D0D0D0; */
+}
+
+/* modalButtons */
+.modalButtons {
+    width: 100%;
+}
+
+.modalButtons .modalButton {
+    display: inline-block;
+    font-size: 14px;
+    text-align: center;
+    /* -webkit-transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease; */
+    /* transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease; */
+    /* transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease; */
+    /* transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease, -webkit-box-shadow .1s ease; */
+    /* -webkit-tap-highlight-color: transparent; */
+    border: 0;
+    padding: 0;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 93px;
+    height: 44px;
+}
+
+.modalButtons .modalButton.accept {
+    background-color: #004B85;
+    border: 1px solid #004B85;
+    color: #fff;
+}
+
+.modalButtons .modalButton.cancel {
+    background-color: #fff;
+    border: 1px solid #004B85;
+    color: #004B85;
+}
+
+.modalButtons .modalButton.remove {
+    background-color: #B40020;
+    border: 1px solid #B40020;
+    color: #fff;
+}
+
+/* message */
+.modalFooter .message {
+    float: left;
+    line-height: 44px;
+    font-size: 14px;
+}
+
+.modalFooter .message .messageError {
+    color: var(--red);
+}
+
+.modalFooter .message .messageSuccess {
+    color: var(--green);
+}
+
+/***** common styles for schema save button *****/
+.schemaBtnContainer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.schemaBtnContainer .schemaBtn {
+    cursor: pointer;
+    background: #004B85;
+    width: 99px;
+    height: 35px;
+    color: #fff;
+    border-radius: 5px;
+    float: right;
+    border: none;
+    font-size: 12px;
+}
+
+.schemaBtnContainer .message {
+    float: right;
+    line-height: 35px;
+    margin-right: 15px;
+}
+
+.schemaBtnContainer .message .messageError {
+    color: var(--red);
+}
+
+.schemaBtnContainer .message .messageSuccess {
+    color: var(--green);
+}
+
+/************************* just for old design - delete after edit them *************************/
+/***** modal title schema *****/
+.modalBody [data-bc-title-container] {
+    width: 128px !important;
+}
+
+/************************* just for old design - delete after edit them *************************/
+/***** widgets buttons -- delete after change design *****/
+.widget_title {
+    width: 100%;
+    /* border-bottom: 1px solid var(--light_gray); */
+    padding: 0 0 10px 0;
+    /* box-sizing: border-box; */
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+    /* flex-direction: row; */
+    /* position: sticky; */
+}
+
+.widget_title span {
+    font-size: 16px;
+}
+
+.widget_buttons {
+    min-height: 25px;
+}
+
+.widgetBtn {
+    color: var(--dark_gray);
+    /* background-color: #fff; */
+    border: 1px solid var(--gray);
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    float: left;
+    display: flex;
+    direction: rtl;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.widgetBtn i {
+    font-size: 15px;
+    display: block;
+    margin-left: 5px;
+}
+
+.widgetBtn svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    fill: var(--dark_gray);
+}
+/*******************************************************/
+/*******************************************************/
+/*********************modal styles**********************/
+/*******************************************************/
+/*******************************************************/
+
+.modal-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: default;
+    background-color: transparent;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fbfdff;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    border-radius: 6px;
+    width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+/* modal-title */
+.modal-title {
+    width: 100%;
+    background: #4d576e;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    direction: rtl;
+    padding: 10px;
+    box-sizing: border-box;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
+    height: 40px;
+    align-items: center;
+}
+
+.modal-title span {
+    color: #fff;
+}
+
+.modal-title .close {
+    color: white;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-title .close:hover,
+.modal-title .close:focus {
+    color: #bcbcbc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* modal-body */
+.modal-body {
+    padding: 15px;
+    padding-bottom: 10px;
+}
+
+.modal-rtl{direction: rtl; text-align: right;}
+.modal-buttons  button {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 4px;
+    min-height: 1em;
+    -webkit-transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
+    transition: opacity .1s ease, background-color .1s ease, color .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
+    transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease;
+    transition: opacity .1s ease, background-color .1s ease, color .1s ease, box-shadow .1s ease, background .1s ease, -webkit-box-shadow .1s ease;
+    -webkit-tap-highlight-color: transparent;
+    border: 0;
+    background-image: none;
+}
+.modal-buttons {
+    width:100% ;
+    padding: 15px;
+    padding-top: 0;
+    float: none !important;
+    min-height: 43px !important;
+}
+.modal-buttons button {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: none;
+}
+.modal-buttons button.remove .btn_icon {
+    border-left: 1px solid #e67266;
+}
+.form_table_btn .btn_icon {
+    position: relative;
+    float: right;
+    border-left: 1px solid #8cdc93;
+	padding: 0 5px;
+	display: flex;
+	align-items: center;
+	height: 100%;
+}
+.form_table_btn .btn_icon i {
+    color: #fff;
+}
+.modal-buttons button.remove .btn_title {
+    border-right: 1px solid #e67266 !important;
+}
+.modal-buttons button.remove {
+    background-color: #e74c3c !important;
+}
+.form_table_btn .btn_title {
+    position: relative;
+    border-right: 1px solid #59ab60;
+    padding: 0 10px;
+	display: flex;
+	align-items: center;
+	height: 100%;
+}
+.form_table_btn {
+    cursor: pointer;
+    background: #57bd60 !important;
+    height: 30px;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/*******************************************************/
+/*******************************************************/
+/*********************checkbox styles**********************/
+/*******************************************************/
+/*******************************************************/
+.basisPanelCheckBox {
+    width: 12px;
+    position: relative;
+    display: block;
+	margin-top: 7px;
+}
+
+.basisPanelCheckBox input[type="checkbox"] {
+    width: auto;
+    opacity: 0.00000001;
+    position: absolute;
+    right: 0;
+    margin-left: -20px;
+}
+.basisPanelCheckBox label {
+    position: relative;
+}
+.basisPanelCheckBox label:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    transition: transform ease-in-out 0.25s;
+    will-change: transform;
+    border-radius: 3px;
+	z-index: 9;
+    border: 2px solid #4d576e;
+	background: #fff;
+}
+.basisPanelCheckBox label:after {
+  content: '';
+    display: block;
+	z-index: 9;
+    width: 8px;
+    height: 3px;
+    border-bottom: 2px solid #fff;
+    border-left: 2px solid #fff;
+    -webkit-transform: rotate(-45deg) scale(0);
+    transform: rotate(-45deg) scale(0);
+    transition: transform ease-in-out 0.25s;
+    will-change: transform;
+    position: relative;
+    top: 4px;
+    right: 3px;
+}
+.basisPanelCheckBox input[type="checkbox"]:checked ~ label::before {
+	background: #4d576e;
+
+}
+
+.basisPanelCheckBox input[type="checkbox"]:checked ~ label::after {
+    -webkit-transform: rotate(-45deg) scale(1);
+    transform: rotate(-45deg) scale(1);
+}
+
+.basisPanelCheckBox label {
+    display: block;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+
+}
+.basisPanelCheckBox label span {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.basisPanelCheckBox input[type="checkbox"]:focus + label::before {
+    outline: 0;
+}
+/*******************************************************/
+/*******************************************************/
+/*********************tooltip styles**********************/
+/*******************************************************/
+/*******************************************************/
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    padding: 4px 8px !important;
+    background: #555;
+    bottom: -35px;
+    color: #fff !important;
+    text-align: center;
+    z-index: 999;
+    left: 8px;
+    opacity: 0;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    -webkit-border-radius: 5px;
+    -webkit-border-top-left-radius: 0;
+    -moz-border-radius: 5px;
+    -moz-border-radius-topleft: 0;
+    border-radius: 5px;
+        border-top-left-radius: 5px;
+    border-top-left-radius: 0;
+    font-size: 12px;
+}
+.has-tooltip{position: relative;}
+.has-tooltip:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+.tooltip:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-bottom: 5px solid #555;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    top: -5px;
+    left: 0;
+    position: absolute;
+}
+
+/***** grid type 2 *****/
+[data-bc-grid-type2] .listItem {
+    position: relative;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    direction: ltr;
+    text-align: center;
+    height: 35px;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+    margin-bottom: 15px;
+    padding: 0 5px;
+    border-radius: 4px;
+    border: 1px solid #d3d8db;
+    background: #f8f8f8;
+    justify-content: space-between;
+    width: 24%;
+}
+
+[data-bc-grid-type2] .itemkeyword {
+    color: #555;
+    white-space: nowrap;
+    font-size: 12px;
+    /* flex-basis: 80%; */
+    text-align: right;
+    width: calc(100% - 50px);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    right: 0;
+    transition: all 1000ms linear;
+    line-height: 35px;
+}
+
+[data-bc-grid-type2] .itemEdit {
+    line-height: 30px;
+    /* flex-basis: 10%; */
+    width: 25px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+}
+
+[data-bc-grid-type2] .keyword {
+    color: #555;
+    font-size: 13.5px;
+    flex-basis: 90%;
+    text-align: right;
+    padding: 0 10px;
+    position: relative;
+    right: 0;
+    transition: all 1000ms linear;
+}
+
+[data-bc-grid-type2] .listItems {
+    direction: rtl;
+}
+/***** tree *****/
+.treeBox .actionOnAll {
+    border-bottom: 1px solid var(--light_gray);
+    padding: 0 10px 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.treeBox .actionOnAll .icon {
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid var(--light_gray);
+}
+
+.treeBox svg {
+    width: 25px;
+    cursor: pointer;
+}
+
+.treeBox ul {
+    margin: 0;
+    padding-right: 25px;
+    line-height: 40px;
+    list-style: none;
+    /* background-color: #fff; */
+}
+
+.treeBox ul li {
+    position: relative;
+}
+
+.treeBox ul li:before {
+    position: absolute;
+    top: 0;
+    right: -15px;
+    display: block;
+    width: 15px;
+    height: 20px;
+    content: "";
+    border-bottom: 1px dotted #666;
+    border-right: 1px dotted #666;
+}
+
+/* hide the vertical line on the first item */
+.treeBox ul.tree>li:first-child:before {
+    border-right: none;
+}
+
+.treeBox ul li:after {
+    position: absolute;
+    top: 20px;
+    bottom: 1px;
+    right: -15px;
+    display: block;
+    content: "";
+    border-right: 1px dotted #666;
+}
+
+/* hide the lines on the last item */
+.treeBox ul li:last-child:after {
+    display: none;
+}
+
+.treeBox .itemTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+    cursor: pointer;
+    float: right;
+    padding-right: 5px;
+}
+
+.treeBox .itemTitle span {
+    margin-left: 5px;
+}
+
+.treeBox .itemIcon {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin-left: 12px;
+    margin-right: -28px;
+    line-height: 14px;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--white);
+    border: 1px solid var(--vdark_gray);
+    border-radius: 2px;
+    font-style: normal;
+}
+
+.treeBox .itemActions {
+    padding-right: 10px;
+}
+
+.treeBox .btn_list {
+    border: none;
+    background-color: inherit;
+    font-size: 15px;
+    padding: 0 3px;
+    color: var(--dark_gray);
+    cursor: pointer;
+}
+
+.treeBox .btn_list.cancel {
+    font-size: 13px;
+    color: var(--red);
+    display: none;
+}
+
+.treeBox .btn_list.cancel i {
+    font-weight: bold;
+}
+
+.treeBox .loadBox {
+    line-height: initial;
+}
+
+.treeBox .loadBox.show {
+    padding: 10px 20px 20px 0;
+}
+
+.treeBox .labelList {
+    display: none;
+}
+
+/***** common styles for grid component *****/
+[data-bc-grid] .objectImage {
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+}
+
+[data-bc-grid] table[data-bc-table] td.textCenter {
+    text-align: center !important;
+}
+
+[data-bc-grid] table[data-bc-table] td.textRight {
+    text-align: right !important;
+}
+
+[data-bc-grid] table[data-bc-table] td.textLeft {
+    text-align: left !important;
+}
+
+[data-bc-grid] [data-bc-paging-container] [data-bc-status] svg {
+    height: 25px;
+}
+
+[data-bc-grid] [data-bc-paging-container] [data-bc-status=""] path {
+    fill: #004B85;
+}
+
+[data-bc-grid] [data-bc-paging-container] [data-bc-status="disabled"] path {
+    fill: #D0D0D0;
+}
+
+/***** common styles for condition column button and icons in grid component *****/
+[data-bc-grid] table[data-bc-table] .iconsCondition {
+    position: relative;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .icon {
+    padding: 2px 5px;
+    cursor: pointer;
+    width: max-content;
+    border-radius: 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition svg {
+    vertical-align: middle;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition svg.dot,
+[data-bc-grid] table[data-bc-table] .iconsCondition .icon span {
+    margin-left: 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .icon span {
+    font-size: 12px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .active {
+    background: #CDFFCD;
+    color: #007F00;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .active * {
+    color: #007F00;
+    font-size: 12px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .active svg circle {
+    fill: #007F00;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .active svg path {
+    stroke: #007F00;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .inactive {
+    background: #FFECCC;
+    color: #CE8500;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .inactive * {
+    color: #CE8500;
+    font-size: 12px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .inactive svg circle {
+    fill: #CE8500;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .inactive svg path {
+    stroke: #CE8500;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .info {
+    background: #e5edf3;
+    color: #004b85;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .info * {
+    color: #004b85;
+    font-size: 12px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .info svg circle {
+    fill: #004b85;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .info svg path {
+    stroke: #004b85;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .iconsDetail {
+    display: none;
+    position: absolute;
+    top: 27px;
+    right: 0;
+    /* transform: translateX(-50%); */
+    padding: 5px;
+    width: 90px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    z-index: 1;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition.show .iconsDetail {
+    display: block;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .iconItem {
+    display: block;
+    cursor: pointer;
+    padding: 5px 5px;
+    font-size: 12px;
+    color: #000;
+    text-align: right;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .iconItem:last-child {
+    margin-bottom: 0;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsCondition .iconItem.notAllowed {
+    cursor: not-allowed;
+}
+
+/* [data-bc-grid] table[data-bc-table] .iconsCondition .iconItem:hover {
+    background: rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+} */
+
+/***** common styles for operations column button and icons in grid component *****/
+[data-bc-grid] table[data-bc-table] .iconsOperations {
+    position: relative;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .icon {
+    padding: 0 10px;
+    cursor: pointer;
+    width: max-content;
+    margin: 0 auto;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .icon svg {
+    vertical-align: middle;
+    padding: 0 10px;
+    width: 100%;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconsDetail {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    width: 100px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    z-index: 1;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations.show .iconsDetail {
+    display: block;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem {
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex; /* NEW - Chrome */
+    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 5px 5px;
+    font-size: 12px;
+    color: #000;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem.notAllowed {
+    cursor: not-allowed;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem:hover {
+    background: rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem span {
+    font-size: 12px;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem svg {
+    vertical-align: middle;
+}
+
+[data-bc-grid] table[data-bc-table] .iconsOperations .iconItem i {
+    font-size: 17px;
+    vertical-align: middle;
+}
+
+/***** common styles for unread row in grid component *****/
+[data-bc-grid] table[data-bc-table] tbody tr.unread td {
+    font-weight: bold;
+    font-size: 14.5px;
+    color: #333;
+}
+
+/***** common styles for operations column button and icons in grid component *****/
+[data-bc-grid] table[data-bc-table] tbody td .noData {
+    margin: 50px 0;
+}
+
+[data-bc-grid] table[data-bc-table] tbody td .noData .text {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 31px;
+    text-align: center;
+    color: #D0D0D0;
+}
+/************************* just for external modules - delete after edit them *************************/
+/***** common styles for button and icons in grid component *****/
+[data-bc-grid] table[data-bc-table] .icons a {
+    padding: 0 5px;
+}
+
+[data-bc-grid] table[data-bc-table] .icons .view {
+    cursor: pointer;
+}
+
+[data-bc-grid] table[data-bc-table] .icons .illegal {
+    cursor: not-allowed;
+}
+
+[data-bc-grid] table[data-bc-table] .icons i {
+    cursor: pointer;
+}
+
+[data-bc-grid] table[data-bc-table] td .preview {
+    height: 67px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    line-height: 67px;
+}
+
+
+/***** common styles for operations widthCard in grid component *****/
+[data-bc-card] div[data-bc-card-data] .iconsOperations {
+    position: relative;
+    background-color: rgba(0, 75, 133, 0.1);
+    width: 36px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .icon {
+    padding: 0 10px;
+    cursor: pointer;
+    width: max-content;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+[data-bc-card] div[data-bc-card-data]{
+    padding-right: 10px;
+}
+[data-bc-card] div[data-bc-card-data] .iconsOperations .icon svg {
+    vertical-align: middle;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconsDetail {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    width: 100px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    z-index: 1;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations.show .iconsDetail {
+    display: block;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem {
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex; /* NEW - Chrome */
+    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 5px 5px;
+    font-size: 12px;
+    color: #000;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem.notAllowed {
+    cursor: not-allowed;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem:hover {
+    background: rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem span {
+    font-size: 12px;
+}
+[data-bc-card] div[data-bc-card-data] [data-bc-card-titleText]{
+    color: #767676;
+}
+[data-bc-card] div[data-bc-card-data] [data-bc-card-info]{
+    color: rgba(0, 0, 0, 0.3)
+}
+
+[data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem svg {
+    vertical-align: middle;
+}
+[data-bc-card] div[data-bc-card-data] [data-bc-card-title]{
+    display: flex; flex-direction: column;
+    margin-right: 5px;margin-left: 5px;
+}
+[data-bc-card]{
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+    height: 80px;
+    background: #fff;
+}
+[data-bc-card-data]{
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  [data-bc-card] div[data-bc-card-data] [data-bc-card-text]{
+      display: flex; align-items: center; margin-right: 10px;
+  }
+  [data-bc-grid] [data-bc-grid-modes] div{
+    width: 36px; height: 36px; border-radius: 5px; margin-left: 5px; border: none;
+}
+[data-bc-grid] [data-bc-grid-modes] div{
+    background: rgba(0, 75, 133, 0.2);
+    transition: all ease-in-out 0.25s;
+}
+[data-bc-grid] [data-bc-grid-modes] div[data-bc-grid-active-mode]{
+    background: #004B85; cursor: default;
+}
+[data-bc-grid] [data-bc-grid-modes] svg{
+    fill: #fff;
+}
+[data-bc-grid] [data-bc-grid-modes] div:hover{
+    background: #004B85;
+}
+[data-sys-btn-info]{
+    padding: 10px 10px;
+    border-radius: 5px;
+    direction: rtl;
+    width:  fit-content;
+
+  }
+[data-bc-page-header]{
+    height: 1px !important;
+}
+/**************Tab***************/
+.tabWrapper {
+    overflow: hidden;
+    text-align: right;
+    direction: rtl;
+}
+
+.tabWrapper .tabs {
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    margin-bottom: 15px;
+    /* padding: 0 20px; */
+}
+
+.tabWrapper .tabContainer {
+    /* border: 1px solid #efefef; */
+    background-color: rgba(0, 75, 133, 0.05);
+    border-radius: 5px;
+    padding: 5px;
+    width: max-content;
+    position: relative;
+}
+
+.tabWrapper .tabButton {
+    color: #030229;
+    background: transparent;
+    font-size: 14px;
+    height: 35px;
+    position: relative;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    width: 100px;
+    text-transform: uppercase;
+    /* font-weight: bold; */
+    text-align: center;
+    border: none;
+    box-sizing: border-box;
+    -webkit-transition: all 150ms ease 0s;
+    transition: all 150ms ease 0s;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 35px;
+}
+
+.tabWrapper .tabButton[tab-button-status="active"] {
+    color: #fff;
+}
+
+.tabWrapper .tabActive {
+    position: absolute;
+    bottom: 5px;
+    display: flex;
+    height: 35px;
+    width: 100px;
+    background-color: #004B85;
+    z-index: 1;
+    border-radius: 5px;
+    transition: 0.25s ease-out;
+    transform: translateX(0);
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.odd td {
+    background-color: #fff !important;
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.even td {
+    background-color: #F4F4F4 !important;
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr td[data-bc-order]:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: #222 transparent transparent transparent;
+    opacity: 0.75;
+    /* position: absolute; */
+    /* right: 15px; */
+    /* top: calc(50% - 3px); */
+    -webkit-transition: transform 0.5s;
+    -moz-transition: transform 0.5s;
+    -o-transition: transform 0.5s;
+    transition: transform 0.5s;
+    float: right;
+    transform: translateY(100%);
+    margin-right: 10px;
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr td.rotate[data-bc-order]:before {
+    transform: rotateZ(90deg) translateX(50%);
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list {
+    color: #5c5c5c;
+    height: 0px;
+    transition: height 0.3s linear, line-height 0.3s linear, opacity 0.5s linear;
+    opacity: 0;
+    line-height: 0;
+    border-bottom: none;
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list.show {
+    height: 100px;
+    opacity: 1;
+    line-height: 1;
+    /* border-bottom: 1px solid #D0D0D0; */
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list td {
+    background-color: #fff !important;
+    padding: 0;
+    border: 0;
+}
+
+.schemaOrderChangeForm [data-bc-grid] table[data-bc-table] tbody tr.load-list.show td {
+    border: 1px solid #D9E4E6;
+    background-color: #fff !important;
+    /* padding: 10px 5px; */
+}

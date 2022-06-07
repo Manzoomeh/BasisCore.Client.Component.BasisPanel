@@ -25,57 +25,11 @@ export default class DashboardComponent extends PageComponent {
     );
     this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
     const body = this.container.querySelector("[data-bc-page-body]");
-    if (this.info.content) {
-      const range = new Range();
-      range.setStart(body, 0);
-      range.setEnd(body, 0);
-      range.insertNode(range.createContextualFragment(this.info.content));
-    }
-  }
-  public async addingDashboardWidgets(): Promise<void>  {
-    const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]")
-    parent.innerHTML = ""
-    const widgetWrapper = this.container.querySelector("[data-bc-page-dashboard-disablelist]") as HTMLElement
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
-    const url = HttpUtil.formatString( this.options.tempwidgets, {
-      rKey: this.options.rKey,
-    }); 
-    const removewidgetUrl = HttpUtil.formatString( this.options.removeFromDashbaord, {
-      rKey: this.options.rKey,
-    }); 
-    
-    const data = await HttpUtil.fetchStringAsync( url, "GET" );
-    const content = JSON.parse(data)
-  
-    content.forEach((e) => {
-      const widgetDiv = document.createElement("div")
-      const closeDiv = document.createElement("span")
-      widgetDiv.setAttribute("data-bc-page-widget-dashboard","")
-      widgetDiv.setAttribute("data-sys-widget","")
-      widgetDiv.setAttribute("data-sys-text","")
-      closeDiv.setAttribute("data-bc-btn-remove","")
-      closeDiv.textContent = "X"
-      widgetDiv.textContent= e.title
-      const widgetIcon = document.createElement("img")
-      widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")
-      widgetDiv.appendChild(widgetIcon)
-      widgetDiv.appendChild(closeDiv)
-      parent.appendChild(widgetDiv)
-      widgetWrapper.style.display="block"
-      closeDiv.addEventListener("click", async (event) => {
-        await HttpUtil.fetchDataAsync(removewidgetUrl, "POST", {
-          widgetid: e.widgetid
-        });
-        this.addingDashboardWidgets()
-      })
-    })
-   
-    
-
   }
+ 
   public async runAsync(source?: ISource) {
-    this.addingDashboardWidgets();
     if (!this._groupsAdded) {
       await this.addingPageGroupsAsync(this.info);
       this._groupsAdded = true;

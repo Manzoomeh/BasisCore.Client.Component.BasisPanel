@@ -53,8 +53,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._page.widgetDropAreaContainer.addEventListener("dragover", (e) =>
       e.preventDefault()
     );
-    this._page.widgetDropAreaContainer.addEventListener("drop", (e) =>
+    this._page.widgetDropAreaContainer.addEventListener("drop", (e) =>{
+    e.preventDefault();
       this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")))
+    }
     );
   }
 
@@ -85,7 +87,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const layout = widgetItemLayout
         .replace("@title", widgetInfo.title)
         .replace("@id", widgetInfo.id.toString())
-        .replace("@image", widgetInfo.icon);
+        .replace("@image",  widgetInfo.icon ? widgetInfo.icon : "asset/images/no_icon.png");
+     
       const widgetMessage = container.querySelector("[data-bc-widget-drop-area-message]")
       if(widgetMessage)
         widgetMessage.remove()
@@ -106,6 +109,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   public runAsync(source?: ISource) {
+    this.addingDashboardWidgets();
     if (source?.id === DefaultSource.WIDGET_CLOSED) {
     }
   }
@@ -136,6 +140,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         widgetElement.addEventListener("dragstart", (e) => {
           e.dataTransfer.setData("text/plain", JSON.stringify(widget));
         });
+        
         disableWidgets.appendChild(widgetElement);
         widgetElement.addEventListener("dblclick", (e) => {
           e.preventDefault();
@@ -146,7 +151,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     catch{
       
     }
-    
+
   }
 
   private displayWidgetList(e ) {
@@ -177,10 +182,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });  
     const widgetBox : HTMLElement= this.container.querySelector("[data-bc-page-widget-list]") as HTMLElement
     const widgetContainer = document.querySelector("[data-bc-page-body-container]") as HTMLElement
-    const widgetDashboardBox = document.querySelector("[data-bc-dashboard-widgets]") as HTMLElement
     widgetBox.style.transform="translateX(-300px)"
     widgetContainer.style.width="calc(100%)"
-    widgetDashboardBox.style.width="calc(100% )"
   }
 
   private showList() {
@@ -192,10 +195,62 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });    
     const widgetBox : HTMLElement= this.container.querySelector("[data-bc-page-widget-list]") as HTMLElement
     const widgetContainer = document.querySelector("[data-bc-page-body-container]") as HTMLElement
-    const widgetDashboardBox = document.querySelector("[data-bc-dashboard-widgets]") as HTMLElement
     widgetBox.style.transform="translateX(0px)"
     widgetContainer.style.width="calc(100% - 300px)"
-    widgetDashboardBox.style.width="calc(100% - 300px)"
 
+  }
+  public async addingDashboardWidgets(): Promise<void>  {
+    const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]") as HTMLElement
+    parent.innerHTML = ""
+    const url = HttpUtil.formatString( this.options.tempwidgets, {
+      rKey: this.options.rKey,
+    }); 
+    const removewidgetUrl = HttpUtil.formatString( this.options.removeFromDashbaord, {
+      rKey: this.options.rKey,
+    }); 
+    const data = await HttpUtil.fetchStringAsync( url, "GET" );
+    const dashboardWidgetList = JSON.parse(data)
+    dashboardWidgetList.forEach((widgetList) => {
+      const widgetDiv = document.createElement("div")
+      const closeDiv = document.createElement("span")
+      widgetDiv.setAttribute("data-bc-page-widget-dashboard","")
+      widgetDiv.setAttribute("data-sys-widget","")
+      widgetDiv.setAttribute("data-sys-text","")
+      closeDiv.setAttribute("data-bc-btn-remove","")
+      closeDiv.textContent = "X"
+      widgetDiv.textContent= widgetList.title
+      const widgetIcon = document.createElement("img")
+      widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")
+      widgetDiv.appendChild(widgetIcon)
+      widgetDiv.appendChild(closeDiv)
+      parent.appendChild(widgetDiv)
+      widgetDiv.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", JSON.stringify(widgetList));
+      });
+      closeDiv.addEventListener("click", async (event) => {
+        await HttpUtil.fetchDataAsync(removewidgetUrl, "POST", {
+          widgetid: widgetList.widgetid
+        });
+        this.addingDashboardWidgets()
+      })
+    })
+    const allWidget = document.querySelector("[data-bc-page-widget-disableList]") as HTMLElement;
+    const allWidgetBtn= this.container.querySelector("[data-all-widget]")
+    const dashboardWidgetBtn= this.container.querySelector("[data-dashboard-widgets]")
+    const activeElement= this.container.querySelector(".tabActive") as HTMLElement;
+    dashboardWidgetBtn.addEventListener("click", e => {
+      parent.style.display="flex"
+      allWidget.style.display="none"
+      activeElement.style.transform = `translateX(-100px)`;
+      dashboardWidgetBtn.setAttribute("tab-button-status","active")
+      allWidgetBtn.removeAttribute("tab-button-status")
+    })
+    allWidgetBtn.addEventListener("click", e => {
+      parent.style.display="none"
+      allWidget.style.display="flex"
+      activeElement.style.transform = `translateX(0px)`;
+      allWidgetBtn.setAttribute("tab-button-status","active")
+      dashboardWidgetBtn.removeAttribute("tab-button-status")
+    })
   }
 }

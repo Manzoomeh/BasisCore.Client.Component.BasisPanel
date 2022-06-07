@@ -90,7 +90,7 @@ div[data-bc-page-body] {
 [data-bc-page-widget-disablelist] {
     display: flex;
     z-index: 1;
-    margin-top: 20px;
+    margin-top: 10px;
     padding-top: 20px;
     justify-content: space-between;
     border-top: 1px dashed #ccc;
@@ -114,6 +114,9 @@ flex-direction: column;
     align-items: center;
     justify-content: space-between;
     direction: rtl;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 [data-bc-page-widget-disablelist] div img{
     width: 60px;
