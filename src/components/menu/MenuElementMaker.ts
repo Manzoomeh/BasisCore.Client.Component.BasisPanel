@@ -94,18 +94,23 @@ export default class MenuElementMaker {
     innerUl.setAttribute("data-bc-bp-submenu", "");
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
-    li.appendChild(innerUl);    
+    li.appendChild(innerUl);
     li.addEventListener("click", function (e) {       
-      const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
-      if (innerUl.getAttribute("data-bc-ul-level-open") == null) {       
+      if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
+        const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")  
+        openMenu.forEach(e => {
+          (e as HTMLElement).style.transform = ` scaleY(0)`;
+          e.removeAttribute("data-bc-ul-level-open");
+          e.previousElementSibling.removeAttribute("data-bc-level-open");
+        });
+        
         innerUl.style.transform = `scaleY(1)`;
         innerUl.setAttribute("data-bc-ul-level-open", "1");
         content.setAttribute("data-bc-level-open", "");      
-      } 
-      else {
+      } else {
         innerUl.style.transform = ` scaleY(0)`;
         innerUl.removeAttribute("data-bc-ul-level-open");
-        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");      
+        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
       }
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
       activeMenus.forEach(e => {
