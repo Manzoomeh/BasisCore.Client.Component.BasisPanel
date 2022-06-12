@@ -11,8 +11,8 @@
     direction: rtl;
     z-index: 99;
     transform-origin: top;
-	transform: scaleY(0);
-	transition: all 0.3s ease-in-out;
+    transform: scaleY(0);
+    transition: all 0.3s ease-in-out;
     padding-right: 40px;
 }
 
@@ -62,13 +62,17 @@
 
 [data-bc-business-list] [data-bc-business-notif-drop-down] {
     position: absolute;
-    top:3px;
-    left: 10px;
+    top: 3px;
+    left: 0;
     cursor: pointer;
+    width: 20px;
+    height: 20px;
+    text-align: center;
 }
-[data-bc-corporate-list-icon]{
+
+[data-bc-corporate-list-icon] {
     float: right;
-	width: 32px;
+    width: 32px;
     height: 32px;
     background-color: #E4E7F4;
     border-radius: 5px;
@@ -78,7 +82,6 @@
     position: absolute;
     right: 0;
 }
-
 
 [data-bc-business-list] [data-bc-business-drop-down] {
     position: absolute;
@@ -117,13 +120,13 @@
     font-size: 11px;
     color: var(--dark_gray);
     background: #F4F4F4;
-    border:1px solid #EBEBEB;
+    border: 1px solid #EBEBEB;
     border-radius: 5px;
     transition: border 0.3s linear 0s;
     box-sizing: border-box;
 }
 
-[data-bc-business-list] [data-bc-business-search] input:focus{
+[data-bc-business-list] [data-bc-business-search] input:focus {
     border: 1px solid #EBEBEB;
     outline: none;
 }
@@ -144,7 +147,8 @@
     border-radius: 5px;
     margin-left: 5px;
 }
-[data-bc-business-list] [data-bc-business-drop-down] li:hover{
+
+[data-bc-business-list] [data-bc-business-drop-down] li:hover {
     background: rgba(0, 75, 133, 0.1);
 }
 
@@ -159,4 +163,19 @@
 
 .autocomplete-active {
     background-color: #eee !important;
+}
+
+.active-business {
+    border: 1px solid rgba(0, 75, 133, 1);
+    background-color: #E4E7F4;
+}
+
+.active-business [data-bc-main-name] {
+    color: rgba(0, 75, 133, 1);
+}
+
+.active-business [data-bc-corporate-list-icon] {
+    border: 1px solid rgba(0, 75, 133, 1);
+    border-top: 0;
+    border-right: 0;
 }

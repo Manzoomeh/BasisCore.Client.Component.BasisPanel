@@ -24,6 +24,9 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     this.container.addEventListener("click", (e) => {
       e.preventDefault();
       this.signalToDisplayMenu();
+
+      this.container.closest("[data-bc-bp-main-header]").querySelector(".active-business")?.classList.remove("active-business");
+      this.container.closest("[data-bc-bp-main-header]").querySelector(".active-corporate")?.classList.remove("active-corporate");
     });
     return Promise.resolve();
   }
