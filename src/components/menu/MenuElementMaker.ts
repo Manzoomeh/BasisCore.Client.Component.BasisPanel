@@ -112,11 +112,6 @@ export default class MenuElementMaker {
         innerUl.removeAttribute("data-bc-ul-level-open");
         innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
       }
-      const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
-      activeMenus.forEach(e => {
-        e.removeAttribute("data-bc-menu-active")
-      })
-      li.setAttribute("data-bc-menu-active","")
     });
     return li;
   }
@@ -134,12 +129,19 @@ export default class MenuElementMaker {
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onMenuItemClick(node.pid, menuParam, e.target);
-      const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
+
+      const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach(e => {
-        e.removeAttribute("data-bc-menu-active")
+        e.removeAttribute("data-bc-menu-active");
       })
-      li.setAttribute("data-bc-menu-active","")
-     
+      
+      const parent = content.closest("[data-bc-bp-submenu]");
+      if (parent) {
+        parent.closest("li").querySelector("[data-bc-level]").setAttribute("data-bc-menu-active","");
+        li.setAttribute("data-bc-menu-active","");
+      } else {
+        li.setAttribute("data-bc-menu-active","");
+      }
     });
     pageLookup.set(node.pid, menuParam);    
     li.appendChild(content);
