@@ -83,7 +83,7 @@ export default abstract class PageComponent
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-
+    
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
@@ -96,10 +96,16 @@ export default abstract class PageComponent
     const windowHeight = window.innerHeight;
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
-    if (cell * maxHeight > windowHeight) {
+
+    const headerHeight = (document.querySelector("[data-bc-bp-main-header]") as HTMLElement).offsetHeight;
+    const menuHeight = (document.querySelector("[data-bc-bp-menu-container]") as HTMLElement).offsetHeight;
+    const footerHeight = (document.querySelector("[data-bc-bp-footer-container]") as HTMLElement).offsetHeight;
+    const otherHeight = headerHeight + menuHeight + footerHeight;
+
+    if ((cell * maxHeight) > (windowHeight - otherHeight)) {
       (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.height = `${windowHeight - 195}px`;
+      (pageBody as HTMLElement).style.height = `${windowHeight - otherHeight}px`;
     }
   }
 }
