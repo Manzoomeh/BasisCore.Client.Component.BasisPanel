@@ -88,7 +88,7 @@
     box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
     padding: 5px;
     border-radius: 5px;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 [data-bc-corporate-list] [data-bc-corporate-drop-down][data-status="open"] {

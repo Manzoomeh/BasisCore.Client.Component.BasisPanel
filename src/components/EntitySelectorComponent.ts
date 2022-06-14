@@ -143,11 +143,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       if (this.ownerType == "corporate") {
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("data-bc-corporate-search-input", "");
+        searchInput.setAttribute("data-sys-input-text", "");
         searchInput.setAttribute("placeHolder", "جستجوی شرکت ...");
         searchWrapper.appendChild(searchInput);
       } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
+        searchInput.setAttribute("data-sys-input-text", "");
         searchInput.setAttribute("placeHolder", "جستجوی شرکت");
         searchWrapper.appendChild(searchInput);
       }
