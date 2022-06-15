@@ -15,7 +15,8 @@
     font-size: 24px;
 }
 [data-bc-widget-drop-area-message] span{
-    color: rgba(0,0,0,0.3);
+    color: rgba(0,0,0);
+    opacity: 0.4;
     font-size: 20px;
     font-weight: bold;
     margin-top: 15px;
