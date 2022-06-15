@@ -90,10 +90,14 @@ module.exports = (env, options) => {
           test: /\.svg$/i,
           type: "asset/inline",
         },
+        {
+          test: /\.(jpe?g)$/,
+          type: "asset/inline",
+        },
       ],
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".png", ".html", ".svg"], // there's a dot missing
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".png", ".html", ".svg", ".jpg", ".jpeg"], // there's a dot missing
     },
     plugins: [
       new CircularDependencyPlugin({

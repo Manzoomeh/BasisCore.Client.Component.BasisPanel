@@ -14,8 +14,14 @@
   margin-top: 5px;
 }
 
-[data-bc-bp-logo] img {
+[data-bc-bp-logo] a {
+  display: block;
   width: 140px;
+  height: 32px;
+  background-image: url('basispanel_light.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 [data-bc-bp-header-items]{
