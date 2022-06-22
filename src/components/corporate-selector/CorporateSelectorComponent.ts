@@ -1,4 +1,4 @@
-import { IUserDefineComponent } from "basiscore";
+import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import EntitySelectorComponent from "../EntitySelectorComponent";
 import layout from "./assets/layout.html";
@@ -6,6 +6,7 @@ import "./assets/style.css";
 
 export default class CorporateSelectorComponent extends EntitySelectorComponent {
   private dataLoaded = false;
+  private _isFirst = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "corporate");
@@ -29,5 +30,12 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
       this.dataLoaded = true;
     }
   }
+
+  public async runAsync(source?: ISource): Promise<any> {
+    await super.runAsync(source);
+    if (source?.id == DefaultSource.USER_INFO_SOURCE && this._isFirst) {
+      this._isFirst = true;
+      this.trySelectAsync(1);
+    }
+  }
 }
-//

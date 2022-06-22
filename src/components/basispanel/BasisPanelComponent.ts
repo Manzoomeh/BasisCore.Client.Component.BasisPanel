@@ -2,7 +2,7 @@
 
 import "./assets/style.css";
 import layout from "./assets/layout.html";
-import {ISourceOptions, IUserDefineComponent, IDisposable} from "basiscore";
+import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 
 declare const $bc: any;
@@ -30,33 +30,42 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
     }
 
     this.container.addEventListener("click", function (e) {
-      const currentElement = e.target as HTMLElement
+      const currentElement = e.target as HTMLElement;
 
       // for close menu
       if (currentElement.getAttribute("data-bc-level-open") === null) {
-        const openMenu = document.querySelectorAll("[data-bc-ul-level-open]")
+        const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
         openMenu.forEach((x) => {
-          const openMenu = x as HTMLElement
+          const openMenu = x as HTMLElement;
           openMenu.style.transform = ` scaleY(0)`;
           openMenu.previousElementSibling.removeAttribute("data-bc-level-open");
           openMenu.removeAttribute("data-bc-ul-level-open");
-        })
+        });
       }
-      
+
       // for close corporate drop down
-      if (currentElement.getAttribute("data-bc-drop-down-click") === null && 
-        currentElement.getAttribute("data-bc-corporate-icon-drop-down") === null && 
-        currentElement.getAttribute("data-bc-corporate-search-input") === null) {
-        document.querySelector("[data-bc-corporate-drop-down]").setAttribute("data-status", "close");
+      if (
+        currentElement.getAttribute("data-bc-drop-down-click") === null &&
+        currentElement.getAttribute("data-bc-corporate-icon-drop-down") ===
+          null &&
+        currentElement.getAttribute("data-bc-corporate-search-input") === null
+      ) {
+        document
+          .querySelector("[data-bc-corporate-drop-down]")
+          .setAttribute("data-status", "close");
       }
 
       // for close business drop down
-      if (currentElement.getAttribute("data-bc-drop-down-click") === null && 
-        currentElement.getAttribute("data-bc-business-icon-drop-down") === null && 
-        currentElement.getAttribute("data-bc-business-search-input") === null) {
-        document.querySelector("[data-bc-business-drop-down]").setAttribute("data-status", "close");
+      if (
+        currentElement.getAttribute("data-bc-drop-down-click") === null &&
+        currentElement.getAttribute("data-bc-business-icon-drop-down") ===
+          null &&
+        currentElement.getAttribute("data-bc-business-search-input") === null
+      ) {
+        document
+          .querySelector("[data-bc-business-drop-down]")
+          .setAttribute("data-status", "close");
       }
-
-    })
+    });
   }
 }

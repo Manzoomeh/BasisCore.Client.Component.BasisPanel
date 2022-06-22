@@ -18,45 +18,45 @@
       settings: {
         "connection.web.demo": "/server/dbsource/demo",
         "basispanel.option": {
-          rKey: "A6CEEFA8-B816-4C34-9843-D15EFD17C158",
+          rKey: "A8A5A4E5-514D-4C61-9AFF-2CC385688B6B",
           avatar: "https://trust-login.com",
-          widgetListUrl: "/server/widget-list/A6CEEFA8-B816-4C34-9843-D15EFD17C158/${pageId}",
-          addWidgetUrl: "/server/widget-list/A6CEEFA8-B816-4C34-9843-D15EFD17C158/${pageId}",
-          addtoDashboard: "user/A6CEEFA8-B816-4C34-9843-D15EFD17C158/addtodashboard",
-          removeFromDashbaord:"https://basispanel.ir/user/[rkey]/removetempwidget",
-          tempwidgets: "https://basispanel.ir/user/A6CEEFA8-B816-4C34-9843-D15EFD17C158/tempwidgets",
+          widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
+          addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
+          addtoDashboard: "user/${rKey}/addtodashboard",
+          removeFromDashbaord: "https://basispanel.ir/user/[rkey]/removetempwidget",
+          tempwidgets: "https://basispanel.ir/user/${rKey}/tempwidgets",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
             business: "/server/business",
-            active: "/server/active/A6CEEFA8-B816-4C34-9843-D15EFD17C158/set-active",
+            active: "/server/active/${rKey}/set-active",
           },
           dataUrl: {
-            profile: "/server/trust/A6CEEFA8-B816-4C34-9843-D15EFD17C158/profile",
-            corporate: "/server/corporate/A6CEEFA8-B816-4C34-9843-D15EFD17C158/list",
-            business: "/server/business/A6CEEFA8-B816-4C34-9843-D15EFD17C158/list",
+            profile: "/server/trust/${rKey}/profile",
+            corporate: "/server/corporate/${rKey}/list",
+            business: "/server/business/${rKey}/list",
           },
           themeUrl: {
             light: "http://basispanel.ir/asset/css/light.css",
             dark: "http://basispanel.ir/asset/css/dark.css",
-            addThemeUrl : "https://basispanel.ir/user/${rKey}/editcolormode",
-            defaultTheme : "http://basispanel.ir/user/${rKey}/visualmode"
+            addThemeUrl: "https://basispanel.ir/user/${rKey}/editcolormode",
+            defaultTheme: "http://basispanel.ir/user/${rKey}/visualmode"
           },
           method: {
-            userImage: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/users/${profile.thumbnail}",
-            menu: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/menu?level=${level}",
-            page: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/page/${pageId}",
-            sidebarMenu: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/sidebarMenu/${pageId}",
-            widget: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/widget/${widgetId}"
+            userImage: "/${rKey}/users/${profile.thumbnail}",
+            menu: "/${rKey}/menu?level=${level}",
+            page: "/${rKey}/page/${pageId}",
+            sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
+            widget: "/${rKey}/widget/${widgetId}"
 
           },
           checkRkey: {
-            url: "/server/trust/checkrkey/A6CEEFA8-B816-4C34-9843-D15EFD17C158",
+            url: "/server/trust/checkrkey/${rKey}",
             cookieName: "rkey",
             defaultRedirectUrl: "https://www.google.com",
           },
           logout: {
-            url: "/server/trust/A6CEEFA8-B816-4C34-9843-D15EFD17C158/logout",
+            url: "/server/trust/${rKey}/logout",
             cookieName: "rkey",
             successId: 4,
             dmnToken: "asdfr",
@@ -67,7 +67,7 @@
               {
                 name: "messages",
                 title: "پیام ها",
-                url: "/server/notifications/A6CEEFA8-B816-4C34-9843-D15EFD17C158/unread-messages",
+                url: "/server/notifications/${rKey}/unread-messages",
                 config: {
                   filter: "none",
                   paging: null,
@@ -89,7 +89,7 @@
               {
                 name: "notes",
                 title: "یادداشت ها",
-                url: "/server/notifications/A6CEEFA8-B816-4C34-9843-D15EFD17C158/new-notes",
+                url: "/server/notifications/${rKey}/new-notes",
                 config: {
                   filter: "none",
                   paging: null,
@@ -111,7 +111,7 @@
               {
                 name: "tasks",
                 title: "تسک ها",
-                url: "/server/notifications/A6CEEFA8-B816-4C34-9843-D15EFD17C158/new-tasks",
+                url: "/server/notifications/${rKey}/new-tasks",
                 config: {
                   filter: "none",
                   paging: null,

@@ -17,6 +17,7 @@ export default class MenuComponent
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   private current: MenuElement;
+  private _isFirst: boolean = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-menu-container");
@@ -29,14 +30,29 @@ export default class MenuComponent
   }
 
   public initializeAsync(): Promise<void> {
-    this.owner.addTrigger([DefaultSource.SHOW_MENU]);
+    this.owner.addTrigger([
+      DefaultSource.SHOW_MENU,
+      DefaultSource.BUSINESS_SOURCE,
+    ]);
     return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
-   
+    console.log("in menu", source?.id);
     if (source?.id == DefaultSource.SHOW_MENU) {
       await this.loadDataAsync(source.rows[0]);
+    } else if (this._isFirst && source?.id == DefaultSource.BUSINESS_SOURCE) {
+      this._isFirst = false;
+
+      const newParam = {
+        pageId: "userInfo",
+        owner: "profile",
+        ownerId: "",
+        ownerUrl: "/server/trust",
+        rKey: "A8A5A4E5-514D-4C61-9AFF-2CC385688B6B",
+        pageMethod: "/${rKey}/page/${pageId}",
+      };
+      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
   }
 
@@ -60,7 +76,7 @@ export default class MenuComponent
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
-    )
+    );
     const cookieName = this.options.checkRkey.cookieName;
     if (isAuthenticate == false) {
       if (cookieName && cookieName != "") {
@@ -94,7 +110,7 @@ export default class MenuComponent
       const isAuthenticate = await HttpUtil.isAuthenticate(
         this.options.rKey,
         this.options.checkRkey
-      )
+      );
       const cookieName = this.options.checkRkey.cookieName;
       if (isAuthenticate == false) {
         if (cookieName && cookieName != "") {
