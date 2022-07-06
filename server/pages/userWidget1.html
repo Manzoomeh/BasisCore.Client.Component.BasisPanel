@@ -1,5 +1,7 @@
 <span id="span_id">ویجت داشبورد سطح user</span>
 
+<button id="btn-ajax" onclick="click_process(this)">ajax process</button>
+
 <!-- <Basis core="component.local.DemoComponent" run="atclient" triggers="event.click">
 </Basis> -->
 <!-- <button id="btn">Load user info</button> -->
@@ -16,8 +18,8 @@
 </basis>
 <Basis core="component.grid.grid" run="atclient" dataMemberName="book.list" options="demo_grid_options" optionsUrl="/server/dbsource/grid-options.js">
 </Basis>
-<basis core="callback" run="atclient" triggers="sample.data"></basis>
-<basis core="component.basiscore.exposer" run="atclient" component="pagesList_component"></basis> -->
+<basis core="callback" run="atclient" triggers="sample.data"></basis> -->
+<basis core="component.basiscore.exposer" run="atclient" component="pagesList_component"></basis>
 <!-- <script src="/server/dbsource/grid-options.js"></script> -->
 <!-- <script>
   const demo_grid_options = {
@@ -26,6 +28,42 @@
 </script> -->
 
 <script>
+
+  function click_process(e) {
+    const scheduler = pagesList_component.owner.dc.resolve("scheduler");
+    const widget = pagesList_component.owner.dc.resolve("widget");
+
+    /*
+     ITaskOptions {
+  key?: string;
+  container?: Element;
+  title?: string;
+  type?: TaskType;
+  reportHandlers?: EventManager<IReportParam>;
+  task: Promise<any>;
+  notify?: boolean;
+  cancel?: () => void;
+}
+
+    */
+    const task = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 3000);
+    })
+    const taskOptions = {
+      key: "process-1",
+      container: widget.body,
+      title: "process",
+      type: 0,
+      reportHandlers: null,
+      task: task,
+      notify: false,
+      cancel: null
+    }
+    const r = scheduler.startTask(taskOptions)
+    console.log(r);
+  }
   document.getElementById("file-form").addEventListener("change", (e) => {
     let data = new FormData(e.currentTarget);
     console.log(data);

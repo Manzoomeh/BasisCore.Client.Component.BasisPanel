@@ -1,13 +1,15 @@
 import ITaskOptions, { IReportParam } from "./ITaskOptions";
 import SchedulerComponent from "./SchedulerComponent";
 import layout from "./assets/item-layout.html";
-import { EventHandler } from "basiscore";
+import { BCWrapperFactory, EventHandler, EventManager } from "basiscore";
 
+declare const $bc: BCWrapperFactory;
 export default class TaskProcess {
   private _owner: SchedulerComponent;
   private _options: ITaskOptions;
   private _key: string;
   private _container: Element;
+  private _ajaxNode: Element;
 
   constructor(owner: SchedulerComponent, options: ITaskOptions, key: string) {
     this._owner = owner;
@@ -19,9 +21,13 @@ export default class TaskProcess {
     range.setEnd(this._container, 0);
     range.insertNode(range.createContextualFragment(layout));
     range.detach();
-    (owner.ulElement.querySelector("[data-bc-task-list-noTask]") as HTMLElement).style.display = "none";
+    (
+      owner.ulElement.querySelector("[data-bc-task-list-noTask]") as HTMLElement
+    ).style.display = "none";
     owner.ulElement.appendChild(this._container);
-    const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
+    const alarmEl = this._owner.container.querySelector(
+      "[data-bc-task-list-alarm]"
+    );
     alarmEl.innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     this.startDisplayAjax();
     this._options.task.finally(this.dispose.bind(this));
@@ -54,6 +60,9 @@ export default class TaskProcess {
         this._container.querySelector("[data-bc-task-list-progress-bar]") as any
       ).style.width = `${param.percent}%`;
     };
+    if (!this._options.reportHandlers) {
+      this._options.reportHandlers = new EventManager<IReportParam>();
+    }
     this._options.reportHandlers.Add(uiHandler);
   }
 
@@ -62,25 +71,41 @@ export default class TaskProcess {
     this._owner.taskComplete(this._key, this._options);
     setTimeout((_) => {
       this._container.remove();
-      const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
+      const alarmEl = this._owner.container.querySelector(
+        "[data-bc-task-list-alarm]"
+      );
       alarmEl.innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
-      const countTask = this._owner.container.querySelectorAll("[data-bc-task-list-item]").length;
+      const countTask = this._owner.container.querySelectorAll(
+        "[data-bc-task-list-item]"
+      ).length;
       if (countTask == 0) {
-        (this._owner.container.querySelector("[data-bc-task-list-noTask]") as HTMLElement).style.display = "block";
+        (
+          this._owner.container.querySelector(
+            "[data-bc-task-list-noTask]"
+          ) as HTMLElement
+        ).style.display = "block";
       }
-    }
-    , 3_000);
+    }, 3_000);
   }
 
   private startDisplayAjax() {
+    this._ajaxNode?.remove();
     if (this._options.container) {
-      //console.log("start display ajax", this._options);
+      this._options.container.setAttribute("data-bc-loading-container", "");
+      this._ajaxNode = $bc.util.toHTMLElement(
+        `<div class="loading"><h2 class="animate">Loading</h2></div>`
+      );
+
+      this._options.container.append(this._ajaxNode);
+      console.log("start display ajax", this._options);
     }
   }
 
   private endDisplayAjax() {
     if (this._options.container) {
-      //console.log("end display ajax", this._options);
+      console.log("end display ajax", this._options);
+      this._options.container.removeAttribute("data-bc-loading-container");
+      this._ajaxNode.remove();
     }
   }
 }

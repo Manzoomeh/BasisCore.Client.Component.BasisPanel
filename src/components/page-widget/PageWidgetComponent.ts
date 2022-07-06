@@ -23,8 +23,12 @@ export default abstract class PageWidgetComponent
       "[data-bc-widget-header] > [data-bc-widget-title]"
     ).innerHTML = value;
   }
+  public get body(): HTMLElement {
+    return this.container.querySelector("[data-bc-widget-body]");
+  }
 }
 
 interface IWidget {
   title: string;
+  body: HTMLElement;
 }
