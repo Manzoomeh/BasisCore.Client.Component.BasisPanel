@@ -36,6 +36,8 @@ interface IPanelPartUrlOptions extends IUrlCollectionOption {
 
 interface IPanelPartMethodOptions {
   userImage: string;
+  userNoImage: string;
+  userNoName: string;
   menu: string;
   page: string;
   sidebarMenu: string;
