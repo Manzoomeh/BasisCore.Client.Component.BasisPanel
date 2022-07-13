@@ -9,6 +9,7 @@ import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
 import HttpUtil from "../../HttpUtil";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -38,21 +39,16 @@ export default class MenuComponent
   }
 
   public async runAsync(source?: ISource) {
-    console.log("in menu", source?.id);
     if (source?.id == DefaultSource.SHOW_MENU) {
       await this.loadDataAsync(source.rows[0]);
-    } else if (this._isFirst && source?.id == DefaultSource.BUSINESS_SOURCE) {
-      this._isFirst = false;
-
-      const newParam = {
-        pageId: "userInfo",
-        owner: "profile",
-        ownerId: "",
-        ownerUrl: "/server/trust",
-        rKey: "A8A5A4E5-514D-4C61-9AFF-2CC385688B6B",
-        pageMethod: "/${rKey}/page/${pageId}",
-      };
-      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+      if (this._isFirst && LocalStorageUtil.mustLoadPage(source?.id)) {
+        this._isFirst = false;
+        const storage_value = LocalStorageUtil.getCurrentPage();
+        if (storage_value) {
+          storage_value.rKey = this.options.rKey;
+          this.owner.setSource(DefaultSource.DISPLAY_PAGE, storage_value);
+        }
+      }
     }
   }
 

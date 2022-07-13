@@ -6,6 +6,7 @@ import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import IPageLoaderParam from "./menu/IPageLoaderParam";
 import { DependencyContainer } from "tsyringe";
+import LocalStorageUtil from "../LocalStorageUtil";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -73,18 +74,20 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     return Promise.resolve();
   }
 
-  protected async trySelectAsync(id: number): Promise<boolean> {
+  protected async trySelectFromLocalStorageAsync(): Promise<void> {
     if (this.mustReload) {
       this.mustReload = false;
       await this.fillComboAsync();
     }
-    const relatedElement = this.element.querySelector<HTMLElement>(
-      `[data-id='${id}']`
-    );
-    if (relatedElement) {
-      relatedElement.click();
+    const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+    if (id) {
+      const relatedElement = this.element.querySelector<HTMLElement>(
+        `[data-id='${id}']`
+      );
+      if (relatedElement) {
+        relatedElement.click();
+      }
     }
-    return relatedElement ? true : false;
   }
 
   public async runAsync(source?: ISource) {
@@ -199,6 +202,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           // const id = parseInt(this.element.value);
           const id = parseInt(li.getAttribute("data-id"));
           const entity = this.entityList.find((x) => x.id == id);
+          LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
 
           if (this.profile) {
             if (entity) {

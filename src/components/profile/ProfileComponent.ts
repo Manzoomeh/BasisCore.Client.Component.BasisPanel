@@ -15,7 +15,6 @@ export default class ProfileComponent extends BasisPanelChildComponent {
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-profile-container");
-    console.warn(`ProfileComponent run`);
   }
 
   public runAsync(source?: ISource): Promise<any> {

@@ -5,6 +5,7 @@ import IPageLoaderParam from "../menu/IPageLoaderParam";
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
+import LocalStorageUtil from "../../LocalStorageUtil";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
   constructor(owner: IUserDefineComponent) {
@@ -19,6 +20,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   public async runAsync(source?: ISource) {
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
       const pageParam = source.rows[0] as IPageLoaderParam;
+      LocalStorageUtil.setCurrentPage(pageParam);
       const url = HttpUtil.formatString(
         `${pageParam.ownerUrl}${pageParam.pageMethod}`,
         pageParam

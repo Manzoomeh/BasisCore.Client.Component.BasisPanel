@@ -47,7 +47,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
         this.clearCombo();
         if (this._isFirst) {
           this._isFirst = false;
-          this.trySelectAsync(7);
+          this.trySelectFromLocalStorageAsync();
         }
         break;
       }

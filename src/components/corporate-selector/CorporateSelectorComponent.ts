@@ -35,7 +35,7 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE && this._isFirst) {
       this._isFirst = true;
-      this.trySelectAsync(1);
+      this.trySelectFromLocalStorageAsync();
     }
   }
 }

@@ -4,6 +4,7 @@ import "./assets/style.css";
 import layout from "./assets/layout.html";
 import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 declare const $bc: any;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -12,6 +13,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-main-container");
     $bc.basisPanel = {};
+    LocalStorageUtil.loadLastState();
   }
 
   async runAsync(source?: ISourceOptions): Promise<any> {

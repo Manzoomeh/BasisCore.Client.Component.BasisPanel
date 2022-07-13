@@ -71,16 +71,12 @@ export default class HttpUtil {
 
   public static async isAuthenticate(
     rKey: string,
-    options: ICheckRkeyOptions,
+    options: ICheckRkeyOptions
   ): Promise<boolean> {
     const url = HttpUtil.formatString(options.url, {
       rKey: rKey,
     });
-    const result = await HttpUtil.sendFormData<IResponseCheckRkey>(
-      url,
-      "GET"
-    );
+    const result = await HttpUtil.sendFormData<IResponseCheckRkey>(url, "GET");
     return result.checked;
   }
-
 }
