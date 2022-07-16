@@ -23,7 +23,7 @@
           widgetListUrl: "/server/widget-list/A6CEEFA8-B816-4C34-9843-D15EFD17C158/${pageId}",
           addWidgetUrl: "/server/widget-list/A6CEEFA8-B816-4C34-9843-D15EFD17C158/${pageId}",
           addtoDashboard: "user/A6CEEFA8-B816-4C34-9843-D15EFD17C158/addtodashboard",
-          removeFromDashbaord:"https://basispanel.ir/user/[rkey]/removetempwidget",
+          removeFromDashbaord: "https://basispanel.ir/user/[rkey]/removetempwidget",
           tempwidgets: "https://basispanel.ir/user/A6CEEFA8-B816-4C34-9843-D15EFD17C158/tempwidgets",
           baseUrl: {
             profile: "/server/trust",
@@ -39,17 +39,15 @@
           themeUrl: {
             light: "http://basispanel.ir/asset/css/light.css",
             dark: "http://basispanel.ir/asset/css/dark.css",
-            addThemeUrl : "https://basispanel.ir/user/${rKey}/editcolormode",
-            defaultTheme : "http://basispanel.ir/user/${rKey}/visualmode"
+            addThemeUrl: "https://basispanel.ir/user/${rKey}/editcolormode",
+            defaultTheme: "http://basispanel.ir/user/${rKey}/visualmode"
           },
           method: {
-            userImage: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/users/${profile.thumbnail}",
-            userNoImage: "/asset/images/unknown-avatar.png",
-            userNoName: "بدون نام",
-            menu: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/menu?level=${level}",
-            page: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/page/${pageId}",
-            sidebarMenu: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/sidebarMenu/${pageId}",
-            widget: "/A6CEEFA8-B816-4C34-9843-D15EFD17C158/widget/${widgetId}"
+            userImage: "/${rKey}/users/${profile.thumbnail}",
+            menu: "/${rKey}/menu?level=${level}",
+            page: "/${rKey}/page/${pageId}",
+            sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
+            widget: "/${rKey}/widget/${widgetId}"
 
           },
           checkRkey: {
