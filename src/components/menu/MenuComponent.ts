@@ -29,12 +29,14 @@ export default class MenuComponent
   }
 
   public initializeAsync(): Promise<void> {
-    this.owner.addTrigger([DefaultSource.SHOW_MENU]);
+    this.owner.addTrigger([
+      DefaultSource.SHOW_MENU,
+      DefaultSource.BUSINESS_SOURCE,
+    ]);
     return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
-   
     if (source?.id == DefaultSource.SHOW_MENU) {
       await this.loadDataAsync(source.rows[0]);
     }
@@ -60,7 +62,7 @@ export default class MenuComponent
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
-    )
+    );
     const cookieName = this.options.checkRkey.cookieName;
     if (isAuthenticate == false) {
       if (cookieName && cookieName != "") {
@@ -94,7 +96,7 @@ export default class MenuComponent
       const isAuthenticate = await HttpUtil.isAuthenticate(
         this.options.rKey,
         this.options.checkRkey
-      )
+      );
       const cookieName = this.options.checkRkey.cookieName;
       if (isAuthenticate == false) {
         if (cookieName && cookieName != "") {

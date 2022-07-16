@@ -5,14 +5,17 @@ import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import IPageLoaderParam from "./menu/IPageLoaderParam";
-import { corporate } from "../ComponentLoader";
+import { DependencyContainer } from "tsyringe";
+import LocalStorageUtil from "../LocalStorageUtil";
 
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
   private element: Element;
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
+  private _isFirst = true;
   protected mustReload = true;
+
   public businessComponentFlag: boolean = false;
   constructor(
     owner: IUserDefineComponent,
@@ -21,6 +24,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   ) {
     super(owner, layout, `data-bc-bp-${entityType}-container`);
     this.ownerType = entityType;
+    this.owner.dc
+      .resolve<DependencyContainer>("parent.dc")
+      .registerInstance(entityType, this);
+    console.warn(`corporate registered`);
   }
 
   protected abstract getListUrl(): string;
@@ -41,7 +48,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         await this.fillComboAsync();
       }
       const elStatus = this.element.closest("[data-bc-drop-down-container]");
-      const status = elStatus.getAttribute("data-status");      
+      const status = elStatus.getAttribute("data-status");
       if (status == "close") {
         elStatus.setAttribute("data-status", "open");
       } else {
@@ -63,9 +70,28 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.setActive();
       }
     });
-    
+
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
     return Promise.resolve();
+  }
+
+  protected async trySelectFromLocalStorageAsync(): Promise<void> {
+    if (this._isFirst) {
+      this._isFirst = false;
+      if (this.mustReload) {
+        this.mustReload = false;
+        await this.fillComboAsync();
+      }
+      const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+      if (id) {
+        const relatedElement = this.element.querySelector<HTMLElement>(
+          `[data-id='${id}']`
+        );
+        if (relatedElement) {
+          relatedElement.click();
+        }
+      }
+    }
   }
 
   public async runAsync(source?: ISource) {
@@ -180,6 +206,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           // const id = parseInt(this.element.value);
           const id = parseInt(li.getAttribute("data-id"));
           const entity = this.entityList.find((x) => x.id == id);
+          LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
 
           if (this.profile) {
             if (entity) {
@@ -203,15 +230,25 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             // choose corporate
             const header = this.element.closest("[data-bc-bp-main-header]");
 
-            const businessMsgElement = header.querySelector("[data-bc-business-msg]");
+            const businessMsgElement = header.querySelector(
+              "[data-bc-business-msg]"
+            );
             businessMsgElement.textContent = "کسب‌و‌کارها";
             businessMsgElement.setAttribute("data-id", "0");
             (businessMsgElement as HTMLElement).style.cursor = "auto";
             businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
 
-            header.querySelector("[data-bc-bp-business-container] [data-bc-main-name]")?.remove();
+            header
+              .querySelector(
+                "[data-bc-bp-business-container] [data-bc-main-name]"
+              )
+              ?.remove();
 
-            (header.querySelector("[data-bc-bp-business-container] [data-bc-drop-down-click]") as HTMLElement).style.top = "3px";
+            (
+              header.querySelector(
+                "[data-bc-bp-business-container] [data-bc-drop-down-click]"
+              ) as HTMLElement
+            ).style.top = "3px";
           }
           this.setActive();
 
@@ -222,21 +259,33 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             existCorporateElemant.remove();
           }
 
-          const containerMsgElement = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-msg]");
+          const containerMsgElement = this.element
+            .closest("[data-bc-main-list-container]")
+            .querySelector("[data-bc-main-list-msg]");
 
           const CorporateName = document.createElement("div");
           CorporateName.setAttribute("data-bc-main-name", "");
           CorporateName.textContent = li.textContent;
 
-          const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-drop-down-click]") as HTMLElement;
+          const elClick = this.element
+            .closest("[data-bc-main-list-container]")
+            .querySelector("[data-bc-drop-down-click]") as HTMLElement;
           elClick.style.top = "-5px";
 
-          containerMsgElement.parentNode.insertBefore(CorporateName, containerMsgElement.nextSibling);
+          containerMsgElement.parentNode.insertBefore(
+            CorporateName,
+            containerMsgElement.nextSibling
+          );
           containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
-          containerMsgElement.setAttribute("data-id", li.getAttribute("data-id"));
+          containerMsgElement.setAttribute(
+            "data-id",
+            li.getAttribute("data-id")
+          );
           (containerMsgElement as HTMLElement).style.cursor = "pointer";
 
-          this.element.closest("[data-bc-drop-down-container]").setAttribute("data-status", "close");
+          this.element
+            .closest("[data-bc-drop-down-container]")
+            .setAttribute("data-status", "close");
         });
         // div.textContent = item.title;
         // li.appendChild(div);
@@ -249,12 +298,22 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   setActive() {
     if (this.ownerType == "corporate") {
       // choose corporate
-      this.element.closest("[data-bc-bp-main-header]").querySelector(".active-business")?.classList.remove("active-business");
-      this.element.closest("[data-bc-main-list-container]").classList.add("active-corporate");
+      this.element
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-business")
+        ?.classList.remove("active-business");
+      this.element
+        .closest("[data-bc-main-list-container]")
+        .classList.add("active-corporate");
     } else if (this.ownerType == "business") {
       // choose business
-      this.element.closest("[data-bc-bp-main-header]").querySelector(".active-corporate")?.classList.remove("active-corporate");
-      this.element.closest("[data-bc-main-list-container]").classList.add("active-business");
+      this.element
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-corporate")
+        ?.classList.remove("active-corporate");
+      this.element
+        .closest("[data-bc-main-list-container]")
+        .classList.add("active-business");
     }
   }
 
@@ -263,7 +322,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
-    
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
       // ownerId: this.element.value,
@@ -276,14 +334,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async signalToDisplayPage(id: Number) {
-    const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
-    activeMenus.forEach(e => {
-      e.removeAttribute("data-bc-menu-active")
-    })
+    const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+    activeMenus.forEach((e) => {
+      e.removeAttribute("data-bc-menu-active");
+    });
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
-    )
+    );
     const cookieName = this.options.checkRkey.cookieName;
     if (isAuthenticate == false) {
       if (cookieName && cookieName != "") {
@@ -306,11 +364,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         ownerUrl: this.getOwnerUrl(),
         rKey: this.options.rKey,
         pageMethod: this.options.method.page,
-      };    
+      };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
-    
-
   }
 }
 

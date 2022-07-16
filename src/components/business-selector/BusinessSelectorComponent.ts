@@ -40,10 +40,8 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
         this.currentCorporate = source.rows[0];
         this.mustReload = true;
         this.fillComboAsync();
-        // if (this.cache.has(this.currentCorporate.id)) {
-        //   await this.fillComboAsync();
-        // }
         this.clearCombo();
+        this.trySelectFromLocalStorageAsync();
         break;
       }
     }

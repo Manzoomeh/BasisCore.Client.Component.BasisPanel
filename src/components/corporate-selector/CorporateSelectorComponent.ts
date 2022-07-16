@@ -1,4 +1,4 @@
-import { IUserDefineComponent } from "basiscore";
+import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import EntitySelectorComponent from "../EntitySelectorComponent";
 import layout from "./assets/layout.html";
@@ -29,5 +29,11 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
       this.dataLoaded = true;
     }
   }
+
+  public async runAsync(source?: ISource): Promise<any> {
+    await super.runAsync(source);
+    if (source?.id == DefaultSource.USER_INFO_SOURCE) {
+      this.trySelectFromLocalStorageAsync();
+    }
+  }
 }
-//

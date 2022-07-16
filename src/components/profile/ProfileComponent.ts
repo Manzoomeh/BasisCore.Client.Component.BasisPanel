@@ -8,6 +8,7 @@ import "./assets/style.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
+import CorporateSelectorComponent from "../corporate-selector/CorporateSelectorComponent";
 
 export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -25,8 +26,14 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       e.preventDefault();
       this.signalToDisplayMenu();
 
-      this.container.closest("[data-bc-bp-main-header]").querySelector(".active-business")?.classList.remove("active-business");
-      this.container.closest("[data-bc-bp-main-header]").querySelector(".active-corporate")?.classList.remove("active-corporate");
+      this.container
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-business")
+        ?.classList.remove("active-business");
+      this.container
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-corporate")
+        ?.classList.remove("active-corporate");
     });
     return Promise.resolve();
   }
@@ -40,15 +47,18 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       urlFormatter(this.options.rKey),
       "GET"
     );
-    
+
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     this.signalToDisplayMenu();
+    // (window as any).dc_ = this.owner.dc;
+    // const c = this.owner.dc.resolve<CorporateSelectorComponent>("corporate");
+    // console.log(c);
+    // await c.trySelectAsync(20);
   }
 
   private signalToDisplayMenu() {
-
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
@@ -60,18 +70,17 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
       this.signalToDisplayPage();
     }
-   
   }
 
   private async signalToDisplayPage() {
-    const activeMenus = document.querySelectorAll("[data-bc-menu-active]")
-    activeMenus.forEach(e => {
-      e.removeAttribute("data-bc-menu-active")
-    })
+    const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+    activeMenus.forEach((e) => {
+      e.removeAttribute("data-bc-menu-active");
+    });
     const isAuthenticate = await HttpUtil.isAuthenticate(
       this.options.rKey,
       this.options.checkRkey
-    )
+    );
     const cookieName = this.options.checkRkey.cookieName;
     if (isAuthenticate == false) {
       if (cookieName && cookieName != "") {
@@ -97,7 +106,6 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
-   
   }
 
   private refreshUI() {
@@ -116,7 +124,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       "profile",
       `return \`${`${this.options.avatar}${this.options.method.userImage}`}\``
     );
-      
+
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
       fn(this.options.rKey, this.profile);
 
