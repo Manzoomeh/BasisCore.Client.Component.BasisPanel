@@ -36,10 +36,10 @@
       btn.remove()
       btn = null;
     } else {
-      btn = document.createElement("button")
-      btn.innerText = "click me!"
-      btn.addEventListener("click", e => alert("oops! it work ..."))
-      widget.addHeaderNode(btn)
+      // btn = document.createElement("button")
+      // btn.innerText = "click me!"
+      // btn.addEventListener("click", e => alert("oops! it work ..."))
+      btn = widget.addActionToHeader("click me!", e => alert("oops! it work ..."))
     }
   }
   function click_process(e) {
