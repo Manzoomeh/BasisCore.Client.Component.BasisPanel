@@ -18,13 +18,21 @@ export default abstract class PageWidgetComponent
       "[data-bc-widget-header] > [data-bc-widget-title]"
     )?.innerHTML;
   }
+
   set title(value: string) {
     this.container.querySelector(
       "[data-bc-widget-header] > [data-bc-widget-title]"
     ).innerHTML = value;
   }
+
   public get body(): HTMLElement {
     return this.container.querySelector("[data-bc-widget-body]");
+  }
+
+  public addHeaderNode(node: Node): void {
+    this.container
+      .querySelector("[data-bc-widget-header] > [data-bc-widget-buttons]")
+      .appendChild(node);
   }
 }
 
