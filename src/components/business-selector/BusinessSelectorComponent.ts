@@ -10,7 +10,6 @@ import "./assets/style.css";
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   protected currentCorporate: ICorporateInfo;
   private cache: Map<number, Array<IEntityInfo>>;
-  private _isFirst = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "business");
@@ -41,14 +40,8 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
         this.currentCorporate = source.rows[0];
         this.mustReload = true;
         this.fillComboAsync();
-        // if (this.cache.has(this.currentCorporate.id)) {
-        //   await this.fillComboAsync();
-        // }
         this.clearCombo();
-        if (this._isFirst) {
-          this._isFirst = false;
-          this.trySelectFromLocalStorageAsync();
-        }
+        this.trySelectFromLocalStorageAsync();
         break;
       }
     }

@@ -9,7 +9,6 @@ import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
 import HttpUtil from "../../HttpUtil";
-import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -18,7 +17,6 @@ export default class MenuComponent
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   private current: MenuElement;
-  private _isFirst: boolean = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-menu-container");
@@ -41,14 +39,6 @@ export default class MenuComponent
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
       await this.loadDataAsync(source.rows[0]);
-      if (this._isFirst && LocalStorageUtil.mustLoadPage(source?.id)) {
-        this._isFirst = false;
-        const storage_value = LocalStorageUtil.getCurrentPage();
-        if (storage_value) {
-          storage_value.rKey = this.options.rKey;
-          this.owner.setSource(DefaultSource.DISPLAY_PAGE, storage_value);
-        }
-      }
     }
   }
 

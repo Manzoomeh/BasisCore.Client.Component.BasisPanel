@@ -13,6 +13,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private element: Element;
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
+  private _isFirst = true;
   protected mustReload = true;
 
   public businessComponentFlag: boolean = false;
@@ -75,17 +76,20 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
-    if (this.mustReload) {
-      this.mustReload = false;
-      await this.fillComboAsync();
-    }
-    const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
-    if (id) {
-      const relatedElement = this.element.querySelector<HTMLElement>(
-        `[data-id='${id}']`
-      );
-      if (relatedElement) {
-        relatedElement.click();
+    if (this._isFirst) {
+      this._isFirst = false;
+      if (this.mustReload) {
+        this.mustReload = false;
+        await this.fillComboAsync();
+      }
+      const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+      if (id) {
+        const relatedElement = this.element.querySelector<HTMLElement>(
+          `[data-id='${id}']`
+        );
+        if (relatedElement) {
+          relatedElement.click();
+        }
       }
     }
   }

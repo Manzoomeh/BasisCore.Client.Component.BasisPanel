@@ -6,7 +6,6 @@ import "./assets/style.css";
 
 export default class CorporateSelectorComponent extends EntitySelectorComponent {
   private dataLoaded = false;
-  private _isFirst = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "corporate");
@@ -33,8 +32,7 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
 
   public async runAsync(source?: ISource): Promise<any> {
     await super.runAsync(source);
-    if (source?.id == DefaultSource.USER_INFO_SOURCE && this._isFirst) {
-      this._isFirst = true;
+    if (source?.id == DefaultSource.USER_INFO_SOURCE) {
       this.trySelectFromLocalStorageAsync();
     }
   }

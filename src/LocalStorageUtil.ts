@@ -1,6 +1,5 @@
-import { SourceId } from "basiscore";
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
-import { DefaultSource, MenuOwnerType } from "./type-alias";
+import { MenuOwnerType } from "./type-alias";
 
 export default class LocalStorageUtil {
   private static _lastBusiness: number;
@@ -10,6 +9,8 @@ export default class LocalStorageUtil {
   private static _currentBusiness: number;
   private static _currentCorporate: number;
   private static _currentPage: IPageLoaderParam;
+
+  private static _hasPageToShow: boolean = false;
 
   public static loadLastState() {
     const str = localStorage.getItem("__bc_panel_last_state__");
@@ -23,8 +24,8 @@ export default class LocalStorageUtil {
       }
       if (obj.p) {
         LocalStorageUtil._lastPage = obj.p;
+        LocalStorageUtil._hasPageToShow = true;
       }
-      console.log("local-load", obj);
     }
   }
 
@@ -32,7 +33,6 @@ export default class LocalStorageUtil {
     ownerType: MenuOwnerType,
     value: number
   ) {
-    console.log("local-set", ownerType, value);
     if (ownerType == "business") {
       LocalStorageUtil._currentBusiness = value;
     } else if (ownerType == "corporate") {
@@ -48,7 +48,6 @@ export default class LocalStorageUtil {
       c: LocalStorageUtil._currentCorporate,
       p: LocalStorageUtil._currentPage,
     };
-    console.log("local-save", obj);
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
 
@@ -59,12 +58,10 @@ export default class LocalStorageUtil {
     } else if (ownerType == "corporate") {
       retVal = LocalStorageUtil._lastCorporate;
     }
-    console.log("local-get", ownerType, retVal);
     return retVal;
   }
 
   public static setCurrentPage(page: IPageLoaderParam) {
-    console.log("local-set", page);
     LocalStorageUtil._currentPage = page;
     LocalStorageUtil.save();
   }
@@ -73,20 +70,26 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._lastPage;
   }
 
-  public static mustLoadPage(sourceId: SourceId) {
-    let wait = false;
-    if (LocalStorageUtil._currentCorporate) {
-      if (sourceId == DefaultSource.CORPORATE_SOURCE) {
-        wait = true;
+  public static mustLoadPage(owner: MenuOwnerType) {
+    let load = false;
+    if (LocalStorageUtil._lastBusiness) {
+      if (owner == "business") {
+        load = true;
       }
-    } else if (LocalStorageUtil._currentBusiness) {
-      if (sourceId == DefaultSource.BUSINESS_SOURCE) {
-        wait = true;
+    } else if (LocalStorageUtil._lastCorporate) {
+      if (owner == "corporate") {
+        load = true;
       }
-    } else if (sourceId == DefaultSource.USER_INFO_SOURCE) {
-      wait = true;
+    } else if (owner == "profile") {
+      load = true;
     }
-    console.log("local-wait", wait);
-    return wait;
+    if (load) {
+      LocalStorageUtil._hasPageToShow = false;
+    }
+    return load;
+  }
+
+  public static hasPageToShow() {
+    return LocalStorageUtil._hasPageToShow;
   }
 }

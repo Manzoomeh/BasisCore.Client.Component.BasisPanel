@@ -19,15 +19,28 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
 
   public async runAsync(source?: ISource) {
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
-      const pageParam = source.rows[0] as IPageLoaderParam;
-      LocalStorageUtil.setCurrentPage(pageParam);
-      const url = HttpUtil.formatString(
-        `${pageParam.ownerUrl}${pageParam.pageMethod}`,
-        pageParam
-      );
-      let info = await HttpUtil.fetchDataAsync(url, "GET");
-      this.pageType = info["container"];
-      this.displayPageAsync(pageParam);
+      let pageParam: IPageLoaderParam = source.rows[0] as IPageLoaderParam;
+      if (LocalStorageUtil.hasPageToShow()) {
+        if (LocalStorageUtil.mustLoadPage(pageParam.owner)) {
+          const temp = LocalStorageUtil.getCurrentPage();
+          if (temp) {
+            temp.rKey = this.options.rKey;
+            pageParam = temp;
+          }
+        } else {
+          pageParam = null;
+        }
+      }
+      if (pageParam) {
+        LocalStorageUtil.setCurrentPage(pageParam);
+        const url = HttpUtil.formatString(
+          `${pageParam.ownerUrl}${pageParam.pageMethod}`,
+          pageParam
+        );
+        let info = await HttpUtil.fetchDataAsync(url, "GET");
+        this.pageType = info["container"];
+        await this.displayPageAsync(pageParam);
+      }
     }
     return true;
   }
