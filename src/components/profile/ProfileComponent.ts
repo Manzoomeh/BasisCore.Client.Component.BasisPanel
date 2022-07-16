@@ -112,7 +112,13 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     const ui = this.container.querySelector<HTMLDivElement>(
       "[data-bc-user-name]"
     );
-    ui.textContent = `${this.profile.fName} ${this.profile.lName}`;
+
+    if (this.profile.fName != undefined || this.profile.lName != undefined) {
+      ui.textContent = `${this.profile.fName ?? ""} ${this.profile.lName ?? ""}`;
+    } else {
+      ui.textContent = this.options.method.userNoName;
+    }
+
     const fn = new Function(
       "rKey",
       "profile",
@@ -121,5 +127,13 @@ export default class ProfileComponent extends BasisPanelChildComponent {
 
     this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").src =
       fn(this.options.rKey, this.profile);
+
+    let i = 0;
+    this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").addEventListener("error", (e) => {
+      if (i == 0) {
+        (e.target as HTMLImageElement).src = this.options.method.userNoImage;
+        i++;
+      }
+    });
   }
 }
