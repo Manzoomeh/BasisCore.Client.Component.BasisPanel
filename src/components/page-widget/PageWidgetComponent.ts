@@ -18,17 +18,43 @@ export default abstract class PageWidgetComponent
       "[data-bc-widget-header] > [data-bc-widget-title]"
     )?.innerHTML;
   }
+
   set title(value: string) {
     this.container.querySelector(
       "[data-bc-widget-header] > [data-bc-widget-title]"
     ).innerHTML = value;
   }
+
   public get body(): HTMLElement {
     return this.container.querySelector("[data-bc-widget-body]");
+  }
+
+  public addNodeToHeader(node: Node): void {
+    this.container
+      .querySelector("[data-bc-widget-header] > [data-bc-widget-buttons]")
+      .appendChild(node);
+  }
+
+  public addActionToHeader(
+    title: string,
+    callback: (e: MouseEvent) => void
+  ): Node {
+    //TODO: add btn style
+    const btn = document.createElement("button");
+    btn.textContent = title;
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      callback(e);
+    });
+    this.addNodeToHeader(btn);
+    return btn;
   }
 }
 
 interface IWidget {
   title: string;
   body: HTMLElement;
+
+  addNodeToHeader(node: Node): void;
+  addActionToHeader(title: string, callback: (e: MouseEvent) => void): Node;
 }

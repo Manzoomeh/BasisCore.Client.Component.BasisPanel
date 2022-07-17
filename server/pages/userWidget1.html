@@ -27,8 +27,21 @@
   };
 </script> -->
 
+<button onclick="addOrRemoveBtnToTitle()">Add/remove btn to header</button>
 <script>
-
+  btn = null
+  function addOrRemoveBtnToTitle() {
+    const widget = pagesList_component.owner.dc.resolve("widget");
+    if (btn) {
+      btn.remove()
+      btn = null;
+    } else {
+      // btn = document.createElement("button")
+      // btn.innerText = "click me!"
+      // btn.addEventListener("click", e => alert("oops! it work ..."))
+      btn = widget.addActionToHeader("click me!", e => alert("oops! it work ..."))
+    }
+  }
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
     const widget = pagesList_component.owner.dc.resolve("widget");
