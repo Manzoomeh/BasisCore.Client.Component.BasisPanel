@@ -10,10 +10,16 @@ import "./assets/style.css";
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   protected currentCorporate: ICorporateInfo;
   private cache: Map<number, Array<IEntityInfo>>;
+  private _freezeBusiness: boolean;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
+    this.container
+      .querySelector("[data-freeze-business-select-action]")
+      .addEventListener("change", (e) => {
+        this._freezeBusiness = (e.target as HTMLInputElement).checked;
+      });
   }
 
   protected getOwnerUrl(): string {
@@ -58,5 +64,11 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
       }
     }
     return retVal;
+  }
+
+  protected async onItemSelectAsync(id: number) {
+    if (!this._freezeBusiness) {
+      await super.onItemSelectAsync(id);
+    }
   }
 }
