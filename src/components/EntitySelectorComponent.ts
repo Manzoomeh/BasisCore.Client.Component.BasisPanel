@@ -27,7 +27,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.owner.dc
       .resolve<DependencyContainer>("parent.dc")
       .registerInstance(entityType, this);
-    console.warn(`corporate registered`);
   }
 
   protected abstract getListUrl(): string;
@@ -61,12 +60,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .querySelector("[data-bc-main-list-msg]");
     msgElClick.addEventListener("click", async (e) => {
       const msgElId = msgElClick.getAttribute("data-id");
-      if (msgElId != "0") {
+      const id = parseInt(msgElId);
+      if (id != 0) {
         this.owner.setSource(
           DefaultSource.SHOW_MENU,
-          this.createMenuLoaderParam(parseInt(msgElId))
+          this.createMenuLoaderParam(id)
         );
-        this.signalToDisplayPage(parseInt(msgElId));
+        this.signalToDisplayPage(id);
         this.setActive();
       }
     });
@@ -194,6 +194,21 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.parentNode.insertBefore(searchWrapper, this.element);
   }
 
+  protected async onItemSelectAsync(id: number) {
+    const url = HttpUtil.formatString(this.options.baseUrl.active, {
+      rKey: this.options.rKey,
+    });
+    await HttpUtil.fetchDataAsync(url, "POST", {
+      type: this.ownerType,
+      id: id,
+    });
+    this.owner.setSource(
+      DefaultSource.SHOW_MENU,
+      this.createMenuLoaderParam(id)
+    );
+    this.signalToDisplayPage(id);
+  }
+
   entryListMaker(list) {
     this.element.innerHTML = "";
     if (list?.length > 0) {
@@ -210,18 +225,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
           if (this.profile) {
             if (entity) {
-              const url = HttpUtil.formatString(this.options.baseUrl.active, {
-                rKey: this.options.rKey,
-              });
-              await HttpUtil.fetchDataAsync(url, "POST", {
-                type: this.ownerType,
-                id: id,
-              });
-              this.owner.setSource(
-                DefaultSource.SHOW_MENU,
-                this.createMenuLoaderParam(id)
-              );
-              this.signalToDisplayPage(id);
+              await this.onItemSelectAsync(id);
             }
           }
           this.owner.setSource(this.getSourceId(), entity ?? {});

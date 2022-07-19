@@ -65,4 +65,10 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     }
     return retVal;
   }
+
+  protected async onItemSelectAsync(id: number) {
+    if (!this._freezeBusiness) {
+      await super.onItemSelectAsync(id);
+    }
+  }
 }
