@@ -1,4 +1,3 @@
-
 [data-bc-bp-widget-container] {
     position: absolute;
     /* padding: 0; */
@@ -32,10 +31,10 @@
     border-bottom: 1px solid var(--light_gray);
     padding: 10px;
     box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+    /* flex-direction: row; */
     position: sticky;
 }
 
@@ -154,9 +153,14 @@
 [data-bc-bp-widget-container][gs-x="12"] {
     left: 100%;
 }
-[data-bc-widget-btn-add-dashboard]{
-    margin-left: 5px; cursor: pointer; position: relative;display: none;
+
+[data-bc-widget-btn-add-dashboard] {
+    margin-left: 5px;
+    cursor: pointer;
+    position: relative;
+    display: none;
 }
+
 [data-bc-widget-btn-add-dashboard]:after {
     content: "افزودن به داشبورد";
     position: absolute;
@@ -175,14 +179,28 @@
     width: 100px;
     transition: all 0.3s ease-in-out;
 }
+
 [data-bc-widget-btn-add-dashboard]:hover::after {
     visibility: visible;
     opacity: 1;
 }
-[data-bc-widget-buttons]{
-    padding-right: 15px;
-    border-right: 0.5px solid #D0D0D0;;
+
+[data-bc-widget-title] {
+    float: right;
 }
-[data-bc-widget-buttons] svg{    
-    position: relative ; top: 3px;
+
+[data-bc-widget-buttons] {
+    padding-right: 15px;
+    border-right: 0.5px solid #D0D0D0;
+    float: left;
+}
+
+[data-bc-widget-buttons] svg {
+    position: relative;
+    top: 3px;
+}
+
+[data-bc-widget-external-buttons] {
+    padding: 0 15px;
+    float: left;
 }

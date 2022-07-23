@@ -31,7 +31,7 @@ export default abstract class PageWidgetComponent
 
   public addNodeToHeader(node: Node): void {
     this.container
-      .querySelector("[data-bc-widget-header] > [data-bc-widget-buttons]")
+      .querySelector("[data-bc-widget-header] > [data-bc-widget-external-buttons]")
       .appendChild(node);
   }
 
