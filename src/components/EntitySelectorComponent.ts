@@ -136,7 +136,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const url = HttpUtil.formatString(this.getListUrl(), {
       rKey: this.options.rKey,
     });
-    return HttpUtil.fetchDataAsync<Array<IEntityInfo>>(url, "GET");
+    return HttpUtil.checkRkeyFetchDataAsync<Array<IEntityInfo>>(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
   }
 
   filterItems(input, list) {
@@ -198,10 +202,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const url = HttpUtil.formatString(this.options.baseUrl.active, {
       rKey: this.options.rKey,
     });
-    await HttpUtil.fetchDataAsync(url, "POST", {
-      type: this.ownerType,
-      id: id,
-    });
+    await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "POST",
+      this.options.checkRkey,
+      {
+        type: this.ownerType,
+        id: id,
+      }
+    );
     this.owner.setSource(
       DefaultSource.SHOW_MENU,
       this.createMenuLoaderParam(id)
@@ -342,35 +351,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
-    const isAuthenticate = await HttpUtil.isAuthenticate(
-      this.options.rKey,
-      this.options.checkRkey
-    );
-    const cookieName = this.options.checkRkey.cookieName;
-    if (isAuthenticate == false) {
-      if (cookieName && cookieName != "") {
-        const cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim().split("=")[0];
-          if (cookie == cookieName) {
-            document.cookie =
-              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            break;
-          }
-        }
-      }
-      window.location.href = this.options.checkRkey.defaultRedirectUrl;
-    } else {
-      const newParam: IPageLoaderParam = {
-        pageId: "default",
-        owner: this.ownerType,
-        ownerId: id.toString(),
-        ownerUrl: this.getOwnerUrl(),
-        rKey: this.options.rKey,
-        pageMethod: this.options.method.page,
-      };
-      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    }
+
+    const newParam: IPageLoaderParam = {
+      pageId: "default",
+      owner: this.ownerType,
+      ownerId: id.toString(),
+      ownerUrl: this.getOwnerUrl(),
+      rKey: this.options.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }
 

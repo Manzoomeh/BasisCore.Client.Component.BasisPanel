@@ -6,6 +6,7 @@ import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import IPageInfo from "../page/IPageInfo";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
   constructor(owner: IUserDefineComponent) {
@@ -37,8 +38,14 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
           `${pageParam.ownerUrl}${pageParam.pageMethod}`,
           pageParam
         );
-        let info = await HttpUtil.fetchDataAsync(url, "GET");
-        this.pageType = info["container"];
+
+        let info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+          url,
+          "GET",
+          this.options.checkRkey
+        );
+        this.pageType = info?.container;
+
         await this.displayPageAsync(pageParam);
       }
     }

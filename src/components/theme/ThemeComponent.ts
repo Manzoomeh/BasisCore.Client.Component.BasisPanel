@@ -7,60 +7,52 @@ import HttpUtil from "../../HttpUtil";
 
 export default class ThemeComponent extends BasisPanelChildComponent {
   themes: IDictionary<string>;
-  defaultTheme : string
-  public  initializeAsync(): Promise<void> {
+  defaultTheme: string;
+  public initializeAsync(): Promise<void> {
     var selector = this.container.querySelector<HTMLSelectElement>(
       "[data-bc-basispanel-theme-selector]"
     );
     // Object.getOwnPropertyNames(this.themes).forEach((theme) => {
     //   selector.appendChild(new Option(theme, this.themes[theme]));
     // });
-    
+
     return Promise.resolve();
   }
   public async runAsync(source?: ISource) {
-    await this.getStyle()
-    this.themes = {      
+    await this.getStyle();
+    this.themes = {
       light: this.options.themeUrl.light,
-      dark: this.options.themeUrl.dark
-    };    
-    const themeName= this.defaultTheme["colorMode"].split(" ")[0]
+      dark: this.options.themeUrl.dark,
+    };
+    const themeName = this.defaultTheme["colorMode"].split(" ")[0];
     this.setTheme(themeName);
-    if(themeName == "dark"){
+    if (themeName == "dark") {
       this.container
-      .querySelector("[data-bc-basispanel-theme-selector]").setAttribute("checked","")
+        .querySelector("[data-bc-basispanel-theme-selector]")
+        .setAttribute("checked", "");
     }
     this.container
       .querySelector("[data-bc-basispanel-theme-selector]")
       .addEventListener("change", async (e) => {
         const op = e.target as HTMLInputElement;
-       
-        if(op.checked){
+
+        if (op.checked) {
           this.setTheme("dark");
           const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
             rKey: this.options.rKey,
-          });        
-          await HttpUtil.sendFormData(
-            url,
-            "POST",
-            `mode=dark mode`
-          );
-        }
-        else{
+          });
+          await HttpUtil.sendFormData(url, "POST", `mode=dark mode`);
+        } else {
           this.setTheme("light");
           const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
             rKey: this.options.rKey,
           });
-          await HttpUtil.sendFormData(
-            url,
-            "POST",
-            `mode=light mode`
-          );
-        }        
+          await HttpUtil.sendFormData(url, "POST", `mode=light mode`);
+        }
       });
   }
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-theme-container");    
+    super(owner, layout, "data-bc-bp-theme-container");
   }
   private setTheme(theme: string): boolean {
     const path = this.themes[theme];
@@ -93,10 +85,15 @@ export default class ThemeComponent extends BasisPanelChildComponent {
     }
     return ret_val;
   }
-  async getStyle(): Promise<void>{
+  async getStyle(): Promise<void> {
     const url = HttpUtil.formatString(this.options.themeUrl.defaultTheme, {
       rKey: this.options.rKey,
-    });            
-    this.defaultTheme = await HttpUtil.fetchDataAsync(url, "GET");
+    });
+
+    this.defaultTheme = await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
   }
 }

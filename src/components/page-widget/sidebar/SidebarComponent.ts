@@ -46,7 +46,11 @@ export default class SidebarComponent extends PageWidgetComponent {
       { rKey: this.param.page.rKey, pageId: this.param.page.pageId }
     );
 
-    HttpUtil.fetchDataAsync<IMenuInfo>(url, "GET").then((sidebar) => {
+    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+      url,
+      "GET",
+      this.options.checkRkey
+    ).then((sidebar) => {
       this.createSidebar(mainDiv as HTMLElement, sidebar.nodes);
     });
   }
@@ -68,7 +72,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     const content = document.createElement("span");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
-    content.setAttribute("data-sys-text","")
+    content.setAttribute("data-sys-text", "");
     div.appendChild(content);
     const innerUl = document.createElement("div");
     innerUl.setAttribute("data-bc-sidebar-levels", "secondLevel");
@@ -103,12 +107,12 @@ export default class SidebarComponent extends PageWidgetComponent {
     div.setAttribute("data-bc-sidebar-items", "");
     if (node.pid === this.param.page.pageId) {
       div.setAttribute("data-bc-sidebar-active", "");
-      div.setAttribute("data-sys-inherit","")
+      div.setAttribute("data-sys-inherit", "");
     }
     const content = document.createElement("span");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.appendChild(document.createTextNode(node.title));
-    content.setAttribute("data-sys-text","")
+    content.setAttribute("data-sys-text", "");
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onSidebarItemClick(node.pid, e.target);
@@ -118,34 +122,14 @@ export default class SidebarComponent extends PageWidgetComponent {
   }
 
   private async onSidebarItemClick(pageId: string, target: EventTarget) {
-    const isAuthenticate = await HttpUtil.isAuthenticate(
-      this.options.rKey,
-      this.options.checkRkey
-    )
-    const cookieName = this.options.checkRkey.cookieName;
-    if (isAuthenticate == false) {
-      if (cookieName && cookieName != "") {
-        const cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim().split("=")[0];
-          if (cookie == cookieName) {
-            document.cookie =
-              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            break;
-          }
-        }
-      }
-      window.location.href = this.options.checkRkey.defaultRedirectUrl;
-    } else {
-      const newParam: IPageLoaderParam = {
-        pageId: pageId,
-        owner: this.param.page.owner,
-        ownerId: this.param.page.ownerId,
-        ownerUrl: this.param.page.ownerUrl,
-        rKey: this.param.page.rKey,
-        pageMethod: this.param.page.pageMethod,
-      };
-      $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    }
+    const newParam: IPageLoaderParam = {
+      pageId: pageId,
+      owner: this.param.page.owner,
+      ownerId: this.param.page.ownerId,
+      ownerUrl: this.param.page.ownerUrl,
+      rKey: this.param.page.rKey,
+      pageMethod: this.param.page.pageMethod,
+    };
+    $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }

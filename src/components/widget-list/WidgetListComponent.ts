@@ -35,16 +35,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         await this.sendSelectedWidgetToServerAsync();
         this.hideList();
       });
-      
-     
+
     this._page.container
       .querySelectorAll("[data-bc-page-widget-list-dlg-btn-add]")
-      .forEach((btn) =>{
-        btn.setAttribute("data-bc-page-widget-list-dlg-btn-add-active","1")
-        btn.addEventListener("click", e => {
+      .forEach((btn) => {
+        btn.setAttribute("data-bc-page-widget-list-dlg-btn-add-active", "1");
+        btn.addEventListener("click", (e) => {
           e.preventDefault();
           this.displayWidgetList(e);
-        })
+        });
       });
 
     this._page.widgetDropAreaContainer.addEventListener("dragenter", (e) =>
@@ -53,11 +52,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._page.widgetDropAreaContainer.addEventListener("dragover", (e) =>
       e.preventDefault()
     );
-    this._page.widgetDropAreaContainer.addEventListener("drop", (e) =>{
-    e.preventDefault();
-      this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")))
-    }
-    );
+    this._page.widgetDropAreaContainer.addEventListener("drop", (e) => {
+      e.preventDefault();
+      this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")));
+    });
   }
 
   private async sendSelectedWidgetToServerAsync(): Promise<void> {
@@ -69,29 +67,39 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
       });
-      const result = await HttpUtil.fetchDataAsync(url, "POST", {
-        widgetId: addedWidgetList,
-      });
+
+      const result = await HttpUtil.checkRkeyFetchDataAsync(
+        url,
+        "POST",
+        this.options.checkRkey,
+        {
+          widgetId: addedWidgetList,
+        }
+      );
     }
   }
 
   public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
     const container = this._page.widgetDropAreaContainer.querySelector(
       "[data-bc-widget-drop-area]"
-    ) as HTMLElement
+    ) as HTMLElement;
     let element = container.querySelector<HTMLElement>(
       `[data-bc-widget-id='${widgetInfo.id}']`
     );
-   
+
     if (!element) {
       const layout = widgetItemLayout
         .replace("@title", widgetInfo.title)
         .replace("@id", widgetInfo.id.toString())
-        .replace("@image",  widgetInfo.icon ? widgetInfo.icon : "asset/images/no_icon.png");
-     
-      const widgetMessage = container.querySelector("[data-bc-widget-drop-area-message]")
-      if(widgetMessage)
-        widgetMessage.remove()
+        .replace(
+          "@image",
+          widgetInfo.icon ? widgetInfo.icon : "asset/images/no_icon.png"
+        );
+
+      const widgetMessage = container.querySelector(
+        "[data-bc-widget-drop-area-message]"
+      );
+      if (widgetMessage) widgetMessage.remove();
       element = this.owner.toHTMLElement(layout);
       container.appendChild(element);
       element
@@ -124,51 +132,52 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       rKey: this.options.rKey,
       pageId: this._page.loaderParam.pageId,
     });
-    
-    const widgetsList = await HttpUtil.fetchDataAsync<
+
+    const widgetsList = await HttpUtil.checkRkeyFetchDataAsync<
       Array<IWidgetListItemInfo>
-    >(url, "GET");
-    
-    try{
+    >(url, "GET", this.options.checkRkey);
+
+    try {
       widgetsList.forEach((widget) => {
         const widgetElement = document.createElement("div");
-        const widgetIcon = document.createElement("img")
+        const widgetIcon = document.createElement("img");
         widgetElement.setAttribute("draggable", "true");
-        widgetIcon.setAttribute("src" , widget.icon ? widget.icon : "asset/images/no_icon.png")
+        widgetIcon.setAttribute(
+          "src",
+          widget.icon ? widget.icon : "asset/images/no_icon.png"
+        );
         widgetElement.appendChild(document.createTextNode(widget.title));
-        widgetElement.appendChild(widgetIcon)
+        widgetElement.appendChild(widgetIcon);
         widgetElement.addEventListener("dragstart", (e) => {
           e.dataTransfer.setData("text/plain", JSON.stringify(widget));
         });
-        
+
         disableWidgets.appendChild(widgetElement);
         widgetElement.addEventListener("dblclick", (e) => {
           e.preventDefault();
           this.tryAddingWidget(widget);
         });
       });
-    }
-    catch{
-      
-    }
+    } catch {
 
+    }
   }
 
-  private displayWidgetList(e ) {
-    if(e.target.getAttribute("data-bc-page-widget-list-dlg-btn-add-active") == "1"){
+  private displayWidgetList(e) {
+    if (
+      e.target.getAttribute("data-bc-page-widget-list-dlg-btn-add-active") ==
+      "1"
+    ) {
       this.showList();
-      e.target.setAttribute("data-icon-right" , "")
-      e.target.removeAttribute("data-icon-left" )
-      e.target.removeAttribute("data-bc-page-widget-list-dlg-btn-add-active")
-
-    }
-    else{
+      e.target.setAttribute("data-icon-right", "");
+      e.target.removeAttribute("data-icon-left");
+      e.target.removeAttribute("data-bc-page-widget-list-dlg-btn-add-active");
+    } else {
       this.hideList();
-      e.target.setAttribute("data-icon-left" , "")
-      e.target.removeAttribute("data-icon-right" )
-      e.target.setAttribute("data-bc-page-widget-list-dlg-btn-add-active","1")
+      e.target.setAttribute("data-icon-left", "");
+      e.target.removeAttribute("data-icon-right");
+      e.target.setAttribute("data-bc-page-widget-list-dlg-btn-add-active", "1");
     }
-    
   }
 
   private hideList() {
@@ -177,13 +186,18 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     ).innerHTML = "";
     this.fillWidgetListAsync().then(() => {
       this._page.widgetDropAreaContainer.setAttribute(
-        "data-bc-display-none",""
+        "data-bc-display-none",
+        ""
       );
-    });  
-    const widgetBox : HTMLElement= this.container.querySelector("[data-bc-page-widget-list]") as HTMLElement
-    const widgetContainer = document.querySelector("[data-bc-page-body-container]") as HTMLElement
-    widgetBox.style.transform="translateX(-300px)"
-    widgetContainer.style.width="calc(100%)"
+    });
+    const widgetBox: HTMLElement = this.container.querySelector(
+      "[data-bc-page-widget-list]"
+    ) as HTMLElement;
+    const widgetContainer = document.querySelector(
+      "[data-bc-page-body-container]"
+    ) as HTMLElement;
+    widgetBox.style.transform = "translateX(-300px)";
+    widgetContainer.style.width = "calc(100%)";
   }
 
   private showList() {
@@ -192,65 +206,84 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       this._page.widgetDropAreaContainer.removeAttribute(
         "data-bc-display-none"
       );
-    });    
-    const widgetBox : HTMLElement= this.container.querySelector("[data-bc-page-widget-list]") as HTMLElement
-    const widgetContainer = document.querySelector("[data-bc-page-body-container]") as HTMLElement
-    widgetBox.style.transform="translateX(0px)"
-    widgetContainer.style.width="calc(100% - 300px)"
-
+    });
+    const widgetBox: HTMLElement = this.container.querySelector(
+      "[data-bc-page-widget-list]"
+    ) as HTMLElement;
+    const widgetContainer = document.querySelector(
+      "[data-bc-page-body-container]"
+    ) as HTMLElement;
+    widgetBox.style.transform = "translateX(0px)";
+    widgetContainer.style.width = "calc(100% - 300px)";
   }
-  public async addingDashboardWidgets(): Promise<void>  {
-    const parent = this.container.querySelector("[data-bc-page-widget-dashboard-wrapper]") as HTMLElement
-    parent.innerHTML = ""
-    const url = HttpUtil.formatString( this.options.tempwidgets, {
+  public async addingDashboardWidgets(): Promise<void> {
+    const parent = this.container.querySelector(
+      "[data-bc-page-widget-dashboard-wrapper]"
+    ) as HTMLElement;
+    parent.innerHTML = "";
+    const url = HttpUtil.formatString(this.options.tempwidgets, {
       rKey: this.options.rKey,
-    }); 
-    const removewidgetUrl = HttpUtil.formatString( this.options.removeFromDashbaord, {
-      rKey: this.options.rKey,
-    }); 
-    const data = await HttpUtil.fetchStringAsync( url, "GET" );
-    const dashboardWidgetList = JSON.parse(data)
+    });
+    const removewidgetUrl = HttpUtil.formatString(
+      this.options.removeFromDashbaord,
+      {
+        rKey: this.options.rKey,
+      }
+    );
+    const data = await HttpUtil.fetchStringAsync(url, "GET");
+    const dashboardWidgetList = JSON.parse(data);
     dashboardWidgetList.forEach((widgetList) => {
-      const widgetDiv = document.createElement("div")
-      const closeDiv = document.createElement("span")
-      widgetDiv.setAttribute("data-bc-page-widget-dashboard","")
-      widgetDiv.setAttribute("data-sys-widget","")
-      widgetDiv.setAttribute("data-sys-text","")
-      closeDiv.setAttribute("data-bc-btn-remove","")
-      closeDiv.textContent = "X"
-      widgetDiv.textContent= widgetList.title
-      const widgetIcon = document.createElement("img")
-      widgetIcon.setAttribute("src" , "/asset/images/no_icon.png")
-      widgetDiv.appendChild(widgetIcon)
-      widgetDiv.appendChild(closeDiv)
-      parent.appendChild(widgetDiv)
+      const widgetDiv = document.createElement("div");
+      const closeDiv = document.createElement("span");
+      widgetDiv.setAttribute("data-bc-page-widget-dashboard", "");
+      widgetDiv.setAttribute("data-sys-widget", "");
+      widgetDiv.setAttribute("data-sys-text", "");
+      closeDiv.setAttribute("data-bc-btn-remove", "");
+      closeDiv.textContent = "X";
+      widgetDiv.textContent = widgetList.title;
+      const widgetIcon = document.createElement("img");
+      widgetIcon.setAttribute("src", "/asset/images/no_icon.png");
+      widgetDiv.appendChild(widgetIcon);
+      widgetDiv.appendChild(closeDiv);
+      parent.appendChild(widgetDiv);
       widgetDiv.addEventListener("dragstart", (e) => {
         e.dataTransfer.setData("text/plain", JSON.stringify(widgetList));
       });
       closeDiv.addEventListener("click", async (event) => {
-        await HttpUtil.fetchDataAsync(removewidgetUrl, "POST", {
-          widgetid: widgetList.widgetid
-        });
-        this.addingDashboardWidgets()
-      })
-    })
-    const allWidget = document.querySelector("[data-bc-page-widget-disableList]") as HTMLElement;
-    const allWidgetBtn= this.container.querySelector("[data-all-widget]")
-    const dashboardWidgetBtn= this.container.querySelector("[data-dashboard-widgets]")
-    const activeElement= this.container.querySelector(".tabActive") as HTMLElement;
-    dashboardWidgetBtn.addEventListener("click", e => {
-      parent.style.display="flex"
-      allWidget.style.display="none"
+        await HttpUtil.checkRkeyFetchDataAsync(
+          removewidgetUrl,
+          "POST",
+          this.options.checkRkey,
+          {
+            widgetid: widgetList.widgetid,
+          }
+        );
+        this.addingDashboardWidgets();
+      });
+    });
+    const allWidget = document.querySelector(
+      "[data-bc-page-widget-disableList]"
+    ) as HTMLElement;
+    const allWidgetBtn = this.container.querySelector("[data-all-widget]");
+    const dashboardWidgetBtn = this.container.querySelector(
+      "[data-dashboard-widgets]"
+    );
+    const activeElement = this.container.querySelector(
+      ".tabActive"
+    ) as HTMLElement;
+    dashboardWidgetBtn.addEventListener("click", (e) => {
+      parent.style.display = "flex";
+      allWidget.style.display = "none";
       activeElement.style.transform = `translateX(-100px)`;
-      dashboardWidgetBtn.setAttribute("tab-button-status","active")
-      allWidgetBtn.removeAttribute("tab-button-status")
-    })
-    allWidgetBtn.addEventListener("click", e => {
-      parent.style.display="none"
-      allWidget.style.display="flex"
+      dashboardWidgetBtn.setAttribute("tab-button-status", "active");
+      allWidgetBtn.removeAttribute("tab-button-status");
+    });
+    allWidgetBtn.addEventListener("click", (e) => {
+      parent.style.display = "none";
+      allWidget.style.display = "flex";
       activeElement.style.transform = `translateX(0px)`;
-      allWidgetBtn.setAttribute("tab-button-status","active")
-      dashboardWidgetBtn.removeAttribute("tab-button-status")
-    })
+      allWidgetBtn.setAttribute("tab-button-status", "active");
+      dashboardWidgetBtn.removeAttribute("tab-button-status");
+    });
   }
 }

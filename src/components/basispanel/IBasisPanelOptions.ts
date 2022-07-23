@@ -45,7 +45,6 @@ interface IPanelPartMethodOptions {
 }
 
 export interface ICheckRkeyOptions {
-  url: string;
   cookieName?: string;
   defaultRedirectUrl: string;
 }

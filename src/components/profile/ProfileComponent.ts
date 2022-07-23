@@ -43,15 +43,16 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       "rKey",
       `return \`${this.options.dataUrl.profile}\``
     );
-    const questions = await HttpUtil.fetchDataAsync<Array<IQuestionItem>>(
-      urlFormatter(this.options.rKey),
-      "GET"
-    );
+
+    const questions = await HttpUtil.checkRkeyFetchDataAsync<
+      Array<IQuestionItem>
+    >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
 
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     this.signalToDisplayMenu();
+
     // (window as any).dc_ = this.owner.dc;
     // const c = this.owner.dc.resolve<CorporateSelectorComponent>("corporate");
     // console.log(c);
@@ -77,35 +78,15 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
-    const isAuthenticate = await HttpUtil.isAuthenticate(
-      this.options.rKey,
-      this.options.checkRkey
-    );
-    const cookieName = this.options.checkRkey.cookieName;
-    if (isAuthenticate == false) {
-      if (cookieName && cookieName != "") {
-        const cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim().split("=")[0];
-          if (cookie == cookieName) {
-            document.cookie =
-              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            break;
-          }
-        }
-      }
-      window.location.href = this.options.checkRkey.defaultRedirectUrl;
-    } else {
-      const newParam: IPageLoaderParam = {
-        pageId: "default",
-        owner: "profile",
-        ownerId: "",
-        ownerUrl: this.options.baseUrl.profile,
-        rKey: this.options.rKey,
-        pageMethod: this.options.method.page,
-      };
-      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    }
+    const newParam: IPageLoaderParam = {
+      pageId: "default",
+      owner: "profile",
+      ownerId: "",
+      ownerUrl: this.options.baseUrl.profile,
+      rKey: this.options.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private refreshUI() {
@@ -129,11 +110,13 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       fn(this.options.rKey, this.profile);
 
     let i = 0;
-    this.container.querySelector<HTMLImageElement>("[data-bc-user-image]").addEventListener("error", (e) => {
-      if (i == 0) {
-        (e.target as HTMLImageElement).src = this.options.method.userNoImage;
-        i++;
-      }
-    });
+    this.container
+      .querySelector<HTMLImageElement>("[data-bc-user-image]")
+      .addEventListener("error", (e) => {
+        if (i == 0) {
+          (e.target as HTMLImageElement).src = this.options.method.userNoImage;
+          i++;
+        }
+      });
   }
 }

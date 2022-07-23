@@ -23,12 +23,17 @@ export default class DashboardComponent extends PageComponent {
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
     );
-    this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
+
+    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
     const body = this.container.querySelector("[data-bc-page-body]");
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
   }
- 
+
   public async runAsync(source?: ISource) {
     if (!this._groupsAdded) {
       await this.addingPageGroupsAsync(this.info);

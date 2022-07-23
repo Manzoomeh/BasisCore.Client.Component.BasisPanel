@@ -38,14 +38,12 @@ export default abstract class PageComponent
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
     );
-    this.info = await HttpUtil.fetchDataAsync<IPageInfo>(url, "GET");
-    const body = this.container.querySelector("[data-bc-page-body]");
-    if (this.info.content) {
-      const range = new Range();
-      range.setStart(body, 0);
-      range.setEnd(body, 0);
-      range.insertNode(range.createContextualFragment(this.info.content));
-    }
+
+    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
   }
 
   public async runAsync(source?: ISource) {
@@ -83,7 +81,7 @@ export default abstract class PageComponent
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-    
+
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
@@ -97,15 +95,23 @@ export default abstract class PageComponent
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
 
-    const headerHeight = (document.querySelector("[data-bc-bp-main-header]") as HTMLElement).offsetHeight;
-    const menuHeight = (document.querySelector("[data-bc-bp-menu-container]") as HTMLElement).offsetHeight;
-    const footerHeight = (document.querySelector("[data-bc-bp-footer-container]") as HTMLElement).offsetHeight;
+    const headerHeight = (
+      document.querySelector("[data-bc-bp-main-header]") as HTMLElement
+    ).offsetHeight;
+    const menuHeight = (
+      document.querySelector("[data-bc-bp-menu-container]") as HTMLElement
+    ).offsetHeight;
+    const footerHeight = (
+      document.querySelector("[data-bc-bp-footer-container]") as HTMLElement
+    ).offsetHeight;
     const otherHeight = headerHeight + menuHeight + footerHeight;
 
-    if ((cell * maxHeight) > (windowHeight - otherHeight)) {
+    if (cell * maxHeight > windowHeight - otherHeight) {
       (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.height = `${windowHeight - otherHeight}px`;
+      (pageBody as HTMLElement).style.height = `${
+        windowHeight - otherHeight
+      }px`;
     }
   }
 }

@@ -21,7 +21,7 @@ export default class MenuComponent
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
-    this.cache = new MenuCacheManager();
+    this.cache = new MenuCacheManager(this.options.checkRkey);
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
@@ -59,25 +59,6 @@ export default class MenuComponent
     param: IMenuLoaderParam,
     target: EventTarget
   ) {
-    const isAuthenticate = await HttpUtil.isAuthenticate(
-      this.options.rKey,
-      this.options.checkRkey
-    );
-    const cookieName = this.options.checkRkey.cookieName;
-    if (isAuthenticate == false) {
-      if (cookieName && cookieName != "") {
-        const cookies = document.cookie.split(";");
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim().split("=")[0];
-          if (cookie == cookieName) {
-            document.cookie =
-              cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            break;
-          }
-        }
-      }
-      window.location.href = this.options.checkRkey.defaultRedirectUrl;
-    } else {
       const newParam: IPageLoaderParam = {
         pageId: pageId,
         owner: param.owner,
@@ -87,31 +68,11 @@ export default class MenuComponent
         pageMethod: this.options.method.page,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    }
   }
 
   public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
     var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
     if (source) {
-      const isAuthenticate = await HttpUtil.isAuthenticate(
-        this.options.rKey,
-        this.options.checkRkey
-      );
-      const cookieName = this.options.checkRkey.cookieName;
-      if (isAuthenticate == false) {
-        if (cookieName && cookieName != "") {
-          const cookies = document.cookie.split(";");
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim().split("=")[0];
-            if (cookie == cookieName) {
-              document.cookie =
-                cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-              break;
-            }
-          }
-        }
-        window.location.href = this.options.checkRkey.defaultRedirectUrl;
-      } else {
         const param = source.rows[0] as IPageLoaderParam;
         const newParam: IPageLoaderParam = {
           pageId: pageId,
@@ -123,7 +84,6 @@ export default class MenuComponent
           arguments: args,
         };
         this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-      }
     }
     return source != null;
   }

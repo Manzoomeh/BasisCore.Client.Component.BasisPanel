@@ -31,11 +31,46 @@ export default class HttpUtil {
       init.body = JSON.stringify(data);
     }
     const result = await fetch(url, init);
+    if (result.ok) {
+      try {
+        return await result.json();
+      } catch (ex) {
+        console.error(`Error in parse json result from ${url}`, ex);
+        throw ex;
+      }
+    } else {
+      throw result;
+    }
+  }
+
+  static async checkRkeyFetchDataAsync<T>(
+    url: string,
+    method: "POST" | "GET",
+    options: ICheckRkeyOptions,
+    data?: any
+  ): Promise<T> {
+    // isAuthenticate
     try {
-      return await result.json();
+      return await HttpUtil.fetchDataAsync<T>(url, method, data);
     } catch (ex) {
-      console.error(`Error in parse json result from ${url}`, ex);
-      throw ex;
+      const status = ex.status;
+      if (status == 401) {
+        // Invalid rKey
+        if (options.cookieName && options.cookieName != "") {
+          const cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim().split("=")[0];
+            if (cookie == options.cookieName) {
+              document.cookie =
+                cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+              break;
+            }
+          }
+        }
+        window.location.href = options.defaultRedirectUrl;
+      } else {
+        console.error(`Error in parse json result from ${url}`, ex);
+      }
     }
   }
 
@@ -67,16 +102,5 @@ export default class HttpUtil {
     const paraNameList = [...Object.getOwnPropertyNames(params)];
     const formatter = new Function(...paraNameList, `return \`${string}\``);
     return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
-  }
-
-  public static async isAuthenticate(
-    rKey: string,
-    options: ICheckRkeyOptions
-  ): Promise<boolean> {
-    const url = HttpUtil.formatString(options.url, {
-      rKey: rKey,
-    });
-    const result = await HttpUtil.sendFormData<IResponseCheckRkey>(url, "GET");
-    return result.checked;
   }
 }
