@@ -6,10 +6,11 @@
   <title></title>
   <link href="assets/css/LineIcons.css" rel="stylesheet" />
   <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
-  <link href="assets/css/styles-1.css" rel="stylesheet" />
+  <!-- <link href="assets/css/styles-1.css" rel="stylesheet" /> -->
+  <link href="asset/css/styles-1.css" rel="stylesheet" />
 </head>
 
-<body>
+<body data-sys-container="">
   <Basis core="component.basispanel.panel" run="atclient"></Basis>
   <div class="clr"></div>
 
@@ -18,13 +19,13 @@
       settings: {
         "connection.web.demo": "/server/dbsource/demo",
         "basispanel.option": {
-          rKey: "C4F54E8F-D1AF-4710-B79B-622752468693",
+          rKey: "C4F54E8F",
           avatar: "https://trust-login.com",
           widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
           addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
-          addtoDashboard: "user/${rKey}/addtodashboard",
-          removeFromDashbaord: "https://basispanel.ir/user/[rkey]/removetempwidget",
-          tempwidgets: "https://basispanel.ir/user/${rKey}/tempwidgets",
+          addtoDashboard: "/server/trust/${rKey}/addtodashboard",
+          removeFromDashbaord: "/server/trust/${rKey}/removetempwidget",
+          tempwidgets: "/server/trust/${rKey}/tempwidgets",
           baseUrl: {
             profile: "/server/trust",
             corporate: "/server/corporate",
@@ -37,13 +38,15 @@
             business: "/server/business/${rKey}/list",
           },
           themeUrl: {
-            light: "http://basispanel.ir/asset/css/light.css",
-            dark: "http://basispanel.ir/asset/css/dark.css",
-            addThemeUrl: "https://basispanel.ir/user/${rKey}/editcolormode",
-            defaultTheme: "http://basispanel.ir/user/${rKey}/visualmode"
+            light: "/asset/css/light.css",
+            dark: "/asset/css/dark.css",
+            addThemeUrl: "/server/trust/${rKey}/editcolormode",
+            defaultTheme: "/server/trust/${rKey}/visualmode"
           },
           method: {
             userImage: "/${rKey}/users/${profile.thumbnail}",
+            userNoImage: "/asset/images/unknown-avatar.png",
+            userNoName: "بدون نام",
             menu: "/${rKey}/menu?level=${level}",
             page: "/${rKey}/page/${pageId}",
             sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",

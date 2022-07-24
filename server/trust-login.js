@@ -150,4 +150,41 @@ router.get("/checkrkey/:rKey", function (req, res) {
   res.json(result);
 });
 
+router.post("/:rKey/addtodashboard", function (req, res) {
+  const result = { errorid: 4, message: "successful" };
+  res.json(result);
+});
+
+router.post("/:rKey/removetempwidget", function (req, res) {
+  const result = { errorid: 3, message: "successful" };
+  res.json(result);
+});
+
+router.post("/:rKey/editcolormode", function (req, res) {
+  const result = { errorid: 3, message: "colormode changed" };
+  res.json(result);
+});
+
+router.get("/:rKey/visualmode", function (req, res) {
+  const result = { colorMode: "light mode", viewMode: "grid" };
+  res.json(result);
+});
+
+router.get("/:rKey/tempwidgets", function (req, res) {
+  const result = [
+    {
+      id: 28,
+      widgetid: 2,
+      title: "تصویر پنل کاربری"
+    },
+    {
+      id: 29,
+      widgetid: 3,
+      title: "ویرایش اطلاعات کاربری"
+    }
+  ];
+  // const result = [];
+  res.json(result);
+});
+
 module.exports = router;
