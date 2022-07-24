@@ -105,7 +105,7 @@ export default class SidebarComponent extends PageWidgetComponent {
   private createPageSidebarItem(node: IMenuPageInfo): HTMLElement {
     const div = document.createElement("div");
     div.setAttribute("data-bc-sidebar-items", "");
-    if (node.pid === this.param.page.pageId) {
+    if (parseInt(node.pid) === parseInt(this.param.page.pageId)) {
       div.setAttribute("data-bc-sidebar-active", "");
       div.setAttribute("data-sys-inherit", "");
     }
