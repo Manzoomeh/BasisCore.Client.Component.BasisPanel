@@ -62,6 +62,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       const msgElId = msgElClick.getAttribute("data-id");
       const id = parseInt(msgElId);
       if (id != 0) {
+        LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
         this.owner.setSource(
           DefaultSource.SHOW_MENU,
           this.createMenuLoaderParam(id)
