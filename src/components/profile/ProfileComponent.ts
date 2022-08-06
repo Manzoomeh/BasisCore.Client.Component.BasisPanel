@@ -8,7 +8,6 @@ import "./assets/style.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
-import CorporateSelectorComponent from "../corporate-selector/CorporateSelectorComponent";
 
 export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -52,11 +51,6 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     this.signalToDisplayMenu();
-
-    // (window as any).dc_ = this.owner.dc;
-    // const c = this.owner.dc.resolve<CorporateSelectorComponent>("corporate");
-    // console.log(c);
-    // await c.trySelectAsync(20);
   }
 
   private signalToDisplayMenu() {
@@ -95,7 +89,9 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     );
 
     if (this.profile.fName != undefined || this.profile.lName != undefined) {
-      ui.textContent = `${this.profile.fName ?? ""} ${this.profile.lName ?? ""}`;
+      ui.textContent = `${this.profile.fName ?? ""} ${
+        this.profile.lName ?? ""
+      }`;
     } else {
       ui.textContent = this.options.method.userNoName;
     }

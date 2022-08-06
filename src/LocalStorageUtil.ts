@@ -1,4 +1,5 @@
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
+import HttpUtil from "./HttpUtil";
 import { MenuOwnerType } from "./type-alias";
 
 export default class LocalStorageUtil {
@@ -9,22 +10,36 @@ export default class LocalStorageUtil {
   private static _currentBusiness: number;
   private static _currentCorporate: number;
   private static _currentPage: IPageLoaderParam;
+  private static _currentUserId: number;
 
   private static _hasPageToShow: boolean = false;
 
-  public static loadLastState() {
-    const str = localStorage.getItem("__bc_panel_last_state__");
-    if (str) {
-      const obj = JSON.parse(str);
-      if (obj.b) {
-        LocalStorageUtil._lastBusiness = obj.b;
-      }
-      if (obj.c) {
-        LocalStorageUtil._lastCorporate = obj.c;
-      }
-      if (obj.p) {
-        LocalStorageUtil._lastPage = obj.p;
-        LocalStorageUtil._hasPageToShow = true;
+  public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
+    const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
+    const result = await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
+    if (result.checked) {
+      LocalStorageUtil._currentUserId = result.userid;
+      const str = localStorage.getItem("__bc_panel_last_state__");
+      if (str) {
+        try {
+          const obj = JSON.parse(str);
+          if (obj.i) {
+            if (result.checked && result.userid == obj.i) {
+              if (obj.b) {
+                LocalStorageUtil._lastBusiness = obj.b;
+              }
+              if (obj.c) {
+                LocalStorageUtil._lastCorporate = obj.c;
+              }
+              if (obj.p) {
+                LocalStorageUtil._lastPage = obj.p;
+                LocalStorageUtil._hasPageToShow = true;
+              }
+            }
+          }
+        } catch (ex) {
+          console.error("error in  load local storage data", ex);
+        }
       }
     }
   }
@@ -44,6 +59,7 @@ export default class LocalStorageUtil {
 
   private static save(): void {
     var obj = {
+      i: LocalStorageUtil._currentUserId,
       b: LocalStorageUtil._currentBusiness,
       c: LocalStorageUtil._currentCorporate,
       p: LocalStorageUtil._currentPage,
@@ -92,4 +108,17 @@ export default class LocalStorageUtil {
   public static hasPageToShow() {
     return LocalStorageUtil._hasPageToShow;
   }
+}
+
+("80CA95CF-486F-40B5-9116-BA7E50E1973B");
+
+interface ICheckRkeyResult {
+  checked: boolean;
+  userid: number;
+  currentOwnerid: number;
+  currentDmnid: number;
+  ownerid: number;
+  dmnid: number;
+  rkey: string;
+  usercat: string;
 }

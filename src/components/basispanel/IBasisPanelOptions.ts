@@ -5,7 +5,7 @@ export default interface IBasisPanelOptions {
   rKey: string;
   avatar: string;
   baseUrl: IPanelPartUrlOptions;
-  themeUrl: IUrlTheme,
+  themeUrl: IUrlTheme;
   dataUrl: IUrlCollectionOption;
   widgetListUrl: string;
   addWidgetUrl: string;
@@ -13,9 +13,9 @@ export default interface IBasisPanelOptions {
   checkRkey: ICheckRkeyOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;
-  addtoDashboard:string;
-  removeFromDashbaord:string ;
-  tempwidgets: string
+  addtoDashboard: string;
+  removeFromDashbaord: string;
+  tempwidgets: string;
 }
 
 interface IUrlCollectionOption {
@@ -28,7 +28,7 @@ interface IUrlTheme {
   light: string;
   dark: string;
   addThemeUrl: string;
-  defaultTheme : string
+  defaultTheme: string;
 }
 interface IPanelPartUrlOptions extends IUrlCollectionOption {
   active: string;
@@ -45,6 +45,7 @@ interface IPanelPartMethodOptions {
 }
 
 export interface ICheckRkeyOptions {
+  url?: string;
   cookieName?: string;
   defaultRedirectUrl: string;
 }
