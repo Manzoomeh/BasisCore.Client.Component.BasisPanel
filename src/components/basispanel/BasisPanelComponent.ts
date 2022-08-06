@@ -13,7 +13,10 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, "data-bc-bp-main-container");
     $bc.basisPanel = {};
-    LocalStorageUtil.loadLastState();
+    LocalStorageUtil.loadLastStateAsync(
+      this.options.rKey,
+      this.options.checkRkey.url
+    );
   }
 
   async runAsync(source?: ISourceOptions): Promise<any> {
