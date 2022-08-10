@@ -8,6 +8,7 @@ import "./assets/style.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
@@ -24,7 +25,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     this.container.addEventListener("click", (e) => {
       e.preventDefault();
       this.signalToDisplayMenu();
-
+      LocalStorageUtil.resetCurrentUserId();
       this.container
         .closest("[data-bc-bp-main-header]")
         .querySelector(".active-business")

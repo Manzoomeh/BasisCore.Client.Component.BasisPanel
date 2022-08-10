@@ -44,6 +44,12 @@ export default class LocalStorageUtil {
     }
   }
 
+  public static resetCurrentUserId() {
+    LocalStorageUtil._currentBusiness = null;
+    LocalStorageUtil._currentCorporate = null;
+    LocalStorageUtil.save();
+  }
+
   public static setEntitySelectorCurrentValue(
     ownerType: MenuOwnerType,
     value: number
