@@ -23,18 +23,16 @@ export default class LocalStorageUtil {
       if (str) {
         try {
           const obj = JSON.parse(str);
-          if (obj.i) {
-            if (result.checked && result.userid == obj.i) {
-              if (obj.b) {
-                LocalStorageUtil._lastBusiness = obj.b;
-              }
-              if (obj.c) {
-                LocalStorageUtil._lastCorporate = obj.c;
-              }
-              if (obj.p) {
-                LocalStorageUtil._lastPage = obj.p;
-                LocalStorageUtil._hasPageToShow = true;
-              }
+          if (obj.i && result.userid == obj.i) {
+            if (obj.b) {
+              LocalStorageUtil._lastBusiness = obj.b;
+            }
+            if (obj.c) {
+              LocalStorageUtil._lastCorporate = obj.c;
+            }
+            if (obj.p) {
+              LocalStorageUtil._lastPage = obj.p;
+              LocalStorageUtil._hasPageToShow = true;
             }
           }
         } catch (ex) {
@@ -42,6 +40,12 @@ export default class LocalStorageUtil {
         }
       }
     }
+  }
+
+  public static resetCurrentUserId() {
+    LocalStorageUtil._currentBusiness = null;
+    LocalStorageUtil._currentCorporate = null;
+    LocalStorageUtil.save();
   }
 
   public static setEntitySelectorCurrentValue(
@@ -109,8 +113,6 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._hasPageToShow;
   }
 }
-
-("80CA95CF-486F-40B5-9116-BA7E50E1973B");
 
 interface ICheckRkeyResult {
   checked: boolean;
