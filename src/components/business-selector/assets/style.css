@@ -1,13 +1,18 @@
+[data-bc-bp-business-container] {
+    float: right;
+    height: 48px;
+    padding: 7.5px 0;
+}
+
 [data-bc-business-list] {
-    min-width: 150px;
-    height: 25px;
+    min-width: 190px;
+    height: 33px;
     background: #fff;
     border: 1px solid #E5E5E5;
     float: right;
     margin-right: 15px;
     position: relative;
     border-radius: 5px;
-    height: 32px;
     direction: rtl;
     z-index: 99;
     transform-origin: top;

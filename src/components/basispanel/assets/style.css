@@ -7,11 +7,13 @@
   background-color: #fff;
   padding: 20px;
   position: relative;
+  min-height: 88px;
+  box-sizing: border-box;
 }
 
 [data-bc-bp-logo] {
   float: left;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 [data-bc-bp-logo] a {
@@ -24,12 +26,17 @@
   background-size: cover;
 }
 
-[data-bc-bp-header-items]{
+[data-bc-bp-header-items] {
   float: right;
-  height: 35px;
-  padding-left: 15px;
+  height: 48px;
+  padding: 7.5px 0 7.5px 15px;
   border-left: 0.5px solid #D0D0D0;
 }
-[data-bc-bp-main-container]{
+
+[data-bc-bp-main-container] {
   position: relative;
+}
+
+[data-bc-bp-main-container] * {
+  box-sizing: border-box;
 }

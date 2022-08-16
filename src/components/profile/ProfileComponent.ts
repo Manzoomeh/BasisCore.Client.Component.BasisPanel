@@ -22,7 +22,18 @@ export default class ProfileComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): Promise<void> {
-    this.container.addEventListener("click", (e) => {
+    this.container.querySelector("[data-bc-user-info-image]").addEventListener("click", (e) => {
+      e.preventDefault();
+      const elStatus = this.container.querySelector("[data-bc-user-info]");
+      const status = elStatus.getAttribute("data-status");
+      if (status == "close") {
+        elStatus.setAttribute("data-status", "open");
+      } else {
+        elStatus.setAttribute("data-status", "close");
+      }
+    });
+
+    this.container.querySelector("[data-bc-user-name]").addEventListener("click", (e) => {
       e.preventDefault();
       this.signalToDisplayMenu();
       LocalStorageUtil.resetCurrentUserId();
@@ -35,6 +46,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         .querySelector(".active-corporate")
         ?.classList.remove("active-corporate");
     });
+
     return Promise.resolve();
   }
 

@@ -37,6 +37,14 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
     this.container.addEventListener("click", function (e) {
       const currentElement = e.target as HTMLElement;
 
+      // for close userinfo drop down
+      if (currentElement.getAttribute("data-bc-user-info-image") === null &&
+      currentElement.getAttribute("data-bc-user-image") === null) {
+        document
+          .querySelector("[data-bc-user-info]")
+          .setAttribute("data-status", "close");
+      }
+
       // for close menu
       if (currentElement.getAttribute("data-bc-level-open") === null) {
         const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");

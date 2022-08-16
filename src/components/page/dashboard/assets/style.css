@@ -1,25 +1,26 @@
 [data-bc-page-dashboard-disablelist] {
-    
+
     z-index: 1;
-	margin: 15px 10px;
-	padding: 10px;
-	border-radius: 5px;
-	border : 1px dashed #767667;
+    margin: 15px 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px dashed #767667;
     direction: rtl;
-    
+
 }
 
-[clear]{
-	clear: both;
+[clear] {
+    clear: both;
 }
 
-[data-bc-page-widget-list-dlg-btn-add]{
+[data-bc-page-widget-list-dlg-btn-add] {
     font-size: 12px;
 }
+
 [data-bc-page-widget-list-dlg-btn-add] {
     float: left;
     color: #000;
-    margin-top: -38px;
+    margin-top: -41px;
     margin-left: 10px;
     z-index: 99999;
     cursor: pointer;
@@ -37,23 +38,28 @@
     align-items: center;
     width: 25px;
     justify-content: center;
-    
+
 }
-[data-bc-page-widget-list-dlg-btn-add]:before{
+
+[data-bc-page-widget-list-dlg-btn-add]:before {
     transition: all 0.5s ease-in-out;
 }
-[data-bc-dashboard-widgets]{
+
+[data-bc-dashboard-widgets] {
     width: 100%;
     transition: all 0.5s ease-in-out;
 }
-[data-bc-page-body-container]{
+
+[data-bc-page-body-container] {
     width: 100%;
     transition: all 0.5s ease-in-out;
 }
-[data-bc-widget-drop-area-container]{
+
+[data-bc-widget-drop-area-container] {
     padding-top: 10px;
 }
-[data-bc-btn-remove]{
+
+[data-bc-btn-remove] {
     width: 20px;
     height: 20px;
     border-radius: 50%;

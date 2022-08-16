@@ -1,11 +1,11 @@
-[data-bc-bp-theme-container]{
+[data-bc-bp-theme-container] {
     position: absolute;
-    top: 90px;
+    top: 101px;
     z-index: 99999999;
-    left:35px
+    left: 35px
 }
-.toggle-button-cover
-{
+
+.toggle-button-cover {
     display: table-cell;
     position: relative;
     width: 200px;
@@ -13,8 +13,7 @@
     box-sizing: border-box;
 }
 
-.mode-button-cover
-{
+.mode-button-cover {
     height: 100px;
     margin: 20px;
     background-color: #fff;
@@ -22,8 +21,7 @@
     border-radius: 4px;
 }
 
-.mode-button-cover:before
-{
+.mode-button-cover:before {
     counter-increment: button-counter;
     content: counter(button-counter);
     position: absolute;
@@ -35,8 +33,9 @@
     padding: 5px;
 }
 
-.mode-button-cover, .knobs, .layer
-{
+.mode-button-cover,
+.knobs,
+.layer {
     position: absolute;
     top: 0;
     right: 0;
@@ -44,27 +43,25 @@
     left: 0;
 }
 
-.mode-button
-{
+.mode-button {
     position: relative;
     top: 50%;
-    width: 74px;
+    width: 76px;
     height: 36px;
     overflow: hidden;
+    padding: 5px;
 }
 
-.mode-button.r, .mode-button.r .layer
-{
+.mode-button.r,
+.mode-button.r .layer {
     border-radius: 5px;
 }
 
-.mode-button.b2
-{
+.mode-button.b2 {
     border-radius: 2px;
 }
 
-.checkbox
-{
+.checkbox {
     position: relative;
     width: 100%;
     height: 100%;
@@ -75,13 +72,11 @@
     z-index: 3;
 }
 
-.knobs
-{
+.knobs {
     z-index: 2;
 }
 
-.layer
-{
+.layer {
     width: 100%;
     background-color: #767676;
     transition: 0.3s ease all;
@@ -89,14 +84,13 @@
     border-radius: 5px;
 }
 
-
 /* Button 9 */
-#swtich-button .knobs:before, #swtich-button .knobs:after, #swtich-button .knobs span
-{
+#swtich-button .knobs span {
     position: absolute;
-    top: 4px;
-    width: 25px;
-    height: 10px;
+    top: 5px;
+    left: 5px;
+    width: 33px;
+    height: 26px;
     font-size: 10px;
     font-weight: bold;
     text-align: center;
@@ -104,65 +98,61 @@
     padding: 9px 4px;
     border-radius: 5px;
     transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
-    
+    background-color: #ffffff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
-#swtich-button .knobs:before
-{
-    content: '';
-    background-image: url('sun.svg') ;
-    background-repeat: no-repeat;
-    background-position:center;
-    left: 4px;
-    display: block;
-
-}
-
-#swtich-button .knobs:after
-{
-    content: '';
-    background-image: url('moon.svg') ;
-    background-repeat: no-repeat;
-    background-position:center;
-        display: block;
-    right: 5px;
-}
-
-#swtich-button .knobs:before, #swtich-button .knobs:after
-{
+#swtich-button .knobs:before,
+#swtich-button .knobs:after {
+    position: absolute;
+    top: 5px;
+    width: 33px;
+    height: 26px;
+    /* font-size: 10px; */
+    /* font-weight: bold; */
+    /* text-align: center; */
+    /* line-height: 1; */
+    /* padding: 9px 4px; */
+    /* border-radius: 5px; */
+    transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
     color: #fff;
     z-index: 2;
 }
 
-#swtich-button .knobs span
-{
-    left: 4px;
-    background-color: #ffffff;
-    z-index: 1;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-    
+#swtich-button .knobs:before {
+    content: '';
+    background-image: url('sun.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 5px;
+    display: block;
 }
 
-#swtich-button .checkbox:checked + .knobs:before
-{
+#swtich-button .knobs:after {
+    content: '';
+    background-image: url('moon.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    right: 5px;
+}
+
+#swtich-button .checkbox:checked+.knobs:before {
     /* left: -24px; */
 }
 
-#swtich-button .checkbox:checked + .knobs:after
-{
-    right: 4px;
+#swtich-button .checkbox:checked+.knobs:after {
+    right: 5px;
     /* background-image: url('moon2.svg') ; */
 }
 
-
-#swtich-button .checkbox:checked + .knobs span
-{
-    left: 37px;
+#swtich-button .checkbox:checked+.knobs span {
+    left: 38px;
     background-color: #1C1C1C;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 
-#swtich-button .checkbox:checked ~ .layer
-{
+#swtich-button .checkbox:checked~.layer {
     background-color: #767676;
 }
