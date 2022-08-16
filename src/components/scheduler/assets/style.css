@@ -2,20 +2,16 @@
     float: right;
 	width: 32px;
     height: 32px;
-    background-color: #E4E7F4;
+    /* background-color: #E4E7F4; */
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 15px;
-    transition: all 0.3s ease-in-out;
     position: relative;
-}
-[data-bc-bp-scheduler-container]:hover{
-    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
-
 
 [data-bc-task-list] [data-bc-task-list-alert] {
    height: 14px;
@@ -36,10 +32,10 @@
 
 [data-bc-task-list] [data-bc-task-list-alarm] {
     position: absolute;
-    right: -7px;
-    top: -7px;
-    width: 20px;
-    height:20px;
+    right: -4px;
+    top: -4px;
+    width: 18px;
+    height:18px;
     border-radius: 100%;
     content: '';
     background-color: #EB5757;

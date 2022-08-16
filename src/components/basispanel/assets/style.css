@@ -30,7 +30,7 @@
   float: right;
   height: 48px;
   padding: 7.5px 0 7.5px 15px;
-  border-left: 0.5px solid #D0D0D0;
+  /* border-left: 0.5px solid #D0D0D0; */
 }
 
 [data-bc-bp-main-container] {
