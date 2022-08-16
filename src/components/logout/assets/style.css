@@ -1,34 +1,39 @@
 [data-bc-bp-logout-container] {
-    float: right;
-	width: 32px;
-    height: 32px;
-    background-color: #E4E7F4;
-    border-radius: 5px;
-    display: flex;
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex; /* NEW - Chrome */
+    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease-in-out;
-    margin-right: 15px;
-}
-[data-bc-bp-logout-container]:hover{
-    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
     cursor: pointer;
-}
-[data-bc-bp-logout-container] {
-    cursor: pointer;
-}
-[data-bc-bp-logout-main-wrapper]{
-    height: 14px;
+    padding: 5px 5px;
+    font-size: 12px;
+    color: #000;
 }
 
-[data-bc-bp-logout-main-wrapper] [data-bc-logout-icon] {
+[data-bc-bp-logout-container]:hover {
+    background: rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+}
+
+[data-bc-bp-logout-container] [data-bc-bp-logout-title] {
+    cursor: pointer;
+}
+
+[data-bc-bp-logout-container] [data-bc-logout-icon] {
     vertical-align: middle;
-	cursor: pointer;
-	font-style: normal;
-	font-size: 15px;
+    cursor: pointer;
+    font-style: normal;
+    font-size: 15px;
 }
 
-[data-bc-bp-logout-main-wrapper] [data-bc-logout-icon] * {
+[data-bc-bp-logout-container] [data-bc-logout-icon] * {
     color: #2b2b2b;
     fill: #2b2b2b;
 }

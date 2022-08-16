@@ -10,6 +10,7 @@ export default class LogoutComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): Promise<void> {
+    this.container.setAttribute("data-sys-hover", "");
     this.container
       ?.addEventListener("click", async (e) => {
         e.preventDefault();
