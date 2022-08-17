@@ -71,7 +71,7 @@ router.get("/:rKey/menu", function (req, res) {
       {
         mid: 4,
         title: "TaskManager",
-        multi: true,
+        multi: false,
         url: "/server/external/task",
       },
     ],

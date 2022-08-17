@@ -21,7 +21,10 @@ router.get("/task/:rKey/menu", function (req, res) {
     nodes: [
       {
         title: "مدیریت تسک",
-        pid: 19,
+        nodes: [
+          { title: "لیست پروژه ها", pid: 11 },
+          { title: "مدیریت پروژه ها", pid: 13 },
+        ],
       },
     ],
   };
