@@ -11,9 +11,17 @@
   box-sizing: border-box;
 }
 
+[data-bc-bp-header-left-items] {
+  float: left;
+  height: 48px;
+  padding: 7.5px 0;
+  border-right: 0.5px solid #D0D0D0;
+}
+
 [data-bc-bp-logo] {
   float: left;
   margin-top: 8px;
+  margin-left: 15px;
 }
 
 [data-bc-bp-logo] a {
