@@ -2,6 +2,13 @@
 	clear: both;
 }
 
+[data-bc-bp-menu-container][data-bc-bp-sticky] {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 99;
+}
+
 [data-bc-bp-menu-wrapper] {
 	width: 100%;
 	background: #fff;

@@ -5,6 +5,14 @@
     left: 35px
 }
 
+[data-bc-bp-theme-container][data-bc-bp-sticky] {
+	position: fixed;
+	top: 13.5px;
+    left: 10px;
+	width: 76px;
+	z-index: 999;
+}
+
 .toggle-button-cover {
     display: table-cell;
     position: relative;
