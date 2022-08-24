@@ -76,7 +76,6 @@
     border: 1px solid #eee;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 15px;
     z-index: 99;
     width: 120px;
     height: 110px;
@@ -86,6 +85,7 @@
     flex-direction: column;
     background: var(--white);
     position: relative;
+    margin-bottom: 15px;
 }
 [data-bc-page-widget-list-dlg] [data-bc-page-widget-dashboard] img{
     padding-top: 5px;
@@ -100,4 +100,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+[data-bc-page-widget-dashboard-wrapper]{
+    justify-content: space-between;
+    flex-wrap: wrap;
+    
 }

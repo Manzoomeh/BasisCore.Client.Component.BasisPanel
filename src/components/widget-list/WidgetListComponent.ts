@@ -43,6 +43,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           this.displayWidgetList(e);
+          if(this._page?.info?.container == "dashboard"){
+            this.addingDashboardWidgets()
+          }
         });
       });
 
@@ -117,7 +120,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   public runAsync(source?: ISource) {
-    this.addingDashboardWidgets();
+    // this.addingDashboardWidgets();
     if (source?.id === DefaultSource.WIDGET_CLOSED) {
     }
   }
@@ -201,6 +204,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   private showList() {
+    const dashbaordBtn = this.container.querySelector(".tabWrapperForWidgets") as HTMLElement
+    dashbaordBtn.style.display="none"
     this.fillWidgetListAsync().then(() => {
       this._widgetDialog.removeAttribute("data-bc-display-none");
       this._page.widgetDropAreaContainer.removeAttribute(
@@ -217,6 +222,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     widgetContainer.style.width = "calc(100% - 300px)";
   }
   public async addingDashboardWidgets(): Promise<void> {
+    const dashbaordBtn = this.container.querySelector(".tabWrapperForWidgets") as HTMLElement
+    dashbaordBtn.style.display="flex"
     const parent = this.container.querySelector(
       "[data-bc-page-widget-dashboard-wrapper]"
     ) as HTMLElement;
