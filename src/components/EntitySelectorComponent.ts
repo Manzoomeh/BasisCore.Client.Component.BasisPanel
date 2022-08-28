@@ -8,6 +8,7 @@ import IPageLoaderParam from "./menu/IPageLoaderParam";
 import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
 
+declare const $bc: any;
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
   private element: Element;
@@ -200,18 +201,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async onItemSelectAsync(id: number) {
-    const url = HttpUtil.formatString(this.options.baseUrl.active, {
-      rKey: this.options.rKey,
-    });
-    await HttpUtil.checkRkeyFetchDataAsync(
-      url,
-      "POST",
-      this.options.checkRkey,
-      {
-        type: this.ownerType,
-        id: id,
-      }
-    );
+    await this.setActiveAsync(id);
     this.owner.setSource(
       DefaultSource.SHOW_MENU,
       this.createMenuLoaderParam(id)
@@ -228,7 +218,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         li.setAttribute("data-id", item.id.toString());
         li.addEventListener("click", async (e) => {
           e.preventDefault();
-          // const id = parseInt(this.element.value);
           const id = parseInt(li.getAttribute("data-id"));
           const entity = this.entityList.find((x) => x.id == id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
@@ -242,71 +231,57 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
           if (this.ownerType == "corporate") {
             // choose corporate
-            const header = this.element.closest("[data-bc-bp-main-header]");
-
-            const businessMsgElement = header.querySelector(
-              "[data-bc-business-msg]"
-            );
-            businessMsgElement.textContent = "کسب‌و‌کارها";
-            businessMsgElement.setAttribute("data-id", "0");
-            (businessMsgElement as HTMLElement).style.cursor = "auto";
-            businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
-
-            header
-              .querySelector(
-                "[data-bc-bp-business-container] [data-bc-main-name]"
-              )
-              ?.remove();
-
-            (
-              header.querySelector(
-                "[data-bc-bp-business-container] [data-bc-drop-down-click]"
-              ) as HTMLElement
-            ).style.top = "3px";
+            this.resetBusinessEntity();
+          } else if (this.ownerType == "business") {
+            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
           }
           this.setActive();
-
-          const existCorporateElemant = this.element
-            .closest("[data-bc-main-list-container]")
-            .querySelector("[data-bc-main-name]");
-          if (existCorporateElemant) {
-            existCorporateElemant.remove();
-          }
-
-          const containerMsgElement = this.element
-            .closest("[data-bc-main-list-container]")
-            .querySelector("[data-bc-main-list-msg]");
-
-          const CorporateName = document.createElement("div");
-          CorporateName.setAttribute("data-bc-main-name", "");
-          CorporateName.textContent = li.textContent;
-
-          const elClick = this.element
-            .closest("[data-bc-main-list-container]")
-            .querySelector("[data-bc-drop-down-click]") as HTMLElement;
-          elClick.style.top = "-5px";
-
-          containerMsgElement.parentNode.insertBefore(
-            CorporateName,
-            containerMsgElement.nextSibling
-          );
-          containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
-          containerMsgElement.setAttribute(
-            "data-id",
-            li.getAttribute("data-id")
-          );
-          (containerMsgElement as HTMLElement).style.cursor = "pointer";
-
-          this.element
-            .closest("[data-bc-drop-down-container]")
-            .setAttribute("data-status", "close");
+          this.selectItem(li);
         });
-        // div.textContent = item.title;
-        // li.appendChild(div);
-        li.textContent = item.title;
+        li.innerHTML = `<div data-bc-main-title="">${item.title}</div>`;
+
+        if (this.ownerType == "business") {
+          const lockIcon = document.createElement("span");
+          lockIcon.setAttribute("data-bc-business-freeze-btn", "");
+          lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
+          lockIcon.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = parseInt(li.getAttribute("data-id"));
+            this.setActiveAsync(id);
+            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
+            // // refresh page
+            // const newParam: IPageLoaderParam = {
+            //   pageId: LocalStorageUtil.getCurrentPage().pageId,
+            //   owner: LocalStorageUtil.getCurrentPage().owner,
+            //   ownerId: LocalStorageUtil.getCurrentPage().ownerId,
+            //   ownerUrl: LocalStorageUtil.getCurrentPage().ownerUrl,
+            //   rKey: this.options.rKey,
+            //   pageMethod: LocalStorageUtil.getCurrentPage().pageMethod,
+            // };
+            // this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+            this.selectItem(li, true);
+          });
+          li.appendChild(lockIcon);
+        }
         this.element.appendChild(li);
       });
     }
+  }
+
+  protected async setActiveAsync(id: number) {
+    const url = HttpUtil.formatString(this.options.baseUrl.active, {
+      rKey: this.options.rKey,
+    });
+    await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "POST",
+      this.options.checkRkey,
+      {
+        type: this.ownerType,
+        id: id
+      }
+    );
   }
 
   setActive() {
@@ -329,6 +304,77 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         .closest("[data-bc-main-list-container]")
         .classList.add("active-business");
     }
+  }
+
+  protected resetBusinessEntity() {
+    $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", 0);
+
+    const header = this.element.closest("[data-bc-bp-main-header]");
+    const businessMsgElement = header.querySelector(
+      "[data-bc-business-msg]"
+    );
+    businessMsgElement.textContent = "کسب‌و‌کارها";
+    businessMsgElement.setAttribute("data-id", "0");
+    businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
+    header
+      .querySelector(
+        "[data-bc-bp-business-container] [data-bc-main-name]"
+      )
+      ?.remove();
+  }
+
+  protected selectItem(li: HTMLElement, freeze: boolean = false) {
+    const entityElement = this.element
+      .closest("[data-bc-main-list-container]")
+      .querySelector("[data-bc-main-name]");
+    if (entityElement) {
+      entityElement.remove();
+    }
+
+    const containerMsgElement = this.element
+      .closest("[data-bc-main-list-container]")
+      .querySelector("[data-bc-main-list-msg]");
+
+    const entityName = document.createElement("div");
+    entityName.setAttribute("data-bc-main-name", "");
+
+    if (!freeze) {
+      entityName.textContent = li.textContent;
+    } else {
+      const switchInput = document.createElement("input");
+      switchInput.setAttribute("type", "checkbox");
+      switchInput.setAttribute("id", "switch");
+      switchInput.setAttribute("data-bc-business-freeze-input", "");
+      switchInput.setAttribute("checked", "checked");
+      switchInput.addEventListener("change", async (e) => {
+        const checked = switchInput.checked;
+        if (!checked) {
+          this.resetBusinessEntity();
+        }
+      });
+      entityName.appendChild(switchInput);
+      const switchLabel = document.createElement("label");
+      switchLabel.setAttribute("for", "switch");
+      switchLabel.setAttribute("data-bc-business-freeze-label", "");
+      switchLabel.innerHTML = `<span data-bc-business-freeze-switch=""><svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.18581 2.63636H4.8449V1.95455C4.8449 1.01364 4.08127 0.25 3.14036 0.25C2.19945 0.25 1.43581 1.01364 1.43581 1.95455V2.63636H1.0949C0.719904 2.63636 0.413086 2.94318 0.413086 3.31818V6.72727C0.413086 7.10227 0.719904 7.40909 1.0949 7.40909H5.18581C5.56081 7.40909 5.86763 7.10227 5.86763 6.72727V3.31818C5.86763 2.94318 5.56081 2.63636 5.18581 2.63636ZM3.14036 5.70455C2.76536 5.70455 2.45854 5.39773 2.45854 5.02273C2.45854 4.64773 2.76536 4.34091 3.14036 4.34091C3.51536 4.34091 3.82218 4.64773 3.82218 5.02273C3.82218 5.39773 3.51536 5.70455 3.14036 5.70455ZM2.11763 2.63636V1.95455C2.11763 1.38864 2.57445 0.931818 3.14036 0.931818C3.70627 0.931818 4.16309 1.38864 4.16309 1.95455V2.63636H2.11763Z" fill="#004B85"/></svg></span>`;
+      entityName.appendChild(switchLabel);
+      const title = document.createTextNode(li.textContent);
+      entityName.appendChild(title);
+    }
+
+    containerMsgElement.parentNode.insertBefore(
+      entityName,
+      containerMsgElement.nextSibling
+    );
+    containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
+    containerMsgElement.setAttribute(
+      "data-id",
+      li.getAttribute("data-id")
+    );
+
+    this.element
+      .closest("[data-bc-drop-down-container]")
+      .setAttribute("data-status", "close");
   }
 
   protected clearCombo() {

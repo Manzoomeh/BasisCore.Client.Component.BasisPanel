@@ -41,13 +41,13 @@
     visibility: hidden;
     opacity: 0;
     margin-top: -10px;
+    z-index: 99;
 }
 
 [data-bc-user-info][data-status="open"] [data-bc-user-info-drop-down] {
     visibility: visible;
     opacity: 1;
     margin-top: 5px;
-    z-index: 99;
 }
 
 [data-bc-user-info] [data-bc-user-drop-down] {
