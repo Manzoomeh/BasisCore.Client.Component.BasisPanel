@@ -20,9 +20,10 @@ export default abstract class PageWidgetComponent
   }
 
   set title(value: string) {
-    this.container.querySelector(
-      "[data-bc-widget-header] > [data-bc-widget-title]"
-    ).innerHTML = value;
+    const widgetTitle = this.container.querySelector("[data-bc-widget-header] > [data-bc-widget-title]");
+    if (widgetTitle) {
+      widgetTitle.innerHTML = value;
+    }
   }
 
   public get body(): HTMLElement {
