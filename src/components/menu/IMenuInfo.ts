@@ -6,6 +6,7 @@ export default interface IMenuInfo {
 
 export interface IMenuItemInfo {
   title: string;
+  mid: string;
 }
 
 export interface IMenuExternalItemInfo extends IMenuItemInfo {

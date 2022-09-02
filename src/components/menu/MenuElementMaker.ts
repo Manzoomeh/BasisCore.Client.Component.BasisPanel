@@ -8,6 +8,7 @@ import IMenuInfo, {
 } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuElementMaker {
   readonly rKey: string;
@@ -128,6 +129,7 @@ export default class MenuElementMaker {
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
+    content.setAttribute("data-bc-mid", node.mid?.toString());
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
@@ -148,6 +150,8 @@ export default class MenuElementMaker {
       } else {
         li.setAttribute("data-bc-menu-active", "");
       }
+
+      LocalStorageUtil.setCurrentMenu(node);
     });
     pageLookup.set(node.pid, menuParam);
     li.appendChild(content);

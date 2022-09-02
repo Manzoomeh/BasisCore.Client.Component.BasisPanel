@@ -8,7 +8,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
-import HttpUtil from "../../HttpUtil";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -65,6 +65,25 @@ export default class MenuComponent
       this.current = newMenu;
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
+
+      const temp = LocalStorageUtil.getCurrentMenu();
+      const pid = temp?.pid.toString();
+      const mid = temp?.mid.toString();
+
+      LocalStorageUtil.setCurrentMenu(temp);
+
+      const content = this.ul.querySelector(`a[data-bc-pid="${pid}"][data-bc-mid="${mid}"]`);
+      const li = content?.closest("li");
+      const parent = content?.closest("[data-bc-bp-submenu]");
+      if (parent) {
+        parent
+          .closest("li")
+          .querySelector("[data-bc-level]")
+          .setAttribute("data-bc-menu-active", "");
+        li?.setAttribute("data-bc-menu-active", "");
+      } else {
+        li?.setAttribute("data-bc-menu-active", "");
+      }
     }
   }
 

@@ -1,16 +1,19 @@
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
 import { MenuOwnerType } from "./type-alias";
+import { IMenuPageInfo } from "./components/menu/IMenuInfo";
 
 export default class LocalStorageUtil {
   private static _lastBusiness: number;
   private static _lastCorporate: number;
   private static _lastPage: IPageLoaderParam;
+  private static _lastMenu: IMenuPageInfo;
 
   private static _currentBusiness: number;
   private static _currentCorporate: number;
   private static _currentPage: IPageLoaderParam;
   private static _currentUserId: number;
+  private static _currentMenu: IMenuPageInfo;
 
   private static _hasPageToShow: boolean = false;
 
@@ -33,6 +36,9 @@ export default class LocalStorageUtil {
             if (obj.p) {
               LocalStorageUtil._lastPage = obj.p;
               LocalStorageUtil._hasPageToShow = true;
+            }
+            if (obj.m) {
+              LocalStorageUtil._lastMenu = obj.m;
             }
           }
         } catch (ex) {
@@ -67,6 +73,7 @@ export default class LocalStorageUtil {
       b: LocalStorageUtil._currentBusiness,
       c: LocalStorageUtil._currentCorporate,
       p: LocalStorageUtil._currentPage,
+      m: LocalStorageUtil._currentMenu,
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
@@ -88,6 +95,15 @@ export default class LocalStorageUtil {
 
   public static getCurrentPage(): IPageLoaderParam {
     return LocalStorageUtil._lastPage;
+  }
+
+  public static setCurrentMenu(menu: IMenuPageInfo) {
+    LocalStorageUtil._currentMenu = menu;
+    LocalStorageUtil.save();
+  }
+
+  public static getCurrentMenu(): IMenuPageInfo {
+    return LocalStorageUtil._lastMenu;
   }
 
   public static mustLoadPage(owner: MenuOwnerType) {
