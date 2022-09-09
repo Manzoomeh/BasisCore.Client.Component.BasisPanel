@@ -130,6 +130,7 @@ export default class MenuElementMaker {
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.setAttribute("data-bc-mid", node.mid?.toString());
+    content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
@@ -151,7 +152,7 @@ export default class MenuElementMaker {
         li.setAttribute("data-bc-menu-active", "");
       }
 
-      LocalStorageUtil.setCurrentMenu(node);
+      LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
     });
     pageLookup.set(node.pid, menuParam);
     li.appendChild(content);

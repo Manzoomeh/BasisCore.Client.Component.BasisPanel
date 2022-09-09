@@ -66,23 +66,28 @@ export default class MenuComponent
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
 
-      const temp = LocalStorageUtil.getCurrentMenu();
-      const pid = temp?.pid.toString();
-      const mid = temp?.mid.toString();
-
-      LocalStorageUtil.setCurrentMenu(temp);
-
-      const content = this.ul.querySelector(`a[data-bc-pid="${pid}"][data-bc-mid="${mid}"]`);
-      const li = content?.closest("li");
-      const parent = content?.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
-        li?.setAttribute("data-bc-menu-active", "");
-      } else {
-        li?.setAttribute("data-bc-menu-active", "");
+      const tempPage = LocalStorageUtil.getCurrentPage();
+      if (tempPage && parseInt(tempPage.pageId) > 0) {
+        if (LocalStorageUtil.hasMenuToActive()) {
+          if (LocalStorageUtil.mustActiveMenuItem(menuParam.owner)) {
+            const temp = LocalStorageUtil.getCurrentMenu();
+            const pid = temp?.info?.pid.toString();
+            const mid = temp?.info?.mid.toString();
+            const ownerId = temp?.ownerId.toString();
+            const content = this.ul.querySelector(`a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`);
+            const li = content?.closest("li");
+            const parent = content?.closest("[data-bc-bp-submenu]");
+            if (parent) {
+              parent
+                .closest("li")
+                .querySelector("[data-bc-level]")
+                .setAttribute("data-bc-menu-active", "");
+              li?.setAttribute("data-bc-menu-active", "");
+            } else {
+              li?.setAttribute("data-bc-menu-active", "");
+            }
+          }
+        }
       }
     }
   }

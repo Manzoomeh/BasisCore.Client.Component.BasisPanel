@@ -7,15 +7,15 @@ export default class LocalStorageUtil {
   private static _lastBusiness: number;
   private static _lastCorporate: number;
   private static _lastPage: IPageLoaderParam;
-  private static _lastMenu: IMenuPageInfo;
+  private static _lastMenu: ICurrentMenu;
 
   private static _currentBusiness: number;
   private static _currentCorporate: number;
   private static _currentPage: IPageLoaderParam;
   private static _currentUserId: number;
-  private static _currentMenu: IMenuPageInfo;
 
   private static _hasPageToShow: boolean = false;
+  private static _hasMenuToActive: boolean = false;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
@@ -39,6 +39,7 @@ export default class LocalStorageUtil {
             }
             if (obj.m) {
               LocalStorageUtil._lastMenu = obj.m;
+              LocalStorageUtil._hasMenuToActive = true;
             }
           }
         } catch (ex) {
@@ -73,7 +74,7 @@ export default class LocalStorageUtil {
       b: LocalStorageUtil._currentBusiness,
       c: LocalStorageUtil._currentCorporate,
       p: LocalStorageUtil._currentPage,
-      m: LocalStorageUtil._currentMenu,
+      m: LocalStorageUtil._lastMenu,
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
@@ -95,15 +96,6 @@ export default class LocalStorageUtil {
 
   public static getCurrentPage(): IPageLoaderParam {
     return LocalStorageUtil._lastPage;
-  }
-
-  public static setCurrentMenu(menu: IMenuPageInfo) {
-    LocalStorageUtil._currentMenu = menu;
-    LocalStorageUtil.save();
-  }
-
-  public static getCurrentMenu(): IMenuPageInfo {
-    return LocalStorageUtil._lastMenu;
   }
 
   public static mustLoadPage(owner: MenuOwnerType) {
@@ -128,6 +120,41 @@ export default class LocalStorageUtil {
   public static hasPageToShow() {
     return LocalStorageUtil._hasPageToShow;
   }
+
+  public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
+    LocalStorageUtil._lastMenu = {
+      ownerId: ownerId,
+      info: menu
+    };
+    LocalStorageUtil.save();
+  }
+
+  public static getCurrentMenu(): ICurrentMenu {
+    return LocalStorageUtil._lastMenu;
+  }
+
+  public static mustActiveMenuItem(owner: MenuOwnerType) {
+    let load = false;
+    if (LocalStorageUtil._lastBusiness) {
+      if (owner == "business") {
+        load = true;
+      }
+    } else if (LocalStorageUtil._lastCorporate) {
+      if (owner == "corporate") {
+        load = true;
+      }
+    } else if (owner == "profile") {
+      load = true;
+    }
+    if (load) {
+      LocalStorageUtil._hasMenuToActive = false;
+    }
+    return load;
+  }
+
+  public static hasMenuToActive() {
+    return LocalStorageUtil._hasMenuToActive;
+  }
 }
 
 interface ICheckRkeyResult {
@@ -139,4 +166,9 @@ interface ICheckRkeyResult {
   dmnid: number;
   rkey: string;
   usercat: string;
+}
+
+interface ICurrentMenu {
+  ownerId: string;
+  info: IMenuPageInfo;
 }
