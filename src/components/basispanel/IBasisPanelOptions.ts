@@ -11,6 +11,7 @@ export default interface IBasisPanelOptions {
   addWidgetUrl: string;
   method: IPanelPartMethodOptions;
   checkRkey: ICheckRkeyOptions;
+  culture: ICultureOptions;
   logout: ILogoutOptions;
   notification: INotificationOptions;
   addtoDashboard: string;
@@ -49,3 +50,10 @@ export interface ICheckRkeyOptions {
   cookieName?: string;
   defaultRedirectUrl: string;
 }
+
+export interface ICultureOptions {
+  direction: IDirection;
+}
+
+export type IDirection =  "leftToRight" | "rightToLeft";
+

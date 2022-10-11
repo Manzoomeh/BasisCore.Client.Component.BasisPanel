@@ -1,20 +1,30 @@
 [data-bc-bp-scheduler-container] {
-    float: right;
-	width: 32px;
+    /* float: right; */
+    width: 32px;
     height: 32px;
     /* background-color: #E4E7F4; */
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 15px;
+    /* margin-right: 15px; */
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-scheduler-container] {
+    float: right;
+    margin-right: 15px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-scheduler-container] {
+    float: left;
+    margin-left: 15px;
+}
+
 [data-bc-task-list] [data-bc-task-list-alert] {
-   height: 14px;
+    height: 14px;
 }
 
 [data-bc-task-list] [data-bc-task-list-icon] {
@@ -32,10 +42,10 @@
 
 [data-bc-task-list] [data-bc-task-list-alarm] {
     position: absolute;
-    right: -4px;
+    /* right: -4px; */
     top: -4px;
     width: 18px;
-    height:18px;
+    height: 18px;
     border-radius: 100%;
     content: '';
     background-color: #EB5757;
@@ -47,37 +57,57 @@
     justify-content: center;
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-alarm] {
+    right: -4px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-alarm] {
+    left: -4px;
+}
+
 /* ********** task list dropdown ********** */
 [data-bc-task-list] [data-bc-task-list-dropdown] {
-    -webkit-box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);;
-    box-shadow:0px 5px 10px rgba(0, 75, 133, 0.1);;
-  
-   
-   
+    -webkit-box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
+    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
     background-color: #fff;
     -webkit-transition: all linear 0.3s;
     transition: all linear 0.3s;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-    direction: rtl;
+    /* direction: rtl; */
     border-radius: 5px;
     border: 1px solid #E5E5E5;
-   
 }
-[data-bc-task-list-dropdown-wrapper]{
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-dropdown] {
+    direction: rtl;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-dropdown] {
+    direction: ltr;
+}
+
+[data-bc-task-list-dropdown-wrapper] {
     -webkit-transform: translateY(30px);
     transform: translateY(30px);
     opacity: 0;
     visibility: hidden;
     height: 0;
-    right: -17px !important;
+    /* right: -17px !important; */
     z-index: 999;
     position: absolute;
     top: 30px;
     padding-top: 15px;
     transition: all 0.3s ease-in-out;
+}
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list-dropdown-wrapper] {
+    right: -17px !important;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list-dropdown-wrapper] {
+    left: -17px !important;
 }
 
 [data-bc-bp-scheduler-container]:hover [data-bc-task-list-dropdown-wrapper] {
@@ -88,11 +118,22 @@
     height: auto;
 }
 
-
 [data-bc-task-list] [data-bc-task-list-dropdown]::before,
 [data-bc-task-list] [data-bc-task-list-dropdown]::after {
     right: 28px !important;
     left: unset !important;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-dropdown]::before,
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-dropdown]::after {
+    right: 28px !important;
+    left: unset !important;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-dropdown]::before,
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-dropdown]::after {
+    left: 28px !important;
+    right: unset !important;
 }
 
 /* ********** task list contents ********** */
@@ -108,7 +149,7 @@
 [data-bc-task-list] [data-bc-task-list-contents] {
     height: auto;
     width: 100%;
-    float: left;
+    /* float: left; */
     z-index: 5;
     background: #fefefe;
     box-sizing: border-box;
@@ -120,6 +161,14 @@
     box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-contents] {
+    float: left;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-contents] {
+    float: right;
+}
+
 [data-bc-task-list] [data-bc-task-list-noTask] {
     color: #004B85;
     font-size: 13px;
@@ -128,7 +177,7 @@
 
 /* ********** task list item ********** */
 [data-bc-task-list] [data-bc-task-list-item] {
-    border-bottom:  0.5px solid #D0D0D0;
+    border-bottom: 0.5px solid #D0D0D0;
     padding: 10px 0;
 }
 
@@ -232,17 +281,39 @@
     /* NEW - Chrome */
     display: flex;
     /* NEW, Spec - Opera 12.1, Firefox 20+ */
-    -webkit-flex-direction: row;
-    flex-direction: row;
+    /* -webkit-flex-direction: row; */
+    /* flex-direction: row; */
     -webkit-align-items: center;
     align-items: center;
+    /* -webkit-justify-content: left; */
+    /* justify-content: left; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-btn] {
+    -webkit-flex-direction: row;
+    flex-direction: row;
     -webkit-justify-content: left;
     justify-content: left;
 }
 
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-btn] {
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-justify-content: right;
+    justify-content: right;
+}
+
 [data-bc-task-list] [data-bc-task-list-btn] svg {
-    margin-right: 10px;
+    /* margin-right: 10px; */
     cursor: pointer;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-task-list] [data-bc-task-list-btn] svg {
+    margin-right: 10px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-task-list] [data-bc-task-list-btn] svg {
+    margin-left: 10px;
 }
 
 /* ********** task list keyframes ********** */
@@ -259,13 +330,13 @@
 /***ajax progress***/
 @keyframes load {
     0% {
-      opacity: 0.08;
-      filter: blur(5px);
-      letter-spacing: 3px;
+        opacity: 0.08;
+        filter: blur(5px);
+        letter-spacing: 3px;
     }
-  }
+}
 
-  .loading {
+.loading {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
@@ -274,9 +345,9 @@
     left: 0;
     top: 0;
     z-index: 1;
-  }
+}
 
-  .animate {
+.animate {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -286,8 +357,8 @@
     animation: load 1.2s infinite 0s ease-in-out;
     animation-direction: alternate;
     text-shadow: 0 0 1px white;
-  }
+}
 
-  [data-bc-loading-container] {
+[data-bc-loading-container] {
     position: relative;
-  }
+}

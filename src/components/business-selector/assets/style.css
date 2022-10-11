@@ -1,7 +1,15 @@
 [data-bc-bp-business-container] {
-    float: right;
+    /* float: right; */
     height: 48px;
     padding: 7.5px 0;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-business-container] {
+    float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-business-container] {
+    float: left;
 }
 
 [data-bc-business-list] {
@@ -9,11 +17,11 @@
     height: 33px;
     background: #fff;
     border: 1px solid #E5E5E5;
-    float: right;
-    margin-right: 15px;
+    /* float: right; */
+    /* margin-right: 15px; */
     position: relative;
     border-radius: 5px;
-    direction: rtl;
+    /* direction: rtl; */
     z-index: 99;
     transform-origin: top;
     transform: scaleY(0);
@@ -21,8 +29,20 @@
     /* padding-right: 40px; */
 }
 
-[data-bc-business-list-icon] {
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list] {
     float: right;
+    margin-right: 15px;
+    direction: rtl;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list] {
+    float: left;
+    margin-left: 15px;
+    direction: ltr;
+}
+
+[data-bc-business-list-icon] {
+    /* float: right; */
     width: 32px;
     height: 32px;
     background-color: #E4E7F4;
@@ -32,6 +52,14 @@
     justify-content: center;
     /* position: absolute; */
     /* right: 0; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list-icon] {
+    float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list-icon] {
+    float: left;
 }
 
 /* [data-bc-business-list] [data-bc-business-loading] {
@@ -71,13 +99,29 @@
     position: relative;
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list] [data-bc-business-select] {
+    float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list] [data-bc-business-select] {
+    float: left;
+}
+
 [data-bc-business-list] [data-bc-business-msg] {
     font-size: 12px;
     color: #999999;
     position: absolute;
     top: 50%;
-    right: 10px;
+    /* right: 10px; */
     transform: translateY(-50%);
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list] [data-bc-business-msg] {
+    right: 10px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list] [data-bc-business-msg] {
+    left: 10px;
 }
 
 /* [data-bc-business-list] [data-bc-business-msg][data-bc-business-msg-inactive] {
@@ -99,7 +143,7 @@
 [data-bc-business-list] [data-bc-business-drop-down] {
     position: absolute;
     width: 100%;
-    right: 0;
+    /* right: 0; */
     top: 45px;
     background: #fff;
     opacity: 0;
@@ -119,6 +163,14 @@
     opacity: 0;
     margin-top: -10px;
     z-index: 99;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list] [data-bc-business-drop-down] {
+    right: 0;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list] [data-bc-business-drop-down] {
+    left: 0;
 }
 
 [data-bc-business-list] [data-bc-business-drop-down][data-status="open"] {
@@ -164,8 +216,16 @@
     cursor: pointer;
     position: relative;
     border-radius: 5px;
-    margin-left: 5px;
+    /* margin-left: 5px; */
     text-align: left;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-business-list] [data-bc-business-drop-down] li {
+    margin-left: 5px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-business-list] [data-bc-business-drop-down] li {
+    margin-right: 5px;
 }
 
 [data-bc-business-list] [data-bc-business-drop-down] li:hover {
@@ -207,7 +267,15 @@
 .active-business [data-bc-business-list-icon] {
     border: 1px solid rgba(0, 75, 133, 1);
     border-top: 0;
+    /* border-right: 0; */
+}
+
+[data-bc-bp-direction="rightToLeft"] .active-business [data-bc-business-list-icon] {
     border-right: 0;
+}
+
+[data-bc-bp-direction="leftToRight"] .active-business [data-bc-business-list-icon] {
+    border-left: 0;
 }
 
 /* freeze switch */
@@ -227,8 +295,18 @@
     position: relative;
     /* display: inline-block; */
     /* vertical-align: middle; */
+    /* float: right; */
+    /* margin: 2px 0 0 2px; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-main-name] [data-bc-business-freeze-label] {
     float: right;
     margin: 2px 0 0 2px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-main-name] [data-bc-business-freeze-label] {
+    float: left;
+    margin: 2px 2px 0 0;
 }
 
 .active-business [data-bc-main-name] [data-bc-business-freeze-input],
@@ -240,7 +318,7 @@
     display: inline-block;
     position: absolute;
     top: 1px;
-    left: 1px;
+    /* left: 1px; */
     width: 12px;
     height: 12px;
     background: #fff;
@@ -248,11 +326,29 @@
     transition: 0.3s;
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-main-name] [data-bc-business-freeze-switch] {
+    left: 1px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-main-name] [data-bc-business-freeze-switch] {
+    right: 1px;
+}
+
 [data-bc-main-name] [data-bc-business-freeze-switch] svg {
     position: absolute;
+    /* right: 50%; */
+    /* transform: translateX(50%) translateY(-50%); */
+    top: 50%;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-main-name] [data-bc-business-freeze-switch] svg {
     right: 50%;
     transform: translateX(50%) translateY(-50%);
-    top: 50%;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-main-name] [data-bc-business-freeze-switch] svg {
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 [data-bc-main-name] [data-bc-business-freeze-input]:checked+[data-bc-business-freeze-label] {
@@ -260,8 +356,18 @@
 }
 
 [data-bc-main-name] [data-bc-business-freeze-input]:checked+[data-bc-business-freeze-label] [data-bc-business-freeze-switch] {
+    /* left: calc(100% - 1px); */
+    /* transform: translateX(-100%); */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-main-name] [data-bc-business-freeze-input]:checked+[data-bc-business-freeze-label] [data-bc-business-freeze-switch] {
     left: calc(100% - 1px);
     transform: translateX(-100%);
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-main-name] [data-bc-business-freeze-input]:checked+[data-bc-business-freeze-label] [data-bc-business-freeze-switch] {
+    right: calc(100% - 1px);
+    transform: translateX(100%);
 }
 
 [data-bc-main-name] [data-bc-business-freeze-label]:active [data-bc-business-freeze-switch] {

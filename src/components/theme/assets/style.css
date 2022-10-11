@@ -2,15 +2,31 @@
     position: absolute;
     top: 101px;
     z-index: 99999999;
+    /* left: 35px */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-theme-container] {
     left: 35px
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-theme-container] {
+    right: 35px
 }
 
 [data-bc-bp-theme-container][data-bc-bp-sticky] {
 	position: fixed;
 	top: 13.5px;
-    left: 10px;
+    /* left: 10px; */
 	width: 76px;
 	z-index: 999;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-theme-container][data-bc-bp-sticky] {
+    left: 10px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-theme-container][data-bc-bp-sticky] {
+    right: 10px;
 }
 
 .toggle-button-cover {
@@ -33,12 +49,20 @@
     counter-increment: button-counter;
     content: counter(button-counter);
     position: absolute;
-    right: 0;
+    /* right: 0; */
     bottom: 0;
     color: #d7e3e3;
     font-size: 12px;
     line-height: 1;
     padding: 5px;
+}
+
+[data-bc-bp-direction="rightToLeft"] .mode-button-cover:before {
+    right: 0;
+}
+
+[data-bc-bp-direction="leftToRight"] .mode-button-cover:before {
+    left: 0;
 }
 
 .mode-button-cover,
@@ -96,7 +120,7 @@
 #swtich-button .knobs span {
     position: absolute;
     top: 5px;
-    left: 5px;
+    /* left: 5px; */
     width: 33px;
     height: 26px;
     font-size: 10px;
@@ -109,6 +133,14 @@
     background-color: #ffffff;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
     z-index: 1;
+}
+
+[data-bc-bp-direction="rightToLeft"] #swtich-button .knobs span {
+    left: 5px;
+}
+
+[data-bc-bp-direction="leftToRight"] #swtich-button .knobs span {
+    right: 5px;
 }
 
 #swtich-button .knobs:before,
@@ -133,8 +165,16 @@
     background-image: url('sun.svg');
     background-repeat: no-repeat;
     background-position: center;
-    left: 5px;
+    /* left: 5px; */
     display: block;
+}
+
+[data-bc-bp-direction="rightToLeft"] #swtich-button .knobs:before {
+    left: 5px;
+}
+
+[data-bc-bp-direction="leftToRight"] #swtich-button .knobs:before {
+    right: 5px;
 }
 
 #swtich-button .knobs:after {
@@ -143,7 +183,15 @@
     background-repeat: no-repeat;
     background-position: center;
     display: block;
+    /* right: 5px; */
+}
+
+[data-bc-bp-direction="rightToLeft"] #swtich-button .knobs:after {
     right: 5px;
+}
+
+[data-bc-bp-direction="leftToRight"] #swtich-button .knobs:after {
+    left: 5px;
 }
 
 #swtich-button .checkbox:checked+.knobs:before {
@@ -151,14 +199,30 @@
 }
 
 #swtich-button .checkbox:checked+.knobs:after {
-    right: 5px;
+    /* right: 5px; */
     /* background-image: url('moon2.svg') ; */
 }
 
+[data-bc-bp-direction="rightToLeft"] #swtich-button .checkbox:checked+.knobs:after  {
+    right: 5px;
+}
+
+[data-bc-bp-direction="leftToRight"] #swtich-button .checkbox:checked+.knobs:after  {
+    left: 5px;
+}
+
 #swtich-button .checkbox:checked+.knobs span {
-    left: 38px;
+    /* left: 38px; */
     background-color: #1C1C1C;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+[data-bc-bp-direction="rightToLeft"] #swtich-button .checkbox:checked+.knobs span {
+    left: 38px;
+}
+
+[data-bc-bp-direction="leftToRight"] #swtich-button .checkbox:checked+.knobs span {
+    right: 38px;
 }
 
 #swtich-button .checkbox:checked~.layer {

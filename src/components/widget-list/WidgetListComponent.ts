@@ -199,8 +199,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const widgetContainer = document.querySelector(
       "[data-bc-page-body-container]"
     ) as HTMLElement;
-    widgetBox.style.transform = "translateX(-300px)";
-    widgetContainer.style.width = "calc(100%)";
+    if (this.direction == "leftToRight") {
+      widgetBox.style.transform = "translateX(300px)";
+    } else {
+      widgetBox.style.transform = "translateX(-300px)";
+    }
+    widgetContainer.style.width = "100%";
   }
 
   private showList() {

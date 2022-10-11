@@ -1,21 +1,49 @@
 [data-bc-bp-profile-container] {
+    /* float: right; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-profile-container] {
     float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-profile-container] {
+    float: left;
 }
 
 [data-bc-user-info] {
-    float: right;
+    /* float: right; */
     height: 48px;
-    border-left: 0.5px solid #D0D0D0;
-    padding-left: 15px;
+    /* border-left: 0.5px solid #D0D0D0; */
+    /* padding-left: 15px; */
     position: relative;
 }
 
-[data-bc-user-info] [data-bc-user-info-image] {
+[data-bc-bp-direction="rightToLeft"] [data-bc-user-info] {
     float: right;
+    border-left: 0.5px solid #D0D0D0;
+    padding-left: 15px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-user-info] {
+    float: left;
+    border-right: 0.5px solid #D0D0D0;
+    padding-right: 15px;
+}
+
+[data-bc-user-info] [data-bc-user-info-image] {
+    /* float: right; */
     height: 48px;
     width: 48px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-user-info] [data-bc-user-info-image] {
+    float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-user-info] [data-bc-user-info-image] {
+    float: left;
 }
 
 [data-bc-user-info] [data-bc-user-info-image] img {
@@ -28,7 +56,7 @@
     position: absolute;
     width: 150px;
     top: 100%;
-    right: 0;
+    /* right: 0; */
     background-color: #fff;
     border: 1px solid #E5E5E5;
     border-radius: 4px;
@@ -42,6 +70,14 @@
     opacity: 0;
     margin-top: -10px;
     z-index: 99;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-user-info] [data-bc-user-info-drop-down] {
+    right: 0;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-user-info] [data-bc-user-info-drop-down] {
+    left: 0;
 }
 
 [data-bc-user-info][data-status="open"] [data-bc-user-info-drop-down] {
@@ -69,14 +105,31 @@
 
 [data-bc-user-info] [data-bc-user-title] {
     font-size: 11px;
-    text-align: right;
+    /* text-align: right; */
     color: #767676;
     color: #000;
     opacity: 0.6;
     margin-bottom: 3px;
 }
 
+[data-bc-bp-direction="rightToLeft"] [data-bc-user-info] [data-bc-user-title] {
+    text-align: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-user-info] [data-bc-user-title] {
+    text-align: left;
+}
+
 [data-bc-user-info] [data-bc-user-name] {
     cursor: pointer;
     /* float: right; */
+    /* text-align: right; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-user-info] [data-bc-user-name] {
+    text-align: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-user-info] [data-bc-user-name] {
+    text-align: left;
 }

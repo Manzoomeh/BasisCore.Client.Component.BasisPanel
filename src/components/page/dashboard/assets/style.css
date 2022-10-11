@@ -13,19 +13,19 @@
 
 [data-bc-page-widget-list-dlg-btn-add] {
     font-size: 12px;
-    float: left;
+    /* float: left; */
     color: #000;
     margin-top: -41px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     z-index: 99999;
     cursor: pointer;
     position: relative;
     background-color: var(--white);
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    /* border-top-right-radius: 5px; */
+    /* border-bottom-right-radius: 5px; */
     position: absolute;
     top: -10px;
-    left: -10px;
+    /* left: -10px; */
     padding: 5px;
     background: var(--dark_white);
     height: 36px;
@@ -33,6 +33,22 @@
     align-items: center;
     width: 25px;
     justify-content: center;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-add] {
+    float: left;
+    margin-left: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    left: -10px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-add] {
+    float: right;
+    margin-right: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    right: -10px;
 }
 
 [data-bc-page-widget-list-dlg-btn-add][data-bc-bp-sticky] {
@@ -45,6 +61,14 @@
 
 [data-bc-page-widget-list-dlg-btn-add]:before {
     transition: all 0.5s ease-in-out;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-add]:before {
+    transform: rotate(0deg);
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-add]:before {
+    transform: rotate(180deg);
 }
 
 [data-bc-dashboard-widgets] {
@@ -70,8 +94,16 @@
     cursor: pointer;
     position: absolute;
     top: -5px;
-    left: -5px;
+    /* left: -5px; */
     font-size: 10px;
     line-height: 22px;
     text-align: center;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-btn-remove] {
+    left: -5px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-btn-remove] {
+    right: -5px;
 }
