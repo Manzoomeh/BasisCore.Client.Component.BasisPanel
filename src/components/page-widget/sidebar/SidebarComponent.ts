@@ -115,13 +115,13 @@ export default class SidebarComponent extends PageWidgetComponent {
     content.setAttribute("data-sys-text", "");
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onSidebarItemClick(node.pid, e.target);
+      this.onSidebarItemClick(node.pid, e.target , this.param.page.arguments);
     });
     div.appendChild(content);
     return div;
   }
 
-  private async onSidebarItemClick(pageId: string, target: EventTarget) {
+  private async onSidebarItemClick(pageId: string, target: EventTarget, args?:any) {
     const newParam: IPageLoaderParam = {
       pageId: pageId,
       owner: this.param.page.owner,
@@ -129,6 +129,7 @@ export default class SidebarComponent extends PageWidgetComponent {
       ownerUrl: this.param.page.ownerUrl,
       rKey: this.param.page.rKey,
       pageMethod: this.param.page.pageMethod,
+      arguments: args
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
