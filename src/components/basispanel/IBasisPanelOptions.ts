@@ -50,10 +50,27 @@ export interface ICheckRkeyOptions {
   cookieName?: string;
   defaultRedirectUrl: string;
 }
-
 export interface ICultureOptions {
   direction: IDirection;
+  labels: ILabels;
 }
 
 export type IDirection =  "leftToRight" | "rightToLeft";
+
+export interface ILabels {
+  userTitle: string;
+  logoutTitle: string;
+  corporateTitle: string;
+  corporateSearchPlaceholder: string;
+  corporateBuy: string;
+  businessTitle: string;
+  businessSearchPlaceholder: string;
+  schedulerNoTask: string;
+  addToDashboardTooltip: string;
+  dragAndDropMessage: string;
+  widgetsTitle: string;
+  widgetsTab: string;
+  dashboardWidgetsTab: string;
+  widgetsSettingButton: string;
+}
 

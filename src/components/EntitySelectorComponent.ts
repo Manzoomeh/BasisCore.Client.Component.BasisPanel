@@ -114,7 +114,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             );
             const buyService = document.createElement("div");
             buyService.innerHTML = `<div data-bc-corporate-buy="">
-              <span>خرید سرویس</span>
+              <span>${this.labels.corporateBuy}</span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
               </svg>
@@ -176,13 +176,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("data-bc-corporate-search-input", "");
         searchInput.setAttribute("data-sys-input-text", "");
-        searchInput.setAttribute("placeHolder", "جستجوی شرکت ...");
+        searchInput.setAttribute("placeHolder", this.labels.corporateSearchPlaceholder);
         searchWrapper.appendChild(searchInput);
       } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
         searchInput.setAttribute("data-sys-input-text", "");
-        searchInput.setAttribute("placeHolder", "جستجوی کسب و کار");
+        searchInput.setAttribute("placeHolder", this.labels.businessSearchPlaceholder);
         searchWrapper.appendChild(searchInput);
       }
     }
@@ -313,7 +313,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const businessMsgElement = header.querySelector(
       "[data-bc-business-msg]"
     );
-    businessMsgElement.textContent = "کسب‌و‌کارها";
+    businessMsgElement.textContent = this.labels.businessTitle;
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
     header

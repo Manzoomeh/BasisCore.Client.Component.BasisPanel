@@ -127,6 +127,32 @@
             }
         ]
     },
+    "myFiles1": {
+        "container": "container",
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "my-file.html",
+                        "title": "فایل های من",
+                        "name": "myFiles",
+                        "container": "fullPageWidget",
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
+                    }
+                ]
+            }
+        ]
+    },
     "calendare": {
         "container": "page",
         "groups": [

@@ -19,7 +19,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
-    this._page.widgetDropAreaContainer.innerHTML = dropAreaLayout;
+
+    const copyDropAreaLayout = dropAreaLayout
+        .replace("@dragAndDropMessage", this.labels.dragAndDropMessage);
+
+    this._page.widgetDropAreaContainer.innerHTML = copyDropAreaLayout;
     this._page.container
       .querySelectorAll("[data-bc-btn-close]")
       .forEach((btn) =>
