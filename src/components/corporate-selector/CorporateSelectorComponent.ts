@@ -1,14 +1,17 @@
 import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import EntitySelectorComponent from "../EntitySelectorComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 
 export default class CorporateSelectorComponent extends EntitySelectorComponent {
   private dataLoaded = false;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "corporate");
+    super(owner, desktopLayout, mobileLayout, "corporate");
   }
 
   protected getSourceId(): string {

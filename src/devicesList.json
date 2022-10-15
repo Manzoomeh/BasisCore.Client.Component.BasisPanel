@@ -1,0 +1,34 @@
+[
+    {
+        "deviceId": 1,
+        "title": "Desktop"
+    },
+    {
+        "deviceId": 2,
+        "title": "MobilePhone"
+    },
+    {
+        "deviceId": 4,
+        "title": "Tablet"
+    },
+    {
+        "deviceId": 5,
+        "title": "TV"
+    },
+    {
+        "deviceId": 6,
+        "title": "Console"
+    },
+    {
+        "deviceId": 7,
+        "title": "CarEntertainmentSystem"
+    },
+    {
+        "deviceId": 8,
+        "title": "DigitalCamera"
+    },
+    {
+        "deviceId": 9,
+        "title": "EbookReader"
+    }
+]

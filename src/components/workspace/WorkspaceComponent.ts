@@ -10,7 +10,7 @@ import IPageInfo from "../page/IPageInfo";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-workspace-container");
+    super(owner, layout, layout, "data-bc-bp-workspace-container");
   }
 
   public initializeAsync(): Promise<void> {
@@ -57,7 +57,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
     const doc = this.owner.toNode(
-      `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient"  params='${param}' ></basis></basis>`
+      `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`
     );
     // doc.querySelector("[params='']").setAttribute("params", param);
     const nodes = Array.from(doc.childNodes);

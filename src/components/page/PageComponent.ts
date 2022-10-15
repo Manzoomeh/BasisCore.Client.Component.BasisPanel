@@ -22,8 +22,8 @@ export default abstract class PageComponent
   public _groupsAdded: boolean = false;
   readonly _groups: Map<string, PageGroupComponent> = new Map();
 
-  constructor(owner: IUserDefineComponent, layout: string, dataAttr: string) {
-    super(owner, layout, dataAttr);
+  constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
+    super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("page", this);
     this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
       "[data-bc-widget-drop-area-container]"
@@ -103,7 +103,7 @@ export default abstract class PageComponent
     ).offsetHeight;
     const footerHeight = (
       document.querySelector("[data-bc-bp-footer-container]") as HTMLElement
-    ).offsetHeight;
+    )?.offsetHeight ?? 0;
     const otherHeight = headerHeight + menuHeight + footerHeight;
 
     if (cell * maxHeight > windowHeight - otherHeight) {

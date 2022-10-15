@@ -20,10 +20,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public businessComponentFlag: boolean = false;
   constructor(
     owner: IUserDefineComponent,
-    layout: string,
+    desktopLayout: string,
+    mobileLayout: string,
     entityType: MenuOwnerType
   ) {
-    super(owner, layout, `data-bc-bp-${entityType}-container`);
+    super(owner, desktopLayout, mobileLayout, `data-bc-bp-${entityType}-container`);
     this.ownerType = entityType;
     this.owner.dc
       .resolve<DependencyContainer>("parent.dc")

@@ -5,8 +5,11 @@ import {
   IUserDefineComponent,
 } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 
 import INotificationComponent from "./INotificationComponent";
 import NotificationProvider from "./NotificationProvider";
@@ -22,7 +25,7 @@ export default class NotificationComponent
   }
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-notification-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-notification-container");
   }
 
   storeAsGlobal(

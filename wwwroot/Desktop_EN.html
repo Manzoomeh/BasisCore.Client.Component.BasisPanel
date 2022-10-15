@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link href="assets/css/LineIcons.css" rel="stylesheet" />
+  <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
+  <!-- <link href="assets/css/styles-1.css" rel="stylesheet" /> -->
+  <link href="asset/css/styles-1.css" rel="stylesheet" />
+  <style>
+    body {
+      background: var(--light_blue);
+      font-size: 14px;
+      color: var(--vdark_gray);
+      font-weight: normal;
+      overflow-x: hidden;
+      direction: ltr;
+    }
+
+    .tabWrapper .tabButton {
+      text-transform: unset;
+    }
+  </style>
+</head>
+
+<body data-sys-container="">
+  <Basis core="component.basispanel.panel" run="atclient"></Basis>
+  <div class="clr"></div>
+
+  <script>
+    const host = {
+      settings: {
+        "connection.web.demo": "/server/dbsource/demo",
+        "basispanel.option": {
+          rKey: "C4F54E8F",
+          avatar: "https://trust-login.com",
+          widgetListUrl: "/server/widget-list/${rKey}/${pageId}",
+          addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
+          addtoDashboard: "/server/trust/${rKey}/addtodashboard",
+          removeFromDashbaord: "/server/trust/${rKey}/removetempwidget",
+          tempwidgets: "/server/trust/${rKey}/tempwidgets",
+          baseUrl: {
+            profile: "/server/trust",
+            corporate: "/server/corporate",
+            business: "/server/business",
+            active: "/server/active/${rKey}/set-active",
+          },
+          dataUrl: {
+            profile: "/server/trust/${rKey}/profile",
+            corporate: "/server/corporate/${rKey}/list",
+            business: "/server/business/${rKey}/list",
+          },
+          themeUrl: {
+            light: "/asset/css/light.css",
+            dark: "/asset/css/dark.css",
+            addThemeUrl: "/server/trust/${rKey}/editcolormode",
+            defaultTheme: "/server/trust/${rKey}/visualmode"
+          },
+          method: {
+            userImage: "/${rKey}/users/${profile.thumbnail}",
+            userNoImage: "/asset/images/unknown-avatar.png",
+            userNoName: "بدون نام",
+            menu: "/${rKey}/menu?level=${level}",
+            page: "/${rKey}/page/${pageId}",
+            sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
+            widget: "/${rKey}/widget/${widgetId}"
+
+          },
+          checkRkey: {
+            url: "/server/trust/checkrkey/${rKey}",
+            cookieName: "rkey",
+            defaultRedirectUrl: "https://www.google.com",
+          },
+          culture: {
+            direction: "leftToRight",
+            deviceId: 1,
+            labels: {
+              // userTitle: "نام کاربری",
+              // logoutTitle: "خارج شدن",
+              // corporateTitle: "شرکت‌ها",
+              // corporateSearchPlaceholder: "جستجوی شرکت ...",
+              // corporateBuy: "خرید سرویس",
+              // businessTitle: "کسب‌و‌کارها",
+              // businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
+              // schedulerNoTask: "در انتظار کار جدید",
+              // addToDashboardTooltip: "افزودن به داشبورد",
+              // dragAndDropMessage: "ویجت‌ها را بکشید و رها کنید",
+              // widgetsTitle: "ویجت‌ها",
+              // widgetsTab: "ویجت‌ها",
+              // dashboardWidgetsTab: "ویجت‌ میزکار",
+              // widgetsSettingButton: "ذخیره تغییرات",
+
+              userTitle: "user name",
+              logoutTitle: "logout",
+              corporateTitle: "companies",
+              corporateSearchPlaceholder: "company search ...",
+              corporateBuy: "buy service",
+              businessTitle: "businesses",
+              businessSearchPlaceholder: "business search ...",
+              schedulerNoTask: "waiting for new task",
+              addToDashboardTooltip: "add to dashboard",
+              dragAndDropMessage: "drag and drop widgets",
+              widgetsTitle: "widgets",
+              widgetsTab: "widgets",
+              dashboardWidgetsTab: "desk widgets",
+              widgetsSettingButton: "save changes",
+            },
+          },
+          logout: {
+            url: "/server/trust/${rKey}/logout",
+            cookieName: "rkey",
+            successId: 4,
+            dmnToken: "asdfr",
+            defaultRedirectUrl: "https://www.google.com",
+          },
+          notification: {
+            providers: [
+              {
+                name: "messages",
+                title: "پیام ها",
+                url: "/server/notifications/${rKey}/unread-messages",
+                config: {
+                  filter: "none",
+                  paging: null,
+                  information: false,
+                  columns: {
+                    title: "فرستنده",
+                    date: "تاریخ",
+                    action: {
+                      title: "عملیات",
+                      cellMaker: (row, data, td) =>
+                        `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
+                    },
+                  },
+                  noData: "پیام جدیدی ندارید",
+                  rowNumber: "#",
+                },
+                link: "#",
+              },
+              {
+                name: "notes",
+                title: "یادداشت ها",
+                url: "/server/notifications/${rKey}/new-notes",
+                config: {
+                  filter: "none",
+                  paging: null,
+                  information: false,
+                  columns: {
+                    title: "ایجاد کننده",
+                    date: "تاریخ",
+                    action: {
+                      title: "عملیات",
+                      cellMaker: (row, data, td) =>
+                        `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
+                    },
+                  },
+                  noData: "یادداشت جدیدی ندارید",
+                  rowNumber: "#",
+                },
+                link: "#",
+              },
+              {
+                name: "tasks",
+                title: "تسک ها",
+                url: "/server/notifications/${rKey}/new-tasks",
+                config: {
+                  filter: "none",
+                  paging: null,
+                  information: false,
+                  columns: {
+                    img: {
+                      source: "img",
+                      title: "تصویر",
+                      cellMaker: (row, data, td) =>
+                        `<img src="${row.img}" width="40" height="40" />`,
+                    },
+                    title: "پروژه",
+                    date: "تاریخ",
+                    action: {
+                      title: "عملیات",
+                      cellMaker: (row, data, td) =>
+                        `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`,
+                    },
+                  },
+                  noData: "تسک جدیدی ندارید",
+                  rowNumber: "#",
+                },
+                link: "#",
+              },
+            ],
+          },
+        },
+      },
+      repositories: {
+        basispanel: "/basiscore.basispanel.component.js",
+        "grid.grid": "http://localhost:8082/basiscore.grid.component.js",
+      },
+    };
+
+    function onClickRowEditBtn(e) {
+      console.log(e);
+    }
+
+    function onClickRowShareBtn(e) {
+      console.log(e);
+    }
+
+    function onClickRowDownloadBtn(e) {
+      console.log(e);
+    }
+
+    function onClickRowRemoveBtn(e) {
+      console.log(e);
+    }
+  </script>
+  <!-- <script src="basiscore.js"></script> -->
+  <script src="/basiscore.js"></script>
+  <script src="/alasql.min.js"></script>
+</body>
+
+</html>

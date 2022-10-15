@@ -8,7 +8,7 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
   private _group: any;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-group-container");
+    super(owner, layout, layout, "data-bc-bp-group-container");
     this.Name = owner.node.getAttribute("name");
   }
 
@@ -31,6 +31,7 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
   ): Promise<void> {
     const elementList = new Array<Node>();
     widgetParamList.forEach((widgetParam) => {
+      console.log("wwwwwwww", widgetParam)
       const widgetElement = document.createElement("basis");
       widgetElement.setAttribute(
         "core",

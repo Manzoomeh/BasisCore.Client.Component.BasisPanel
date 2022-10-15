@@ -1,23 +1,32 @@
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { DefaultSource, IDictionary } from "../../type-alias";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import HttpUtil from "../../HttpUtil";
 
 export default class ThemeComponent extends BasisPanelChildComponent {
   themes: IDictionary<string>;
   defaultTheme: string;
+
+  constructor(owner: IUserDefineComponent) {
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-theme-container");
+  }
+
   public initializeAsync(): Promise<void> {
-    var selector = this.container.querySelector<HTMLSelectElement>(
-      "[data-bc-basispanel-theme-selector]"
-    );
+    // var selector = this.container.querySelector<HTMLSelectElement>(
+    //   "[data-bc-basispanel-theme-selector]"
+    // );
     // Object.getOwnPropertyNames(this.themes).forEach((theme) => {
     //   selector.appendChild(new Option(theme, this.themes[theme]));
     // });
 
     return Promise.resolve();
   }
+
   public async runAsync(source?: ISource) {
     await this.getStyle();
     this.themes = {
@@ -51,9 +60,7 @@ export default class ThemeComponent extends BasisPanelChildComponent {
         }
       });
   }
-  constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-theme-container");
-  }
+  
   private setTheme(theme: string): boolean {
     const path = this.themes[theme];
     let ret_val = false;
@@ -85,6 +92,7 @@ export default class ThemeComponent extends BasisPanelChildComponent {
     }
     return ret_val;
   }
+
   async getStyle(): Promise<void> {
     const url = HttpUtil.formatString(this.options.themeUrl.defaultTheme, {
       rKey: this.options.rKey,

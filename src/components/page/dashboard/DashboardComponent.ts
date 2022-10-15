@@ -1,15 +1,18 @@
 import PageComponent from "../PageComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
+import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import HttpUtil from "../../../HttpUtil";
 import IPageInfo from "../IPageInfo";
-import "./assets/style.css";
 import { PageType } from "../PageType";
 
 export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-page-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-page-container");
   }
   public get type(): PageType {
     return PageType.Dashboard;

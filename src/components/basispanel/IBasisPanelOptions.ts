@@ -52,6 +52,7 @@ export interface ICheckRkeyOptions {
 }
 export interface ICultureOptions {
   direction: IDirection;
+  deviceId: number | string;
   labels: ILabels;
 }
 

@@ -3,8 +3,11 @@ import { QuestionUtil } from "../../QuestionUtil";
 import { DefaultSource, IQuestionItem } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IProfileInfo from "./IProfileInfo";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
@@ -14,7 +17,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-profile-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-profile-container");
   }
 
   public runAsync(source?: ISource): Promise<any> {
@@ -23,9 +26,11 @@ export default class ProfileComponent extends BasisPanelChildComponent {
 
   public initializeAsync(): Promise<void> {
     const nodes = this.container.querySelector("basis");
-    this.owner.processNodesAsync([nodes]);
+    if (nodes) {
+      this.owner.processNodesAsync([nodes]);
+    }
 
-    this.container.querySelector("[data-bc-user-info-image]").addEventListener("click", (e) => {
+    this.container.querySelector("[data-bc-user-show-info]")?.addEventListener("click", (e) => {
       e.preventDefault();
       const elStatus = this.container.querySelector("[data-bc-user-info]");
       const status = elStatus.getAttribute("data-status");
@@ -36,7 +41,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       }
     });
 
-    this.container.querySelector("[data-bc-user-name]").addEventListener("click", (e) => {
+    this.container.querySelector("[data-bc-user-change-level]").addEventListener("click", (e) => {
       e.preventDefault();
       this.signalToDisplayMenu();
       LocalStorageUtil.resetCurrentUserId();
@@ -104,12 +109,14 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       "[data-bc-user-name]"
     );
 
-    if (this.profile.fName != undefined || this.profile.lName != undefined) {
-      ui.textContent = `${this.profile.fName ?? ""} ${
-        this.profile.lName ?? ""
-      }`;
-    } else {
-      ui.textContent = this.options.method.userNoName;
+    if (ui) {
+      if (this.profile.fName != undefined || this.profile.lName != undefined) {
+        ui.textContent = `${this.profile.fName ?? ""} ${
+          this.profile.lName ?? ""
+        }`;
+      } else {
+        ui.textContent = this.options.method.userNoName;
+      }
     }
 
     const fn = new Function(

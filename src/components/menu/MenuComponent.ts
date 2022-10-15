@@ -1,7 +1,10 @@
 import { ISource, IUserDefineComponent, IDependencyContainer } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import { DefaultSource } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
@@ -19,27 +22,52 @@ export default class MenuComponent
   private current: MenuElement;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-menu-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
-    this.cache = new MenuCacheManager(this.options.checkRkey);
+    this.cache = new MenuCacheManager(this.options.checkRkey, this.deviceId as number);
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
     
-    // for fix menu after scroll
-    const menu = this.container;
-    const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
-    var sticky = (this.container as HTMLElement).offsetTop;
-    window.onscroll = function() {
-      if (window.pageYOffset >= sticky) {
-        menu.setAttribute("data-bc-bp-sticky", "");
-        themeContainer.setAttribute("data-bc-bp-sticky", "");
-      } else {
-        menu.removeAttribute("data-bc-bp-sticky");
-        themeContainer.removeAttribute("data-bc-bp-sticky");
-      }
-    };
+    if (this.deviceId == 1) {
+      // for fix menu after scroll
+      const menu = this.container;
+      const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
+      var sticky = (this.container as HTMLElement).offsetTop;
+      window.onscroll = function() {
+        if (window.pageYOffset >= sticky) {
+          menu.setAttribute("data-bc-bp-sticky", "");
+          themeContainer.setAttribute("data-bc-bp-sticky", "");
+        } else {
+          menu.removeAttribute("data-bc-bp-sticky");
+          themeContainer.removeAttribute("data-bc-bp-sticky");
+        }
+      };
+    } else if (this.deviceId == 2) {
+      // add Event Listeners
+      const openedMenu = this.container.querySelector('.opened-menu');
+      const closedMenu = this.container.querySelector('.closed-menu');
+      const navbarMenu = this.container.querySelector('.navbar');
+      const menuOverlay = this.container.querySelector('.overlay');
+
+      openedMenu.addEventListener("click", (e) => {
+        this.toggleMenu([navbarMenu, menuOverlay]);
+      });
+      closedMenu.addEventListener("click", (e) => {
+        this.toggleMenu([navbarMenu, menuOverlay]);
+      });
+      menuOverlay.addEventListener("click", (e) => {
+        this.toggleMenu([navbarMenu, menuOverlay]);
+      });
+    }
+  }
+
+  private toggleMenu(elements: Array<Element>) {
+    elements.forEach((el) => {
+      el.classList.toggle('active');
+    });
+    document.body.classList.toggle('scrolling');
   }
 
   public initializeAsync(): Promise<void> {
@@ -106,6 +134,12 @@ export default class MenuComponent
         pageMethod: this.options.method.page,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+
+      if (this.deviceId == 2) {
+        const navbarMenu = this.container.querySelector('.navbar');
+        const menuOverlay = this.container.querySelector('.overlay');
+        this.toggleMenu([navbarMenu, menuOverlay]);
+      }
   }
 
   public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {

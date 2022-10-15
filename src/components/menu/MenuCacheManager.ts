@@ -7,9 +7,11 @@ import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
 export default class MenuCacheManager {
   private readonly cache: Map<string, MenuCacheItem>;
   private checkRkeyOption: ICheckRkeyOptions;
-  constructor(checkRkey: ICheckRkeyOptions) {
+  private deviceId: number;
+  constructor(checkRkey: ICheckRkeyOptions, deviceId: number) {
     this.cache = new Map<string, MenuCacheItem>();
     this.checkRkeyOption = checkRkey;
+    this.deviceId = deviceId;
   }
 
   public loadMenuAsync(
@@ -22,7 +24,7 @@ export default class MenuCacheManager {
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
-      cache = new MenuCacheItem(menuParam, onMenuItemClick, this.checkRkeyOption);
+      cache = new MenuCacheItem(menuParam, onMenuItemClick, this.checkRkeyOption, this.deviceId);
       this.cache.set(menuParam.owner, cache);
     }
     return cache.loadMenuAsync(menuParam);
@@ -40,9 +42,10 @@ class MenuCacheItem {
       param: IMenuLoaderParam,
       target: EventTarget
     ) => void,
-    checkRkey: ICheckRkeyOptions
+    checkRkey: ICheckRkeyOptions,
+    deviceId: number
   ) {
-    this.menuMaker = new MenuElementMaker(menuParam.rKey, onMenuItemClick, checkRkey);
+    this.menuMaker = new MenuElementMaker(menuParam.rKey, onMenuItemClick, checkRkey, deviceId);
     this.checkRkeyOption = checkRkey;
   }
 
