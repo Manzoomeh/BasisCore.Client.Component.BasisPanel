@@ -28,6 +28,8 @@ export default class WidgetComponent extends PageWidgetComponent {
     }px`;
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
+    this.container.setAttribute("id", `widget${this.param.id.toString()}`);
+
     this.title = this.param.title;
 
     const url = HttpUtil.formatString(

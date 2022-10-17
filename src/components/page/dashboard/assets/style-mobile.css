@@ -23,7 +23,7 @@
     height: 100%;
     float: right;
     text-align: center;
-    opacity: 0.7;
+    /* opacity: 0.7; */
     /* cursor: pointer; */
 }
 
@@ -32,6 +32,9 @@
     margin: 0 auto;
     cursor: pointer;
     padding: 0 10px;
+	opacity: 0.7;
+	position: relative;
+	z-index: 99;
 }
 
 [data-bc-page-navbar-item] [data-bc-page-navbar-icon] {
@@ -42,4 +45,210 @@
 [data-bc-page-navbar-item] [data-bc-page-navbar-title] {
     font-size: 14px;
     color: #FFFFFF;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ico01 {
+	/* background-color: #d92567; */
+	/* position: relative; */
+	/* z-index: 4; */
+
+	/* width: 54px; */
+	/* height: 54px; */
+	/* border-radius: 50%; */
+
+	background-color: #d91e85;
+	transition: opacity 1s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	z-index: 4;
+}
+
+.ico02 {
+	background-color: #d91e85;
+	transition: opacity 1s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	z-index: 3;
+}
+
+.ico03 {
+	background-color: #f24405;
+	transition: opacity 1s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	z-index: 2;
+}
+
+.ico04 {
+	background-color: #f23030;
+	transition: opacity 1s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	z-index: 1;
+}
+
+.move-ico {
+	position: absolute;
+	top: 0;
+	padding: 5px 20px;
+	border-radius: 5px;
+	opacity: 0;
+}
+
+.active .ico01 {
+	transform: translateY(calc(0px - (32px + 15px)));
+	transition: opacity 2s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	opacity: 1;
+}
+
+.active .ico02 {
+	transform: translateY(calc(0px - (32px * 2 + 15px * 2)));
+	transition: opacity 2s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	opacity: 1;
+}
+
+.active .ico03 {
+	transform: translateY(calc(0px - (32px * 3 + 15px * 3)));
+	transition: opacity 2s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	opacity: 1;
+}
+
+.active .ico04 {
+	transform: translateY(calc(0px - (32px * 4 + 15px * 4)));
+	transition: opacity 2s, transform 0.5s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+	opacity: 1;
+}
+
+/* menu-object style */
+.toggle {
+	position: absolute;
+	top: 0;
+	right: 15px;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	/* width: calc(54px * 4 + 30px * 3); */
+	height: 54px;
+}
+
+/* .toggle .ico01::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 4px;
+	height: 24px;
+	margin: auto;
+	background-color: #fff;
+	transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+} */
+
+/* .toggle .ico01::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 24px;
+	height: 4px;
+	margin: auto;
+	background-color: #fff;
+	transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+} */
+
+/* .active .ico01::before {
+	transform: rotate(45deg);
+} */
+
+/* .active .ico01::after {
+	transform: rotate(45deg);
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.overlay {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 999;
+	opacity: 0;
+	visibility: hidden;
+	/* background: rgba(0, 0, 0, 0.6); */
+	background: rgba(37, 33, 59, 0.2);
+	-webkit-transition: all 0.35s ease;
+	-o-transition: all 0.35s ease;
+	transition: all 0.35s ease;
+}
+
+.overlay.active {
+	display: block;
+	opacity: 1;
+	visibility: visible;
+}
+
+
+.navbar {
+	max-width: 100%;
+	height: auto;
+}
+
+.navbar {
+	position: fixed;
+	top: 0;
+	right: -100%;
+	width: 80%;
+	height: 100%;
+	padding: 10px 0;
+	z-index: 999;
+	opacity: 0;
+	overflow-y: auto;
+	visibility: hidden;
+	background: #ffffff;
+	-webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+.navbar.active {
+	right: 0;
+	opacity: 1;
+	visibility: visible;
+}
+
+.navbar::-webkit-scrollbar {
+	width: 5px;
+}
+
+.navbar::-webkit-scrollbar-thumb {
+	border-radius: 1rem;
+	background: #e6e6e6;
+	-webkit-box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
+	box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
 }

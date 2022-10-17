@@ -121,7 +121,10 @@ export default class MenuElementMaker {
             // Expand New menuItemHasChildren
             li.classList.add('active');
             const subMenu = li.querySelector("[data-bc-bp-submenu]");
-            (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            (subMenu as HTMLElement).style.maxHeight = '20rem';
+            (subMenu as HTMLElement).style.transition = 'all 1s ease';
+            // subMenu.classList.add("show");
         }
       });
     } else {
@@ -264,7 +267,10 @@ export default class MenuElementMaker {
             // Expand New menuItemHasChildren
             li.classList.add('active');
             const subMenu = li.querySelector("[data-bc-bp-menu-external]");
-            (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            (subMenu as HTMLElement).style.maxHeight = '20rem';
+            (subMenu as HTMLElement).style.transition = 'all 1s ease';
+            // subMenu.classList.add("show");
         }
       })
     } else {

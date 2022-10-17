@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        /* basic style */
+        html,
+        body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            /* display: flex; */
+            /* justify-content: center; */
+            /* align-items: center; */
+            background-color: #1c2026;
+            direction: rtl;
+        }
+
+        ul {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            /* width: 54px; */
+            /* height: 54px; */
+            /* border-radius: 50%; */
+            cursor: pointer;
+        }
+
+
+
+        .ico01 {
+            background-color: #d92567;
+            position: relative;
+            z-index: 4;
+
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+        }
+
+        .ico02 {
+            background-color: #d91e85;
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 3;
+        }
+
+        .ico03 {
+            background-color: #f24405;
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.4s;
+            z-index: 2;
+        }
+
+        .ico04 {
+            background-color: #f23030;
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.8s;
+            z-index: 1;
+        }
+
+        .move-ico {
+            position: absolute;
+            top: 0;
+            padding: 5px 20px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .active .ico02 {
+            transform: translateY(calc(0px - (54px + 30px)));
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.8s;
+            opacity: 1;
+        }
+
+        .active .ico03 {
+            transform: translateY(calc(0px - (54px * 2 + 30px * 2)));
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.4s;
+            opacity: 1;
+        }
+
+        .active .ico04 {
+            transform: translateY(calc(0px - (54px * 3 + 30px * 3)));
+            transition: opacity 2s, transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            opacity: 1;
+        }
+
+        /* menu-object style */
+        .toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            width: calc(54px * 4 + 30px * 3);
+            height: 54px;
+        }
+
+        .toggle .ico01::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 4px;
+            height: 24px;
+            margin: auto;
+            background-color: #fff;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .toggle .ico01::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 24px;
+            height: 4px;
+            margin: auto;
+            background-color: #fff;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .active .ico01::before {
+            transform: rotate(45deg);
+        }
+
+        .active .ico01::after {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="toggle">
+        <li class="ico01"></li>
+        <li class="move-ico ico02">
+            <a href="https://codepen.io/hisamikurita" target="_blank">
+                لیست 1
+            </a>
+        </li>
+        <li class="move-ico ico03">
+            <a href="https://github.com/hisamikurita" target="_blank">
+                تقویم
+            </a>
+        </li>
+        <li class="move-ico ico04">
+            <a href="" target="_blank">
+                مدیریت فایل ها
+            </a>
+        </li>
+    </ul>
+
+    <script>
+        document.querySelector(".ico01").addEventListener("click", (e) => {
+            document.querySelector(".toggle").classList.toggle('active');
+        });
+    </script>
+
+</body>
+
+</html>

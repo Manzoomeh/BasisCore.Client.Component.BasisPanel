@@ -47,16 +47,16 @@ export default class MenuComponent
     } else if (this.deviceId == 2) {
       // add Event Listeners
       const openedMenu = this.container.querySelector('.opened-menu');
-      const closedMenu = this.container.querySelector('.closed-menu');
+      // const closedMenu = this.container.querySelector('.closed-menu');
       const navbarMenu = this.container.querySelector('.navbar');
       const menuOverlay = this.container.querySelector('.overlay');
 
       openedMenu.addEventListener("click", (e) => {
         this.toggleMenu([navbarMenu, menuOverlay]);
       });
-      closedMenu.addEventListener("click", (e) => {
-        this.toggleMenu([navbarMenu, menuOverlay]);
-      });
+      // closedMenu.addEventListener("click", (e) => {
+      //   this.toggleMenu([navbarMenu, menuOverlay]);
+      // });
       menuOverlay.addEventListener("click", (e) => {
         this.toggleMenu([navbarMenu, menuOverlay]);
       });
@@ -64,6 +64,13 @@ export default class MenuComponent
   }
 
   private toggleMenu(elements: Array<Element>) {
+    const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+    openMenu.forEach((e) => {
+      e.querySelector("[data-bc-bp-submenu]")?.removeAttribute('style');
+      e.querySelector("[data-bc-bp-menu-external]")?.removeAttribute('style');
+      e.classList.remove('active');
+    });
+
     elements.forEach((el) => {
       el.classList.toggle('active');
     });
