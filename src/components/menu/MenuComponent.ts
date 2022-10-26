@@ -46,10 +46,10 @@ export default class MenuComponent
       };
     } else if (this.deviceId == 2) {
       // add Event Listeners
-      const openedMenu = this.container.querySelector('.opened-menu');
+      const openedMenu = this.container.querySelector("[data-bc-bp-menu-opened]");
       // const closedMenu = this.container.querySelector('.closed-menu');
-      const navbarMenu = this.container.querySelector('.navbar');
-      const menuOverlay = this.container.querySelector('.overlay');
+      const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
+      const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
 
       openedMenu.addEventListener("click", (e) => {
         this.toggleMenu([navbarMenu, menuOverlay]);
@@ -143,8 +143,8 @@ export default class MenuComponent
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
 
       if (this.deviceId == 2) {
-        const navbarMenu = this.container.querySelector('.navbar');
-        const menuOverlay = this.container.querySelector('.overlay');
+        const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
+        const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
         this.toggleMenu([navbarMenu, menuOverlay]);
       }
   }
