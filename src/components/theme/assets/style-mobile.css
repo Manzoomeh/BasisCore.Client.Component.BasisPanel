@@ -1,0 +1,159 @@
+[data-bc-bp-theme-container="d2"] {
+    /* position: absolute; */
+    /* top: 101px; */
+    /* z-index: 99999999; */
+    /* left: 35px */
+    /* float: left; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-theme-container="d2"] {
+    /* left: 35px */
+    float: left;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-theme-container="d2"] {
+    /* right: 35px */
+    float: right;
+}
+
+[data-bc-bp-theme-container="d2"][data-bc-bp-sticky] {
+	/* position: fixed; */
+	/* top: 13.5px; */
+    /* left: 10px; */
+	/* width: 76px; */
+	/* z-index: 999; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-theme-container="d2"][data-bc-bp-sticky] {
+    /* left: 10px; */
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-theme-container="d2"][data-bc-bp-sticky] {
+    /* right: 10px; */
+}
+
+[data-bc-d2-theme-button] {
+    position: relative;
+    top: 50%;
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    /* padding: 5px; */
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-checkbox] {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-knobs] {
+    z-index: 2;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-knobs]:before {
+    position: absolute;
+    top: 0px;
+    width: 36px;
+    height: 36px;
+    /* font-size: 10px; */
+    /* font-weight: bold; */
+    /* text-align: center; */
+    /* line-height: 1; */
+    /* padding: 9px 4px; */
+    /* border-radius: 5px; */
+    transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    color: #fff;
+    z-index: 2;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-knobs]:before {
+    content: '';
+    background-image: url('moon.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    /* left: 5px; */
+    display: block;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-theme-button] [data-bc-d2-theme-knobs]:before {
+    left: 0px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-theme-button] [data-bc-d2-theme-knobs]:before {
+    right: 0px;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-checkbox]:checked+[data-bc-d2-theme-knobs]:before {
+    /* left: -24px; */
+    background-image: url('sun.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-knobs] span {
+    position: absolute;
+    top: 0;
+    /* left: 5px; */
+    width: 36px;
+    height: 36px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    border-radius: 5px;
+    transition: 0.4s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    /* background-color: #ffffff; */
+    /* box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); */
+    background-color: #e8e8e8;
+    z-index: 1;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-theme-button] [data-bc-d2-theme-knobs] span {
+    left: 36px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-theme-button] [data-bc-d2-theme-knobs] span {
+    right: 36px;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-checkbox]:checked+[data-bc-d2-theme-knobs] span {
+    /* left: 36px; */
+    /* background-color: #e8e8e8; */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-theme-button] [data-bc-d2-theme-checkbox]:checked+[data-bc-d2-theme-knobs] span {
+    left: 0;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-theme-button] [data-bc-d2-theme-checkbox]:checked+[data-bc-d2-theme-knobs] span {
+    right: 0;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-layer] {
+    width: 100%;
+    background-color: #767676;
+    transition: 0.3s ease all;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-knobs],
+[data-bc-d2-theme-button] [data-bc-d2-theme-layer] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+[data-bc-d2-theme-button] [data-bc-d2-theme-checkbox]:checked~[data-bc-d2-theme-layer] {
+    /* background-color: #767676; */
+}

@@ -1,0 +1,70 @@
+/*  */
+[data-bc-bp-d1-main-header] {
+  background-color: #fff;
+  padding: 20px;
+  position: relative;
+  min-height: 88px;
+  box-sizing: border-box;
+}
+
+[data-bc-bp-d1-header-left-items] {
+  /* float: left; */
+  height: 48px;
+  padding: 7.5px 0;
+  /* border-right: 0.5px solid #D0D0D0; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-left-items] {
+  float: left;
+  border-right: 0.5px solid #D0D0D0;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-left-items] {
+  float: right;
+  border-left: 0.5px solid #D0D0D0;
+}
+
+[data-bc-bp-d1-logo] {
+  /* float: left; */
+  margin-top: 8px;
+  /* margin-left: 15px; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-logo] {
+  float: left;
+  margin-left: 15px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-logo] {
+  float: right;
+  margin-right: 15px;
+}
+
+[data-bc-bp-d1-logo] a {
+  display: block;
+  width: 140px;
+  height: 32px;
+  background-image: url('basispanel_light.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+[data-bc-bp-d1-header-items] {
+  /* float: right; */
+  height: 48px;
+  /* padding: 7.5px 0 7.5px 15px; */
+  /* border-left: 0.5px solid #D0D0D0; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-items] {
+  float: right;
+  padding: 7.5px 0 7.5px 15px;
+  border-left: 0.5px solid #D0D0D0;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-items] {
+  float: left;
+  padding: 7.5px 15px 7.5px 0;
+  border-right: 0.5px solid #D0D0D0;
+}

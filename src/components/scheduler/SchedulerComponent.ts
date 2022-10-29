@@ -6,8 +6,11 @@ import {
 } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import IScheduler from "./IScheduler";
 import ITaskOptions, { IReportParam } from "./ITaskOptions";
 import PostTaskOptions from "./PostTaskOptions";
@@ -20,7 +23,7 @@ export default class SchedulerComponent
   private processList: Map<string, TaskProcess>;
   public readonly ulElement: HTMLUListElement;
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-scheduler-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-scheduler-container");
     this.processList = new Map<string, TaskProcess>();
     this.ulElement = this.container.querySelector("[data-bc-main-task-list]");
     //add this to parent container to see in all other components

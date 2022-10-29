@@ -1,12 +1,13 @@
 import { IUserDefineComponent, ISource } from "basiscore";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import PageComponent from "../PageComponent";
 import { PageType } from "../PageType";
 import HttpUtil from "../../../HttpUtil";
 import IPageInfo from "../IPageInfo";
 export default class ContainerComponent extends PageComponent {
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-page-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-page-container");
   }
   public get type(): PageType {
     return PageType.Dashboard;

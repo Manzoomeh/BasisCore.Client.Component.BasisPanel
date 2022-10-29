@@ -4,15 +4,18 @@ import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   protected currentCorporate: ICorporateInfo;
   private cache: Map<number, Array<IEntityInfo>>;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "business");
+    super(owner, desktopLayout, mobileLayout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
   }
 

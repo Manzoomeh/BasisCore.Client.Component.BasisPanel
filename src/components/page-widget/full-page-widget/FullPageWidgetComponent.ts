@@ -12,6 +12,10 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
   //     "[data-bc-fullpage-header] > [data-bc-fullpage-title]"
   //   ).textContent = value;
   // }
+  constructor(owner: IUserDefineComponent) {
+    super(owner, layout, layout, "data-bc-bp-fullpage-container");
+  }
+
   public async initializeAsync(): Promise<void> {
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
@@ -73,10 +77,6 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
 
   public runAsync(source?: ISource) {
     return true;
-  }
-
-  constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-fullpage-container");
   }
 
   // private async removeAsync(): Promise<void> {

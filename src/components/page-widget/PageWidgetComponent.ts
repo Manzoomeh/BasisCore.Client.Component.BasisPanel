@@ -7,8 +7,8 @@ export default abstract class PageWidgetComponent
   implements IWidget
 {
   protected readonly param: IWidgetParam;
-  constructor(owner: IUserDefineComponent, layout: string, dataAttr: string) {
-    super(owner, layout, dataAttr);
+  constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
+    super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("widget", this);
     this.param = eval(this.owner.node.getAttribute("options"));
   }

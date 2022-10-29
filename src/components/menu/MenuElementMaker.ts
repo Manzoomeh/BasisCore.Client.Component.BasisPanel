@@ -18,6 +18,7 @@ export default class MenuElementMaker {
     target: EventTarget
   ) => void;
   private checkRkeyOption: ICheckRkeyOptions;
+  private deviceId: number;
 
   constructor(
     rKey: string,
@@ -26,11 +27,13 @@ export default class MenuElementMaker {
       param: IMenuLoaderParam,
       target: EventTarget
     ) => void,
-    checkRkey: ICheckRkeyOptions
+    checkRkey: ICheckRkeyOptions,
+    deviceId: number
   ) {
     this.rKey = rKey;
     this.onMenuItemClick = onMenuItemClick;
     this.checkRkeyOption = checkRkey;
+    this.deviceId = deviceId;
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -56,7 +59,8 @@ export default class MenuElementMaker {
           this.createLevelMenuItem(
             node as IMenuLevelInfo,
             menuParam,
-            pageLookup
+            pageLookup,
+            this.deviceId
           )
         );
       } else if (
@@ -67,7 +71,8 @@ export default class MenuElementMaker {
           this.createExternalMenuItem(
             node as IMenuExternalItemInfo,
             menuParam,
-            pageLookup
+            pageLookup,
+            this.deviceId
           )
         );
       } else if (
@@ -88,7 +93,8 @@ export default class MenuElementMaker {
   private createLevelMenuItem(
     node: IMenuLevelInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>,
+    deviceId: number
   ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
@@ -99,24 +105,48 @@ export default class MenuElementMaker {
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
     li.appendChild(innerUl);
-    li.addEventListener("click", function (e) {
-      if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
-        const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-        openMenu.forEach((e) => {
-          (e as HTMLElement).style.transform = ` scaleY(0)`;
-          e.removeAttribute("data-bc-ul-level-open");
-          e.previousElementSibling.removeAttribute("data-bc-level-open");
-        });
-
-        innerUl.style.transform = `scaleY(1)`;
-        innerUl.setAttribute("data-bc-ul-level-open", "1");
-        content.setAttribute("data-bc-level-open", "");
-      } else {
-        innerUl.style.transform = ` scaleY(0)`;
-        innerUl.removeAttribute("data-bc-ul-level-open");
-        innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
-      }
-    });
+    if (deviceId == 2) {
+      content.addEventListener("click", function (e) {
+        if (li.classList.contains('active')) {
+            // collapseSubMenu();
+            li.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
+            li.classList.remove('active');
+        } else {
+            // Collapse Existing Expanded menuItemHasChildren
+            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+            openMenu.forEach((e) => {
+              e.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
+              e.classList.remove('active');
+            });
+            // Expand New menuItemHasChildren
+            li.classList.add('active');
+            const subMenu = li.querySelector("[data-bc-bp-submenu]");
+            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            (subMenu as HTMLElement).style.maxHeight = '20rem';
+            (subMenu as HTMLElement).style.transition = 'all 1s ease';
+            // subMenu.classList.add("show");
+        }
+      });
+    } else {
+      li.addEventListener("click", function (e) {
+        if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
+          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+          openMenu.forEach((e) => {
+            (e as HTMLElement).style.transform = ` scaleY(0)`;
+            e.removeAttribute("data-bc-ul-level-open");
+            e.previousElementSibling.removeAttribute("data-bc-level-open");
+          });
+  
+          innerUl.style.transform = `scaleY(1)`;
+          innerUl.setAttribute("data-bc-ul-level-open", "1");
+          content.setAttribute("data-bc-level-open", "");
+        } else {
+          innerUl.style.transform = ` scaleY(0)`;
+          innerUl.removeAttribute("data-bc-ul-level-open");
+          innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
+        }
+      });
+    }
     return li;
   }
 
@@ -199,7 +229,8 @@ export default class MenuElementMaker {
   private createExternalMenuItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>,
+    deviceId: number
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
@@ -220,21 +251,45 @@ export default class MenuElementMaker {
     content.setAttribute("data-bc-bp-menu-external-level", "");
     li.appendChild(ul);
     let subMenuFlag = false;
-    content.addEventListener("click", function () {
-      if (subMenuFlag == false) {
-        ul.style.transition = "all 0.3s ease-in-out";
-        ul.style.width = `auto`;
-        ul.style.overflow = `visible`;
-        content.setAttribute("data-bc-bp-menu-external-open", "");
-        subMenuFlag = true;
-      } else {
-        ul.style.transition = "all 0.3s ease-in-out";
-        ul.style.width = `0`;
-        ul.style.overflow = `hidden`;
-        content.removeAttribute("data-bc-bp-menu-external-open");
-        subMenuFlag = false;
-      }
-    });
+    if (deviceId == 2) {
+      content.addEventListener("click", function (e) {
+        if (li.classList.contains('active')) {
+            // collapseSubMenu();
+            li.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
+            li.classList.remove('active');
+        } else {
+            // Collapse Existing Expanded menuItemHasChildren
+            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+            openMenu.forEach((e) => {
+              e.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
+              e.classList.remove('active');
+            });
+            // Expand New menuItemHasChildren
+            li.classList.add('active');
+            const subMenu = li.querySelector("[data-bc-bp-menu-external]");
+            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            (subMenu as HTMLElement).style.maxHeight = '20rem';
+            (subMenu as HTMLElement).style.transition = 'all 1s ease';
+            // subMenu.classList.add("show");
+        }
+      })
+    } else {
+      content.addEventListener("click", function () {
+        if (subMenuFlag == false) {
+          ul.style.transition = "all 0.3s ease-in-out";
+          ul.style.width = `auto`;
+          ul.style.overflow = `visible`;
+          content.setAttribute("data-bc-bp-menu-external-open", "");
+          subMenuFlag = true;
+        } else {
+          ul.style.transition = "all 0.3s ease-in-out";
+          ul.style.width = `0`;
+          ul.style.overflow = `hidden`;
+          content.removeAttribute("data-bc-bp-menu-external-open");
+          subMenuFlag = false;
+        }
+      });
+    }
     const url = HttpUtil.formatString(
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
       {

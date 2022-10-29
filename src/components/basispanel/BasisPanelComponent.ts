@@ -1,7 +1,10 @@
 /// <reference path="../../@types/typings.d.ts" />
 
 import "./assets/style.css";
-import layout from "./assets/layout.html";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import LocalStorageUtil from "../../LocalStorageUtil";
@@ -11,7 +14,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
   private runTask: Promise<IDisposable>;
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-main-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-main-container");
     $bc.basisPanel = {};
     LocalStorageUtil.loadLastStateAsync(
       this.options.rKey,

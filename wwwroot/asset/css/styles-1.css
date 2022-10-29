@@ -160,8 +160,8 @@ body.darkmode {
     padding: 5px !important;
     line-height: 25px !important;
     border-radius: 5px !important;
-    width: fit-content;
-    width: max-content;
+    /* width: fit-content; */
+    width: 100%;
 }
 
 .alertMessages svg {
@@ -277,25 +277,33 @@ body.darkmode {
 .widgetButtonsContainer .widgetButton {
     color: var(--white);
     background-color: #004B85;
-    border: 1px solid #004B85;
+    /* border: 1px solid #004B85; */
     border-radius: 5px;
     height: 41px;
     line-height: 30px;
     text-align: center;
     cursor: pointer;
-    padding: 5px;
+    padding: 5px 15px;
     margin-right: 5px;
     float: left;
-    direction: rtl;
+    direction: ltr;
     /* display: flex; */
     /* align-items: center; */
     /* justify-content: space-between; */
 }
 
+.widgetButtonsContainer .widgetButton:hover {
+    background: #007BDB !important;
+}
+
+.widgetButtonsContainer .widgetButton:focus {
+    background: #003965 !important;
+}
+
 .widgetButtonsContainer .widgetButton i {
     font-size: 15px;
     /* display: block; */
-    margin-right: 10px;
+    margin-left: 10px;
     vertical-align: middle;
 }
 
@@ -553,13 +561,21 @@ body.darkmode {
     border-radius: 5px;
     cursor: pointer;
     width: 93px;
-    height: 44px;
+    height: 34px;
 }
 
 .modalButtons .modalButton.accept {
     background-color: #004B85;
-    border: 1px solid #004B85;
+    /* border: 1px solid #004B85; */
     color: #fff;
+}
+
+.modalButtons .modalButton.accept:hover {
+    background-color: #007BDB !important;
+}
+
+.modalButtons .modalButton.accept:focus {
+    background: #003965 !important;
 }
 
 .modalButtons .modalButton.cancel {
@@ -605,12 +621,14 @@ body.darkmode {
     float: right;
     border: none;
     font-size: 12px;
+    min-width: 100px
 }
 
 .schemaBtnContainer .message {
     float: right;
     line-height: 35px;
     margin-right: 15px;
+    direction: ltr;
 }
 
 .schemaBtnContainer .message .messageError {
@@ -1080,7 +1098,7 @@ body.darkmode {
     border-left: 1px solid var(--light_gray);
 }
 
-.treeBox svg {
+.treeBox .icon svg {
     width: 25px;
     cursor: pointer;
 }
@@ -1169,9 +1187,15 @@ body.darkmode {
     border: none;
     background-color: inherit;
     font-size: 15px;
-    padding: 0 3px;
+    padding: 0 5px;
     color: var(--dark_gray);
     cursor: pointer;
+}
+
+.treeBox .btn_list.active path,
+.treeBox .btn_list.active i {
+    color: #004B85;
+    fill: #004B85;
 }
 
 .treeBox .btn_list.cancel {
@@ -1184,16 +1208,90 @@ body.darkmode {
     font-weight: bold;
 }
 
+.treeBox .btn_list svg {
+    vertical-align: middle;
+}
+
+.treeBox .loadBoxes {
+    background-color: #fafafa;
+}
+
 .treeBox .loadBox {
     line-height: initial;
+    display: none;
+    padding: 0 20px;
 }
 
 .treeBox .loadBox.show {
-    padding: 10px 20px 20px 0;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 .treeBox .labelList {
     display: none;
+}
+
+/* ********** tooltip tree ********** */
+[data-tree-tooltip] {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+[data-tree-tooltip]:before,
+[data-tree-tooltip]:after {
+    visibility: hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+}
+
+[data-tree-tooltip]:before {
+    position: absolute;
+    top: -30px;
+    right: 50%;
+    /* margin-bottom: 5px; */
+    margin-right: -15px;
+    /* transform: translateX(-50%); */
+    padding: 7px;
+    width: max-content;
+    border-radius: 3px;
+    background-color: #000;
+    background-color: hsla(0, 0%, 20%, 0.9);
+    color: #fff;
+    content: attr(data-tree-tooltip);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+[data-tree-tooltip]:after {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid #000;
+    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+}
+
+[data-tree-tooltip]:hover:before,
+[data-tree-tooltip]:hover:after {
+    visibility: visible;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
 }
 
 /***** common styles for grid component *****/
@@ -1212,6 +1310,10 @@ body.darkmode {
 
 [data-bc-grid] table[data-bc-table] td.textLeft {
     text-align: left !important;
+}
+
+[data-bc-grid] table[data-bc-table] td.dirLeft {
+    direction: ltr !important;
 }
 
 [data-bc-grid] [data-bc-paging-container] [data-bc-status] svg {
@@ -1370,6 +1472,7 @@ body.darkmode {
     vertical-align: middle;
     padding: 0 10px;
     width: 100%;
+    rotate: 90deg;
 }
 
 [data-bc-grid] table[data-bc-table] .iconsOperations .iconsDetail {
@@ -1461,6 +1564,78 @@ body.darkmode {
     line-height: 31px;
     text-align: center;
     color: #D0D0D0;
+}
+
+/***** common styles for widget header external buttons *****/
+.widgetHeaderExternalButtons {
+    display: none;
+}
+
+[data-bc-widget-external-buttons] .backToList svg {
+    vertical-align: middle;
+    opacity: 0.8;
+}
+
+/***** widget header btn tooltip common *****/
+[data-widget-header-btn-tooltip] {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+
+[data-widget-header-btn-tooltip]:before,
+[data-widget-header-btn-tooltip]:after {
+    visibility: hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+}
+
+[data-widget-header-btn-tooltip]:before {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    /* margin-bottom: 5px; */
+    /* margin-right: -15px; */
+    /* transform: translateX(-50%); */
+    padding: 7px;
+    width: max-content;
+    border-radius: 3px;
+    background-color: #000;
+    background-color: hsla(0, 0%, 20%, 0.9);
+    color: #fff;
+    content: attr(data-widget-header-btn-tooltip);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+[data-widget-header-btn-tooltip]:after {
+    position: absolute;
+    bottom: -2px;
+    left: 5px;
+    /* margin-left: -5px; */
+    width: 0;
+    border-bottom: 5px solid #000;
+    border-bottom: 5px solid hsla(0, 0%, 20%, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+}
+
+[data-widget-header-btn-tooltip]:hover:before,
+[data-widget-header-btn-tooltip]:hover:after {
+    visibility: visible;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
 }
 
 /************************* just for external modules - delete after edit them *************************/
@@ -1765,20 +1940,22 @@ body.darkmode {
         opacity: 1;
     }
 }
-.loading-basispanel{
+
+.loading-basispanel {
     width: 50px;
     height: 50px;
     position: absolute;
     animation-name: rotateAll;
-   animation-duration:1s;
-   animation-iteration-count: infinite;
-   animation-timing-function:  ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
 }
-.loading-basispanel .loading-part1{
+
+.loading-basispanel .loading-part1 {
     width: 15px;
     height: 15px;
     border-radius: 5px;
-    background:#222222;
+    background: #222222;
     position: absolute;
     top: 0;
     left: 0;
@@ -1786,14 +1963,15 @@ body.darkmode {
     animation-name: topLeft;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-   animation-timing-function: ease-in-out;
-   animation-direction: alternate-reverse;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate-reverse;
 }
-.loading-basispanel .loading-part2{
+
+.loading-basispanel .loading-part2 {
     width: 15px;
     height: 15px;
     border-radius: 5px;
-    background:#222222;
+    background: #222222;
     position: absolute;
     top: 0;
     right: 0;
@@ -1801,14 +1979,15 @@ body.darkmode {
     animation-name: topRight;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-   animation-timing-function: ease-in-out;
-   animation-direction: alternate-reverse;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate-reverse;
 }
-.loading-basispanel .loading-part3{
+
+.loading-basispanel .loading-part3 {
     width: 15px;
     height: 15px;
     border-radius: 5px;
-    background:#222222;
+    background: #222222;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -1816,107 +1995,148 @@ body.darkmode {
     animation-name: bottomLeft;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-   animation-timing-function: ease-in-out;
-   animation-direction: alternate-reverse;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate-reverse;
 }
-.loading-basispanel .loading-part4{
+
+.loading-basispanel .loading-part4 {
     width: 15px;
     height: 15px;
     border-radius: 5px;
-    background:#222222;
+    background: #222222;
     position: absolute;
     bottom: 0;
     right: 0;
     transform: rotate(45deg);
     animation-name: bottomRight;
-   animation-duration: 2s;
-   animation-iteration-count: infinite;
-   animation-timing-function: ease-in-out;
-   animation-direction: alternate-reverse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate-reverse;
 }
+
 @keyframes rotateAll {
-   from { transform: rotate(180deg);
+    from {
+        transform: rotate(180deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
-   to {transform: rotate(360deg);
-}
-}
+
 @keyframes topLeft {
-   0% {background: #222222;
+    0% {
+        background: #222222;
+    }
+
+    40% {
+        background: #004B85;
+
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0;
+        transform: translate(10px, 10px);
+    }
+
+    60% {
+        background: #004B85;
+
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0;
+        transform: translate(10px, 10px);
+    }
+
+    100% {
+        background: #BAE1FF;
+    }
 }
-   40% {background: #004B85;
-     
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    transform: translate(10px,10px);
-}
-60% {background: #004B85;
-     
-     border-bottom-right-radius: 0;
-     border-bottom-left-radius: 0;
-     border-top-right-radius: 0;
-     transform: translate(10px,10px);
- }
-100% {background: #BAE1FF;
-}
-}
+
 @keyframes topRight {
-   0% {background: #222222;}
-   40% {background: #004B85;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 0;
-    transform: translate(-10px,10px);
+    0% {
+        background: #222222;
+    }
+
+    40% {
+        background: #004B85;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 0;
+        transform: translate(-10px, 10px);
+    }
+
+    60% {
+        background: #004B85;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 0;
+        transform: translate(-10px, 10px);
+    }
+
+    100% {
+        background: #BAE1FF;
+    }
 }
-60% {background: #004B85;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 0;
-    transform: translate(-10px,10px);
-}
-100% {background: #BAE1FF;
-}
-}
+
 @keyframes bottomLeft {
-   0% {background: #222222;}
-   40% {background: #004B85;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    transform: translate(10px,-10px);
+    0% {
+        background: #222222;
+    }
+
+    40% {
+        background: #004B85;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+        transform: translate(10px, -10px);
+    }
+
+    60% {
+        background: #004B85;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+        transform: translate(10px, -10px);
+    }
+
+    100% {
+        background: #BAE1FF;
+    }
 }
-60% {background: #004B85;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    transform: translate(10px,-10px);
-}
-100% {background: #BAE1FF;
-}
-}
+
 @keyframes bottomRight {
-   0% {background: #222222;}
-   40% {background: #004B85;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-    transform: translate(-10px,-10px);
+    0% {
+        background: #222222;
+    }
+
+    40% {
+        background: #004B85;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        transform: translate(-10px, -10px);
+    }
+
+    60% {
+        background: #004B85;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        transform: translate(-10px, -10px);
+    }
+
+    100% {
+        background: #BAE1FF;
+    }
 }
-60% {background: #004B85;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 0;
-    transform: translate(-10px,-10px);
-}
-100% {background: #BAE1FF;
-}
-}
-.check-label > input[type="checkbox"] {
+
+.check-label>input[type="checkbox"] {
     display: none;
     padding-left: 5px;
 }
 
-.check-label > input[type="checkbox"] + *::before {
+.check-label>input[type="checkbox"]+*::before {
     content: "";
     display: inline-block;
     vertical-align: middle;
@@ -1930,8 +2150,8 @@ body.darkmode {
     font-weight: bold;
 }
 
-.check-label > input[type="checkbox"]:checked + *::before {
-    content: "✓";
+.check-label>input[type="checkbox"]:checked+*::before {
+    content: "âœ“";
     color: white;
     text-align: center;
     vertical-align: middle;
@@ -1940,4 +2160,78 @@ body.darkmode {
     transition: all 0.3s ease;
     font-size: 11px;
     font-weight: bold;
+}
+
+.CTA-button button {
+    background-color: #00A693;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: ease 0.4s;
+    font-size: 16px;
+    min-width: 110px;
+    height: 41px;
+    direction: ltr;
+}
+
+.CTA-button button:hover {
+    background-color: #13CDB8;
+}
+
+.CTA-button button:focus {
+    background-color: #068173;
+}
+
+.disable-btn button {
+    background: #D0D0D0;
+    border-radius: 5px;
+    height: 35px;
+    min-width: 100px;
+    color: #FFFFFF;
+    border: none;
+    padding: 0 15px;
+    cursor: no-drop;
+    float: right;
+}
+
+.cancelBtn {
+    background-color: transparent;
+    border: none !important;
+}
+
+.schemaBtnContainer .schemaBtn.accept:hover {
+    background: #007BDB !important;
+    border: none !important;
+}
+
+.schemaBtnContainer .schemaBtn.accept:focus {
+    background: #003965 !important;
+}
+
+.button--loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
 }

@@ -1,5 +1,8 @@
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
 import { IUserDefineComponent } from "basiscore";
 import { ISource } from "basiscore";
@@ -7,6 +10,10 @@ import { DefaultSource } from "../../../type-alias";
 import PageWidgetComponent from "../PageWidgetComponent";
 
 export default class WidgetComponent extends PageWidgetComponent {
+  constructor(owner: IUserDefineComponent) {
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-widget-container");
+  }
+
   public async initializeAsync(): Promise<void> {
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
@@ -20,6 +27,8 @@ export default class WidgetComponent extends PageWidgetComponent {
       this.param.y * cell + parent.clientTop
     }px`;
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+
+    this.container.setAttribute("id", `widget${this.param.id.toString()}`);
 
     this.title = this.param.title;
 
@@ -83,10 +92,6 @@ export default class WidgetComponent extends PageWidgetComponent {
 
   public runAsync(source?: ISource) {
     return true;
-  }
-
-  constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-widget-container");
   }
 
   private async removeAsync(): Promise<void> {

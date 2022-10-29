@@ -1,4 +1,4 @@
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout.html";
 import dropAreaLayout from "./assets/drop-area-layout.html";
 import widgetItemLayout from "./assets/widget-item-layout.html";
 import "./assets/style.css";
@@ -14,7 +14,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private readonly _page: IPage;
   private readonly _widgetDialog: Element;
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-widget-list-container");
+    super(owner, desktopLayout, desktopLayout, "data-bc-bp-widget-list-container");
     this._page = owner.dc.resolve<IPage>("page");
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"

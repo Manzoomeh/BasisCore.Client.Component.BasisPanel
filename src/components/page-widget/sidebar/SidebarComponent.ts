@@ -1,5 +1,8 @@
-import layout from "./assets/layout.html";
+import desktopLayout from "./assets/layout-desktop.html";
+import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
@@ -15,7 +18,7 @@ declare const $bc: any;
 
 export default class SidebarComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
-    super(owner, layout, "data-bc-bp-sidebar-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-sidebar-container");
   }
 
   public runAsync(source?: ISource) {
