@@ -36,7 +36,19 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected abstract getOwnerUrl(): string;
 
   protected abstract getSourceId(): string;
-
+  public selectService(el:HTMLElement){
+    const msgElId = el.getAttribute("data-id");
+    const id = parseInt(msgElId);
+    if (id != 0) {
+      LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
+      this.owner.setSource(
+        DefaultSource.SHOW_MENU,
+        this.createMenuLoaderParam(id)
+      );
+      this.signalToDisplayPage(id);
+      this.setActive();
+    }
+  }
   public initializeAsync(): Promise<void> {
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
@@ -59,24 +71,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
     const msgElClick = this.element
       .closest("[data-bc-main-list-container]")
-      .querySelector("[data-bc-main-list-msg]");
-    msgElClick.addEventListener("click", async (e) => {
-      const msgElId = msgElClick.getAttribute("data-id");
-      const id = parseInt(msgElId);
-      if (id != 0) {
-        LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
-        this.owner.setSource(
-          DefaultSource.SHOW_MENU,
-          this.createMenuLoaderParam(id)
-        );
-        this.signalToDisplayPage(id);
-        this.setActive();
-      }
+      .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
+    msgElClick?.addEventListener("click", async (e) => {
+      this.selectService(msgElClick)
     });
 
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
     return Promise.resolve();
   }
+
 
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
     if (this._isFirst) {
@@ -210,16 +213,19 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.signalToDisplayPage(id);
   }
 
-  entryListMaker(list) {
+   entryListMaker(list) {
     this.element.innerHTML = "";
+   
     if (list?.length > 0) {
-      list.forEach((item) => {
+     
+      list.forEach(async item => {
         const li = document.createElement("li");
         // const div = document.createElement("div");
         li.setAttribute("data-id", item.id.toString());
         li.addEventListener("click", async (e) => {
           e.preventDefault();
           const id = parseInt(li.getAttribute("data-id"));
+      
           const entity = this.entityList.find((x) => x.id == id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
 
@@ -265,8 +271,25 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           });
           li.appendChild(lockIcon);
         }
+        
         this.element.appendChild(li);
+        if(list?.length == 1 ){
+          await this.setActiveAsync(list[0].id);
+          LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
+           this.owner.setSource(this.getSourceId(), list[0] ?? {});
+          //  this.setActive();
+           this.selectItem(li);
+           const businessActive = this.container.querySelector(".active-business")
+           const serviceActive = this.container.querySelector(".active-corporate")
+           if(businessActive){
+            businessActive.classList.remove("active-business")
+           }
+           if(serviceActive){
+            serviceActive.classList.remove("active-corporate")
+           }
+        }
       });
+     
     }
   }
 
@@ -286,6 +309,28 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   setActive() {
+    if (this.ownerType == "corporate") {
+      // choose corporate
+      this.element
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-business")
+        ?.classList.remove("active-business");
+      this.element
+        .closest("[data-bc-main-list-container]")
+        .classList.add("active-corporate");
+    } else if (this.ownerType == "business") {
+      // choose business
+      this.element
+        .closest("[data-bc-bp-main-header]")
+        .querySelector(".active-corporate")
+        ?.classList.remove("active-corporate");
+      this.element
+        .closest("[data-bc-main-list-container]")
+        .classList.add("active-business");
+    }
+  }
+
+  InitializeSetActive() {
     if (this.ownerType == "corporate") {
       // choose corporate
       this.element
@@ -367,12 +412,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       entityName,
       containerMsgElement.nextSibling
     );
+    const selectiveList = entityName.closest("[data-bc-d1-main-list-info]") as HTMLElement
     containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
-    containerMsgElement.setAttribute(
+    selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
+    selectiveList.setAttribute(
       "data-id",
       li.getAttribute("data-id")
     );
-
+    selectiveList.addEventListener("click" , (e) => {
+      this.selectService(selectiveList)
+    })
     this.element
       .closest("[data-bc-drop-down-container]")
       .setAttribute("data-status", "close");

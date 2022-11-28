@@ -124,10 +124,11 @@
     /* left: 0; */
     display: inline-block;
     cursor: pointer;
-    width: 20px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     padding: 7px 0px;
+    background-color: #fff;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] {
@@ -289,7 +290,7 @@
 /* main */
 [data-bc-d1-main-list-info] {
     /* float: right; */
-    width: calc(100% - 20px);
+    width: calc(100% - 30px);
     height: 32px;
     /* padding-right: 10px; */
     position: relative;
@@ -298,6 +299,7 @@
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-main-list-info] {
     float: right;
     padding-right: 10px;
+    cursor: pointer;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-main-list-info] {

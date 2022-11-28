@@ -73,5 +73,6 @@ export interface ILabels {
   widgetsTab: string;
   dashboardWidgetsTab: string;
   widgetsSettingButton: string;
+  storeTitle:string
 }
 

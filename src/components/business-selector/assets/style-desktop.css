@@ -134,10 +134,11 @@
     /* left: 0; */
     display: inline-block;
     cursor: pointer;
-    width: 20px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     padding: 7px 0px;
+    background-color: #fff !important;
 }
 
 [data-bc-d1-business-list] [data-bc-d1-business-drop-down] {

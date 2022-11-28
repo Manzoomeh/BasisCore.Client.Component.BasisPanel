@@ -89,6 +89,7 @@
 
 [data-bc-d1-user-info] [data-bc-d1-user-drop-down-item]:last-of-type {
     border-bottom: 0;
+    padding-bottom: 0;
 }
 
 [data-bc-d1-user-info] [data-bc-d1-user-title] {

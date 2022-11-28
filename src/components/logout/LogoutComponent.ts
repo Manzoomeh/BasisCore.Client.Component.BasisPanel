@@ -10,8 +10,8 @@ export default class LogoutComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): Promise<void> {
-    this.container.setAttribute("data-sys-hover", "");
-    this.container
+    // this.container.setAttribute("data-sys-hover", "");
+    this.container.querySelector("[data-bc-bp-logout-title]")
       ?.addEventListener("click", async (e) => {
         e.preventDefault();
         const url = HttpUtil.formatString(this.options.logout.url, {

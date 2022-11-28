@@ -31,7 +31,7 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
   ): Promise<void> {
     const elementList = new Array<Node>();
     widgetParamList.forEach((widgetParam) => {
-      console.log("wwwwwwww", widgetParam)
+      // console.log("wwwwwwww", widgetParam)
       const widgetElement = document.createElement("basis");
       widgetElement.setAttribute(
         "core",

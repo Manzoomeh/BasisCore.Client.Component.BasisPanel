@@ -37,7 +37,7 @@ export default class DashboardComponent extends PageComponent {
     this.owner.processNodesAsync(nodes);
 
     const wrapper = this.container;
-    this.container.querySelector("[data-bc-page-widgets-list]").addEventListener("click", function (e) {
+    this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
       wrapper.querySelector(".toggle").classList.toggle('active');
     });
 

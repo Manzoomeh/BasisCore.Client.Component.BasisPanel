@@ -114,9 +114,15 @@
 
 .active-corporate span,
 .active-corporate [data-bc-corporate-name],
-.active-business span,
 .active-business [data-bc-corporate-name] [data-bc-corporate-name] {
   color: rgba(0, 75, 133, 1) !important;
+  border-radius: 5px;
+  
+}
+.active-business [data-bc-drop-down-click],.active-corporate [data-bc-drop-down-click]{
+  color: rgba(0, 75, 133, 1) !important;
+  border-radius: 5px;
+  border-right:1px solid rgba(0, 75, 133, 1)
 }
 
 [data-sys-widget-header] {

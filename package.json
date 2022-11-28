@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "basiscore": "^2.14.1",
+    "bc": "^0.1.1",
     "tsyringe": "^4.7.0"
   }
 }

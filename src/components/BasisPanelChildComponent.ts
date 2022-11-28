@@ -30,7 +30,8 @@ export default abstract class BasisPanelChildComponent
           widgetsTitle: "ویجت‌ها",
           widgetsTab: "ویجت‌ها",
           dashboardWidgetsTab: "ویجت‌ میزکار",
-          widgetsSettingButton: "ذخیره تغییرات"
+          widgetsSettingButton: "ذخیره تغییرات",
+          storeTitle:"فروشگاه"
         },
       };
     }
@@ -102,7 +103,8 @@ export default abstract class BasisPanelChildComponent
         .replace("@widgetsTitle", this.labels.widgetsTitle)
         .replace("@widgetsTab", this.labels.widgetsTab)
         .replace("@dashboardWidgetsTab", this.labels.dashboardWidgetsTab)
-        .replace("@widgetsSettingButton", this.labels.widgetsSettingButton);
+        .replace("@widgetsSettingButton", this.labels.widgetsSettingButton)
+        .replace("@storeTitle", this.labels.storeTitle);
 
       const range = new Range();
       range.setStart(this.container, 0);
