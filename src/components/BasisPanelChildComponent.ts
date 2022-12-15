@@ -8,7 +8,8 @@ export default abstract class BasisPanelChildComponent
   public readonly container: Element;
   protected readonly options: IBasisPanelOptions;
   protected readonly direction: IDirection;
-  protected readonly deviceId: number | string;
+  // protected readonly deviceId: number | string;
+  public readonly deviceId: number | string;
   protected readonly labels: ILabels;
   static _cultureDefaults: Partial<ICultureOptions>;
   static getDefaultCultures(): Partial<ICultureOptions> {

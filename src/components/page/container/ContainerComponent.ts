@@ -26,6 +26,11 @@ export default class ContainerComponent extends PageComponent {
       "GET",
       this.options.checkRkey
     );
+
+    const wrapper = this.container;
+    this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
+      wrapper.querySelector("[data-bc-page-widgets-list-toggle]").classList.toggle('active');
+    });
   }
   public async addingDashboardWidgets(): Promise<void> {
    

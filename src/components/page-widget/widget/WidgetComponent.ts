@@ -28,7 +28,20 @@ export default class WidgetComponent extends PageWidgetComponent {
     }px`;
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
-    this.container.setAttribute("id", `widget${this.param.id.toString()}`);
+    if (this.deviceId == 2) {
+      const uniqueName = `widget${this.param.id.toString()}`;
+      this.container.setAttribute("id", uniqueName);
+      const li = document.createElement("li");
+      li.setAttribute("data-bc-page-widgets-list-move-ico", "");
+      li.setAttribute("data-widget", uniqueName);
+      li.addEventListener("click", function (e) {
+        document.getElementById(uniqueName).scrollIntoView(true);
+      });
+      const span = document.createElement("span");
+      span.textContent = `${this.param.id.toString()}`;
+      li.appendChild(span);
+      this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
+    }    
 
     this.title = this.param.title;
 

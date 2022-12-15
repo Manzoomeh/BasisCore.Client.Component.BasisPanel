@@ -33,6 +33,21 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
 
     // this.title = this.param.title;
 
+    if (this.deviceId == 2) {
+      const uniqueName = `widget${this.param.id.toString()}`;
+      this.container.setAttribute("id", uniqueName);
+      const li = document.createElement("li");
+      li.setAttribute("data-bc-page-widgets-list-move-ico", "");
+      li.setAttribute("data-widget", uniqueName);
+      li.addEventListener("click", function (e) {
+        document.getElementById(uniqueName).scrollIntoView(true);
+      });
+      const span = document.createElement("span");
+      span.textContent = `${this.param.id.toString()}`;
+      li.appendChild(span);
+      this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
+    }
+
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${
         this.options.method.widget
