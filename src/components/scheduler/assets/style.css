@@ -19,8 +19,8 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-scheduler-container] {
-    float: left;
-    margin-left: 15px;
+    float: right;
+    margin-right: 15px;
 }
 
 /* ********** task list item ********** */

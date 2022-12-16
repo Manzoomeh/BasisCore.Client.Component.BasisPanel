@@ -41,8 +41,8 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d2-logo] {
-    float: right;
-    /* margin-right: 15px; */
+    float: left;
+    /* margin-left: 15px; */
 }
 
 [data-bc-bp-d2-logo] a {
@@ -69,9 +69,9 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d2-header-items] {
-    float: left;
-    /* padding: 7.5px 15px 7.5px 0; */
-    /* border-right: 0.5px solid #D0D0D0; */
+    float: right;
+    /* padding: 7.5px 0 7.5px 15px; */
+    /* border-left: 0.5px solid #D0D0D0; */
 }
 
 [data-bc-bp-d2-header-middle] {

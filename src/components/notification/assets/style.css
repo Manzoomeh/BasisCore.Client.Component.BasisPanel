@@ -18,7 +18,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-notification-container] {
-    float: left;
+    float: right;
 }
 
 /* ********** notification dropdown ********** */
@@ -57,7 +57,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-notification-dropdown-wrapper] {
-    left: -17px !important;
+    right: -17px !important;
 }
 
 /* movaghatan baraye faze 1 bardashte shod */
@@ -84,8 +84,8 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-notification] [data-bc-notification-dropdown]::before,
 [data-bc-bp-direction="leftToRight"] [data-bc-notification] [data-bc-notification-dropdown]::after {
-    left: 28px !important;
-    right: unset !important;
+    right: 28px !important;
+    left: unset !important;
 }
 
 /* ********** notification tabs ********** */
