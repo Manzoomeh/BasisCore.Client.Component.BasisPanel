@@ -10,7 +10,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-business-container="d2"] {
-    float: left;
+    float: right;
 }
 
 [data-bc-d2-business-list] {
@@ -38,9 +38,9 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] {
-    float: left;
-    margin-left: 15px;
-    direction: ltr;
+    float: right;
+    margin-right: 15px;
+    direction: rtl;
 }
 
 [data-bc-d2-business-list-icon] {
@@ -61,7 +61,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list-icon] {
-    float: left;
+    float: right;
 }
 
 /* [data-bc-d2-business-list] [data-bc-d2-business-loading] {
@@ -106,7 +106,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] [data-bc-d2-business-select] {
-    float: left;
+    float: right;
 }
 
 [data-bc-d2-business-list] [data-bc-d2-business-msg] {
@@ -123,7 +123,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] [data-bc-d2-business-msg] {
-    left: 10px;
+    right: 10px;
 }
 
 /* [data-bc-d2-business-list] [data-bc-d2-business-msg][data-bc-d2-business-msg-inactive] {
@@ -172,7 +172,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] [data-bc-d2-business-drop-down] {
-    left: 0;
+    right: 0;
 }
 
 [data-bc-d2-business-list] [data-bc-d2-business-drop-down][data-status="open"] {
@@ -227,7 +227,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] [data-bc-d2-business-drop-down] li {
-    margin-right: 5px;
+    margin-left: 5px;
 }
 
 [data-bc-d2-business-list] [data-bc-d2-business-drop-down] li:hover {
@@ -277,5 +277,5 @@
 }
 
 [data-bc-bp-direction="leftToRight"] .active-business [data-bc-d2-business-list-icon] {
-    border-left: 0;
+    border-right: 0;
 }

@@ -7,5 +7,5 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-profile-container] {
-    float: left;
+    float: right;
 }

@@ -37,7 +37,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-alarm] {
-    left: -4px;
+    right: -4px;
 }
 
 /* ********** task list dropdown ********** */
@@ -82,7 +82,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list-dropdown-wrapper] {
-    left: -17px !important;
+    right: -17px !important;
 }
 
 [data-bc-bp-scheduler-container]:hover [data-bc-d2-task-list-dropdown-wrapper] {
@@ -107,8 +107,8 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::before,
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::after {
-    left: 28px !important;
-    right: unset !important;
+    right: 28px !important;
+    left: unset !important;
 }
 
 /* ********** task list contents ********** */

@@ -7,7 +7,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-notification-container="d1"] {
-    margin-left: 15px;
+    margin-right: 15px;
 }
 
 [data-bc-d1-notification] [data-bc-d1-notification-alert] {
@@ -51,5 +51,5 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-notification] [data-bc-d1-notification-alarm] {
-    left: -4px;
+    right: -4px;
 }

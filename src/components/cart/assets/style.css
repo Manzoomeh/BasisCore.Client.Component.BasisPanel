@@ -19,8 +19,8 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-cart-container] {
-    float: right;
-    margin-left: 15px;
+    float: left;
+    margin-right: 15px;
 }
 
 [data-bc-cart] [data-bc-cart-alert] {
@@ -64,5 +64,5 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-cart] [data-bc-cart-alarm] {
-    left: -4px;
+    right: -4px;
 }

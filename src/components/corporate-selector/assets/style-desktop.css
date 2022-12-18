@@ -9,7 +9,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-corporate-container="d1"] {
-    float: left;
+    float: right;
 }
 
 [data-bc-d1-corporate-list] {
@@ -37,9 +37,9 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] {
-    float: left;
-    margin-left: 15px;
-    direction: ltr;
+    float: right;
+    margin-right: 15px;
+    direction: rtl;
 }
 
 [data-bc-d1-corporate-list-icon] {
@@ -60,7 +60,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list-icon] {
-    float: left;
+    float: right;
 }
 
 /* [data-bc-d1-corporate-list] [data-bc-d1-corporate-notification] {
@@ -94,7 +94,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-select] {
-    float: left;
+    float: right;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg] {
@@ -111,7 +111,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg] {
-    left: 10px;
+    right: 10px;
 }
 
 /* [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg][data-bc-d1-corporate-msg-inactive] {
@@ -161,7 +161,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] {
-    left: 0;
+    right: 0;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down][data-status="open"] {
@@ -213,7 +213,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li {
-    margin-right: 5px;
+    margin-left: 5px;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li:hover {
@@ -260,8 +260,8 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-buy] {
-    float: left;
-    margin-left: 15px;
+    float: right;
+    margin-right: 15px;
 }
 
 .active-corporate {
@@ -284,7 +284,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] .active-corporate [data-bc-d1-corporate-list-icon] {
-    border-left: 0;
+    border-right: 0;
 }
 
 /* main */
@@ -294,15 +294,15 @@
     height: 32px;
     /* padding-right: 10px; */
     position: relative;
+    cursor: pointer;
 }
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-main-list-info] {
     float: right;
     padding-right: 10px;
-    cursor: pointer;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-main-list-info] {
-    float: left;
-    padding-left: 10px;
+    float: right;
+    padding-right: 10px;
 }

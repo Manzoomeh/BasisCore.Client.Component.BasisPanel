@@ -51,5 +51,5 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-notification] [data-bc-d2-notification-alarm] {
-    left: -4px;
+    right: -4px;
 }
