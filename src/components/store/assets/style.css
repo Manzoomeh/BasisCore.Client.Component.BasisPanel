@@ -1,4 +1,4 @@
-[data-bc-bp-logout-container] {
+[data-bc-bp-store-container] {
     display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
     display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
     display: -ms-flexbox; /* TWEENER - IE 10 */
@@ -17,23 +17,23 @@
     color: #000;
 }
 
-[data-bc-bp-logout-container]:hover {
+[data-bc-bp-store-container]:hover {
     background: rgba(0, 75, 133, 0.1);
     border-radius: 5px;
 }
 
-[data-bc-bp-logout-container] [data-bc-bp-logout-title] {
+[data-bc-bp-store-container] [data-bc-bp-store-title] {
     cursor: pointer;
 }
 
-[data-bc-bp-logout-container] [data-bc-logout-icon] {
+[data-bc-bp-store-container] [data-bc-store-icon] {
     vertical-align: middle;
     cursor: pointer;
     font-style: normal;
     font-size: 15px;
 }
 
-[data-bc-bp-logout-container] [data-bc-logout-icon] * {
+[data-bc-bp-store-container] [data-bc-store-icon] * {
     color: #2b2b2b;
     fill: #2b2b2b;
 }

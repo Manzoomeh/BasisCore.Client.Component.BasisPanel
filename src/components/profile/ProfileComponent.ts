@@ -25,9 +25,11 @@ export default class ProfileComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): Promise<void> {
-    const nodes = this.container.querySelector("basis");
+    const nodes = this.container.querySelectorAll("basis");
     if (nodes) {
-      this.owner.processNodesAsync([nodes]);
+      nodes.forEach((node) => {
+        this.owner.processNodesAsync([node]);
+      });
     }
 
     this.container.querySelector("[data-bc-user-show-info]")?.addEventListener("click", (e) => {

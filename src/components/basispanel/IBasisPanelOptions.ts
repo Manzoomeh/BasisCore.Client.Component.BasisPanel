@@ -1,4 +1,6 @@
 import ILogoutOptions from "../logout/ILogoutOptions";
+import ICartOptions from "../cart/ICartOptions";
+import IStoreOptions from "../store/IStoreOptions";
 import { INotificationOptions } from "../notification/options/INotificationOptions";
 
 export default interface IBasisPanelOptions {
@@ -13,6 +15,8 @@ export default interface IBasisPanelOptions {
   checkRkey: ICheckRkeyOptions;
   culture: ICultureOptions;
   logout: ILogoutOptions;
+  cart: ICartOptions;
+  store: IStoreOptions;
   notification: INotificationOptions;
   addtoDashboard: string;
   removeFromDashbaord: string;
