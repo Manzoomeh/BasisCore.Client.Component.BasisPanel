@@ -6,6 +6,7 @@ import { INotificationOptions } from "../notification/options/INotificationOptio
 export default interface IBasisPanelOptions {
   rKey: string;
   avatar: string;
+  logo: string;
   baseUrl: IPanelPartUrlOptions;
   themeUrl: IUrlTheme;
   dataUrl: IUrlCollectionOption;

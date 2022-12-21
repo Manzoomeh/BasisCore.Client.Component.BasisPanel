@@ -37,6 +37,8 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       this.container.setAttribute("style", style);
     }
 
+    this.container.querySelector("[data-bc-bp-main-header] [data-bc-bp-logo] a").setAttribute("href", this.options.logo)
+
     this.container.addEventListener("click", function (e) {
       const currentElement = e.target as HTMLElement;
 
