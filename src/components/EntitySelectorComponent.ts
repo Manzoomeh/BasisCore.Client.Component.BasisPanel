@@ -278,11 +278,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           li.appendChild(lockIcon);
         }
        
-        if(id == this.currentOwnerid){
+        if(id == this.currentOwnerid && this._isFirst){
           const entity = this.entityList.find((x) => x.id == id);
           await this.setActiveAsync(id);
           LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
            this.owner.setSource(this.getSourceId(), entity ?? {});
+           this.setActive();
            this.selectItem(li);
            const businessActive = this.container.querySelector(".active-business")
            const serviceActive = this.container.querySelector(".active-corporate")
@@ -297,11 +298,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
         }
    
-        if(id == this.currentDomianid){
+        if(id == this.currentDomianid && this._isFirst){
           const entity = this.entityList.find((x) => x.id == id);
           await this.setActiveAsync(id);
           LocalStorageUtil.setEntitySelectorCurrentValue("business", id);
            this.owner.setSource(this.getSourceId(), entity ?? {});
+           this.setActive();
            this.selectItem(li);
            const businessActive = this.container.querySelector(".active-business")
            const serviceActive = this.container.querySelector(".active-corporate")
@@ -315,10 +317,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
        }
         this.element.appendChild(li);
-        if(list?.length == 1 ){
+        if(list?.length == 1 && this._isFirst){
           await this.setActiveAsync(list[0].id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
            this.owner.setSource(this.getSourceId(), list[0] ?? {});
+           this.setActive();
            this.selectItem(li);
            const businessActive = this.container.querySelector(".active-business")
            const serviceActive = this.container.querySelector(".active-corporate")
