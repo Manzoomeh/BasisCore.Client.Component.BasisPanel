@@ -26,19 +26,37 @@ export default class SidebarComponent extends PageWidgetComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    this.container.setAttribute("gs-x", this.param.x.toString());
-    this.container.setAttribute("gs-y", this.param.y.toString());
-    this.container.setAttribute("gs-w", this.param.w.toString());
-    this.container.setAttribute("gs-h", this.param.h.toString());
+    if (this.deviceId == 2) {
+      // add Event Listeners
+      const openedSidebar = this.container.querySelector("[data-bc-bp-sidebar-opened]");
+      const closedSidebar = this.container.querySelector("[data-bc-bp-sidebar-closed]");
+      const navbarSidebar = this.container.querySelector("[data-bc-sidebar-container]");
+      const sidebarOverlay = this.container.querySelector("[data-bc-bp-d2-sidebar-overlay]");
 
-    const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
-    const cell = parent.offsetWidth / 12;
-
-    (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
-    (this.container as HTMLElement).style.top = `${
-      this.param.y * cell + parent.offsetTop
-    }px`;
-    // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+      openedSidebar.addEventListener("click", (e) => {
+        this.toggleSidebar([navbarSidebar, sidebarOverlay]);
+      });
+      closedSidebar.addEventListener("click", (e) => {
+        this.toggleSidebar([navbarSidebar, sidebarOverlay]);
+      });
+      sidebarOverlay.addEventListener("click", (e) => {
+        this.toggleSidebar([navbarSidebar, sidebarOverlay]);
+      });
+    } else {
+      this.container.setAttribute("gs-x", this.param.x.toString());
+      this.container.setAttribute("gs-y", this.param.y.toString());
+      this.container.setAttribute("gs-w", this.param.w.toString());
+      this.container.setAttribute("gs-h", this.param.h.toString());
+      
+      const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
+      const cell = parent.offsetWidth / 12;
+  
+      (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
+      (this.container as HTMLElement).style.top = `${
+        this.param.y * cell + parent.offsetTop
+      }px`;
+      // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
+    }
 
     const mainDiv = this.container.querySelector(
       "[data-bc-sidebar-levels='firstLevel']"
@@ -135,5 +153,12 @@ export default class SidebarComponent extends PageWidgetComponent {
       arguments: args
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  }
+
+  private toggleSidebar(elements: Array<Element>) {
+    elements.forEach((el) => {
+      el.classList.toggle('active');
+    });
+    document.body.classList.toggle('scrolling');
   }
 }
