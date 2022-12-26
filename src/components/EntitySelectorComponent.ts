@@ -277,45 +277,42 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           });
           li.appendChild(lockIcon);
         }
-
-        if(id == this.currentOwnerid && this._isFirst ){
-          const entity = this.entityList.find((x) => x.id == id);
-          await this.setActiveAsync(id);
-          // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
-           this.owner.setSource(this.getSourceId(), entity ?? {});
-          //  this.setActive();
-           this.selectItem(li);
-           const businessActive = this.container.querySelector(".active-business")
-           const serviceActive = this.container.querySelector(".active-corporate")
-           if(businessActive){
-            businessActive.classList.remove("active-business")
-           }
-           if(serviceActive){
-            serviceActive.classList.remove("active-corporate")
-           }
-
-
-
-        }
+      //   console.log("check" ,this.currentOwnerid , this._isFirst )
+      //   if(id == this.currentOwnerid && this._isFirst ){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
+      //      this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     //  this.setActive();
+      //      this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
+      //   }
    
-        if(id == this.currentDomianid && this._isFirst){
-          const entity = this.entityList.find((x) => x.id == id);
-          await this.setActiveAsync(id);
-          // LocalStorageUtil.setEntitySelectorCurrentValue("business", id);
-           this.owner.setSource(this.getSourceId(), entity ?? {});
-          //  this.setActive();
-           this.selectItem(li);
-           const businessActive = this.container.querySelector(".active-business")
-           const serviceActive = this.container.querySelector(".active-corporate")
-           if(businessActive){
-            businessActive.classList.remove("active-business")
-           }
-           if(serviceActive){
-            serviceActive.classList.remove("active-corporate")
-           }
+      //   if(id == this.currentDomianid && this._isFirst){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     // LocalStorageUtil.setEntitySelectorCurrentValue("business", id);
+      //      this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     //  this.setActive();
+      //      this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
 
 
-       }
+      //  }
         this.element.appendChild(li);
         //ver 2
         if(list?.length == 1){
