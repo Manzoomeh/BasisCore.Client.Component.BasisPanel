@@ -277,13 +277,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           });
           li.appendChild(lockIcon);
         }
-       
-        if(id == this.currentOwnerid && this._isFirst){
+
+        if(id == this.currentOwnerid && this._isFirst ){
           const entity = this.entityList.find((x) => x.id == id);
           await this.setActiveAsync(id);
-          LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
+          // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
            this.owner.setSource(this.getSourceId(), entity ?? {});
-           this.setActive();
+          //  this.setActive();
            this.selectItem(li);
            const businessActive = this.container.querySelector(".active-business")
            const serviceActive = this.container.querySelector(".active-corporate")

@@ -105,6 +105,11 @@ const businessList = [
     title: "mitragasht.com",
     ownerid: 8355,
   },
+  {
+    id: 4235,
+    title: "fingerfood.ir",
+    ownerid: 8,
+  },
 ];
 router.get("/:rKey/list", function (req, res) {
   const business = businessList.filter((x) => x.ownerid == active.corporate);
