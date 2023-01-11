@@ -393,7 +393,7 @@
 }
 
 body.scrolling {
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 }
 
 [data-bc-bp-d2-menu-wrapper] [data-bc-bp-d2-menu-opened] {

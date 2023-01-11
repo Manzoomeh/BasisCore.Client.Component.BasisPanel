@@ -18,6 +18,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected mustReload = true;
   private currentOwnerid:number = 0
   private currentDomianid:number = 0
+  private ownerId : number = 0 
+  private domainId :number = 0
+  private firstLoginFromOtherWebSitesService = false
+  private firstLoginFromOtherWebSitesBusiness = false
   
   public businessComponentFlag: boolean = false;
   constructor(
@@ -55,6 +59,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const checkkrkeyInfo  =await this.getCurrentService()
     this.currentOwnerid = checkkrkeyInfo["currentOwnerid"]
     this.currentDomianid = checkkrkeyInfo["currentDmnid"]
+    this.domainId = checkkrkeyInfo["dmnid"]
+    this.ownerId = checkkrkeyInfo["ownerid"]
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
     const elClick = this.element
@@ -87,6 +93,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
 
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
+    
     if (this._isFirst) {
       this._isFirst = false;
       if (this.mustReload) {
@@ -229,9 +236,79 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const li = document.createElement("li");
         // const div = document.createElement("div");
         li.setAttribute("data-id", item.id.toString());
+        li.innerHTML = `<div data-bc-main-title="">${item.title}</div>`;
+        const id = parseInt(li.getAttribute("data-id"));
+        if (this.ownerType == "business") {
+          const lockIcon = document.createElement("span");
+          lockIcon.setAttribute("data-bc-business-freeze-btn", "");
+          lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
+          lockIcon.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();            
+            this.setActiveAsync(id);
+            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
+      
+            this.selectItem(li, true);
+          });
+          li.appendChild(lockIcon);
+        }
+       
+      //   if(id == this.currentOwnerid && this.ownerId != 30){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
+      //      this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     //  this.signalToDisplayPage(id);
+      //     //  this.setActive();
+      //      this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
+
+      //   }
+   
+      //   if(id == this.currentDomianid && this.domainId != 30){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
+
+
+      //  }
+      if(id == this.currentOwnerid && this.ownerId != 30 && this.firstLoginFromOtherWebSitesService == false){
+        const entity = this.entityList.find((x) => x.id == id);
+        this.ownerType = "corporate"
+        this.owner.setSource(this.getSourceId(), entity ?? {});
+        this.resetBusinessEntity();
+        this.selectItem(li);        
+        this.firstLoginFromOtherWebSitesService = true
+        this.trySelectFromLocalStorageAsync()
+      }
+      
+      if(id == this.currentDomianid && this.domainId != 30 && this.firstLoginFromOtherWebSitesBusiness == false){
+        this.ownerType = "business"
+        this.selectItem(li);        
+        this.firstLoginFromOtherWebSitesBusiness = true
+        this.trySelectFromLocalStorageAsync()
+      }
         li.addEventListener("click", async (e) => {
+        
           e.preventDefault();
           const id = parseInt(li.getAttribute("data-id"));
+         
           const entity = this.entityList.find((x) => x.id == id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
           if (this.profile) {
@@ -239,6 +316,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               await this.onItemSelectAsync(id);
             }
           }
+       
           this.owner.setSource(this.getSourceId(), entity ?? {});
           if (this.ownerType == "corporate") {
             // choose corporate
@@ -250,88 +328,24 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           this.setActive();
           this.selectItem(li);
         });
-        li.innerHTML = `<div data-bc-main-title="">${item.title}</div>`;
-        const id = parseInt(li.getAttribute("data-id"));
-        if (this.ownerType == "business") {
-          const lockIcon = document.createElement("span");
-          lockIcon.setAttribute("data-bc-business-freeze-btn", "");
-          lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
-          lockIcon.addEventListener("click", async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            this.setActiveAsync(id);
-            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
-            // // refresh page
-            // const newParam: IPageLoaderParam = {
-            //   pageId: LocalStorageUtil.getCurrentPage().pageId,
-            //   owner: LocalStorageUtil.getCurrentPage().owner,
-            //   ownerId: LocalStorageUtil.getCurrentPage().ownerId,
-            //   ownerUrl: LocalStorageUtil.getCurrentPage().ownerUrl,
-            //   rKey: this.options.rKey,
-            //   pageMethod: LocalStorageUtil.getCurrentPage().pageMethod,
-            // };
-            // this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       
-            this.selectItem(li, true);
-          });
-          li.appendChild(lockIcon);
-        }
-       
-        if(id == this.currentOwnerid && this._isFirst){
-          const entity = this.entityList.find((x) => x.id == id);
-          await this.setActiveAsync(id);
-          LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
-           this.owner.setSource(this.getSourceId(), entity ?? {});
-           this.setActive();
-           this.selectItem(li);
-           const businessActive = this.container.querySelector(".active-business")
-           const serviceActive = this.container.querySelector(".active-corporate")
-           if(businessActive){
-            businessActive.classList.remove("active-business")
-           }
-           if(serviceActive){
-            serviceActive.classList.remove("active-corporate")
-           }
-
-
-
-        }
-   
-        if(id == this.currentDomianid && this._isFirst){
-          const entity = this.entityList.find((x) => x.id == id);
-          await this.setActiveAsync(id);
-          LocalStorageUtil.setEntitySelectorCurrentValue("business", id);
-           this.owner.setSource(this.getSourceId(), entity ?? {});
-           this.setActive();
-           this.selectItem(li);
-           const businessActive = this.container.querySelector(".active-business")
-           const serviceActive = this.container.querySelector(".active-corporate")
-           if(businessActive){
-            businessActive.classList.remove("active-business")
-           }
-           if(serviceActive){
-            serviceActive.classList.remove("active-corporate")
-           }
-
-
-       }
+        
+        // if(list?.length == 1 ){
+        //   await this.setActiveAsync(list[0].id);
+        //   LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
+        //    this.owner.setSource(this.getSourceId(), list[0] ?? {});
+        //    this.setActive();
+        //    this.selectItem(li);
+        //    const businessActive = this.container.querySelector(".active-business")
+        //    const serviceActive = this.container.querySelector(".active-corporate")
+        //    if(businessActive){
+        //     businessActive.classList.remove("active-business")
+        //    }
+        //    if(serviceActive){
+        //     serviceActive.classList.remove("active-corporate")
+        //    }
+        // }
         this.element.appendChild(li);
-        if(list?.length == 1 && this._isFirst){
-          await this.setActiveAsync(list[0].id);
-          LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
-           this.owner.setSource(this.getSourceId(), list[0] ?? {});
-           this.setActive();
-           this.selectItem(li);
-           const businessActive = this.container.querySelector(".active-business")
-           const serviceActive = this.container.querySelector(".active-corporate")
-           if(businessActive){
-            businessActive.classList.remove("active-business")
-           }
-           if(serviceActive){
-            serviceActive.classList.remove("active-corporate")
-           }
-        }
       });
      
     }
