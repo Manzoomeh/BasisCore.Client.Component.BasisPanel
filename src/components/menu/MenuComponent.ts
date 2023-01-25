@@ -22,6 +22,7 @@ export default class MenuComponent
   private current: MenuElement;
 
   constructor(owner: IUserDefineComponent) {
+
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
     this.cache = new MenuCacheManager(this.options.checkRkey, this.deviceId as number);
@@ -78,6 +79,7 @@ export default class MenuComponent
   }
 
   public initializeAsync(): Promise<void> {
+
     this.owner.addTrigger([
       DefaultSource.SHOW_MENU,
       DefaultSource.BUSINESS_SOURCE,
@@ -87,6 +89,8 @@ export default class MenuComponent
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
+      
+      this.container.setAttribute(`data-bc-bp-menu-seperation` , source.rows[0].owner)
       await this.loadDataAsync(source.rows[0]);
     }
   }
