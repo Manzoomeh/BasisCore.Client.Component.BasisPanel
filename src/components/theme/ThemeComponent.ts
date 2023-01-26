@@ -35,30 +35,30 @@ export default class ThemeComponent extends BasisPanelChildComponent {
     };
     const themeName = this.defaultTheme["colorMode"].split(" ")[0];
     this.setTheme(themeName);
-    if (themeName == "dark") {
-      this.container
-        .querySelector("[data-bc-basispanel-theme-selector]")
-        .setAttribute("checked", "");
-    }
-    this.container
-      .querySelector("[data-bc-basispanel-theme-selector]")
-      .addEventListener("change", async (e) => {
-        const op = e.target as HTMLInputElement;
 
-        if (op.checked) {
-          this.setTheme("dark");
-          const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
-            rKey: this.options.rKey,
-          });
-          await HttpUtil.sendFormData(url, "POST", `mode=dark mode`);
-        } else {
-          this.setTheme("light");
-          const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
-            rKey: this.options.rKey,
-          });
-          await HttpUtil.sendFormData(url, "POST", `mode=light mode`);
-        }
-      });
+    const themeSelector = this.container.querySelector("[data-bc-basispanel-theme-selector]");
+    if (themeSelector) {
+      if (themeName == "dark") {
+        themeSelector.setAttribute("checked", "");
+      }
+      themeSelector.addEventListener("change", async (e) => {
+          const op = e.target as HTMLInputElement;
+  
+          if (op.checked) {
+            this.setTheme("dark");
+            const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
+              rKey: this.options.rKey,
+            });
+            await HttpUtil.sendFormData(url, "POST", `mode=dark mode`);
+          } else {
+            this.setTheme("light");
+            const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
+              rKey: this.options.rKey,
+            });
+            await HttpUtil.sendFormData(url, "POST", `mode=light mode`);
+          }
+        });
+    }
   }
   
   private setTheme(theme: string): boolean {
