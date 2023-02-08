@@ -37,7 +37,26 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       this.container.setAttribute("style", style);
     }
 
-    this.container.querySelector("[data-bc-bp-main-header] [data-bc-bp-logo] a").setAttribute("href", this.options.logo)
+    this.container.querySelector("[data-bc-bp-main-header] [data-bc-bp-logo] a")?.setAttribute("href", this.options.logo);
+
+    if (this.deviceId == 2) {
+      // add Event Listeners
+      const openedMore = this.container.querySelector("[data-bc-bp-header-more-opened]");
+      const closedMore = this.container.querySelector("[data-bc-bp-header-more-closed]");
+      const navbarMore = this.container.querySelector("[data-bc-bp-header-more-container]");
+      
+      openedMore.addEventListener("click", (e) => {
+        this.toggleHeaderMore([navbarMore]);
+      });
+      closedMore.addEventListener("click", (e) => {
+        this.toggleHeaderMore([navbarMore]);
+      });
+
+      const openedHeaderLevels = this.container.querySelector("[data-bc-bp-header-levels-opened]");
+      openedHeaderLevels.addEventListener("click", (e) => {
+        this.container.querySelector("[data-bc-bp-header-levels]").classList.toggle('active');
+      });
+    }
 
     this.container.addEventListener("click", function (e) {
       const currentElement = e.target as HTMLElement;
@@ -46,8 +65,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       if (currentElement.getAttribute("data-bc-user-info-image") === null &&
       currentElement.getAttribute("data-bc-user-image") === null) {
         document
-          .querySelector("[data-bc-user-info]")
-          .setAttribute("data-status", "close");
+          .querySelector("[data-bc-user-info]")?.setAttribute("data-status", "close");
       }
 
       // for close menu
@@ -64,26 +82,33 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       // for close corporate drop down
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
-        currentElement.getAttribute("data-bc-corporate-icon-drop-down") ===
-          null &&
-        currentElement.getAttribute("data-bc-corporate-search-input") === null
+        currentElement.getAttribute("data-bc-corporate-icon-drop-down") === null &&
+        currentElement.getAttribute("data-bc-corporate-search-input") === null &&
+        currentElement.getAttribute("data-bc-corporate-drop-down-wrapper") === null &&
+        currentElement.getAttribute("data-bc-corporate-drop-down-title") === null
       ) {
         document
-          .querySelector("[data-bc-corporate-drop-down]")
-          .setAttribute("data-status", "close");
+          .querySelector("[data-bc-corporate-drop-down]")?.setAttribute("data-status", "close");
       }
 
       // for close business drop down
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
-        currentElement.getAttribute("data-bc-business-icon-drop-down") ===
-          null &&
-        currentElement.getAttribute("data-bc-business-search-input") === null
+        currentElement.getAttribute("data-bc-business-icon-drop-down") === null &&
+        currentElement.getAttribute("data-bc-business-search-input") === null &&
+        currentElement.getAttribute("data-bc-business-drop-down-wrapper") === null &&
+        currentElement.getAttribute("data-bc-business-drop-down-title") === null
       ) {
         document
-          .querySelector("[data-bc-business-drop-down]")
-          .setAttribute("data-status", "close");
+          .querySelector("[data-bc-business-drop-down]")?.setAttribute("data-status", "close");
       }
     });
+  }
+
+  private toggleHeaderMore(elements: Array<Element>) {
+    elements.forEach((el) => {
+      el.classList.toggle('active');
+    });
+    document.body.classList.toggle('scrolling');
   }
 }

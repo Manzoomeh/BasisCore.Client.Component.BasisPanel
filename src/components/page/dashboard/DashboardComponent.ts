@@ -36,10 +36,10 @@ export default class DashboardComponent extends PageComponent {
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
 
-    const wrapper = this.container;
-    this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
-      wrapper.querySelector("[data-bc-page-widgets-list-toggle]").classList.toggle('active');
-    });
+    // const wrapper = this.container;
+    // this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
+    //   wrapper.querySelector("[data-bc-page-widgets-list-toggle]").classList.toggle('active');
+    // });
   }
 
   public async runAsync(source?: ISource) {

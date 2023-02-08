@@ -46,37 +46,37 @@ export default class MenuComponent
         }
       };
     } else if (this.deviceId == 2) {
-      // add Event Listeners
-      const openedMenu = this.container.querySelector("[data-bc-bp-menu-opened]");
-      // const closedMenu = this.container.querySelector('.closed-menu');
-      const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
-      const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
+      // // add Event Listeners
+      // const openedMenu = this.container.querySelector("[data-bc-bp-menu-opened]");
+      // // const closedMenu = this.container.querySelector('.closed-menu');
+      // const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
+      // const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
 
-      openedMenu.addEventListener("click", (e) => {
-        this.toggleMenu([navbarMenu, menuOverlay]);
-      });
-      // closedMenu.addEventListener("click", (e) => {
+      // openedMenu.addEventListener("click", (e) => {
       //   this.toggleMenu([navbarMenu, menuOverlay]);
       // });
-      menuOverlay.addEventListener("click", (e) => {
-        this.toggleMenu([navbarMenu, menuOverlay]);
-      });
+      // // closedMenu.addEventListener("click", (e) => {
+      // //   this.toggleMenu([navbarMenu, menuOverlay]);
+      // // });
+      // menuOverlay.addEventListener("click", (e) => {
+      //   this.toggleMenu([navbarMenu, menuOverlay]);
+      // });
     }
   }
 
-  private toggleMenu(elements: Array<Element>) {
-    const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-    openMenu.forEach((e) => {
-      e.querySelector("[data-bc-bp-submenu]")?.removeAttribute('style');
-      e.querySelector("[data-bc-bp-menu-external]")?.removeAttribute('style');
-      e.classList.remove('active');
-    });
+  // private toggleMenu(elements: Array<Element>) {
+  //   const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+  //   openMenu.forEach((e) => {
+  //     e.querySelector("[data-bc-bp-submenu]")?.removeAttribute('style');
+  //     e.querySelector("[data-bc-bp-menu-external]")?.removeAttribute('style');
+  //     e.classList.remove('active');
+  //   });
 
-    elements.forEach((el) => {
-      el.classList.toggle('active');
-    });
-    document.body.classList.toggle('scrolling');
-  }
+  //   elements.forEach((el) => {
+  //     el.classList.toggle('active');
+  //   });
+  //   document.body.classList.toggle('scrolling');
+  // }
 
   public initializeAsync(): Promise<void> {
 
@@ -146,11 +146,11 @@ export default class MenuComponent
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
 
-      if (this.deviceId == 2) {
-        const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
-        const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
-        this.toggleMenu([navbarMenu, menuOverlay]);
-      }
+      // if (this.deviceId == 2) {
+      //   const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
+      //   const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
+      //   this.toggleMenu([navbarMenu, menuOverlay]);
+      // }
   }
 
   public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {

@@ -26,6 +26,7 @@ export default class NotificationComponent
 
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-notification-container");
+    this.container.setAttribute("data-count", "0");
   }
 
   storeAsGlobal(
@@ -54,6 +55,27 @@ export default class NotificationComponent
   }
 
   public async initializeAsync(): Promise<void> {
+    // if (this.deviceId == 2) {
+    //   // add event listeners
+    //   this.container.querySelector("[data-bc-notification-alert]").addEventListener("click", (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     this.container.closest("[data-bc-bp-header-items]").classList.toggle("openedNotification");
+    //     setTimeout(() => {
+    //       this.container.querySelector("[data-bc-notification-dropdown-wrapper]").classList.toggle("active");
+    //     }, 200);
+    //   });
+
+    //   this.container.querySelector("[data-bc-notification-dropdown-closed]").addEventListener("click", (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     this.container.querySelector("[data-bc-notification-dropdown-wrapper]").classList.toggle("active");
+    //     setTimeout(() => {
+    //       this.container.closest("[data-bc-bp-header-items]").classList.toggle("openedNotification");
+    //     }, 200);
+    //   });
+    // }
+
     this._provider = this.options.notification.providers.map(
       (provider, index) => new NotificationProvider(this, provider, index)
     );

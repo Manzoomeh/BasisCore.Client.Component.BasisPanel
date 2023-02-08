@@ -1,14 +1,60 @@
+[data-bc-bp-scheduler-container="d2"] {
+    float: left;
+    width: 40px;
+    height: 40px;
+    /* background-color: #E8E8E8; */
+    /* background: rgba(0, 75, 133, 0.1); */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* [data-bc-bp-scheduler-container="d2"][data-count="0"] {
+    background: #E8E8E8;
+} */
+
+.openedNotification [data-bc-bp-scheduler-container="d2"] {
+    opacity: 0;
+}
+
 [data-bc-d2-task-list] [data-bc-d2-task-list-alert] {
-    height: 14px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 15px;
+    background: rgba(0, 75, 133, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+[data-bc-bp-scheduler-container="d2"][data-count="0"] [data-bc-d2-task-list] [data-bc-d2-task-list-alert] {
+    background: #E8E8E8;
+}
+
+.openedScheduler [data-bc-d2-task-list] [data-bc-d2-task-list-alert] {
+    transform: translateX(-70px);
 }
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-icon] {
     vertical-align: middle;
-    width: 18px;
-    height: 18px;
+    /* width: 18px; */
+    /* height: 18px; */
     overflow: hidden;
-    font-size: 18px;
-    color: #2b2b2b;
+    /* font-size: 18px; */
+    /* color: #2b2b2b; */
+}
+
+[data-bc-d2-task-list] [data-bc-d2-task-list-icon] path {
+    fill: #004B85 !important;
+}
+
+[data-bc-bp-scheduler-container="d2"][data-count="0"] [data-bc-d2-task-list] [data-bc-d2-task-list-icon] path {
+    fill: #767676 !important;
 }
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-icon] * {
@@ -17,8 +63,8 @@
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-alarm] {
     position: absolute;
-    /* right: -4px; */
-    top: -4px;
+    right: -2px;
+    top: -2px;
     width: 18px;
     height: 18px;
     border-radius: 100%;
@@ -32,81 +78,71 @@
     justify-content: center;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list] [data-bc-d2-task-list-alarm] {
-    right: -4px;
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-alarm] {
-    right: -4px;
+[data-bc-bp-scheduler-container="d2"][data-count="0"] [data-bc-d2-task-list] [data-bc-d2-task-list-alarm] {
+    display: none;
 }
 
 /* ********** task list dropdown ********** */
 [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown] {
-    -webkit-box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
-    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
-    background-color: #fff;
+    /* -webkit-box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1); */
+    /* box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1); */
+    background: #e6edf3;
     -webkit-transition: all linear 0.3s;
     transition: all linear 0.3s;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-    /* direction: rtl; */
-    border-radius: 5px;
-    border: 1px solid #E5E5E5;
-}
-
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown] {
     direction: rtl;
+    border-radius: 15px;
+    /* border: 1px solid #E5E5E5; */
+    padding: 10px 30px;
+    height: 100%;
+    position: relative;
 }
 
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown] {
-    direction: ltr;
+[data-bc-d2-task-list] [data-bc-d2-task-list-dropdown-closed] {
+    padding: 10px;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
 }
 
 [data-bc-d2-task-list-dropdown-wrapper] {
-    -webkit-transform: translateY(30px);
-    transform: translateY(30px);
+    width: 40px;
+    height: 40px;
+    /* -webkit-transform: translateY(30px); */
+    /* transform: translateY(30px); */
     opacity: 0;
     visibility: hidden;
-    height: 0;
-    /* right: -17px !important; */
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 999;
-    position: absolute;
-    top: 30px;
-    padding-top: 15px;
+    padding: 15px 25px;
     transition: all 0.3s ease-in-out;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list-dropdown-wrapper] {
-    right: -17px !important;
+.active[data-bc-d2-task-list-dropdown-wrapper] {
+    width: 100%;
+    height: 390px;
+    opacity: 1;
+    /* -webkit-transform: translateY(0px); */
+    /* transform: translateY(0px); */
+    visibility: visible;
 }
 
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list-dropdown-wrapper] {
-    right: -17px !important;
-}
-
-[data-bc-bp-scheduler-container]:hover [data-bc-d2-task-list-dropdown-wrapper] {
+/* [data-bc-bp-scheduler-container]:hover [data-bc-d2-task-list-dropdown-wrapper] {
     opacity: 1;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
     visibility: visible;
     height: auto;
-}
+} */
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::before,
 [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::after {
-    right: 28px !important;
-    left: unset !important;
-}
-
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::before,
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::after {
-    right: 28px !important;
-    left: unset !important;
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::before,
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-dropdown]::after {
     right: 28px !important;
     left: unset !important;
 }
@@ -115,37 +151,61 @@
 [data-bc-d2-task-list] [data-bc-d2-task-list-wrapper] {
     position: relative;
     margin: 0 auto;
-    min-width: 350px;
-    width: 350px;
+    /* min-width: 350px; */
+    /* width: 350px; */
     max-width: 100%;
+    height: 100%;
     overflow: hidden;
+}
+
+[data-bc-d2-task-list] [data-bc-d2-task-list-count] {
+    margin-bottom: 15px;
+}
+
+[data-bc-d2-task-list] [data-bc-d2-task-list-count-text] {
+    width: max-content;
+    background: rgba(118, 118, 118, 0.1);
+    border-radius: 15px;
+    padding: 8px 10px;
+    font-size: 10px;
+    line-height: 10px;
 }
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-contents] {
     height: auto;
     width: 100%;
-    /* float: left; */
+    float: left;
     z-index: 5;
-    background: #fefefe;
+    /* background: #fefefe; */
+    background: rgba(255, 255, 255);
     box-sizing: border-box;
     scrollbar-width: thin;
-    max-height: 325px;
+    max-height: calc(100% - 41px);
     overflow-y: auto;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
-}
-
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-task-list] [data-bc-d2-task-list-contents] {
-    float: left;
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-task-list] [data-bc-d2-task-list-contents] {
-    float: right;
+    padding: 15px;
+    border-radius: 15px;
+    /* box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1); */
 }
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-noTask] {
-    color: #004B85;
-    font-size: 13px;
+    border: 1px dashed #767676;
+    border-radius: 25px;
+    min-height: 138px;
+    padding: 30px 0;
+    /* color: #004B85; */
+    /* font-size: 13px; */
+    /* text-align: center; */
+}
+
+[data-bc-d2-task-list] [data-bc-d2-task-list-noTask-image] {
     text-align: center;
+    margin-bottom: 24px;
+}
+
+[data-bc-d2-task-list] [data-bc-d2-task-list-noTask-text] {
+    color: rgba(118, 118, 118, 0.5);
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 17px;
 }

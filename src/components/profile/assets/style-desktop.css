@@ -1,3 +1,15 @@
+[data-bc-bp-profile-container="d1"] {
+    /* float: right; */
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-profile-container="d1"] {
+    float: right;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-profile-container="d1"] {
+    float: right;
+}
+
 [data-bc-d1-user-info] {
     /* float: right; */
     height: 48px;

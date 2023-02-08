@@ -1,28 +1,60 @@
 [data-bc-bp-notification-container="d2"] {
-    /* margin-right: 15px; */
+    float: left;
+    width: 40px;
+    height: 40px;
+    /* background-color: #E4E7F4; */
+    /* background: rgba(0, 75, 133, 0.1); */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-bp-notification-container="d2"] {
-    /* margin-right: 15px; */
-}
+/* [data-bc-bp-notification-container="d2"][data-count="0"] {
+    background: #E8E8E8;
+} */
 
-[data-bc-bp-direction="leftToRight"] [data-bc-bp-notification-container="d2"] {
-    /* margin-left: 15px; */
+.openedScheduler [data-bc-bp-notification-container="d2"] {
+    opacity: 0;
 }
 
 [data-bc-d2-notification] [data-bc-d2-notification-alert] {
-    height: 14px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 15px;
+    background: rgba(0, 75, 133, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+[data-bc-bp-notification-container="d2"][data-count="0"] [data-bc-d2-notification] [data-bc-d2-notification-alert] {
+    background: #E8E8E8;
+}
+
+.openedNotification [data-bc-d2-notification] [data-bc-d2-notification-alert] {
+    transform: translateX(-126px);
 }
 
 [data-bc-d2-notification] [data-bc-d2-notification-icon] {
     vertical-align: middle;
-    width: 18px;
-    height: 18px;
+    /* width: 18px; */
+    /* height: 18px; */
     overflow: hidden;
-    /* -webkit-animation: tada 1.5s ease infinite;
-    animation: tada 1.5s ease infinite; */
-    /* -webkit-animation: ring 6s linear infinite;
-    animation: ring 6s linear infinite; */
+    /* font-size: 18px; */
+    /* color: #2b2b2b; */
+}
+
+[data-bc-d2-notification] [data-bc-d2-notification-icon] path {
+    fill: #004B85 !important;
+}
+
+[data-bc-bp-notification-container="d2"][data-count="0"] [data-bc-d2-notification] [data-bc-d2-notification-icon] path {
+    fill: #767676 !important;
 }
 
 [data-bc-d2-notification] [data-bc-d2-notification-icon] * {
@@ -31,8 +63,8 @@
 
 [data-bc-d2-notification] [data-bc-d2-notification-alarm] {
     position: absolute;
-    /* right: -4px; */
-    top: -4px;
+    right: -2px;
+    top: -2px;
     width: 18px;
     height: 18px;
     border-radius: 100%;
@@ -46,10 +78,73 @@
     justify-content: center;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-notification] [data-bc-d2-notification-alarm] {
-    right: -4px;
+[data-bc-bp-notification-container="d2"][data-count="0"] [data-bc-d2-notification] [data-bc-d2-notification-alarm] {
+    display: none;
 }
 
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-notification] [data-bc-d2-notification-alarm] {
-    right: -4px;
+/* ********** notification dropdown ********** */
+[data-bc-d2-notification] [data-bc-d2-notification-dropdown] {
+    /* -webkit-box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1); */
+    /* box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1); */
+    background: #e6edf3;
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    direction: rtl;
+    border-radius: 15px;
+    /* border: 1px solid #E5E5E5; */
+    padding: 10px 30px;
+    height: 100%;
+    position: relative;
+}
+
+[data-bc-d2-notification] [data-bc-d2-notification-dropdown-closed] {
+    padding: 10px;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+[data-bc-d2-notification-dropdown-wrapper] {
+    width: 40px;
+    height: 40px;
+    /* -webkit-transform: translateY(30px); */
+    /* transform: translateY(30px); */
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    padding: 15px 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.active[data-bc-d2-notification-dropdown-wrapper] {
+    width: 100%;
+    height: 390px;
+    opacity: 1;
+    /* -webkit-transform: translateY(0px); */
+    /* transform: translateY(0px); */
+    visibility: visible;
+}
+
+/* movaghatan baraye faze 1 bardashte shod */
+/* [data-bc-bp-notification-container="d2"]:hover [data-bc-d2-notification-dropdown-wrapper] {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+    visibility: visible;
+    height: auto;
+} */
+
+
+[data-bc-d2-notification] [data-bc-d2-notification-dropdown]::before,
+[data-bc-d2-notification] [data-bc-d2-notification-dropdown]::after {
+    right: 28px !important;
+    left: unset !important;
 }

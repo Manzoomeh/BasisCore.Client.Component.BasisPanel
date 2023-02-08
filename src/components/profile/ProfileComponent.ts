@@ -32,6 +32,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       });
     }
 
+    this.container.classList.add("active-user");
     this.container.querySelector("[data-bc-user-show-info]")?.addEventListener("click", (e) => {
       e.preventDefault();
       const elStatus = this.container.querySelector("[data-bc-user-info]");
@@ -47,6 +48,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       e.preventDefault();
       this.signalToDisplayMenu();
       LocalStorageUtil.resetCurrentUserId();
+      this.container.classList.add("active-user");
       this.container
         .closest("[data-bc-bp-main-header]")
         .querySelector(".active-business")
@@ -55,6 +57,11 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         .closest("[data-bc-bp-main-header]")
         .querySelector(".active-corporate")
         ?.classList.remove("active-corporate");
+
+      if (this.deviceId == 2) {
+        this.container.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "user");
+        this.container.closest("[data-bc-bp-header-levels]").classList.remove("active");
+      }
     });
 
     return Promise.resolve();

@@ -182,6 +182,10 @@ export default class MenuElementMaker {
         li.setAttribute("data-bc-menu-active", "");
       }
 
+      if (this.deviceId == 2) {
+        li.closest("[data-bc-bp-header-more-container]").classList.remove("active");
+      }
+
       LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
     });
     pageLookup.set(node.pid, menuParam);

@@ -1,28 +1,3 @@
-[data-bc-bp-scheduler-container] {
-    /* float: right; */
-    width: 32px;
-    height: 32px;
-    /* background-color: #E4E7F4; */
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* margin-right: 15px; */
-    position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-[data-bc-bp-direction="rightToLeft"] [data-bc-bp-scheduler-container] {
-    float: right;
-    margin-right: 15px;
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-bp-scheduler-container] {
-    float: right;
-    margin-right: 15px;
-}
-
 /* ********** task list item ********** */
 [data-bc-task-list] [data-bc-task-list-item] {
     border-bottom: 0.5px solid #D0D0D0;

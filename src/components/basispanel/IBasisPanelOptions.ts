@@ -72,12 +72,15 @@ export interface ILabels {
   businessTitle: string;
   businessSearchPlaceholder: string;
   schedulerNoTask: string;
+  schedulerCountTask: string;
   addToDashboardTooltip: string;
   dragAndDropMessage: string;
   widgetsTitle: string;
   widgetsTab: string;
   dashboardWidgetsTab: string;
   widgetsSettingButton: string;
-  storeTitle:string
+  storeTitle: string;
+  lightModeTitle: string;
+  darkModeTitle: string;
 }
 

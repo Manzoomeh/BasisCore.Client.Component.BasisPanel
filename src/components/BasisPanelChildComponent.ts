@@ -26,13 +26,16 @@ export default abstract class BasisPanelChildComponent
           businessTitle: "کسب‌و‌کارها",
           businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
           schedulerNoTask: "در انتظار کار جدید",
+          schedulerCountTask: "مورد آپلود",
           addToDashboardTooltip: "افزودن به داشبورد",
           dragAndDropMessage: "ویجت‌ها را بکشید و رها کنید",
           widgetsTitle: "ویجت‌ها",
           widgetsTab: "ویجت‌ها",
           dashboardWidgetsTab: "ویجت‌ میزکار",
           widgetsSettingButton: "ذخیره تغییرات",
-          storeTitle:"فروشگاه"
+          storeTitle:"فروشگاه",
+          lightModeTitle: "روز",
+          darkModeTitle: "شب"
         },
       };
     }
@@ -94,18 +97,23 @@ export default abstract class BasisPanelChildComponent
         .replace("@userTitle", this.labels.userTitle)
         .replace("@logoutTitle", this.labels.logoutTitle)
         .replace("@corporateTitle", this.labels.corporateTitle)
+        .replace("@corporateDropDownTitle", this.labels.corporateTitle)
         // .replace("@corporateSearchPlaceholder", this.labels.corporateSearchPlaceholder)
         .replace("@corporateBuy", this.labels.corporateBuy)
         .replace("@businessTitle", this.labels.businessTitle)
+        .replace("@businessDropDownTitle", this.labels.businessTitle)
         // .replace("@businessSearchPlaceholder", this.labels.businessSearchPlaceholder)
         .replace("@schedulerNoTask", this.labels.schedulerNoTask)
+        .replace("@schedulerCountTask", this.labels.schedulerCountTask)
         .replace("@addToDashboardTooltip", this.labels.addToDashboardTooltip)
         // .replace("@dragAndDropMessage", this.labels.dragAndDropMessage)
         .replace("@widgetsTitle", this.labels.widgetsTitle)
         .replace("@widgetsTab", this.labels.widgetsTab)
         .replace("@dashboardWidgetsTab", this.labels.dashboardWidgetsTab)
         .replace("@widgetsSettingButton", this.labels.widgetsSettingButton)
-        .replace("@storeTitle", this.labels.storeTitle);
+        .replace("@storeTitle", this.labels.storeTitle)
+        .replace("@lightModeTitle", this.labels.lightModeTitle)
+        .replace("@darkModeTitle", this.labels.darkModeTitle);
 
       const range = new Range();
       range.setStart(this.container, 0);

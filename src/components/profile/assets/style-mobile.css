@@ -1,41 +1,70 @@
+[data-bc-bp-profile-container="d2"] {
+    float: right;
+    /* width: calc(100% - 20px); */
+    width: 100%;
+    padding: 8px 13px;
+    border-radius: 25px;
+    margin: 0 0 5px 0;
+    opacity: 0;
+}
+
+[data-bc-bp-profile-container="d2"].active-user {
+    background: rgba(0, 75, 133, 0.1);
+    opacity: 1;
+}
+
+[data-bc-bp-d2-header-levels].active [data-bc-bp-profile-container="d2"] {
+    opacity: 1;
+}
+
 [data-bc-d2-user-info] {
-    /* float: right; */
-    height: 32px;
+    float: right;
+    width: 100%;
+    height: 30px;
     /* border-left: 0.5px solid #D0D0D0; */
     /* padding-left: 15px; */
     position: relative;
-}
-
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-user-info] {
-    float: right;
-    /* border-left: 0.5px solid #D0D0D0; */
-    /* padding-left: 15px; */
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-user-info] {
-    float: left;
-    /* border-right: 0.5px solid #D0D0D0; */
-    /* padding-right: 15px; */
-}
-
-[data-bc-d2-user-info] [data-bc-d2-user-info-image] {
-    /* float: right; */
-    height: 32px;
-    width: 32px;
-    border-radius: 5px;
     cursor: pointer;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d2-user-info] [data-bc-d2-user-info-image] {
+[data-bc-d2-user-info] [data-bc-d2-user-info-image] {
     float: right;
-}
-
-[data-bc-bp-direction="leftToRight"] [data-bc-d2-user-info] [data-bc-d2-user-info-image] {
-    float: left;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 30px;
 }
 
 [data-bc-d2-user-info] [data-bc-d2-user-info-image] img {
-    border-radius: 5px;
-    height: 32px;
-    width: 32px;
+    border-radius: 10px;
+    height: 30px;
+    width: 30px;
+}
+
+[data-bc-d2-user-info] [data-bc-d2-user-info-name] {
+    width: calc(100% - 60px);
+    height: 30px;
+    float: right;
+}
+
+[data-bc-d2-user-info] [data-bc-d2-user-title] {
+    font-size: 8px;
+    line-height: 10px;
+    text-align: right;
+    opacity: 0.6;
+    margin-bottom: 6px;
+}
+
+[data-bc-d2-user-info] [data-bc-d2-user-name] {
+    font-size: 10px;
+    line-height: 12px;
+    text-align: right;
+    width: 100%;
+    height: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
 }
