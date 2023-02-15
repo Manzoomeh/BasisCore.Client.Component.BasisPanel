@@ -65,14 +65,14 @@ export default class WidgetComponent extends PageWidgetComponent {
         const nodes = Array.from(newContent.childNodes);
         range.insertNode(newContent);
         this.owner.processNodesAsync(nodes);
-        this.container
-          .querySelectorAll("[data-bc-widget-btn-close]")
-          .forEach((btn) =>
-            btn.addEventListener("click", (e) => {
-              e.preventDefault();
-              this.removeAsync();
-            })
-          );
+        // this.container
+        //   .querySelectorAll("[data-bc-widget-btn-close]")
+        //   .forEach((btn) =>
+        //     btn.addEventListener("click", (e) => {
+        //       e.preventDefault();
+        //       this.removeAsync();
+        //     })
+        //   );
 
         if (
           this.param.addToDashboard == null ||

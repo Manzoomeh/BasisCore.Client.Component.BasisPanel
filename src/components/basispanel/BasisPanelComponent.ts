@@ -56,6 +56,11 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       openedHeaderLevels.addEventListener("click", (e) => {
         this.container.querySelector("[data-bc-bp-header-levels]").classList.toggle('active');
       });
+
+      const closedHeaderLevels = this.container.querySelector("[data-bc-bp-header-levels-back]");
+      closedHeaderLevels.addEventListener("click", (e) => {
+        this.container.querySelector("[data-bc-bp-header-levels]").classList.toggle('active');
+      });
     }
 
     this.container.addEventListener("click", function (e) {

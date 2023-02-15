@@ -33,7 +33,7 @@
     height: 30px;
     border-radius: 10px;
     cursor: pointer;
-    margin-left: 30px;
+    margin-left: 15px;
 }
 
 [data-bc-d2-user-info] [data-bc-d2-user-info-image] img {
@@ -43,7 +43,7 @@
 }
 
 [data-bc-d2-user-info] [data-bc-d2-user-info-name] {
-    width: calc(100% - 60px);
+    width: calc(100% - 45px);
     height: 30px;
     float: right;
 }

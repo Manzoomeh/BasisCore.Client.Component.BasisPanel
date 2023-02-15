@@ -64,6 +64,8 @@
 
 [data-bc-d2-menu] > li {
 	/* height: 62px; */
+	border-radius: 15px;
+	margin-bottom: 5px;
 }
 
 [data-bc-d2-menu] [data-bc-bp-menu-external-single-node]>li {

@@ -63,19 +63,21 @@ export default class LogoutComponent extends BasisPanelChildComponent {
   }
 
   public async loadDataAsync(): Promise<void> {
-    const urlFormatter = new Function(
-      "rKey",
-      `return \`${this.options.dataUrl.profile}\``
-    );
-
-    const questions = await HttpUtil.checkRkeyFetchDataAsync<
-      Array<IQuestionItem>
-    >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
-
-    this.profile = QuestionUtil.toObject(questions);
-    this.refreshUI();
-    // this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-    // this.signalToDisplayMenu();
+    if (this.deviceId == 2) {
+      const urlFormatter = new Function(
+        "rKey",
+        `return \`${this.options.dataUrl.profile}\``
+      );
+  
+      const questions = await HttpUtil.checkRkeyFetchDataAsync<
+        Array<IQuestionItem>
+      >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
+  
+      this.profile = QuestionUtil.toObject(questions);
+      this.refreshUI();
+      // this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
+      // this.signalToDisplayMenu();
+    }
   }
 
   private refreshUI() {
