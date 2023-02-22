@@ -221,6 +221,8 @@
 	/* -webkit-transition: all 0.5s ease; */
 	/* -o-transition: all 0.5s ease; */
 	/* transition: all 0.5s ease; */
+	max-width: 220px;
+	margin: 0 auto;
 }
 
 [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels].active {

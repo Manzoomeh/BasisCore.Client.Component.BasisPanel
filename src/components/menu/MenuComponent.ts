@@ -32,19 +32,19 @@ export default class MenuComponent
       .registerInstance("page_loader", this);
     
     if (this.deviceId == 1) {
-      // for fix menu after scroll
-      const menu = this.container;
-      const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
-      var sticky = (this.container as HTMLElement).offsetTop;
-      window.onscroll = function() {
-        if (window.pageYOffset >= sticky) {
-          menu.setAttribute("data-bc-bp-sticky", "");
-          themeContainer.setAttribute("data-bc-bp-sticky", "");
-        } else {
-          menu.removeAttribute("data-bc-bp-sticky");
-          themeContainer.removeAttribute("data-bc-bp-sticky");
-        }
-      };
+      // // for fix menu after scroll
+      // const menu = this.container;
+      // const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
+      // var sticky = (this.container as HTMLElement).offsetTop;
+      // window.onscroll = function() {
+      //   if (window.pageYOffset >= sticky) {
+      //     menu.setAttribute("data-bc-bp-sticky", "");
+      //     themeContainer.setAttribute("data-bc-bp-sticky", "");
+      //   } else {
+      //     menu.removeAttribute("data-bc-bp-sticky");
+      //     themeContainer.removeAttribute("data-bc-bp-sticky");
+      //   }
+      // };
     } else if (this.deviceId == 2) {
       // // add Event Listeners
       // const openedMenu = this.container.querySelector("[data-bc-bp-menu-opened]");

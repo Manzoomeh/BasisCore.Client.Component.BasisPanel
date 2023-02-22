@@ -27,7 +27,9 @@ export default class TaskProcess {
     owner.ulElement.appendChild(this._container);
     const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
     this._owner.container.setAttribute("data-count", (parseInt(alarmEl.textContent) + 1).toString());
-    this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
+    if (this._owner.container.querySelector("[data-bc-task-list-count-text]")) {
+      this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
+    }
     alarmEl.innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     const mainAlarmEl = this._owner.container.closest("[data-bc-bp-main-header]");
     const mainAlarm = mainAlarmEl.getAttribute("data-alertCount");
@@ -76,7 +78,9 @@ export default class TaskProcess {
       this._container.remove();
       const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
       this._owner.container.setAttribute("data-count", (parseInt(alarmEl.textContent) - 1).toString());
-      this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
+      if (this._owner.container.querySelector("[data-bc-task-list-count-text]")) {
+        this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
+      }
       alarmEl.innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
       const mainAlarmEl = this._owner.container.closest("[data-bc-bp-main-header]");
       const mainAlarm = mainAlarmEl.getAttribute("data-alertCount");

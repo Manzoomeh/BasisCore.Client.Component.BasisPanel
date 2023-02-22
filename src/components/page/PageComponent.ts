@@ -113,5 +113,24 @@ export default abstract class PageComponent
         windowHeight - otherHeight
       }px`;
     }
+
+    if (this.deviceId == 1) {
+      // for fix menu after scroll (after load page content and determining the height that)
+      const bodyHeight = (this.container.closest("[data-bc-bp-main-container]") as HTMLElement).offsetHeight;
+      if (bodyHeight - windowHeight > 200) {
+        const menu = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-menu-container]");
+        const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
+        var sticky = (menu as HTMLElement).offsetTop;
+        window.onscroll = function() {
+          if (window.pageYOffset >= sticky) {
+            menu.setAttribute("data-bc-bp-sticky", "");
+            themeContainer.setAttribute("data-bc-bp-sticky", "");
+          } else {
+            menu.removeAttribute("data-bc-bp-sticky");
+            themeContainer.removeAttribute("data-bc-bp-sticky");
+          }
+        };
+      }
+    }
   }
 }
