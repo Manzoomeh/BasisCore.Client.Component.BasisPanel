@@ -63,21 +63,24 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.ownerId = checkkrkeyInfo["ownerid"]
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
-    const elClick = this.element
+    const elClicks = this.element
       .closest("[data-bc-main-list-container]")
-      .querySelector("[data-bc-drop-down-click]");
-    elClick.addEventListener("click", async (e) => {
-      if (this.mustReload) {
-        this.mustReload = false;
-        await this.fillComboAsync();
-      }
-      const elStatus = this.element.closest("[data-bc-drop-down-container]");
-      const status = elStatus.getAttribute("data-status");
-      if (status == "close") {
-        elStatus.setAttribute("data-status", "open");
-      } else {
-        elStatus.setAttribute("data-status", "close");
-      }
+      .querySelectorAll("[data-bc-drop-down-click]");
+
+    elClicks.forEach(elClick => {
+      elClick.addEventListener("click", async (e) => {
+        if (this.mustReload) {
+          this.mustReload = false;
+          await this.fillComboAsync();
+        }
+        const elStatus = this.element.closest("[data-bc-drop-down-container]");
+        const status = elStatus.getAttribute("data-status");
+        if (status == "close") {
+          elStatus.setAttribute("data-status", "open");
+        } else {
+          elStatus.setAttribute("data-status", "close");
+        }
+      });
     });
 
     const msgElClick = this.element
@@ -542,6 +545,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     selectiveList.addEventListener("click" , (e) => {
       this.selectService(selectiveList)
     })
+
+    if (this.deviceId == 2) {
+      selectiveList.querySelector("[data-bc-main-list-msg]").removeAttribute("data-bc-drop-down-click");
+    }
+
     this.element
       .closest("[data-bc-drop-down-container]")
       .setAttribute("data-status", "close");
