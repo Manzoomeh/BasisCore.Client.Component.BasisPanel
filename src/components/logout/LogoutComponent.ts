@@ -23,8 +23,21 @@ export default class LogoutComponent extends BasisPanelChildComponent {
     }
     let eventContainer = this.container;
     if (this.deviceId == 2) {
-      eventContainer = this.container.querySelector("[data-bc-logout-icon]");
+      eventContainer = this.container.querySelector("[data-bc-logout-btn]");
+
+      const logoutIcon = this.container.querySelector("[data-bc-logout-icon]");
+      logoutIcon?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        this.container.querySelector("[data-bc-bp-logout]").setAttribute("data-logout-confirm", "true");
+      });
+
+      const logoutCancel = this.container.querySelector("[data-bc-logout-cancel]");
+      logoutCancel?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        this.container.querySelector("[data-bc-bp-logout]").setAttribute("data-logout-confirm", "");
+      });
     }
+
     eventContainer
       ?.addEventListener("click", async (e) => {
         e.preventDefault();

@@ -66,6 +66,7 @@ export type IDirection =  "leftToRight" | "rightToLeft";
 export interface ILabels {
   userTitle: string;
   logoutTitle: string;
+  cancelBtn: string;
   corporateTitle: string;
   corporateSearchPlaceholder: string;
   corporateBuy: string;

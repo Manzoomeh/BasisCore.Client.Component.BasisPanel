@@ -20,6 +20,7 @@ export default abstract class BasisPanelChildComponent
         labels: {
           userTitle: "نام کاربری",
           logoutTitle: "خارج شدن",
+          cancelBtn: "انصراف",
           corporateTitle: "شرکت‌ها",
           corporateSearchPlaceholder: "جستجوی شرکت ...",
           corporateBuy: "خرید سرویس",
@@ -96,6 +97,7 @@ export default abstract class BasisPanelChildComponent
       const copyLayout = layout
         .replace("@userTitle", this.labels.userTitle)
         .replace("@logoutTitle", this.labels.logoutTitle)
+        .replace("@cancelBtn", this.labels.cancelBtn)
         .replace("@corporateTitle", this.labels.corporateTitle)
         .replace("@corporateDropDownTitle", this.labels.corporateTitle)
         // .replace("@corporateSearchPlaceholder", this.labels.corporateSearchPlaceholder)

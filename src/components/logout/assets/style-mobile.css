@@ -7,7 +7,7 @@
 
 [data-bc-bp-d2-logout] {
     width: 100%;
-    height: 70px;
+    height: 74px;
     border: 1px solid #E8E8E8;
     border-radius: 25px;
     padding: 15px;
@@ -20,6 +20,13 @@
     height: 42px;
     border-radius: 10px;
     margin-left: 15px;
+    transition: all 0.3s ease-in-out;
+    z-index: 5;
+}
+
+[data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-user-info-image] {
+    opacity: 0;
+    z-index: -5;
 }
 
 [data-bc-bp-d2-logout] [data-bc-d2-logout-user-info-image] img {
@@ -32,6 +39,13 @@
     width: calc(100% - 100px);
     height: 30px;
     float: right;
+    transition: all 0.3s ease-in-out;
+    z-index: 5;
+}
+
+[data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-user-info-name] {
+    opacity: 0;
+    z-index: -5;
 }
 
 [data-bc-bp-d2-logout] [data-bc-d2-logout-user-title] {
@@ -64,8 +78,81 @@
     background: rgba(180, 0, 32, 0.05);
     border-radius: 15px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    z-index: 5;
+}
+
+[data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-icon] {
+    opacity: 0;
+    z-index: -5;
 }
 
 [data-bc-bp-d2-logout] [data-bc-d2-logout-icon] svg {
     vertical-align: middle;
+}
+
+[data-bc-bp-d2-logout] [data-bc-d2-logout-btn] {
+    width: calc(50% - 25px);
+    height: 42px;
+    float: right;
+    text-align: center;
+    line-height: 42px;
+    background: #B40020;
+    border-radius: 15px;
+    cursor: pointer;
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-left: 5px;
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -moz-flex;
+    display: -webkit-flex; /* NEW - Chrome */
+    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    z-index: -5;
+}
+
+[data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-btn] {
+    opacity: 1;
+    z-index: 5;
+}
+
+[data-bc-bp-d2-logout] [data-bc-d2-logout-btn] svg {
+    vertical-align: middle;
+}
+
+[data-bc-bp-d2-logout] [data-bc-d2-logout-cancel] {
+    width: calc(50% - 25px);
+    height: 42px;
+    float: left;
+    text-align: center;
+    line-height: 42px;
+    background: rgba(180, 0, 32, 0.05);
+    border-radius: 15px;
+    cursor: pointer;
+    color: #222222;
+    font-size: 14px;
+    margin-right: 5px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    z-index: -5;
+}
+
+[data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-cancel] {
+    opacity: 1;
+    z-index: 5;
 }
