@@ -92,7 +92,7 @@
 }
 
 [data-bc-bp-d2-logout] [data-bc-d2-logout-btn] {
-    width: calc(50% - 25px);
+    width: calc(50% - 20px);
     height: 42px;
     float: right;
     text-align: center;
@@ -121,6 +121,7 @@
     transition: all 0.3s ease-in-out;
     opacity: 0;
     z-index: -5;
+    direction: rtl;
 }
 
 [data-bc-bp-d2-logout][data-logout-confirm="true"] [data-bc-d2-logout-btn] {
@@ -133,7 +134,7 @@
 }
 
 [data-bc-bp-d2-logout] [data-bc-d2-logout-cancel] {
-    width: calc(50% - 25px);
+    width: calc(50% - 20px);
     height: 42px;
     float: left;
     text-align: center;

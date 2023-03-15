@@ -36,6 +36,23 @@ export default class LogoutComponent extends BasisPanelChildComponent {
         e.preventDefault();
         this.container.querySelector("[data-bc-bp-logout]").setAttribute("data-logout-confirm", "");
       });
+    } else {
+      eventContainer = this.container.querySelector("[data-bc-logout-btn]");
+      const logoutPopupContainer = this.container.querySelector("[data-bc-bp-logout-modal]");
+
+      const logout = this.container.querySelector("[data-bc-bp-logout-wrapper]");
+      logout?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        (logoutPopupContainer as HTMLElement).style.display = "block";
+      });
+
+      const logoutClosed = this.container.querySelectorAll("[data-bc-bp-logout-modal-closed]");
+      logoutClosed.forEach(element => {
+        element.addEventListener("click", async (e) => {
+          e.preventDefault();
+          (logoutPopupContainer as HTMLElement).style.display = "none";
+        });
+      });
     }
 
     eventContainer

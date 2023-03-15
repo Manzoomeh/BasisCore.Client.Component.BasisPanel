@@ -17,7 +17,7 @@
     color: #000;
     margin-top: -41px;
     /* margin-left: 10px; */
-    z-index: 99;
+    z-index: 98;
     cursor: pointer;
     position: relative;
     background-color: var(--white);
