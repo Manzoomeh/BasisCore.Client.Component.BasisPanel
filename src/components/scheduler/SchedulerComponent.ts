@@ -38,23 +38,35 @@ export default class SchedulerComponent
 
     if (this.deviceId == 2) {
       // add event listeners
-      this.container.querySelector("[data-bc-task-list-alert]").addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.container.closest("[data-bc-bp-header-items]").classList.toggle("openedScheduler");
-        setTimeout(() => {
-          this.container.querySelector("[data-bc-task-list-dropdown-wrapper]").classList.toggle("active");
-        }, 200);
-      });
+      this.container
+        .querySelector("[data-bc-task-list-alert]")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.container
+            .closest("[data-bc-bp-header-items]")
+            .classList.toggle("openedScheduler");
+          setTimeout(() => {
+            this.container
+              .querySelector("[data-bc-task-list-dropdown-wrapper]")
+              .classList.toggle("active");
+          }, 200);
+        });
 
-      this.container.querySelector("[data-bc-task-list-dropdown-closed]").addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.container.querySelector("[data-bc-task-list-dropdown-wrapper]").classList.toggle("active");
-        setTimeout(() => {
-          this.container.closest("[data-bc-bp-header-items]").classList.toggle("openedScheduler");
-        }, 200);
-      });
+      this.container
+        .querySelector("[data-bc-task-list-dropdown-closed]")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.container
+            .querySelector("[data-bc-task-list-dropdown-wrapper]")
+            .classList.toggle("active");
+          setTimeout(() => {
+            this.container
+              .closest("[data-bc-bp-header-items]")
+              .classList.toggle("openedScheduler");
+          }, 200);
+        });
     }
 
     return Promise.resolve();
@@ -68,7 +80,6 @@ export default class SchedulerComponent
   }
 
   public taskComplete(key: string, options: ITaskOptions) {
-    // console.log(`${key} task is ended`);
     this.processList.delete(key);
   }
 
