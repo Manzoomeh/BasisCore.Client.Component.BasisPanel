@@ -24,7 +24,12 @@ export default class MenuCacheManager {
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
-      cache = new MenuCacheItem(menuParam, onMenuItemClick, this.checkRkeyOption, this.deviceId);
+      cache = new MenuCacheItem(
+        menuParam,
+        onMenuItemClick,
+        this.checkRkeyOption,
+        this.deviceId
+      );
       this.cache.set(menuParam.owner, cache);
     }
     return cache.loadMenuAsync(menuParam);
@@ -45,7 +50,12 @@ class MenuCacheItem {
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
-    this.menuMaker = new MenuElementMaker(menuParam.rKey, onMenuItemClick, checkRkey, deviceId);
+    this.menuMaker = new MenuElementMaker(
+      menuParam.rKey,
+      onMenuItemClick,
+      checkRkey,
+      deviceId
+    );
     this.checkRkeyOption = checkRkey;
   }
 
@@ -61,8 +71,11 @@ class MenuCacheItem {
           level: menuParam.owner,
         }
       );
-      //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
-      const menuData = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(url, "GET", this.checkRkeyOption);
+      const menuData = await HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
+        url,
+        "GET",
+        this.checkRkeyOption
+      );
       menu = this.menuMaker.create(menuData, menuParam);
       this.cache.set(menuParam.ownerId, menu);
     }

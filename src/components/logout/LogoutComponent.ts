@@ -12,7 +12,7 @@ import { QuestionUtil } from "../../QuestionUtil";
 
 export default class LogoutComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
-  
+
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-logout-container");
   }
@@ -25,36 +25,35 @@ export default class LogoutComponent extends BasisPanelChildComponent {
     if (this.deviceId == 2) {
       eventContainer = this.container.querySelector("[data-bc-logout-icon]");
     }
-    eventContainer
-      ?.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const url = HttpUtil.formatString(this.options.logout.url, {
-          rKey: this.options.rKey,
-        });
-        const result = await HttpUtil.sendFormData<IResponseLogout>(
-          url,
-          "POST",
-          `dmntoken=${this.options.logout.dmnToken}`
-        );
-        const cookieName = this.options.logout.cookieName;
-        if (result.errorid == this.options.logout.successId) {
-          if (cookieName && cookieName != "") {
-            const cookies = document.cookie.split(";");
-            for (var i = 0; i < cookies.length; i++) {
-              var cookie = cookies[i].trim().split("=")[0];
-              if (cookie == cookieName) {
-                document.cookie =
-                  cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-                break;
-              }
+    eventContainer?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const url = HttpUtil.formatString(this.options.logout.url, {
+        rKey: this.options.rKey,
+      });
+      const result = await HttpUtil.sendFormData<IResponseLogout>(
+        url,
+        "POST",
+        `dmntoken=${this.options.logout.dmnToken}`
+      );
+      const cookieName = this.options.logout.cookieName;
+      if (result.errorid == this.options.logout.successId) {
+        if (cookieName && cookieName != "") {
+          const cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim().split("=")[0];
+            if (cookie == cookieName) {
+              document.cookie =
+                cookie + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+              break;
             }
           }
-          window.location.href =
-            result.redirectUrl && result.redirectUrl != ""
-              ? result.redirectUrl
-              : this.options.logout.defaultRedirectUrl;
         }
-      });
+        window.location.href =
+          result.redirectUrl && result.redirectUrl != ""
+            ? result.redirectUrl
+            : this.options.logout.defaultRedirectUrl;
+      }
+    });
     return Promise.resolve();
   }
 
@@ -68,15 +67,13 @@ export default class LogoutComponent extends BasisPanelChildComponent {
         "rKey",
         `return \`${this.options.dataUrl.profile}\``
       );
-  
-      const questions = await HttpUtil.checkRkeyFetchDataAsync<
+
+      const questions = await HttpUtil.checkRKeyFetchDataAsync<
         Array<IQuestionItem>
       >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
-  
+
       this.profile = QuestionUtil.toObject(questions);
       this.refreshUI();
-      // this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-      // this.signalToDisplayMenu();
     }
   }
 
@@ -101,8 +98,9 @@ export default class LogoutComponent extends BasisPanelChildComponent {
       `return \`${`${this.options.avatar}${this.options.method.userImage}`}\``
     );
 
-    this.container.querySelector<HTMLImageElement>("[data-bc-logout-user-image]").src =
-      fn(this.options.rKey, this.profile);
+    this.container.querySelector<HTMLImageElement>(
+      "[data-bc-logout-user-image]"
+    ).src = fn(this.options.rKey, this.profile);
 
     let i = 0;
     this.container

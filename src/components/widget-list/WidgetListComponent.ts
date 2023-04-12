@@ -2,7 +2,6 @@ import desktopLayout from "./assets/layout.html";
 import dropAreaLayout from "./assets/drop-area-layout.html";
 import widgetItemLayout from "./assets/widget-item-layout.html";
 import "./assets/style.css";
-import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
 import { ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
@@ -14,14 +13,21 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private readonly _page: IPage;
   private readonly _widgetDialog: Element;
   constructor(owner: IUserDefineComponent) {
-    super(owner, desktopLayout, desktopLayout, "data-bc-bp-widget-list-container");
+    super(
+      owner,
+      desktopLayout,
+      desktopLayout,
+      "data-bc-bp-widget-list-container"
+    );
     this._page = owner.dc.resolve<IPage>("page");
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
 
-    const copyDropAreaLayout = dropAreaLayout
-        .replace("@dragAndDropMessage", this.labels.dragAndDropMessage);
+    const copyDropAreaLayout = dropAreaLayout.replace(
+      "@dragAndDropMessage",
+      this.labels.dragAndDropMessage
+    );
 
     this._page.widgetDropAreaContainer.innerHTML = copyDropAreaLayout;
     this._page.container
@@ -47,8 +53,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           this.displayWidgetList(e);
-          if(this._page?.info?.container == "dashboard"){
-            this.addingDashboardWidgets()
+          if (this._page?.info?.container == "dashboard") {
+            this.addingDashboardWidgets();
           }
         });
       });
@@ -75,7 +81,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         pageId: this._page.loaderParam.pageId,
       });
 
-      const result = await HttpUtil.checkRkeyFetchDataAsync(
+      const _ = await HttpUtil.checkRKeyFetchDataAsync(
         url,
         "POST",
         this.options.checkRkey,
@@ -87,9 +93,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
-    const container = this._page.widgetDropAreaContainer.querySelector(
-      "[data-bc-widget-drop-area]"
-    ) as HTMLElement;
+    const container =
+      this._page.widgetDropAreaContainer.querySelector<HTMLElement>(
+        "[data-bc-widget-drop-area]"
+      );
     let element = container.querySelector<HTMLElement>(
       `[data-bc-widget-id='${widgetInfo.id}']`
     );
@@ -123,11 +130,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     return Promise.resolve();
   }
 
-  public runAsync(source?: ISource) {
-    // this.addingDashboardWidgets();
-    if (source?.id === DefaultSource.WIDGET_CLOSED) {
-    }
-  }
+  public runAsync(source?: ISource) {}
 
   private async fillWidgetListAsync(): Promise<void> {
     const disableWidgets = document.querySelector(
@@ -140,7 +143,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       pageId: this._page.loaderParam.pageId,
     });
 
-    const widgetsList = await HttpUtil.checkRkeyFetchDataAsync<
+    const widgetsList = await HttpUtil.checkRKeyFetchDataAsync<
       Array<IWidgetListItemInfo>
     >(url, "GET", this.options.checkRkey);
 
@@ -165,9 +168,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           this.tryAddingWidget(widget);
         });
       });
-    } catch {
-
-    }
+    } catch {}
   }
 
   private displayWidgetList(e) {
@@ -197,12 +198,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         ""
       );
     });
-    const widgetBox: HTMLElement = this.container.querySelector(
+    const widgetBox: HTMLElement = this.container.querySelector<HTMLElement>(
       "[data-bc-page-widget-list]"
-    ) as HTMLElement;
-    const widgetContainer = document.querySelector(
+    );
+    const widgetContainer = document.querySelector<HTMLElement>(
       "[data-bc-page-body-container]"
-    ) as HTMLElement;
+    );
     if (this.direction == "leftToRight") {
       widgetBox.style.transform = "translateX(300px)";
     } else {
@@ -212,29 +213,33 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   private showList() {
-    const dashbaordBtn = this.container.querySelector(".tabWrapperForWidgets") as HTMLElement
-    dashbaordBtn.style.display="none"
+    const dashbaordBtn = this.container.querySelector<HTMLElement>(
+      ".tabWrapperForWidgets"
+    );
+    dashbaordBtn.style.display = "none";
     this.fillWidgetListAsync().then(() => {
       this._widgetDialog.removeAttribute("data-bc-display-none");
       this._page.widgetDropAreaContainer.removeAttribute(
         "data-bc-display-none"
       );
     });
-    const widgetBox: HTMLElement = this.container.querySelector(
+    const widgetBox: HTMLElement = this.container.querySelector<HTMLElement>(
       "[data-bc-page-widget-list]"
-    ) as HTMLElement;
-    const widgetContainer = document.querySelector(
+    );
+    const widgetContainer = document.querySelector<HTMLElement>(
       "[data-bc-page-body-container]"
-    ) as HTMLElement;
+    );
     widgetBox.style.transform = "translateX(0px)";
     widgetContainer.style.width = "calc(100% - 300px)";
   }
   public async addingDashboardWidgets(): Promise<void> {
-    const dashbaordBtn = this.container.querySelector(".tabWrapperForWidgets") as HTMLElement
-    dashbaordBtn.style.display="flex"
-    const parent = this.container.querySelector(
+    const dashbaordBtn = this.container.querySelector<HTMLElement>(
+      ".tabWrapperForWidgets"
+    );
+    dashbaordBtn.style.display = "flex";
+    const parent = this.container.querySelector<HTMLElement>(
       "[data-bc-page-widget-dashboard-wrapper]"
-    ) as HTMLElement;
+    );
     parent.innerHTML = "";
     const url = HttpUtil.formatString(this.options.tempwidgets, {
       rKey: this.options.rKey,
@@ -265,7 +270,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         e.dataTransfer.setData("text/plain", JSON.stringify(widgetList));
       });
       closeDiv.addEventListener("click", async (event) => {
-        await HttpUtil.checkRkeyFetchDataAsync(
+        await HttpUtil.checkRKeyFetchDataAsync(
           removewidgetUrl,
           "POST",
           this.options.checkRkey,
@@ -276,16 +281,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.addingDashboardWidgets();
       });
     });
-    const allWidget = document.querySelector(
+    const allWidget = document.querySelector<HTMLElement>(
       "[data-bc-page-widget-disableList]"
-    ) as HTMLElement;
+    );
     const allWidgetBtn = this.container.querySelector("[data-all-widget]");
     const dashboardWidgetBtn = this.container.querySelector(
       "[data-dashboard-widgets]"
     );
-    const activeElement = this.container.querySelector(
-      ".tabActive"
-    ) as HTMLElement;
+    const activeElement =
+      this.container.querySelector<HTMLElement>(".tabActive");
     dashboardWidgetBtn.addEventListener("click", (e) => {
       parent.style.display = "flex";
       allWidget.style.display = "none";

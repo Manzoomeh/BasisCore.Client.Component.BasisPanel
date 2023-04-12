@@ -43,7 +43,7 @@ export default class HttpUtil {
     }
   }
 
-  static async checkRkeyFetchDataAsync<T>(
+  static async checkRKeyFetchDataAsync<T>(
     url: string,
     method: "POST" | "GET",
     options: ICheckRkeyOptions,

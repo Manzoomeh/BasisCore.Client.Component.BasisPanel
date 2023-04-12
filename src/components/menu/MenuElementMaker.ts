@@ -65,7 +65,7 @@ export default class MenuElementMaker {
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == true
+        (node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
           this.createExternalMenuItem(
@@ -77,7 +77,7 @@ export default class MenuElementMaker {
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == false
+        !(node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
           this.createExternalMenuItemSingleItem(
@@ -107,24 +107,21 @@ export default class MenuElementMaker {
     li.appendChild(innerUl);
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
-        if (li.classList.contains('active')) {
-            // collapseSubMenu();
-            li.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
-            li.classList.remove('active');
+        if (li.classList.contains("active")) {
+          li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+          li.classList.remove("active");
         } else {
-            // Collapse Existing Expanded menuItemHasChildren
-            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-            openMenu.forEach((e) => {
-              e.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
-              e.classList.remove('active');
-            });
-            // Expand New menuItemHasChildren
-            li.classList.add('active');
-            const subMenu = li.querySelector("[data-bc-bp-submenu]");
-            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-            (subMenu as HTMLElement).style.maxHeight = '20rem';
-            (subMenu as HTMLElement).style.transition = 'all 1s ease';
-            // subMenu.classList.add("show");
+          // Collapse Existing Expanded menuItemHasChildren
+          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+          openMenu.forEach((e) => {
+            e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+            e.classList.remove("active");
+          });
+          // Expand New menuItemHasChildren
+          li.classList.add("active");
+          const subMenu = li.querySelector("[data-bc-bp-submenu]");
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.transition = "all 1s ease";
         }
       });
     } else {
@@ -136,7 +133,6 @@ export default class MenuElementMaker {
             e.removeAttribute("data-bc-ul-level-open");
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
-  
           innerUl.style.transform = `scaleY(1)`;
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
@@ -158,9 +154,9 @@ export default class MenuElementMaker {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
-    content.setAttribute("data-bc-pid", node.pid.toString());
-    content.setAttribute("data-bc-mid", node.mid?.toString());
-    content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
+    content.setAttribute("data-bc-pid", node.pid);
+    content.setAttribute("data-bc-mid", node.mid);
+    content.setAttribute("data-bc-ownerid", menuParam.ownerId);
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
@@ -183,15 +179,18 @@ export default class MenuElementMaker {
       }
 
       if (this.deviceId == 2) {
-        li.closest("[data-bc-bp-header-more-container]").classList.remove("active");
+        li.closest("[data-bc-bp-header-more-container]").classList.remove(
+          "active"
+        );
       }
 
-      LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
+      LocalStorageUtil.setActiveMenuItem(menuParam.ownerId, node);
     });
     pageLookup.set(node.pid, menuParam);
     li.appendChild(content);
     return li;
   }
+
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
@@ -219,7 +218,7 @@ export default class MenuElementMaker {
       }
     );
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption
@@ -257,29 +256,30 @@ export default class MenuElementMaker {
     let subMenuFlag = false;
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
-        if (li.classList.contains('active')) {
-            // collapseSubMenu();
-            li.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
-            li.classList.remove('active');
+        if (li.classList.contains("active")) {
+          li.querySelector("[data-bc-bp-menu-external]").removeAttribute(
+            "style"
+          );
+          li.classList.remove("active");
         } else {
-            // Collapse Existing Expanded menuItemHasChildren
-            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-            openMenu.forEach((e) => {
-              e.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
-              e.classList.remove('active');
-            });
-            // Expand New menuItemHasChildren
-            li.classList.add('active');
-            const subMenu = li.querySelector("[data-bc-bp-menu-external]");
-            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-            (subMenu as HTMLElement).style.maxHeight = '20rem';
-            (subMenu as HTMLElement).style.transition = 'all 1s ease';
-            // subMenu.classList.add("show");
+          // Collapse Existing Expanded menuItemHasChildren
+          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+          openMenu.forEach((e) => {
+            e.querySelector("[data-bc-bp-menu-external]").removeAttribute(
+              "style"
+            );
+            e.classList.remove("active");
+          });
+          // Expand New menuItemHasChildren
+          li.classList.add("active");
+          const subMenu = li.querySelector("[data-bc-bp-menu-external]");
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.transition = "all 1s ease";
         }
-      })
+      });
     } else {
       content.addEventListener("click", function () {
-        if (subMenuFlag == false) {
+        if (!subMenuFlag) {
           ul.style.transition = "all 0.3s ease-in-out";
           ul.style.width = `auto`;
           ul.style.overflow = `visible`;
@@ -302,7 +302,7 @@ export default class MenuElementMaker {
       }
     );
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption

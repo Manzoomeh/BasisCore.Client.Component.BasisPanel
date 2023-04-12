@@ -14,6 +14,10 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     super(owner, desktopLayout, mobileLayout, "corporate");
   }
 
+  public async initializeAsync(): Promise<void> {
+    await super.initializeAsync();
+    this.owner.addTrigger([DefaultSource.SET_CORPORATE]);
+  }
   protected getSourceId(): string {
     return DefaultSource.CORPORATE_SOURCE;
   }
@@ -37,6 +41,9 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
       this.trySelectFromLocalStorageAsync();
+    } else if (source?.id == DefaultSource.SET_CORPORATE) {
+      const corporateId: number = source?.rows[0].value;
+      this.trySelectItemSilentAsync(corporateId);
     }
   }
 }

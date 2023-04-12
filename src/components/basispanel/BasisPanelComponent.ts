@@ -7,7 +7,8 @@ import desktopLayout from "./assets/layout-desktop.html";
 import mobileLayout from "./assets/layout-mobile.html";
 import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import LocalStorageUtil from "../../LocalStorageUtil";
+import LocalStorageUtil, { IStateModel } from "../../LocalStorageUtil";
+import { DefaultSource } from "../../type-alias";
 
 declare const $bc: any;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -24,6 +25,25 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
 
   async runAsync(source?: ISourceOptions): Promise<any> {
     if (!this.runTask) {
+      window.addEventListener("popstate", (event) => {
+        if (event.state) {
+          event.preventDefault();
+          const data: IStateModel = event.state;
+          console.log(`location: ${document.location}`, data);
+          if (data.c) {
+            this.owner.setSource(DefaultSource.SET_CORPORATE, data.c.id);
+          }
+          if (data.b) {
+            this.owner.setSource(DefaultSource.SET_BUSINESS, data.b.id);
+          }
+          if (data.m) {
+            this.owner.setSource(DefaultSource.SET_MENU, data.m);
+          }
+          if (data.p) {
+            this.owner.setSource(DefaultSource.SET_PAGE, data.p);
+          }
+        }
+      });
       this.runTask = this.owner.processNodesAsync(
         Array.from(this.container.childNodes)
       );
@@ -37,14 +57,22 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       this.container.setAttribute("style", style);
     }
 
-    this.container.querySelector("[data-bc-bp-main-header] [data-bc-bp-logo] a")?.setAttribute("href", this.options.logo);
+    this.container
+      .querySelector("[data-bc-bp-main-header] [data-bc-bp-logo] a")
+      ?.setAttribute("href", this.options.logo);
 
     if (this.deviceId == 2) {
       // add Event Listeners
-      const openedMore = this.container.querySelector("[data-bc-bp-header-more-opened]");
-      const closedMore = this.container.querySelector("[data-bc-bp-header-more-closed]");
-      const navbarMore = this.container.querySelector("[data-bc-bp-header-more-container]");
-      
+      const openedMore = this.container.querySelector(
+        "[data-bc-bp-header-more-opened]"
+      );
+      const closedMore = this.container.querySelector(
+        "[data-bc-bp-header-more-closed]"
+      );
+      const navbarMore = this.container.querySelector(
+        "[data-bc-bp-header-more-container]"
+      );
+
       openedMore.addEventListener("click", (e) => {
         this.toggleHeaderMore([navbarMore]);
       });
@@ -52,14 +80,22 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         this.toggleHeaderMore([navbarMore]);
       });
 
-      const openedHeaderLevels = this.container.querySelector("[data-bc-bp-header-levels-opened]");
+      const openedHeaderLevels = this.container.querySelector(
+        "[data-bc-bp-header-levels-opened]"
+      );
       openedHeaderLevels.addEventListener("click", (e) => {
-        this.container.querySelector("[data-bc-bp-header-levels]").classList.toggle('active');
+        this.container
+          .querySelector("[data-bc-bp-header-levels]")
+          .classList.toggle("active");
       });
 
-      const closedHeaderLevels = this.container.querySelector("[data-bc-bp-header-levels-back]");
+      const closedHeaderLevels = this.container.querySelector(
+        "[data-bc-bp-header-levels-back]"
+      );
       closedHeaderLevels.addEventListener("click", (e) => {
-        this.container.querySelector("[data-bc-bp-header-levels]").classList.toggle('active');
+        this.container
+          .querySelector("[data-bc-bp-header-levels]")
+          .classList.toggle("active");
       });
     }
 
@@ -67,10 +103,13 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       const currentElement = e.target as HTMLElement;
 
       // for close userinfo drop down
-      if (currentElement.getAttribute("data-bc-user-info-image") === null &&
-      currentElement.getAttribute("data-bc-user-image") === null) {
+      if (
+        currentElement.getAttribute("data-bc-user-info-image") === null &&
+        currentElement.getAttribute("data-bc-user-image") === null
+      ) {
         document
-          .querySelector("[data-bc-user-info]")?.setAttribute("data-status", "close");
+          .querySelector("[data-bc-user-info]")
+          ?.setAttribute("data-status", "close");
       }
 
       // for close menu
@@ -87,33 +126,41 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       // for close corporate drop down
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
-        currentElement.getAttribute("data-bc-corporate-icon-drop-down") === null &&
-        currentElement.getAttribute("data-bc-corporate-search-input") === null &&
-        currentElement.getAttribute("data-bc-corporate-drop-down-wrapper") === null &&
-        currentElement.getAttribute("data-bc-corporate-drop-down-title") === null
+        currentElement.getAttribute("data-bc-corporate-icon-drop-down") ===
+          null &&
+        currentElement.getAttribute("data-bc-corporate-search-input") ===
+          null &&
+        currentElement.getAttribute("data-bc-corporate-drop-down-wrapper") ===
+          null &&
+        currentElement.getAttribute("data-bc-corporate-drop-down-title") ===
+          null
       ) {
         document
-          .querySelector("[data-bc-corporate-drop-down]")?.setAttribute("data-status", "close");
+          .querySelector("[data-bc-corporate-drop-down]")
+          ?.setAttribute("data-status", "close");
       }
 
       // for close business drop down
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
-        currentElement.getAttribute("data-bc-business-icon-drop-down") === null &&
+        currentElement.getAttribute("data-bc-business-icon-drop-down") ===
+          null &&
         currentElement.getAttribute("data-bc-business-search-input") === null &&
-        currentElement.getAttribute("data-bc-business-drop-down-wrapper") === null &&
+        currentElement.getAttribute("data-bc-business-drop-down-wrapper") ===
+          null &&
         currentElement.getAttribute("data-bc-business-drop-down-title") === null
       ) {
         document
-          .querySelector("[data-bc-business-drop-down]")?.setAttribute("data-status", "close");
+          .querySelector("[data-bc-business-drop-down]")
+          ?.setAttribute("data-status", "close");
       }
     });
   }
 
   private toggleHeaderMore(elements: Array<Element>) {
     elements.forEach((el) => {
-      el.classList.toggle('active');
+      el.classList.toggle("active");
     });
-    document.body.classList.toggle('scrolling');
+    document.body.classList.toggle("scrolling");
   }
 }

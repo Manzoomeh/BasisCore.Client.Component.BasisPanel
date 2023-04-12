@@ -33,22 +33,25 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
 
   public async initializeAsync(): Promise<void> {
     await super.initializeAsync();
-    this.owner.addTrigger([DefaultSource.CORPORATE_SOURCE]);
+    this.owner.addTrigger([
+      DefaultSource.CORPORATE_SOURCE,
+      DefaultSource.SET_BUSINESS,
+    ]);
   }
 
   public async runAsync(source?: ISource): Promise<any> {
-    switch (source?.id) {
-      case DefaultSource.CORPORATE_SOURCE: {
-        this.businessComponentFlag = true;
-        this.currentCorporate = source.rows[0];
-        this.mustReload = true;
-        this.fillComboAsync();
-        this.clearCombo();
-        this.trySelectFromLocalStorageAsync();
-        break;
-      }
+    await super.runAsync(source);
+    if (source?.id == DefaultSource.CORPORATE_SOURCE) {
+      this.businessComponentFlag = true;
+      this.currentCorporate = source.rows[0];
+      this.mustReload = true;
+      this.fillComboAsync();
+      this.clearCombo();
+      this.trySelectFromLocalStorageAsync();
+    } else if (source?.id == DefaultSource.SET_BUSINESS) {
+      const businessId: number = source?.rows[0].value;
+      this.trySelectItemSilentAsync(businessId);
     }
-    return super.runAsync(source);
   }
 
   protected async getEntitiesAsync(): Promise<Array<IEntityInfo>> {

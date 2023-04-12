@@ -33,36 +33,44 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     }
 
     this.container.classList.add("active-user");
-    this.container.querySelector("[data-bc-user-show-info]")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      const elStatus = this.container.querySelector("[data-bc-user-info]");
-      const status = elStatus.getAttribute("data-status");
-      if (status == "close") {
-        elStatus.setAttribute("data-status", "open");
-      } else {
-        elStatus.setAttribute("data-status", "close");
-      }
-    });
+    this.container
+      .querySelector("[data-bc-user-show-info]")
+      ?.addEventListener("click", (e) => {
+        e.preventDefault();
+        const elStatus = this.container.querySelector("[data-bc-user-info]");
+        const status = elStatus.getAttribute("data-status");
+        if (status == "close") {
+          elStatus.setAttribute("data-status", "open");
+        } else {
+          elStatus.setAttribute("data-status", "close");
+        }
+      });
 
-    this.container.querySelector("[data-bc-user-change-level]").addEventListener("click", (e) => {
-      e.preventDefault();
-      this.signalToDisplayMenu();
-      LocalStorageUtil.resetCurrentUserId();
-      this.container.classList.add("active-user");
-      this.container
-        .closest("[data-bc-bp-main-header]")
-        .querySelector(".active-business")
-        ?.classList.remove("active-business");
-      this.container
-        .closest("[data-bc-bp-main-header]")
-        .querySelector(".active-corporate")
-        ?.classList.remove("active-corporate");
+    this.container
+      .querySelector("[data-bc-user-change-level]")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        this.signalToDisplayMenu();
+        LocalStorageUtil.resetCurrentUserId();
+        this.container.classList.add("active-user");
+        this.container
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-business")
+          ?.classList.remove("active-business");
+        this.container
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-corporate")
+          ?.classList.remove("active-corporate");
 
-      if (this.deviceId == 2) {
-        this.container.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "user");
-        this.container.closest("[data-bc-bp-header-levels]").classList.remove("active");
-      }
-    });
+        if (this.deviceId == 2) {
+          this.container
+            .closest("[data-bc-bp-header-levels-container]")
+            .setAttribute("data-active", "user");
+          this.container
+            .closest("[data-bc-bp-header-levels]")
+            .classList.remove("active");
+        }
+      });
 
     return Promise.resolve();
   }
@@ -73,7 +81,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       `return \`${this.options.dataUrl.profile}\``
     );
 
-    const questions = await HttpUtil.checkRkeyFetchDataAsync<
+    const questions = await HttpUtil.checkRKeyFetchDataAsync<
       Array<IQuestionItem>
     >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
 
