@@ -137,11 +137,13 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
   res.send(widgetList);
 });
 
-router.get("/:rKey/logout", function (req, res) {
-  const result = [
-    // { message: "ok", redirectUrl: "https://trust-login.com" }
-    { message: "ok", redirectUrl: "" },
-  ];
+router.get("/getDmnToken", function (req, res) {
+  const result = {"dmnToken": "asdfgh"};
+  res.json(result);
+});
+
+router.post("/:rKey/logout", function (req, res) {
+  const result = { errorid: 3, message: "ok", redirectUrl: "" };
   res.json(result);
 });
 

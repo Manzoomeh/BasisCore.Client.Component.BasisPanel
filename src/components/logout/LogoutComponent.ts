@@ -58,13 +58,18 @@ export default class LogoutComponent extends BasisPanelChildComponent {
     eventContainer
       ?.addEventListener("click", async (e) => {
         e.preventDefault();
-        const url = HttpUtil.formatString(this.options.logout.url, {
+        const getDmnTokenUrl = HttpUtil.formatString(this.options.logout.getDmnTokenUrl, {
+          rKey: this.options.rKey,
+        });
+        const dmnToken = await HttpUtil.fetchDataAsync<IResponseDmnToken>(getDmnTokenUrl, "GET");
+        
+        const logoutUrl = HttpUtil.formatString(this.options.logout.url, {
           rKey: this.options.rKey,
         });
         const result = await HttpUtil.sendFormData<IResponseLogout>(
-          url,
+          logoutUrl,
           "POST",
-          `dmntoken=${this.options.logout.dmnToken}`
+          `dmntoken=${dmnToken.dmnToken}`
         );
         const cookieName = this.options.logout.cookieName;
         if (result.errorid == this.options.logout.successId) {
@@ -150,4 +155,8 @@ interface IResponseLogout {
   message: string;
   errorid: number;
   redirectUrl?: string;
+}
+
+interface IResponseDmnToken {
+  dmnToken: string;
 }
