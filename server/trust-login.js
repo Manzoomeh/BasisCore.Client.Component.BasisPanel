@@ -2,6 +2,7 @@ var fs = require("fs");
 const path = require("path");
 var express = require("express");
 var router = express.Router();
+const { active } = require("./active-manager");
 
 // // middleware that is specific to this router
 // router.use(function timeLog (req, res, next) {
@@ -146,7 +147,17 @@ router.get("/:rKey/logout", function (req, res) {
 });
 
 router.get("/checkrkey/:rKey", function (req, res) {
-  const result = { checked: true };
+  const result = {
+    checked: true,
+    userid: 122503,
+    currentOwnerid: active.corporate,
+    currentDmnid: active.business,
+    ownerid: 30,
+    dmnid: 30,
+    rkey: req.params.rKey,
+    usercat: "48,5475,",
+    ERP: false,
+  };
   res.json(result);
 });
 
@@ -175,13 +186,13 @@ router.get("/:rKey/tempwidgets", function (req, res) {
     {
       id: 28,
       widgetid: 2,
-      title: "تصویر پنل کاربری"
+      title: "تصویر پنل کاربری",
     },
     {
       id: 29,
       widgetid: 3,
-      title: "ویرایش اطلاعات کاربری"
-    }
+      title: "ویرایش اطلاعات کاربری",
+    },
   ];
   // const result = [];
   res.json(result);

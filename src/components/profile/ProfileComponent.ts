@@ -10,18 +10,32 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import { IUserDefineComponent, ISource } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
-import IPageLoaderParam from "../menu/IPageLoaderParam";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import { DependencyContainer } from "tsyringe";
 
 export default class ProfileComponent extends BasisPanelChildComponent {
   private profile: IProfileInfo;
+  private isFirst: boolean = true;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-profile-container");
+    this.owner.dc
+      .resolve<DependencyContainer>("parent.dc")
+      .registerInstance("profile", this);
   }
 
-  public runAsync(source?: ISource): Promise<any> {
-    return this.loadDataAsync();
+  public async runAsync(source?: ISource): Promise<any> {
+    if (this.isFirst) {
+      await this.loadDataAsync();
+      this.refreshUI();
+      this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
+      if (LocalStorageUtil.Category === "profile") {
+        this.signalToDisplayMenu();
+      }
+      this.isFirst = false;
+    } else {
+      this.signalToDisplayMenu();
+    }
   }
 
   public initializeAsync(): Promise<void> {
@@ -86,12 +100,13 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
 
     this.profile = QuestionUtil.toObject(questions);
-    this.refreshUI();
-    this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-    this.signalToDisplayMenu();
   }
 
   private signalToDisplayMenu() {
+    const pageId =
+      this.isFirst && LocalStorageUtil.Category === "profile"
+        ? LocalStorageUtil.PageId
+        : "default";
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
@@ -99,26 +114,10 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         ownerUrl: this.options.baseUrl.profile,
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,
+        pageId: pageId,
       };
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
-      this.signalToDisplayPage();
     }
-  }
-
-  private async signalToDisplayPage() {
-    const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-    activeMenus.forEach((e) => {
-      e.removeAttribute("data-bc-menu-active");
-    });
-    const newParam: IPageLoaderParam = {
-      pageId: "default",
-      owner: "profile",
-      ownerId: "",
-      ownerUrl: this.options.baseUrl.profile,
-      rKey: this.options.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private refreshUI() {

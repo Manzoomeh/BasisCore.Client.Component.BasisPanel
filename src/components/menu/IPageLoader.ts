@@ -1,3 +1,3 @@
 export default interface IPageLoader {
-  tryLoadPage(pageId: string, args?: any): Promise<boolean>;
+  tryLoadPage(pageId: string, args?: any): boolean;
 }

@@ -43,6 +43,9 @@ export default class MenuComponent
     if (source?.id == DefaultSource.SHOW_MENU) {
       const menuParam: IMenuLoaderParam = source.rows[0];
       await this.loadDataAsync(menuParam);
+      if (menuParam.pageId) {
+        this.tryLoadPage(menuParam.pageId, null);
+      }
     } else if (source?.id === DefaultSource.SET_MENU) {
       const menuParam: ICurrentMenu = source.rows[0];
       await this.loadDataAsync(menuParam.menu);
@@ -57,10 +60,6 @@ export default class MenuComponent
     this.ul
       .querySelectorAll(`[data-bc-menu-active]`)
       .forEach((x) => x.removeAttribute("data-bc-menu-active"));
-    console.log(
-      "222",
-      `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
-    );
     const content = this.ul.querySelector(
       `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
     );
@@ -89,37 +88,49 @@ export default class MenuComponent
     }
   }
 
-  private async onMenuItemClick(
-    pageId: string,
-    param: IMenuLoaderParam,
-    target: EventTarget
-  ) {
-    const newParam: IPageLoaderParam = {
-      pageId: pageId,
-      owner: param.owner,
-      ownerId: param.ownerId,
-      ownerUrl: param.ownerUrl,
-      rKey: param.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  private async onMenuItemClick(pageId: string) {
+    this.tryLoadPage(pageId, null);
   }
 
-  public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
-    const source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
-    if (source) {
-      const param = source.rows[0] as IPageLoaderParam;
-      const newParam: IPageLoaderParam = {
-        pageId: pageId,
-        owner: param.owner,
-        ownerId: param.ownerId,
-        ownerUrl: param.ownerUrl,
-        rKey: param.rKey,
-        pageMethod: param.pageMethod,
-        arguments: args,
-      };
-      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  public tryLoadPage(pageId: string, args?: any): boolean {
+    let retVal = false;
+    if (this.current) {
+      const menuItem = this.current.pageLookup.get(pageId);
+      if (menuItem) {
+        //update ui
+        this.ul
+          .querySelectorAll(`[data-bc-menu-active]`)
+          .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+        const content = this.ul.querySelector(
+          `a[data-bc-pid="${menuItem.pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`
+        );
+        console.log(
+          `a[data-bc-pid="${menuItem.pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`,
+          content
+        );
+        const li = content?.closest("li");
+        const parent = content?.closest("[data-bc-bp-submenu]");
+        if (parent) {
+          parent
+            .closest("li")
+            .querySelector("[data-bc-level]")
+            .setAttribute("data-bc-menu-active", "");
+        }
+        li?.setAttribute("data-bc-menu-active", "");
+        //show page
+        const newParam: IPageLoaderParam = {
+          pageId: pageId,
+          owner: menuItem.owner,
+          ownerId: menuItem.ownerId,
+          ownerUrl: menuItem.ownerUrl,
+          rKey: menuItem.rKey,
+          pageMethod: this.options.method.page,
+          arguments: args,
+        };
+        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+        retVal = true;
+      }
     }
-    return source != null;
+    return retVal;
   }
 }

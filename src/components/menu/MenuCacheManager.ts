@@ -16,11 +16,7 @@ export default class MenuCacheManager {
 
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
-    ) => void
+    onMenuItemClick: (pageId: string) => void
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
@@ -42,11 +38,7 @@ class MenuCacheItem {
   private checkRkeyOption: ICheckRkeyOptions;
   constructor(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
-    ) => void,
+    onMenuItemClick: (pageId: string) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {

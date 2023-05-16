@@ -12,21 +12,13 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuElementMaker {
   readonly rKey: string;
-  readonly onMenuItemClick: (
-    pageId: string,
-    param: IMenuLoaderParam,
-    target: EventTarget
-  ) => void;
+  readonly onMenuItemClick: (pageId: string) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
 
   constructor(
     rKey: string,
-    onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
-    ) => void,
+    onMenuItemClick: (pageId: string) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
@@ -160,7 +152,7 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onMenuItemClick(node.pid, menuParam, e.target);
+      this.onMenuItemClick(node.pid);
 
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
@@ -186,7 +178,7 @@ export default class MenuElementMaker {
 
       LocalStorageUtil.setActiveMenuItem(menuParam.ownerId, node);
     });
-    pageLookup.set(node.pid, menuParam);
+    pageLookup.set(node.pid.toString(), menuParam);
     li.appendChild(content);
     return li;
   }

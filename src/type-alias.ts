@@ -37,3 +37,8 @@ export interface ILoaderParam {
 export interface IResponseCheckRkey {
   checked: boolean;
 }
+
+export interface IRoutingQueryString {
+  category: MenuOwnerType;
+  pageId: string;
+}

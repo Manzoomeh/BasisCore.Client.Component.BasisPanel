@@ -1,4 +1,4 @@
-import { IDictionary, IResponseCheckRkey } from "./type-alias";
+import { IDictionary } from "./type-alias";
 import { ICheckRkeyOptions } from "./components/basispanel/IBasisPanelOptions";
 
 export default class HttpUtil {
@@ -102,5 +102,21 @@ export default class HttpUtil {
     const paraNameList = [...Object.getOwnPropertyNames(params)];
     const formatter = new Function(...paraNameList, `return \`${string}\``);
     return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
+  }
+
+  static getQueryStringObject(): object {
+    let retVal = null;
+    if (window.location.search) {
+      const search = location.search.substring(1);
+      retVal = JSON.parse(
+        '{"' +
+          decodeURI(search)
+            .replace(/"/g, '\\"')
+            .replace(/&/g, '","')
+            .replace(/=/g, '":"') +
+          '"}'
+      );
+    }
+    return retVal;
   }
 }

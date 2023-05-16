@@ -1,6 +1,6 @@
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
-import { MenuOwnerType } from "./type-alias";
+import { IRoutingQueryString, MenuOwnerType } from "./type-alias";
 import { IMenuLoaderParam, IMenuPageInfo } from "./components/menu/IMenuInfo";
 
 export default class LocalStorageUtil {
@@ -14,34 +14,59 @@ export default class LocalStorageUtil {
   private static _currentPage: IPageLoaderParam;
   private static _currentUserId: number;
 
+  public static BusinessId?: number;
+  public static CorporateId?: number;
+  public static PageId?: string = "default";
+  public static Category?: string = "profile";
+  private static _routingQueryObject: IRoutingQueryString;
+
+  public static get routingQueryObject(): IRoutingQueryString {
+    return LocalStorageUtil._routingQueryObject;
+  }
+
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
     const result = await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
     if (result.checked) {
       LocalStorageUtil._currentUserId = result.userid;
-      const str = localStorage.getItem("__bc_panel_last_state__");
-      if (str) {
-        try {
-          const obj: IStateModel = JSON.parse(str);
-          if (obj.i && result.userid == obj.i) {
-            if (obj.b) {
-              LocalStorageUtil._lastBusiness = obj.b;
+      LocalStorageUtil._routingQueryObject =
+        HttpUtil.getQueryStringObject() as IRoutingQueryString;
+      if (
+        LocalStorageUtil._routingQueryObject &&
+        LocalStorageUtil._routingQueryObject.category &&
+        LocalStorageUtil._routingQueryObject.pageId
+      ) {
+        LocalStorageUtil.CorporateId = result.currentOwnerid;
+        LocalStorageUtil.BusinessId = result.currentDmnid;
+        LocalStorageUtil.Category = this._routingQueryObject.category;
+        LocalStorageUtil.PageId = this._routingQueryObject.pageId;
+      } else {
+        const str = localStorage.getItem("__bc_panel_last_state__");
+        if (str) {
+          try {
+            const obj: IStateModel = JSON.parse(str);
+            if (obj.i && result.userid == obj.i) {
+              if (obj.b) {
+                LocalStorageUtil._lastBusiness = obj.b;
+              }
+              if (obj.c) {
+                LocalStorageUtil._lastCorporate = obj.c;
+              }
+              if (obj.p) {
+                LocalStorageUtil._lastPage = obj.p;
+              }
+              if (obj.m) {
+                LocalStorageUtil._lastMenu = obj.m;
+              }
             }
-            if (obj.c) {
-              LocalStorageUtil._lastCorporate = obj.c;
-            }
-            if (obj.p) {
-              LocalStorageUtil._lastPage = obj.p;
-            }
-            if (obj.m) {
-              LocalStorageUtil._lastMenu = obj.m;
-            }
+          } catch (ex) {
+            console.error("error in  load local storage data", ex);
           }
-        } catch (ex) {
-          console.error("error in  load local storage data", ex);
         }
       }
     }
+
+    console.log("LocalStorageUtil", LocalStorageUtil);
   }
 
   public static resetCurrentUserId() {
@@ -84,9 +109,9 @@ export default class LocalStorageUtil {
   public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
     let retVal: number = null;
     if (ownerType == "business") {
-      retVal = LocalStorageUtil._lastBusiness?.id;
+      retVal = LocalStorageUtil.BusinessId;
     } else if (ownerType == "corporate") {
-      retVal = LocalStorageUtil._lastCorporate?.id;
+      retVal = LocalStorageUtil.CorporateId;
     }
     return retVal;
   }
@@ -105,6 +130,7 @@ export default class LocalStorageUtil {
       menu: menu,
       ownerId: null,
       info: null,
+      pageId: null,
     };
     LocalStorageUtil.save();
   }
@@ -119,16 +145,20 @@ export default class LocalStorageUtil {
 interface ICheckRkeyResult {
   checked: boolean;
   userid: number;
+  /*current corporate*/
   currentOwnerid: number;
+  /*current business*/
   currentDmnid: number;
   ownerid: number;
   dmnid: number;
   rkey: string;
   usercat: string;
+  ERP: boolean;
 }
 
 export interface ICurrentMenu {
   menu: IMenuLoaderParam;
+  pageId: string;
   ownerId: string;
   info: IMenuPageInfo;
 }

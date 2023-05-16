@@ -49,10 +49,10 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       this.pageType = info?.container;
       const param = JSON.stringify(pageParam);
       const currentState = LocalStorageUtil.getLastState();
-      const pageName =
-        currentState.b?.title ?? currentState.c?.title ?? pageParam.owner;
+      const pageName = pageParam.owner;
       if (!this._isSilent) {
-        history.pushState(currentState, "", `/${pageName}#${pageParam.pageId}`);
+        console.log(currentState);
+        history.pushState(currentState, "", `/${pageName}/${pageParam.pageId}`);
       }
       const doc = this.owner.toNode(
         `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`

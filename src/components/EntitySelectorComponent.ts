@@ -23,6 +23,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private firstLoginFromOtherWebSitesService = false;
   private firstLoginFromOtherWebSitesBusiness = false;
   protected setSilent: boolean = false;
+  private lastActiveId: number;
 
   public businessComponentFlag: boolean = false;
   constructor(
@@ -114,9 +115,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
     if (this._isFirst) {
+      if (LocalStorageUtil.Category !== "profile") {
+        const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+        this.trySelectItemSilentAsync(id);
+        if (LocalStorageUtil.Category == this.ownerType) {
+          const param = this.createMenuLoaderParam(id);
+          param.pageId = LocalStorageUtil.PageId;
+          this.owner.setSource(DefaultSource.SHOW_MENU, param);
+        }
+      }
       this._isFirst = false;
-      const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
-      this.trySelectItemSilentAsync(id);
     }
   }
 
@@ -339,18 +347,21 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async setActiveAsync(id: number) {
-    const url = HttpUtil.formatString(this.options.baseUrl.active, {
-      rKey: this.options.rKey,
-    });
-    await HttpUtil.checkRKeyFetchDataAsync(
-      url,
-      "POST",
-      this.options.checkRkey,
-      {
-        type: this.ownerType,
-        id: id,
-      }
-    );
+    if (id !== this.lastActiveId) {
+      this.lastActiveId = id;
+      const url = HttpUtil.formatString(this.options.baseUrl.active, {
+        rKey: this.options.rKey,
+      });
+      await HttpUtil.checkRKeyFetchDataAsync(
+        url,
+        "POST",
+        this.options.checkRkey,
+        {
+          type: this.ownerType,
+          id: id,
+        }
+      );
+    }
     if (this.deviceId == 2) {
       this.element
         .closest("[data-bc-bp-header-levels]")
