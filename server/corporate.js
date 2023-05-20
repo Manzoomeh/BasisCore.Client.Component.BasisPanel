@@ -65,7 +65,7 @@ const corporateList = [
     id: 8355,
     title: "میترا-گشت",
   },
-]
+];
 router.get("/:rKey/list", function (req, res) {
   res.json(corporateList);
 });
@@ -79,11 +79,11 @@ router.get("/:rKey/menu", function (req, res) {
       nodes: [
         {
           title: `زیر منوی اول شرکت ${corporate.title}`,
-          pid: corporate.id * 3,
+          pid: (corporate.id * 3).toString(),
         },
         {
           title: `زیر منوی دوم شرکت ${corporate.title}`,
-          pid: corporate.id * 4,
+          pid: (corporate.id * 4).toString(),
         },
       ],
     });
@@ -92,23 +92,59 @@ router.get("/:rKey/menu", function (req, res) {
 });
 
 router.get("/:rKey/page/:pageId", function (req, res) {
+  const corporate = corporateList.find((x) => x.id == active.corporate);
   const widgetList = fs.readFileSync(
     path.join(__dirname, "pages/corporate-widget-list.json"),
     {
       encoding: "utf8",
     }
   );
-  res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
+  let result = Reflect.get(JSON.parse(widgetList), req.params.pageId);
+  if (!result) {
+    result = {
+      container: "container",
+      groups: [
+        {
+          groupName: "group1",
+          options: {
+            repositories: {
+              "bc.grid": "/assets/js/basiscore.grid.component.js",
+            },
+            settings: {},
+          },
+          widgets: [
+            {
+              id: `corporateWidget-${req.params.pageId}.html`,
+              title: `ویجت شرکت ${corporate.title}`,
+              name: `corporateWidget-${req.params.pageId}`,
+              container: "widget",
+              x: 0,
+              y: 0,
+              w: 12,
+              h: 2,
+            },
+          ],
+          deactiveWidgets: [],
+        },
+      ],
+    };
+  }
+  res.json(result);
 });
 
 router.get("/:rKey/widget/:widgetId", function (req, res) {
-  const widgetList = fs.readFileSync(
-    path.join(__dirname, "pages", req.params.widgetId),
+  const corporate = corporateList.find((x) => x.id == active.corporate);
+  const widgetContent = fs.readFileSync(
+    path.join(__dirname, "pages", "corporateWidget1.html"),
     {
       encoding: "utf8",
     }
   );
-  res.send(widgetList);
+  res.send(
+    widgetContent
+      .replace("{0}", corporate.title)
+      .replace("{1}", req.params.widgetId)
+  );
 });
 
 module.exports = router;

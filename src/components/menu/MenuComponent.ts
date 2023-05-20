@@ -118,6 +118,7 @@ export default class MenuComponent
     let retVal = false;
     if (this.current) {
       const menuItem = this.current.pageLookup.get(pageId);
+      console.log(pageId, menuItem, this.current);
       if (menuItem) {
         //update ui
         this.ul
