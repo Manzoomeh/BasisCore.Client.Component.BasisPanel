@@ -3,6 +3,7 @@ import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
+import { MenuOwnerType } from "../../type-alias";
 
 export default class MenuCacheManager {
   private readonly cache: Map<string, MenuCacheItem>;
@@ -12,6 +13,11 @@ export default class MenuCacheManager {
     this.cache = new Map<string, MenuCacheItem>();
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
+  }
+
+  public tryGetMenu(category: MenuOwnerType, ownerId: string): MenuElement {
+    let cache = this.cache.get(category);
+    return cache?.tryGetMenu(ownerId);
   }
 
   public loadMenuAsync(
@@ -51,10 +57,14 @@ class MenuCacheItem {
     this.checkRkeyOption = checkRkey;
   }
 
+  public tryGetMenu(ownerId: string): MenuElement {
+    return this.cache.get(ownerId);
+  }
+
   public async loadMenuAsync(
     menuParam: IMenuLoaderParam
   ): Promise<MenuElement> {
-    let menu = this.cache.get(menuParam.ownerId);
+    let menu = this.tryGetMenu(menuParam.ownerId);
     if (!menu) {
       const url = HttpUtil.formatString(
         `${menuParam.ownerUrl}${menuParam.menuMethod}`,

@@ -4,87 +4,75 @@ import { IRoutingQueryString, MenuOwnerType } from "./type-alias";
 import { IMenuLoaderParam, IMenuPageInfo } from "./components/menu/IMenuInfo";
 
 export default class LocalStorageUtil {
-  private static _lastBusiness: IIdValuePair;
-  private static _lastCorporate: IIdValuePair;
-  private static _lastPage: IPageLoaderParam;
-  private static _lastMenu: ICurrentMenu;
-
-  private static _currentBusiness: IIdValuePair;
-  private static _currentCorporate: IIdValuePair;
-  private static _currentPage: IPageLoaderParam;
-  private static _currentUserId: number;
-
+  public static UserId: number;
   public static BusinessId?: number;
   public static CorporateId?: number;
-  public static PageId?: string = "default";
-  public static Category?: string = "profile";
-  private static _routingQueryObject: IRoutingQueryString;
-
-  public static get routingQueryObject(): IRoutingQueryString {
-    return LocalStorageUtil._routingQueryObject;
-  }
+  public static PageId?: string;
+  public static Category?: MenuOwnerType;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
     const result = await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
     if (result.checked) {
-      LocalStorageUtil._currentUserId = result.userid;
-      LocalStorageUtil._routingQueryObject =
+      LocalStorageUtil.UserId = result.userid;
+      const routingQueryObject =
         HttpUtil.getQueryStringObject() as IRoutingQueryString;
       if (
-        LocalStorageUtil._routingQueryObject &&
-        LocalStorageUtil._routingQueryObject.category &&
-        LocalStorageUtil._routingQueryObject.pageId
+        routingQueryObject &&
+        routingQueryObject.category &&
+        routingQueryObject.pageId
       ) {
-        LocalStorageUtil.CorporateId = result.currentOwnerid;
-        LocalStorageUtil.BusinessId = result.currentDmnid;
-        LocalStorageUtil.Category = this._routingQueryObject.category;
-        LocalStorageUtil.PageId = this._routingQueryObject.pageId;
+        LocalStorageUtil.Category = routingQueryObject.category;
+        LocalStorageUtil.PageId = routingQueryObject.pageId;
+        switch (LocalStorageUtil.Category) {
+          case "profile": {
+            LocalStorageUtil.CorporateId = null;
+            LocalStorageUtil.BusinessId = null;
+            break;
+          }
+          case "corporate": {
+            LocalStorageUtil.CorporateId = result.currentOwnerid;
+            LocalStorageUtil.BusinessId = null;
+            break;
+          }
+          case "business": {
+            LocalStorageUtil.CorporateId = result.currentOwnerid;
+            LocalStorageUtil.BusinessId = result.currentDmnid;
+            break;
+          }
+        }
       } else {
         const str = localStorage.getItem("__bc_panel_last_state__");
         if (str) {
           try {
             const obj: IStateModel = JSON.parse(str);
-            if (obj.i && result.userid == obj.i) {
-              if (obj.b) {
-                LocalStorageUtil._lastBusiness = obj.b;
-              }
-              if (obj.c) {
-                LocalStorageUtil._lastCorporate = obj.c;
-              }
-              if (obj.p) {
-                LocalStorageUtil._lastPage = obj.p;
-              }
-              if (obj.m) {
-                LocalStorageUtil._lastMenu = obj.m;
-              }
-            }
+            LocalStorageUtil.CorporateId = obj.CorporateId ?? null;
+            LocalStorageUtil.BusinessId = obj.BusinessId ?? null;
+            LocalStorageUtil.Category = obj.Category ?? "profile";
+            LocalStorageUtil.PageId = obj.PageId ?? "default";
           } catch (ex) {
             console.error("error in  load local storage data", ex);
           }
         }
       }
     }
-
-    console.log("LocalStorageUtil", LocalStorageUtil);
   }
 
   public static resetCurrentUserId() {
-    LocalStorageUtil._currentBusiness = null;
-    LocalStorageUtil._currentCorporate = null;
+    LocalStorageUtil.BusinessId = null;
+    LocalStorageUtil.CorporateId = null;
     LocalStorageUtil.save();
   }
 
   public static setEntitySelectorCurrentValue(
     ownerType: MenuOwnerType,
-    id: number,
-    title: string
+    id: number
   ) {
     if (ownerType == "business") {
-      LocalStorageUtil._currentBusiness = { id, title };
+      LocalStorageUtil.BusinessId = id;
     } else if (ownerType == "corporate") {
-      LocalStorageUtil._currentCorporate = { id, title };
-      LocalStorageUtil._currentBusiness = null;
+      LocalStorageUtil.CorporateId = id;
+      LocalStorageUtil.BusinessId = null;
     }
     LocalStorageUtil.save();
   }
@@ -98,11 +86,11 @@ export default class LocalStorageUtil {
 
   public static getLastState(): IStateModel {
     return {
-      i: LocalStorageUtil._currentUserId,
-      b: LocalStorageUtil._currentBusiness,
-      c: LocalStorageUtil._currentCorporate,
-      p: LocalStorageUtil._currentPage,
-      m: LocalStorageUtil._lastMenu,
+      UserId: LocalStorageUtil.UserId,
+      BusinessId: LocalStorageUtil.BusinessId,
+      CorporateId: LocalStorageUtil.CorporateId,
+      PageId: LocalStorageUtil.PageId,
+      Category: LocalStorageUtil.Category,
     };
   }
 
@@ -116,28 +104,9 @@ export default class LocalStorageUtil {
     return retVal;
   }
 
-  public static setCurrentPage(page: IPageLoaderParam) {
-    LocalStorageUtil._currentPage = page;
-    LocalStorageUtil.save();
-  }
-
-  public static getCurrentPage(): IPageLoaderParam {
-    return LocalStorageUtil._lastPage;
-  }
-
-  public static setCurrentMenu(menu: IMenuLoaderParam) {
-    LocalStorageUtil._lastMenu = {
-      menu: menu,
-      ownerId: null,
-      info: null,
-      pageId: null,
-    };
-    LocalStorageUtil.save();
-  }
-
-  public static setActiveMenuItem(ownerId: string, menuItem: IMenuPageInfo) {
-    LocalStorageUtil._lastMenu.ownerId = ownerId;
-    LocalStorageUtil._lastMenu.info = menuItem;
+  public static setCurrentPage(pageId: string, category: MenuOwnerType) {
+    LocalStorageUtil.PageId = pageId;
+    LocalStorageUtil.Category = category;
     LocalStorageUtil.save();
   }
 }
@@ -164,14 +133,9 @@ export interface ICurrentMenu {
 }
 
 export interface IStateModel {
-  i: number;
-  b: IIdValuePair;
-  c: IIdValuePair;
-  p: IPageLoaderParam;
-  m: ICurrentMenu;
-}
-
-interface IIdValuePair {
-  id: number;
-  title: string;
+  UserId: number;
+  BusinessId?: number;
+  CorporateId?: number;
+  PageId: string;
+  Category?: MenuOwnerType;
 }

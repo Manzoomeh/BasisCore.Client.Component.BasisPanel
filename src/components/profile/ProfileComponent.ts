@@ -29,12 +29,10 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       await this.loadDataAsync();
       this.refreshUI();
       this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-      if (LocalStorageUtil.Category === "profile") {
-        this.signalToDisplayMenu();
-      }
+      this.signalToDisplayMenu(LocalStorageUtil.Category !== "profile");
       this.isFirst = false;
     } else {
-      this.signalToDisplayMenu();
+      this.signalToDisplayMenu(false);
     }
   }
 
@@ -64,7 +62,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       .querySelector("[data-bc-user-change-level]")
       .addEventListener("click", (e) => {
         e.preventDefault();
-        this.signalToDisplayMenu();
+        this.signalToDisplayMenu(false);
         LocalStorageUtil.resetCurrentUserId();
         this.container.classList.add("active-user");
         this.container
@@ -102,7 +100,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     this.profile = QuestionUtil.toObject(questions);
   }
 
-  private signalToDisplayMenu() {
+  private signalToDisplayMenu(onlyLoad: boolean) {
     const pageId =
       this.isFirst && LocalStorageUtil.Category === "profile"
         ? LocalStorageUtil.PageId
@@ -110,13 +108,16 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         owner: "profile",
-        ownerId: "",
+        ownerId: "0",
         ownerUrl: this.options.baseUrl.profile,
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,
         pageId: pageId,
       };
-      this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
+      this.owner.setSource(
+        onlyLoad ? DefaultSource.LOAD_MENU : DefaultSource.SHOW_MENU,
+        menuInfo
+      );
     }
   }
 

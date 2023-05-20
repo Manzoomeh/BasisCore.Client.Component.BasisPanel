@@ -35,7 +35,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
 
   private async displayPageAsync(pageParam: IPageLoaderParam): Promise<void> {
     if (pageParam) {
-      LocalStorageUtil.setCurrentPage(pageParam);
       const url = HttpUtil.formatString(
         `${pageParam.ownerUrl}${pageParam.pageMethod}`,
         pageParam
@@ -48,10 +47,10 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       );
       this.pageType = info?.container;
       const param = JSON.stringify(pageParam);
-      const currentState = LocalStorageUtil.getLastState();
-      const pageName = pageParam.owner;
       if (!this._isSilent) {
-        console.log(currentState);
+        LocalStorageUtil.setCurrentPage(pageParam.pageId, pageParam.owner);
+        const currentState = LocalStorageUtil.getLastState();
+        const pageName = pageParam.owner;
         history.pushState(currentState, "", `/${pageName}/${pageParam.pageId}`);
       }
       const doc = this.owner.toNode(

@@ -29,18 +29,14 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         if (event.state) {
           event.preventDefault();
           const data: IStateModel = event.state;
-          console.log(`location: ${document.location}`, data);
-          if (data.c) {
-            this.owner.setSource(DefaultSource.SET_CORPORATE, data.c.id);
+          if (data.CorporateId) {
+            this.owner.setSource(DefaultSource.SET_CORPORATE, data.CorporateId);
           }
-          if (data.b) {
-            this.owner.setSource(DefaultSource.SET_BUSINESS, data.b.id);
+          if (data.BusinessId) {
+            this.owner.setSource(DefaultSource.SET_BUSINESS, data.BusinessId);
           }
-          if (data.m) {
-            this.owner.setSource(DefaultSource.SET_MENU, data.m);
-          }
-          if (data.p) {
-            this.owner.setSource(DefaultSource.SET_PAGE, data.p);
+          if (data.PageId) {
+            this.owner.setSource(DefaultSource.SET_MENU, data);
           }
         }
       });

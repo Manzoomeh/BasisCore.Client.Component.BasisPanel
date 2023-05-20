@@ -175,8 +175,6 @@ export default class MenuElementMaker {
           "active"
         );
       }
-
-      LocalStorageUtil.setActiveMenuItem(menuParam.ownerId, node);
     });
     pageLookup.set(node.pid.toString(), menuParam);
     li.appendChild(content);

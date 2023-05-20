@@ -53,7 +53,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const title = el.getAttribute("data-title");
     const id = parseInt(msgElId);
     if (id != 0) {
-      LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id, title);
+      LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
       this.owner.setSource(
         DefaultSource.SHOW_MENU,
         this.createMenuLoaderParam(id)
@@ -118,11 +118,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       if (LocalStorageUtil.Category !== "profile") {
         const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
         this.trySelectItemSilentAsync(id);
+        const param = this.createMenuLoaderParam(id);
         if (LocalStorageUtil.Category == this.ownerType) {
-          const param = this.createMenuLoaderParam(id);
           param.pageId = LocalStorageUtil.PageId;
-          this.owner.setSource(DefaultSource.SHOW_MENU, param);
         }
+        this.owner.setSource(
+          LocalStorageUtil.Category == this.ownerType
+            ? DefaultSource.SHOW_MENU
+            : DefaultSource.LOAD_MENU,
+          param
+        );
       }
       this._isFirst = false;
     }
@@ -311,11 +316,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           const id = parseInt(li.getAttribute("data-id"));
           const title = li.getAttribute("data-title");
           const entity = this.entityList.find((x) => x.id == id);
-          LocalStorageUtil.setEntitySelectorCurrentValue(
-            this.ownerType,
-            id,
-            title
-          );
+          LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
           if (this.profile && entity) {
             await this.setActiveAsync(id);
             if (!this.setSilent) {
