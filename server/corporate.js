@@ -78,6 +78,10 @@ router.get("/:rKey/menu", function (req, res) {
       title: `منوی شرکت ${corporate.title}`,
       nodes: [
         {
+          title: `زیر منوی پیش فرض شرکت ${corporate.title}`,
+          pid: "default",
+        },
+        {
           title: `زیر منوی اول شرکت ${corporate.title}`,
           pid: (corporate.id * 3).toString(),
         },
@@ -142,7 +146,7 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
   );
   res.send(
     widgetContent
-      .replace("{0}", corporate.title)
+      .replace("{0}", corporate?.title)
       .replace("{1}", req.params.widgetId)
   );
 });

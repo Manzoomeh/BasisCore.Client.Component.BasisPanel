@@ -119,6 +119,10 @@ router.get("/:rKey/menu", function (req, res) {
       title: `منوی کسب و کار ${business.title}`,
       nodes: [
         {
+          title: `زیر منوی پیش فرض کسب و کار ${business.title}`,
+          pid: "default",
+        },
+        {
           title: `زیر منوی اول کسب و کار ${business.title}`,
           pid: (business.id * 3).toString(),
         },

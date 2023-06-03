@@ -49,8 +49,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
       this.clearCombo();
       this.trySelectFromLocalStorageAsync();
     } else if (source?.id == DefaultSource.SET_BUSINESS) {
-      const businessId: number = source?.rows[0].value;
-      this.trySelectItemSilentAsync(businessId);
+      this.trySelectFromLocalStorageAsync();
     }
   }
 

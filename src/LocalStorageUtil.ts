@@ -94,6 +94,15 @@ export default class LocalStorageUtil {
     };
   }
 
+  public static setCurrentState(state: IStateModel): void {
+    LocalStorageUtil.UserId = state.UserId;
+    LocalStorageUtil.BusinessId = state.BusinessId;
+    LocalStorageUtil.CorporateId = state.CorporateId;
+    LocalStorageUtil.PageId = state.PageId;
+    LocalStorageUtil.Category = state.Category;
+    LocalStorageUtil.save();
+  }
+
   public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
     let retVal: number = null;
     if (ownerType == "business") {

@@ -40,10 +40,9 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
   public async runAsync(source?: ISource): Promise<any> {
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
-      this.trySelectFromLocalStorageAsync();
+      await this.trySelectFromLocalStorageAsync();
     } else if (source?.id == DefaultSource.SET_CORPORATE) {
-      const corporateId: number = source?.rows[0].value;
-      this.trySelectItemSilentAsync(corporateId);
+      await this.trySelectFromLocalStorageAsync();
     }
   }
 }

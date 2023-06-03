@@ -28,15 +28,16 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       window.addEventListener("popstate", (event) => {
         if (event.state) {
           event.preventDefault();
-          const data: IStateModel = event.state;
-          if (data.CorporateId) {
-            this.owner.setSource(DefaultSource.SET_CORPORATE, data.CorporateId);
+          const state: IStateModel = event.state;
+          LocalStorageUtil.setCurrentState(state);
+          if (state.CorporateId) {
+            this.owner.setSource(DefaultSource.SET_CORPORATE, state);
           }
-          if (data.BusinessId) {
-            this.owner.setSource(DefaultSource.SET_BUSINESS, data.BusinessId);
+          if (state.BusinessId) {
+            this.owner.setSource(DefaultSource.SET_BUSINESS, state);
           }
-          if (data.PageId) {
-            this.owner.setSource(DefaultSource.SET_MENU, data);
+          if (state.PageId) {
+            this.owner.setSource(DefaultSource.SET_MENU, state);
           }
         }
       });

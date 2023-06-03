@@ -11,10 +11,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
-import LocalStorageUtil, {
-  ICurrentMenu,
-  IStateModel,
-} from "../../LocalStorageUtil";
+import { IStateModel } from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -118,7 +115,6 @@ export default class MenuComponent
     let retVal = false;
     if (this.current) {
       const menuItem = this.current.pageLookup.get(pageId);
-      console.log(pageId, menuItem, this.current);
       if (menuItem) {
         //update ui
         this.ul
