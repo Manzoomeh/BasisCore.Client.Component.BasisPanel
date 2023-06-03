@@ -15,6 +15,7 @@ export default abstract class PageComponent
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
+  private hasSidebar :boolean = false
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
@@ -79,16 +80,26 @@ export default abstract class PageComponent
   }
 
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
+    
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-
+    for (var i = 0; i < pageInfo.groups.length; i++) {
+      const groupInfo = pageInfo.groups[i];
+      groupInfo.widgets.forEach((widgetParam) => { 
+        if(widgetParam.container == "sidebar"){
+          this.hasSidebar = true
+        }
+      })
+    }
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
       const widgetParamList = groupInfo.widgets.map((widgetInfo) => {
         widgets.push(widgetInfo.y + widgetInfo.h);
-        return { ...widgetInfo, ...{ page: this.loaderParam } };
+      
+        return { ...widgetInfo, ...{ page: this.loaderParam } , "sidebar":this.hasSidebar};
       });
+    
       group.addWidgetAsync(...widgetParamList);
     }
     const windowHeight = window.innerHeight;
