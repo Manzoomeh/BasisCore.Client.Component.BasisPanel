@@ -18,7 +18,7 @@ export default class WidgetComponent extends PageWidgetComponent {
   public async initializeAsync(): Promise<void> {
     let topPosition = 0
     const hasSidebar = this.owner.node.getAttribute("has-sidebar") 
-    if(hasSidebar== "true"){
+    if(hasSidebar== "true" && this.options.culture.deviceId == 2){
       topPosition = 50
     }
     this.container.setAttribute("gs-x", this.param.x.toString());
