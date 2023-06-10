@@ -90,11 +90,11 @@
 }
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d2-menu] a[data-bc-menu-active] {
-	border-left: 2px solid #004B85 !important;
+	/* border-left: 2px solid #004B85 !important; */
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-menu] a[data-bc-menu-active] {
-	border-right: 2px solid #004B85 !important;
+	/* border-right: 2px solid #004B85 !important; */
 }
 
 [data-bc-d2-menu] [data-bc-menu-active]>a {
@@ -108,7 +108,7 @@
 }
 
 [data-bc-d2-menu] li a {
-	/* padding: 0 15px; */
+	padding: 0 15px;
 	cursor: pointer;
 	height: 100%;
 	display: block;

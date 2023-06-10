@@ -1,7 +1,7 @@
 /*  */
 [data-bc-bp-d2-main-header] {
     background-color: #fff;
-    padding: 15px 25px;
+    padding: 15px 15px;
     position: relative;
     /* min-height: 88px; */
     box-sizing: border-box;
@@ -347,12 +347,12 @@
     display: block;
     width: 43px;
     height: 43px;
-    background-image: url('basispanel_light.jpg');
+    background-image: url('basispanel_mobile_light.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 	
-    background-image: none !important;
-    background: #D9D9D9 !important;
-    border-radius: 15px;
+    /* background-image: none !important; */
+    /* background: #D9D9D9 !important; */
+    /* border-radius: 15px; */
 }
