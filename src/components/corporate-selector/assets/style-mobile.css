@@ -220,8 +220,8 @@
     padding: 0px 10px;
     font-size: 11px;
     color: var(--dark_gray);
-    background: #fff !important;
-    border: 1.5px solid rgba(0, 75, 133, 0.1) !important;
+    background: #fff;
+    border: 1.5px solid rgba(0, 75, 133, 0.1);
     border-radius: 15px;
     transition: border 0.3s linear 0s;
     box-sizing: border-box;

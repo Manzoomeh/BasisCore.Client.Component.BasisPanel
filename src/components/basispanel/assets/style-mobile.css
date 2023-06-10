@@ -45,7 +45,7 @@
 	outline: none;
 	opacity: 1;
 	border-radius: 5px;
-	background: #222;
+	background-color: #222;
 	-webkit-transform: rotate(0deg);
 	-ms-transform: rotate(0deg);
 	transform: rotate(0deg);
@@ -156,7 +156,7 @@
 	outline: none;
 	opacity: 1;
 	border-radius: 5px;
-	background: #222;
+	background-color: #222;
 	-webkit-transform: rotate(0deg);
 	-ms-transform: rotate(0deg);
 	transform: rotate(0deg);
@@ -245,12 +245,12 @@
 
 [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels-opened] {
 	position: absolute;
-	top: 15px;
-	left: 15px;
+	top: 0;
+	left: 0;
 	cursor: pointer;
-	width: 15px;
-	height: 15px;
-	line-height: 15px;
+	width: 45px;
+	height: 45px;
+	line-height: 45px;
 	text-align: center;
 	z-index: 10;
 	-webkit-transition: all 0.5s ease;
@@ -260,7 +260,7 @@
 }
 
 [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels].active [data-bc-bp-d2-header-levels-opened] {
-	top: 25px;
+	top: 10px;
 	z-index: 999999;
 }
 
