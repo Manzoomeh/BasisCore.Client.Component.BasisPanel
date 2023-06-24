@@ -5,7 +5,7 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import { DefaultSource } from "../../type-alias";
+import { DefaultSource, IModuleInfo, MenuOwnerType } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
@@ -20,66 +20,26 @@ export default class MenuComponent
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   private current: MenuElement;
+  private moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>> = new Map<
+    MenuOwnerType,
+    Map<string, IModuleInfo>
+  >();
 
   constructor(owner: IUserDefineComponent) {
-
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-menu-container");
     this.ul = this.container.querySelector("[data-bc-menu]");
-    this.cache = new MenuCacheManager(this.options.checkRkey, this.deviceId as number);
+    this.cache = new MenuCacheManager(
+      this.options.checkRkey,
+      this.deviceId as number
+    );
+    (document as any).test_tryLoadPageEx = this.tryLoadPageEx.bind(this);
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
-    
-    if (this.deviceId == 1) {
-      // // for fix menu after scroll
-      // const menu = this.container;
-      // const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
-      // var sticky = (this.container as HTMLElement).offsetTop;
-      // window.onscroll = function() {
-      //   if (window.pageYOffset >= sticky) {
-      //     menu.setAttribute("data-bc-bp-sticky", "");
-      //     themeContainer.setAttribute("data-bc-bp-sticky", "");
-      //   } else {
-      //     menu.removeAttribute("data-bc-bp-sticky");
-      //     themeContainer.removeAttribute("data-bc-bp-sticky");
-      //   }
-      // };
-    } else if (this.deviceId == 2) {
-      // // add Event Listeners
-      // const openedMenu = this.container.querySelector("[data-bc-bp-menu-opened]");
-      // // const closedMenu = this.container.querySelector('.closed-menu');
-      // const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
-      // const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
-
-      // openedMenu.addEventListener("click", (e) => {
-      //   this.toggleMenu([navbarMenu, menuOverlay]);
-      // });
-      // // closedMenu.addEventListener("click", (e) => {
-      // //   this.toggleMenu([navbarMenu, menuOverlay]);
-      // // });
-      // menuOverlay.addEventListener("click", (e) => {
-      //   this.toggleMenu([navbarMenu, menuOverlay]);
-      // });
-    }
   }
 
-  // private toggleMenu(elements: Array<Element>) {
-  //   const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-  //   openMenu.forEach((e) => {
-  //     e.querySelector("[data-bc-bp-submenu]")?.removeAttribute('style');
-  //     e.querySelector("[data-bc-bp-menu-external]")?.removeAttribute('style');
-  //     e.classList.remove('active');
-  //   });
-
-  //   elements.forEach((el) => {
-  //     el.classList.toggle('active');
-  //   });
-  //   document.body.classList.toggle('scrolling');
-  // }
-
   public initializeAsync(): Promise<void> {
-
     this.owner.addTrigger([
       DefaultSource.SHOW_MENU,
       DefaultSource.BUSINESS_SOURCE,
@@ -89,8 +49,10 @@ export default class MenuComponent
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
-      
-      this.container.setAttribute(`data-bc-bp-menu-seperation` , source.rows[0].owner)
+      this.container.setAttribute(
+        `data-bc-bp-menu-seperation`,
+        source.rows[0].owner
+      );
       await this.loadDataAsync(source.rows[0]);
     }
   }
@@ -98,8 +60,10 @@ export default class MenuComponent
   public async loadDataAsync(menuParam: IMenuLoaderParam): Promise<void> {
     const newMenu = await this.cache.loadMenuAsync(
       menuParam,
+      this.moduleMapper,
       this.onMenuItemClick.bind(this)
     );
+    console.log("loader mapping", this.moduleMapper);
     if (this.current != newMenu) {
       this.current = newMenu;
       this.ul.innerHTML = "";
@@ -113,7 +77,9 @@ export default class MenuComponent
             const pid = temp?.info?.pid.toString();
             const mid = temp?.info?.mid.toString();
             const ownerId = temp?.ownerId.toString();
-            const content = this.ul.querySelector(`a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`);
+            const content = this.ul.querySelector(
+              `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
+            );
             const li = content?.closest("li");
             const parent = content?.closest("[data-bc-bp-submenu]");
             if (parent) {
@@ -131,42 +97,82 @@ export default class MenuComponent
     }
   }
 
+  private setMenuUISelected(pageId: string, moduleId: string) {
+    this.ul
+      .querySelector(`li[data-bc-menu-active]`)
+      .removeAttribute("data-bc-menu-active");
+    const content = this.ul.querySelector(
+      `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid]`
+    );
+    const li = content?.closest("li");
+    const parent = content?.closest("[data-bc-bp-submenu]");
+    if (parent) {
+      parent
+        .closest("li")
+        .querySelector("[data-bc-level]")
+        .setAttribute("data-bc-menu-active", "");
+      li?.setAttribute("data-bc-menu-active", "");
+    } else {
+      li?.setAttribute("data-bc-menu-active", "");
+    }
+  }
+
   private async onMenuItemClick(
     pageId: string,
     param: IMenuLoaderParam,
     target: EventTarget
   ) {
+    const newParam: IPageLoaderParam = {
+      pageId: pageId,
+      owner: param.owner,
+      ownerId: param.ownerId,
+      ownerUrl: param.ownerUrl,
+      rKey: param.rKey,
+      pageMethod: this.options.method.page,
+    };
+    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+  }
+
+  public async tryLoadPageEx(
+    owner: MenuOwnerType,
+    moduleId: string,
+    pageId: string,
+    args?: any
+  ): Promise<boolean> {
+    const ownerInfo = this.moduleMapper.get(owner);
+    if (ownerInfo) {
+      const moduleInfo = ownerInfo.get(moduleId);
+      if (moduleInfo) {
+        const newParam: IPageLoaderParam = {
+          pageId: pageId,
+          owner: moduleInfo.owner,
+          ownerId: moduleId,
+          ownerUrl: moduleInfo.ownerUrl,
+          rKey: this.options.rKey,
+          pageMethod: this.options.method.page,
+          arguments: args,
+        };
+        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+        this.setMenuUISelected(pageId, moduleId);
+      }
+    }
+    return ownerInfo != null;
+  }
+
+  public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
+    const source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
+    if (source) {
+      const param = source.rows[0] as IPageLoaderParam;
       const newParam: IPageLoaderParam = {
         pageId: pageId,
         owner: param.owner,
         ownerId: param.ownerId,
         ownerUrl: param.ownerUrl,
         rKey: param.rKey,
-        pageMethod: this.options.method.page,
+        pageMethod: param.pageMethod,
+        arguments: args,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-
-      // if (this.deviceId == 2) {
-      //   const navbarMenu = this.container.querySelector("[data-bc-bp-menu-navbar]");
-      //   const menuOverlay = this.container.querySelector("[data-bc-bp-d2-menu-overlay]");
-      //   this.toggleMenu([navbarMenu, menuOverlay]);
-      // }
-  }
-
-  public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
-    var source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
-    if (source) {
-        const param = source.rows[0] as IPageLoaderParam;
-        const newParam: IPageLoaderParam = {
-          pageId: pageId,
-          owner: param.owner,
-          ownerId: param.ownerId,
-          ownerUrl: param.ownerUrl,
-          rKey: param.rKey,
-          pageMethod: param.pageMethod,
-          arguments: args,
-        };
-        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
     return source != null;
   }

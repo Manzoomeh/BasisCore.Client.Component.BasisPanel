@@ -33,3 +33,8 @@ export interface ILoaderParam {
 export interface IResponseCheckRkey {
   checked: boolean;
 }
+
+export interface IModuleInfo {
+  owner: MenuOwnerType;
+  ownerUrl: string;
+}

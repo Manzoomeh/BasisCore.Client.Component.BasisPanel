@@ -3,6 +3,7 @@ import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
+import { IModuleInfo, MenuOwnerType } from "../../type-alias";
 
 export default class MenuCacheManager {
   private readonly cache: Map<string, MenuCacheItem>;
@@ -16,6 +17,7 @@ export default class MenuCacheManager {
 
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
+    moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>>,
     onMenuItemClick: (
       pageId: string,
       param: IMenuLoaderParam,
@@ -24,7 +26,15 @@ export default class MenuCacheManager {
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
-      cache = new MenuCacheItem(menuParam, onMenuItemClick, this.checkRkeyOption, this.deviceId);
+      const mapper = new Map<string, IModuleInfo>();
+      moduleMapper.set(menuParam.owner, mapper);
+      cache = new MenuCacheItem(
+        menuParam,
+        mapper,
+        onMenuItemClick,
+        this.checkRkeyOption,
+        this.deviceId
+      );
       this.cache.set(menuParam.owner, cache);
     }
     return cache.loadMenuAsync(menuParam);
@@ -37,6 +47,7 @@ class MenuCacheItem {
   private checkRkeyOption: ICheckRkeyOptions;
   constructor(
     menuParam: IMenuLoaderParam,
+    moduleMapper: Map<string, IModuleInfo>,
     onMenuItemClick: (
       pageId: string,
       param: IMenuLoaderParam,
@@ -45,7 +56,13 @@ class MenuCacheItem {
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
-    this.menuMaker = new MenuElementMaker(menuParam.rKey, onMenuItemClick, checkRkey, deviceId);
+    this.menuMaker = new MenuElementMaker(
+      menuParam.rKey,
+      moduleMapper,
+      onMenuItemClick,
+      checkRkey,
+      deviceId
+    );
     this.checkRkeyOption = checkRkey;
   }
 
@@ -62,7 +79,11 @@ class MenuCacheItem {
         }
       );
       //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
-      const menuData = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(url, "GET", this.checkRkeyOption);
+      const menuData = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+        url,
+        "GET",
+        this.checkRkeyOption
+      );
       menu = this.menuMaker.create(menuData, menuParam);
       this.cache.set(menuParam.ownerId, menu);
     }
