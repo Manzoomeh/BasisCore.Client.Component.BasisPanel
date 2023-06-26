@@ -32,7 +32,6 @@ export default class MenuComponent
       this.options.checkRkey,
       this.deviceId as number
     );
-    (document as any).test_tryLoadPageEx = this.tryLoadPageEx.bind(this);
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
@@ -63,7 +62,6 @@ export default class MenuComponent
       this.moduleMapper,
       this.onMenuItemClick.bind(this)
     );
-    console.log("loader mapping", this.moduleMapper);
     if (this.current != newMenu) {
       this.current = newMenu;
       this.ul.innerHTML = "";
