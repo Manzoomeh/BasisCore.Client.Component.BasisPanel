@@ -9,6 +9,7 @@ import IMenuInfo, {
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import { IModuleInfo } from "../../type-alias";
 
 export default class MenuElementMaker {
   readonly rKey: string;
@@ -19,9 +20,11 @@ export default class MenuElementMaker {
   ) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
+  private moduleMapper: Map<string, IModuleInfo>;
 
   constructor(
     rKey: string,
+    moduleMapper: Map<string, IModuleInfo>,
     onMenuItemClick: (
       pageId: string,
       param: IMenuLoaderParam,
@@ -34,6 +37,7 @@ export default class MenuElementMaker {
     this.onMenuItemClick = onMenuItemClick;
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
+    this.moduleMapper = moduleMapper;
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -107,24 +111,24 @@ export default class MenuElementMaker {
     li.appendChild(innerUl);
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
-        if (li.classList.contains('active')) {
-            // collapseSubMenu();
-            li.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
-            li.classList.remove('active');
+        if (li.classList.contains("active")) {
+          // collapseSubMenu();
+          li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+          li.classList.remove("active");
         } else {
-            // Collapse Existing Expanded menuItemHasChildren
-            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-            openMenu.forEach((e) => {
-              e.querySelector("[data-bc-bp-submenu]").removeAttribute('style');
-              e.classList.remove('active');
-            });
-            // Expand New menuItemHasChildren
-            li.classList.add('active');
-            const subMenu = li.querySelector("[data-bc-bp-submenu]");
-            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-            (subMenu as HTMLElement).style.maxHeight = '20rem';
-            (subMenu as HTMLElement).style.transition = 'all 1s ease';
-            // subMenu.classList.add("show");
+          // Collapse Existing Expanded menuItemHasChildren
+          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+          openMenu.forEach((e) => {
+            e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+            e.classList.remove("active");
+          });
+          // Expand New menuItemHasChildren
+          li.classList.add("active");
+          const subMenu = li.querySelector("[data-bc-bp-submenu]");
+          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.transition = "all 1s ease";
+          // subMenu.classList.add("show");
         }
       });
     } else {
@@ -136,7 +140,6 @@ export default class MenuElementMaker {
             e.removeAttribute("data-bc-ul-level-open");
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
-  
           innerUl.style.transform = `scaleY(1)`;
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
@@ -155,6 +158,12 @@ export default class MenuElementMaker {
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLLIElement {
+    if (!this.moduleMapper.has(node.mid)) {
+      this.moduleMapper.set(node.mid, {
+        owner: menuParam.owner,
+        ownerUrl: menuParam.ownerUrl,
+      });
+    }
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
@@ -183,7 +192,9 @@ export default class MenuElementMaker {
       }
 
       if (this.deviceId == 2) {
-        li.closest("[data-bc-bp-header-more-container]").classList.remove("active");
+        li.closest("[data-bc-bp-header-more-container]").classList.remove(
+          "active"
+        );
       }
 
       LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
@@ -257,26 +268,30 @@ export default class MenuElementMaker {
     let subMenuFlag = false;
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
-        if (li.classList.contains('active')) {
-            // collapseSubMenu();
-            li.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
-            li.classList.remove('active');
+        if (li.classList.contains("active")) {
+          // collapseSubMenu();
+          li.querySelector("[data-bc-bp-menu-external]").removeAttribute(
+            "style"
+          );
+          li.classList.remove("active");
         } else {
-            // Collapse Existing Expanded menuItemHasChildren
-            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-            openMenu.forEach((e) => {
-              e.querySelector("[data-bc-bp-menu-external]").removeAttribute('style');
-              e.classList.remove('active');
-            });
-            // Expand New menuItemHasChildren
-            li.classList.add('active');
-            const subMenu = li.querySelector("[data-bc-bp-menu-external]");
-            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-            (subMenu as HTMLElement).style.maxHeight = '20rem';
-            (subMenu as HTMLElement).style.transition = 'all 1s ease';
-            // subMenu.classList.add("show");
+          // Collapse Existing Expanded menuItemHasChildren
+          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+          openMenu.forEach((e) => {
+            e.querySelector("[data-bc-bp-menu-external]").removeAttribute(
+              "style"
+            );
+            e.classList.remove("active");
+          });
+          // Expand New menuItemHasChildren
+          li.classList.add("active");
+          const subMenu = li.querySelector("[data-bc-bp-menu-external]");
+          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.transition = "all 1s ease";
+          // subMenu.classList.add("show");
         }
-      })
+      });
     } else {
       content.addEventListener("click", function () {
         if (subMenuFlag == false) {
