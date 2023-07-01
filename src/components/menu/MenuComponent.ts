@@ -96,9 +96,10 @@ export default class MenuComponent
   }
 
   private setMenuUISelected(pageId: string, moduleId: string) {
-    this.ul
-      .querySelector(`li[data-bc-menu-active]`)
-      .removeAttribute("data-bc-menu-active");
+    const selectedItem = this.ul.querySelector(`li[data-bc-menu-active]`);
+    if (selectedItem) {
+      selectedItem.removeAttribute("data-bc-menu-active");
+    }
     const content = this.ul.querySelector(
       `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid]`
     );
