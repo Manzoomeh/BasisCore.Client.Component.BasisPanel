@@ -171,9 +171,11 @@
 	transition: all 0.3s ease-in-out;
 }
 
-[data-bc-d1-menu] [data-bc-bp-menu-external] li {
+[data-bc-d1-menu] [data-bc-bp-menu-external] > li {
 	padding: 0;
 	height: 100%;
+	float: right;
+	background-color: rgba(244,244,244,0.5);
 }
 
 [data-bc-d1-menu] [data-bc-bp-menu-external] li a {
