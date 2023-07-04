@@ -244,6 +244,10 @@
     word-wrap: break-word;
 }
 
+[data-bc-d1-business-list] [data-bc-d1-business-drop-down] li div span[data-bc-id] {
+    font-size: 12px;
+}
+
 [data-bc-d1-business-list] [data-bc-d1-business-drop-down] [data-bc-business-freeze-btn] {
     float: right;
     padding: 2px 0;

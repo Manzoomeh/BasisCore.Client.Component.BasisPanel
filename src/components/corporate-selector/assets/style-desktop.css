@@ -231,6 +231,10 @@
     word-wrap: break-word;
 }
 
+[data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li div span[data-bc-id] {
+    font-size: 12px;
+}
+
 /* .autocomplete-active {
     background-color: #eee !important;
 } */

@@ -265,7 +265,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const li = document.createElement("li");
         // const div = document.createElement("div");
         li.setAttribute("data-id", item.id.toString());
-        li.innerHTML = `<div data-bc-main-title="">${item.title}</div>`;
+        li.innerHTML = `<div data-bc-main-title="">${item.title} <span data-bc-id="">(${item.id})</span></div>`;
         const id = parseInt(li.getAttribute("data-id"));
         if (this.ownerType == "business") {
           const lockIcon = document.createElement("span");
