@@ -258,7 +258,7 @@
 	background: #F4F4F4;
 	/* border-bottom: 1px solid #F4F4F4 !important; */
 }
-[data-bc-corporate-buy]{
+[data-bc-bp-direction="rightToLeft"] [data-bc-corporate-buy]{
 	background: #E4E7F4;
 width: 140px;
 height: 34px;
@@ -271,7 +271,11 @@ cursor: pointer;
 margin-right: 15px;
 direction: ltr;
 }
+[data-bc-bp-direction="rightToLeft"] [data-bc-corporate-buy] a{
+	display: flex;
+	align-items: center;
+}
 
-[data-bc-corporate-buy] svg{
+[data-bc-bp-direction="rightToLeft"] [data-bc-corporate-buy] svg{
 	margin-left: 15px;
 }

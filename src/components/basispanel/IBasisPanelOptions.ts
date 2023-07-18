@@ -22,6 +22,8 @@ export default interface IBasisPanelOptions {
   addtoDashboard: string;
   removeFromDashbaord: string;
   tempwidgets: string;
+  serviceLink? : string
+  businessLink?: string
 }
 
 interface IUrlCollectionOption {
@@ -72,6 +74,7 @@ export interface ILabels {
   corporateTitle: string;
   corporateSearchPlaceholder: string;
   corporateBuy: string;
+  businessBuy:string;
   businessTitle: string;
   businessSearchPlaceholder: string;
   schedulerNoTask: string;

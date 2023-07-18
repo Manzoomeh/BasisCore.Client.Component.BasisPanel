@@ -26,6 +26,7 @@ export default abstract class BasisPanelChildComponent
           corporateTitle: "شرکت‌ها",
           corporateSearchPlaceholder: "جستجوی شرکت ...",
           corporateBuy: "خرید سرویس",
+          businessBuy:"خرید کسب‌وکار",
           businessTitle: "کسب‌و‌کارها",
           businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
           schedulerNoTask: "در انتظار کار جدید",

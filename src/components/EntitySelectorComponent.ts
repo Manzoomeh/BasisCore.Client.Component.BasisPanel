@@ -119,6 +119,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
         this.profile = source.rows[0];
+        
         if (this.ownerType == "corporate") {
           const corporateList = await this.getEntitiesAsync();
 
@@ -130,15 +131,25 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               corporateElement.style.transform = "scaleY(1)";
             }
           } else {
+            let serviceListMobile = document.querySelector("[data-bc-corporate-list]") as HTMLElement
+            if(serviceListMobile){
+              serviceListMobile.style.display="none"
+            }
+            let businessListMobile = document.querySelector("[data-bc-bp-business-container]") as HTMLElement
+            if(businessListMobile){
+              businessListMobile.style.display="none"
+            }
             const parentElement = this.element.closest(
               "[data-bc-bp-corporate-container]"
             );
             const buyService = document.createElement("div");
             buyService.innerHTML = `<div data-bc-corporate-buy="">
+            <a href="${this.options.serviceLink}" target="_blank">
               <span>${this.labels.corporateBuy}</span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
               </svg>
+              </a>
             </div>`;
             parentElement.prepend(buyService);
             if (this.deviceId == 1) {
@@ -176,11 +187,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async fillComboAsync() {
+    console.log("?")
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-   
+    console.log("inb business?")
     if (this.deviceId == 1) {
       if (this.businessComponentFlag == true && this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -258,10 +270,40 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
    entryListMaker(list) {
     this.element.innerHTML = "";
-   
+    if (this.ownerType == "business" && list?.length == 0) {
+      console.log("miad inja? ")
+      document.getElementById("ctaForBusinessBuy")?.remove()
+      
+      const parentElementForBusiness = this.element.closest(
+        "[data-bc-bp-business-container]"
+      );
+      // console.log("sss" , parentElementForBusiness.querySelector("[data-bc-d2-business-list]"))
+      
+      const buyBusiness = document.createElement("div");
+      buyBusiness.setAttribute("id","ctaForBusinessBuy")
+      buyBusiness.innerHTML = `<div data-bc-corporate-buy="">
+      <a href="${this.options.businessLink}" target="_blank">
+        <span>${this.labels.businessBuy}</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
+        </svg>
+        </a>
+      </div>`;
+      parentElementForBusiness.prepend(buyBusiness);
+      let businessListMobile = parentElementForBusiness.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
+      if(businessListMobile){
+        businessListMobile.style.display="none"
+      }
+      
+    }
     if (list?.length > 0) {
-     
+      console.log("ya miad inja?")
       list.forEach(async item => {
+        let businessListMobile = document.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
+        if(businessListMobile){
+          businessListMobile.style.display="block"
+        }
+        
         const li = document.createElement("li");
         // const div = document.createElement("div");
         li.setAttribute("data-id", item.id.toString());
@@ -280,6 +322,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             this.selectItem(li, true);
           });
           li.appendChild(lockIcon);
+          
         }
        
       //   if(id == this.currentOwnerid && this.ownerId != 30){
@@ -485,11 +528,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     businessMsgElement.textContent = this.labels.businessTitle;
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
+    header.querySelector("#ctaForBusinessBuy")?.remove()
     header
       .querySelector(
         "[data-bc-bp-business-container] [data-bc-main-name]"
       )
       ?.remove();
+    // header.innerHTML = ""
   }
   private async getCurrentService(){
     const url = HttpUtil.formatString(this.options.checkRkey.url, { rKey: this.options.rKey });
