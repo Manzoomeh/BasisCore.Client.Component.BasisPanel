@@ -152,7 +152,7 @@ export default class MenuComponent
           arguments: args,
         };
         this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-        this.setMenuUISelected(pageId, moduleId);
+        !args?.withoutMenu && this.setMenuUISelected(pageId, moduleId);
       }
     }
     return ownerInfo != null;
