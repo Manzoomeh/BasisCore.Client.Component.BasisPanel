@@ -54,6 +54,12 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>
   ) {
     items.forEach((node) => {
+      if ((node as IMenuExternalItemInfo).url) {
+        this.moduleMapper.set(node.mid, {
+          owner: menuParam.owner,
+          ownerUrl: (node as IMenuExternalItemInfo).url,
+        });
+      }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
           this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
