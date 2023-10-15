@@ -187,12 +187,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async fillComboAsync() {
-    console.log("?")
+    
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-    console.log("inb business?")
+    
     if (this.deviceId == 1) {
       if (this.businessComponentFlag == true && this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -271,13 +271,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
    entryListMaker(list) {
     this.element.innerHTML = "";
     if (this.ownerType == "business" && list?.length == 0) {
-      console.log("miad inja? ")
+      
       document.getElementById("ctaForBusinessBuy")?.remove()
       
       const parentElementForBusiness = this.element.closest(
         "[data-bc-bp-business-container]"
       );
-      // console.log("sss" , parentElementForBusiness.querySelector("[data-bc-d2-business-list]"))
+      
       
       const buyBusiness = document.createElement("div");
       buyBusiness.setAttribute("id","ctaForBusinessBuy")
@@ -297,7 +297,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       
     }
     if (list?.length > 0) {
-      console.log("ya miad inja?")
+      
       list.forEach(async item => {
         let businessListMobile = document.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
         if(businessListMobile){

@@ -17,16 +17,16 @@
         const widget = owner.dc.resolve("widget");
         const page = owner.dc.resolve("page");
         //const scheduler = owner.container.resolve("scheduler");
-        console.log("constructor", owner.container);
+        // console.log("constructor", owner.container);
 
         //console.log("constructor", widget, page);
         widget.title = "asasa";
         page.owner.setSource("to.page", 12);
-        console.log("args is ", page.arguments);
+        // console.log("args is ", page.arguments);
       }
 
       async runAsync() {
-        console.log("runAsync");
+        // console.log("runAsync");
         const date = new Date();
         const node = this.owner.toNode(
           `<div>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()} <div>`
@@ -38,5 +38,5 @@
   }
 </script>
 <script>
-  console.log("hi");
+  
 </script>

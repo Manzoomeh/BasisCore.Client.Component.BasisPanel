@@ -75,13 +75,13 @@
       cancel: null
     }
     const r = scheduler.startTask(taskOptions)
-    console.log(r);
+    // console.log(r);
   }
   document.getElementById("file-form").addEventListener("change", (e) => {
     let data = new FormData(e.currentTarget);
-    console.log(data);
+    // console.log(data);
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
-    console.log(scheduler);
+    // console.log(scheduler);
     const x = scheduler.startPost(data, "/app", "Demo-upload", (x) => {
       console.log(x.percent, x);
     });
