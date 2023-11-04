@@ -107,13 +107,13 @@
 }
 
 /* movaghatan baraye faze 1 bardashte shod */
-/* [data-bc-bp-notification-container="d1"]:hover [data-bc-d1-notification-dropdown-wrapper] {
+[data-bc-bp-notification-container="d1"]:hover [data-bc-d1-notification-dropdown-wrapper] {
     opacity: 1;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
     visibility: visible;
     height: auto;
-} */
+}
 
 
 [data-bc-d1-notification] [data-bc-d1-notification-dropdown]::before,

@@ -237,7 +237,7 @@
 }
 
 [data-bc-notification-title] {
-    font-size: 18px;
+    font-size: 14px;
     padding-bottom: 5px;
 }
 
@@ -263,7 +263,7 @@
 
 [data-bc-notification-type] {
     color: #004B85;
-    font-weight: bold;
+    /* font-weight: bold; */
     margin-left: 15px;
 }
 

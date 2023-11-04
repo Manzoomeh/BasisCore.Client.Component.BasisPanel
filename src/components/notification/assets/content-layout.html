@@ -1,38 +1,44 @@
 <div data-bc-notification-tab-content="" data-bc-notification-tab-content-id="@name">
+
+    <basis core="dbsource" source="simple" rkey="@rkey" name="notification" run="atclient" triggers="basispanel.corporate">
+        <member name="@memberName" />
+    </basis>
+
+    <basis core="callback" run="atclient" triggers="notification.@memberName" method="notificationLoad"></basis>
+
     <div data-bc-notification-tab-list="">
         <basis core="print" datamembername="@dataMemberName" run="atclient">
-            <face filter="id in ('1','2')">
+            <layout>
+                @child
+            </layout>
+            <face>
                 <script type="text/template">
                     <div data-bc-notification-items="" data-bc-notification-items-new="">
-                        <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- <svg width="20" height="20" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6.75 9.75H8.25V11.25H6.75V9.75ZM6.75 3.75H8.25V8.25H6.75V3.75ZM7.4925 0C3.3525 0 0 3.36 0 7.5C0 11.64 3.3525 15 7.4925 15C11.64 15 15 11.64 15 7.5C15 3.36 11.64 0 7.4925 0ZM7.5 13.5C4.185 13.5 1.5 10.815 1.5 7.5C1.5 4.185 4.185 1.5 7.5 1.5C10.815 1.5 13.5 4.185 13.5 7.5C13.5 10.815 10.815 13.5 7.5 13.5Z" fill="#004B85"/>
-                            </svg>
-                            
-                        <div data-bc-notification-title="" >@seeMore@ </div>
-                        <div data-bc-notification-date=""> @date@ </div>
+                        </svg> -->
+                        <div data-bc-notification-title=""> @subject@ </div>
+                        <!-- <div data-bc-notification-date=""> @rownumber@ </div> -->
                         <div data-bc-notification-info="">
-                            <div data-bc-notification-type="">تیکت</div>
-                            <div data-bc-notification-owner="">فرستنده : @title@ </div>
-                            <div data-bc-notification-category="">گروه : مارکتینگ / سوپروایزر </div>
+                            <div data-bc-notification-type=""> @message@ </div>
+                            <!-- <div data-bc-notification-owner=""> فرستنده : @title@ </div> -->
+                            <!-- <div data-bc-notification-category=""> گروه : @age@ </div> -->
                         </div>
                     </div>
                 </script>
             </face>
-            <face >
-                <script type="text/template">
-                    <div data-bc-notification-items="" >
-                       
-                        <div data-bc-notification-title="" >@seeMore@ </div>
-                        <div data-bc-notification-date=""> @date@ </div>
-                        <div data-bc-notification-info="">
-                            <div data-bc-notification-type="">تیکت</div>
-                            <div data-bc-notification-owner="">فرستنده : @title@ </div>
-                            <div data-bc-notification-category="">گروه : مارکتینگ / سوپروایزر </div>
-                        </div>
-                    </div>
-                </script>
-            </face>
+            <else-layout>
+                <div data-bc-notification-nonotif="" data-bc-d1-notification-nonotif="">
+                    در انتظار نوتیفیکیشن جدید
+                </div>
+            </else-layout>
         </basis>
-       
     </div>
+
+    <script type="text/javascript">
+        function notificationLoad(args) {
+            const notificationLength = args.source?.rows.length;
+            document.querySelector("[data-bc-notification-alarm]").textContent = notificationLength;
+        };
+    </script>
 </div>
