@@ -44,6 +44,12 @@ export default class NotificationTab {
     }
     this.contents.appendChild(this.content);
     this._owner.processNodesAsync([this.content]);
+
+    this.contents.querySelector("[data-bc-notification-read-button]")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this._owner.setSource("notification.type", "read");
+    });
   }
 
   public refreshUI(data: Array<any>) {
