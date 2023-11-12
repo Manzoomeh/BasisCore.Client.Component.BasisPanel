@@ -542,7 +542,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected resetNotification() {
-    this.owner.setSource("notification.type", "reset");
+    this.owner.setSource("notification.websocket", {
+      type: "reset",
+      usedforid: ""
+    });
   }
   
   private async getCurrentService(){
