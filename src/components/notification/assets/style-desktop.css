@@ -107,13 +107,13 @@
 }
 
 /* movaghatan baraye faze 1 bardashte shod */
-/* [data-bc-bp-notification-container="d1"]:hover [data-bc-d1-notification-dropdown-wrapper] {
+[data-bc-bp-notification-container="d1"]:hover [data-bc-d1-notification-dropdown-wrapper] {
     opacity: 1;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
     visibility: visible;
     height: auto;
-} */
+}
 
 
 [data-bc-d1-notification] [data-bc-d1-notification-dropdown]::before,
@@ -132,4 +132,23 @@
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-notification] [data-bc-d1-notification-dropdown]::after {
     right: 28px !important;
     left: unset !important;
+}
+
+[data-bc-d1-notification] [data-bc-d1-notification-noNotify] {
+    color: #004B85;
+    font-size: 13px;
+    text-align: center;
+}
+
+[data-bc-d1-notification] [data-bc-d1-notification-read] {
+    padding: 10px;
+}
+
+[data-bc-d1-notification] [data-bc-d1-notification-read] button {
+    width: 100%;
+    height: 42px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

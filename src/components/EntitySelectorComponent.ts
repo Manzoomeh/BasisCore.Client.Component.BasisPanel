@@ -396,6 +396,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           if (this.ownerType == "corporate") {
             // choose corporate
             this.resetBusinessEntity();
+            this.resetNotification();
           } else if (this.ownerType == "business") {
             $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
           }
@@ -539,6 +540,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       ?.remove();
     // header.innerHTML = ""
   }
+
+  protected resetNotification() {
+    this.owner.setSource("notification.websocket", {
+      type: "reset",
+      usedforid: ""
+    });
+  }
+  
   private async getCurrentService(){
     const url = HttpUtil.formatString(this.options.checkRkey.url, { rKey: this.options.rKey });
     const result = await HttpUtil.fetchDataAsync(url, "GET");

@@ -6,6 +6,7 @@ export default class NotificationTab {
 
   private notificationContainer: Element;
   private optionsName: string;
+  private optionsRkey: string;
   private optionConfig: object;
   private contents: Element;
   private alarm: HTMLElement;
@@ -16,6 +17,7 @@ export default class NotificationTab {
 
     this.notificationContainer = this._owner.container;
     this.optionsName = this._owner.options.name;
+    this.optionsRkey = this._owner.options.rKey;
     this.optionConfig = this._owner.options.config;
     this.contents = this.notificationContainer.querySelector(
       "[data-bc-notification-contents]"
@@ -29,10 +31,12 @@ export default class NotificationTab {
     const optionName = this._owner.storeAsGlobal(this.optionConfig); //`${this.optionsName}_option`;
     
     let contentTemplate = (contentLayout as any)
-  
       .replaceAll("@dataMemberName", `notification.${this.optionsName}`)
+      .replaceAll("@memberName", `${this.optionsName}`)
+      .replaceAll("@rkey", this.optionsRkey)
       .replaceAll("@name", this.optionsName)
       .replaceAll("@option", optionName);
+
     this.content = this._owner.toNode(contentTemplate)
       .firstChild as HTMLElement;
     if (index == 0) {
@@ -40,6 +44,22 @@ export default class NotificationTab {
     }
     this.contents.appendChild(this.content);
     this._owner.processNodesAsync([this.content]);
+
+    this.contents.querySelector("[data-bc-notification-read-button]")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const listContainer = this.contents.querySelector("[data-bc-notification-tab-list]");
+      const listItems = listContainer.querySelectorAll("[data-bc-notification-items]");
+      const listItemsArray = [];
+      listItems.forEach(element => {
+        listItemsArray.push(element.getAttribute("data-bc-notification-id"));
+      });
+      const listItemsString = listItemsArray.join(",");
+      this._owner.setSource("notification.websocket", {
+        type: "read",
+        usedforid: listItemsString
+      });
+    });
   }
 
   public refreshUI(data: Array<any>) {
