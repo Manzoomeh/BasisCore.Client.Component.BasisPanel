@@ -1,0 +1,126 @@
+@keyframes progressLeft {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+@keyframes progressRight {
+  0% {
+    right: 100%;
+  }
+  100% {
+    right: 0%;
+  }
+}
+[data-bc-bp-direction="rightToLeft"] .NotificationMessage .progress {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 6px;
+  width: 100%;
+}
+[data-bc-bp-direction="rightToLeft"] .NotificationMessage .progress:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+}
+[data-bc-bp-direction="leftToRight"] .NotificationMessage .progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+}
+[data-bc-bp-direction="leftToRight"] .NotificationMessage .progress:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.success-progress:before {
+  background-color: #006a5e;
+}
+
+.error-progress:before {
+  background-color: #b40020;
+}
+[data-bc-bp-direction="leftToRight"] .NotificationMessage {
+  position: fixed;
+  top: 80px;
+  left: 15px;
+  min-width: 300px;
+  border-radius: 12px;
+  height: 60px;
+
+  overflow: hidden;
+  transform: translateX(-350px);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  z-index: 9999999999;
+}
+[data-bc-bp-direction="rightToLeft"] .NotificationMessage {
+  position: fixed;
+  top: 80px;
+  right: 15px;
+  min-width: 300px;
+  border-radius: 12px;
+  height: 60px;
+
+  overflow: hidden;
+  transform: translateX(calc(100%+ 350px));
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  z-index: 9999999999;
+}
+.NotificationMessage .NotificationMessage-content {
+  display: flex;
+  align-items: center;
+}
+
+.NotificationMessage-content .message {
+  display: flex;
+  flex-direction: column;
+  margin: 0 12px;
+}
+.activeNotification {
+  transform: translateX(0%);
+}
+[data-bc-bp-direction="rightToLeft"] .activeNotification:before {
+  animation: progressLeft 3s linear forwards;
+}
+[data-bc-bp-direction="leftToRight"] .activeNotification:before {
+  animation: progressRight 3s linear forwards;
+}
+[data-bc-message-success] {
+  background-color: #d9f2ef;
+  color: #00a693;
+  padding: 7px 15px;
+  border: 1px solid #c1eae6;
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+}
+[data-bc-message-error] {
+  background-color: #fde8e8;
+  color: var(--red);
+  padding: 7px 15px;
+  border-radius: 5px;
+  border: 1px solid #f6d5da;
+  transition: all 0.5s ease-in-out;
+}
+[data-sys-message-fade-in] {
+  transform: translate(0%) !important;
+}
+[data-bc-bp-direction="leftToRight"] [data-sys-message-fade-out] {
+  transform: translateX(-350px);
+}
+[data-bc-bp-direction="rightToLeft"] [data-sys-message-fade-out] {
+  transform: translateX(calc(100% + 350px));
+}

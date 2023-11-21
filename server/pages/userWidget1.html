@@ -1,5 +1,11 @@
 <span id="span_id">ویجت داشبورد سطح user</span>
 
+<button id="btn-ajax" onclick="click_notification_error(this)">
+  notification error
+</button>
+<button id="btn-ajax" onclick="click_notification_success(this)">
+  notification success
+</button>
 <button id="btn-ajax" onclick="click_process(this)">ajax process</button>
 
 <!-- <Basis core="component.local.DemoComponent" run="atclient" triggers="event.click">
@@ -7,7 +13,13 @@
 <!-- <button id="btn">Load user info</button> -->
 
 <form id="file-form" action="#">
-  <input class="file-input" type="file" id="file-form" name="file" multiple="multiple">
+  <input
+    class="file-input"
+    type="file"
+    id="file-form"
+    name="file"
+    multiple="multiple"
+  />
   <i class="fas fa-cloud-upload-alt"></i>
   <p>Browse File to Upload</p>
 </form>
@@ -19,7 +31,11 @@
 <Basis core="component.grid.grid" run="atclient" dataMemberName="book.list" options="demo_grid_options" optionsUrl="/server/dbsource/grid-options.js">
 </Basis>
 <basis core="callback" run="atclient" triggers="sample.data"></basis> -->
-<basis core="component.basiscore.exposer" run="atclient" component="pagesList_component"></basis>
+<basis
+  core="component.basiscore.exposer"
+  run="atclient"
+  component="pagesList_component"
+></basis>
 <!-- <script src="/server/dbsource/grid-options.js"></script> -->
 <!-- <script>
   const demo_grid_options = {
@@ -29,18 +45,28 @@
 
 <button onclick="addOrRemoveBtnToTitle()">Add/remove btn to header</button>
 <script>
-  btn = null
+  btn = null;
   function addOrRemoveBtnToTitle() {
     const widget = pagesList_component.owner.dc.resolve("widget");
     if (btn) {
-      btn.remove()
+      btn.remove();
       btn = null;
     } else {
       // btn = document.createElement("button")
       // btn.innerText = "click me!"
       // btn.addEventListener("click", e => alert("oops! it work ..."))
-      btn = widget.addActionToHeader("click me!", e => alert("oops! it work ..."))
+      btn = widget.addActionToHeader("click me!", (e) =>
+        alert("oops! it work ...")
+      );
     }
+  }
+  function click_notification_error() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.showMessage("error", "test error notification");
+  }
+  function click_notification_success() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.showMessage("success", "test success notification");
   }
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
@@ -61,9 +87,9 @@
     */
     const task = new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(true)
+        resolve(true);
       }, 3000);
-    })
+    });
     const taskOptions = {
       key: "process-1",
       container: widget.body,
@@ -72,9 +98,9 @@
       reportHandlers: null,
       task: task,
       notify: false,
-      cancel: null
-    }
-    const r = scheduler.startTask(taskOptions)
+      cancel: null,
+    };
+    const r = scheduler.startTask(taskOptions);
     // console.log(r);
   }
   document.getElementById("file-form").addEventListener("change", (e) => {
