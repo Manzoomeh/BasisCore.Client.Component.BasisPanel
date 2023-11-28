@@ -180,7 +180,7 @@ export default class MenuElementMaker {
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onMenuItemClick(node.pid, menuParam, e.target);
-      document.body.classList.toggle("scrolling");
+      document.body.classList.remove("scrolling");
 
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
@@ -280,7 +280,7 @@ export default class MenuElementMaker {
           li.querySelector("[data-bc-bp-menu-external]").removeAttribute(
             "style"
           );
-          document.body.classList.toggle("scrolling");
+          document.body.classList.remove("scrolling");
 
           li.classList.remove("active");
         } else {
