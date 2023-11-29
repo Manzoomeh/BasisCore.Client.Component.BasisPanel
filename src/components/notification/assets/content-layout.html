@@ -1,13 +1,13 @@
 <div data-bc-notification-tab-content="" data-bc-notification-tab-content-id="@name">
 
-    <basis core="dbsource" source="simple" name="notification" rkey="@rkey" type="{##notification.websocket.type##}" usedforid="{##notification.websocket.usedforid##}" run="atclient" triggers="notification.websocket">
+    <basis core="dbsource" source="simple" name="notification" rkey="@rkey" type="{##notification.websocket.type|()##}" usedforid="{##notification.websocket.usedforid|()##}" run="atclient" triggers="notification.websocket">
         <member name="@memberName" />
     </basis>
 
     <basis core="callback" run="atclient" triggers="notification.@memberName" method="notificationLoad"></basis>
 
     <div data-bc-notification-tab-list="">
-        <basis core="print" datamembername="@dataMemberName" run="atclient">
+        <basis core="print" datamembername="notification.@memberName_sortAndLimit" run="atclient">
             <layout>
                 @child
             </layout>
@@ -34,20 +34,38 @@
             </else-layout>
         </basis>
     </div>
-    <div data-bc-notification-read="" data-bc-d1-notification-read="" style="display: none;">
-        <button data-bc-notification-read-button="" data-sys-button=""> خواندن همه </button>
+    <div data-bc-notification-buttons-container="" data-bc-d1-notification-buttons-container="" style="display: none;">
+        <div data-bc-notification-buttons="" data-bc-d1-notification-buttons="">
+            <button data-bc-notification-button="" data-bc-d1-notification-button="" data-bc-notification-view-button="" data-sys-button=""> مشاهده همه </button>
+            <button data-bc-notification-button="" data-bc-d1-notification-button="" data-bc-notification-read-button="" data-sys-button=""> خواندن همه </button>
+        </div>
     </div>
 
     <script type="text/javascript">
         function notificationLoad(args) {
             const notificationLength = args.source?.rows.length;
             document.querySelector("[data-bc-notification-alarm]").textContent = notificationLength;
-            const notificationReadButton = document.querySelector("[data-bc-notification-read]");
+            const notificationReadButton = document.querySelector("[data-bc-notification-buttons-container]");
             if (notificationLength > 0) {
                 notificationReadButton.style.display = "block";
             } else {
                 notificationReadButton.style.display = "none";
             }
+
+            // sort rows
+            const items = args.source?.rows;
+            const itemsDesc = items.sort(function compare(a, b) {
+                var dateA = new Date(a.receiveDate);
+                var dateB = new Date(b.receiveDate);
+                return dateB - dateA;
+            });
+            let newItems = itemsDesc
+
+            if (itemsDesc.length > 10) {
+                newItems = itemsDesc.slice(0, 10);
+            }
+            $bc.setSource("notification.@memberName_sortAndLimit", newItems);
+            $bc.setSource("notification.@memberName_sort", itemsDesc);
         };
     </script>
 </div>
