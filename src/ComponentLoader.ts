@@ -11,6 +11,7 @@ import FullPageWidgetComponent from "./components/page-widget/full-page-widget/F
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
 import NotificationMessageComponent from "./components/notificationMessage/NotificationMessageComponent";
+import KanbanComponent from "./components/kanban/KanbanComponent";
 import SchedulerComponent from "./components/scheduler/SchedulerComponent";
 import LogoutComponent from "./components/logout/LogoutComponent";
 import CartComponent from "./components/cart/CartComponent";
@@ -34,6 +35,7 @@ const sidebar = SidebarComponent;
 const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
 const message = NotificationMessageComponent;
+const kanban = KanbanComponent;
 const scheduler = SchedulerComponent;
 const logout = LogoutComponent;
 const cart = CartComponent;
@@ -55,6 +57,7 @@ export {
   page,
   widget,
   message,
+  kanban,
   sidebar,
   fullPageWidget,
   notification,

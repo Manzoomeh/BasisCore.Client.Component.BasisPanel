@@ -1,0 +1,213 @@
+[data-bc-user-icons] {
+  display: flex;
+  height: 50px;
+  justify-content: start;
+}
+[data-bc-columns-container] {
+  display: flex;
+  margin-top: 33px;
+  align-items: start;
+  overflow-x: scroll;
+}
+[data-bc-kanban-container] {
+  display: none;
+  padding: 30px;
+}
+[data-bc-show-all] {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  margin-inline-start: 30px;
+  display: flex;
+  border-radius: 15px;
+  background: #004b85;
+  justify-content: center;
+  align-items: center;
+}
+.loading-wrapper {
+  width: 100%;
+  height: 300px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.sprint {
+  min-width: 200px;
+
+  border: 1px solid #d0d0d0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.sprintcontentDetail {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+.sprintcontentDetail {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.sprintcancel {
+  border: 1px solid #d0d0d0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.item {
+  cursor: move;
+  border: 1px solid #d0d0d0;
+  width: 85%;
+
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 5px;
+  /* display: flex;
+  justify-content: space-between; */
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.item:active {
+  border: 2px dashed #004b85;
+  opacity: 1 !important;
+}
+.epicType {
+  /* background: rgba(0, 166, 147, 0.1);
+  color: #00A693; */
+  width: fit-content;
+  height: 29px;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+.tasksTitle {
+  font-size: 15px !important;
+}
+.activesprintdesc p {
+  color: #767676;
+}
+.activespeintHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.activespeintHeader1 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  direction: ltr;
+}
+.activesprintLabel {
+  /* background: rgba(0, 75, 133,0.1); */
+  color: #004b85;
+  border-radius: 5px;
+  width: fit-content;
+  height: 20px;
+  text-align: center;
+  padding: 5px 10px;
+  line-height: 10px;
+}
+.activesprintInformation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #d0d0d0;
+  margin-bottom: 15px;
+}
+.userImage {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+}
+[data-bc-header-row] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+[data-bc-kanban-search] {
+  width: 354px;
+  height: 40px;
+  border-radius: 5px;
+  text-indent: 40px;
+  border: 1px solid #e9e9ea;
+  background: transparent
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E")
+    no-repeat 320px center;
+}
+.activesprintPriority {
+  display: flex;
+
+  border-radius: 5px;
+  height: 25px;
+  width: 80px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.activesprintPriority svg {
+  vertical-align: middle;
+}
+.activesprintCalender {
+  display: flex;
+  justify-content: space-between;
+}
+.activesprintCalender svg {
+  vertical-align: middle;
+}
+.activesprintDateIcon {
+  background: rgba(0, 75, 133, 0.1);
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  text-align: center;
+}
+.activesprintDate {
+  display: flex;
+}
+.activesprintDate p {
+  color: #767676;
+  margin-left: 5px;
+  direction: ltr;
+}
+.activesprintdesc {
+  margin-bottom: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.activesprintdesc div {
+  background: rgba(118, 118, 118, 0.1);
+  border-radius: 5px;
+  width: 25px !important;
+  height: 25px !important;
+  text-align: center;
+  margin-top: 10px;
+}
+.activesprintdesc svg {
+  vertical-align: middle;
+}
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-widget-container][gs-x="0"] {
+  overflow-y: scroll;
+}
+.activeSprinttBackToPage {
+  position: absolute;
+  top: 12px;
+  left: 100px;
+  display: block !important;
+}

@@ -45,6 +45,21 @@
 
 <button onclick="addOrRemoveBtnToTitle()">Add/remove btn to header</button>
 <script>
+  var settings3 = {
+    api: "https://basispanel.ir/api/BB790877-A396-48D6-97CA-21DA0B40B3D9",
+    rkey: "BB790877-A396-48D6-97CA-21DA0B40B3D9",
+    users:
+      "https://basiserp.ir/trustservice/BB790877-A396-48D6-97CA-21DA0B40B3D9/fa/usersinfo",
+    columns:
+      "<basis core='dbsource' name='db' if='true' run='AtClient' source='taskmanager' lid='1' ownerid='1' triggers='db.activeSprint' projectid='207'><member name='statuscolumn' type='list' request='statuscolumn'></member></basis>",
+    relation:
+      "/server/corporate/BB790877-A396-48D6-97CA-21DA0B40B3D9/addrelation",
+    issues:
+      "<basis core='dbsource' name='db' if='true' run='AtClient' source='taskmanager' lid='1' ownerid='1' usedforid='6043' triggers='db.activesprintissuenumber db.rerun' projectid='207' uservalue='' onrendered='loadPageList'><member name='activesprintissue' type='list' request='activesprintissue'></member></basis>",
+    issuetemplate: `<div class=item data-id={issueid} draggable=true><div class=activespeintHeader><p class=tasksTitle>{ issuetitle
+      }</div><div class=activesprintdesc><p>{description}</div><div class=activesprintInformation><div class=activesprintLabel></div><div class=activesprintUsers id=activesprintUsers><div class=sharingAvatar>{ fname
+      }{lname}</div></div></div><div class=activesprintCalender><div class=activesprintPriority data-priority=none><img src=https://basispanel.ir/asset/images/.png width=15><p></div><div class=activesprintDate><p>{date}<div class=activesprintDateIcon><svg fill=none height=15 viewBox="0 0 15 15"width=15 xmlns=http://www.w3.org/2000/svg><g clip-path=url(#clip0_242_36711)><path d="M5.625 6.875H4.375V8.125H5.625V6.875ZM8.125 6.875H6.875V8.125H8.125V6.875ZM10.625 6.875H9.375V8.125H10.625V6.875ZM11.875 2.5H11.25V1.25H10V2.5H5V1.25H3.75V2.5H3.125C2.43125 2.5 1.88125 3.0625 1.88125 3.75L1.875 12.5C1.875 13.1875 2.43125 13.75 3.125 13.75H11.875C12.5625 13.75 13.125 13.1875 13.125 12.5V3.75C13.125 3.0625 12.5625 2.5 11.875 2.5ZM11.875 12.5H3.125V5.625H11.875V12.5Z"fill=#004B85></path></g><defs><clipPath id=clip0_242_36711><rect fill=white height=15 width=15></rect></clipPath></defs></svg></div></div></div></div>`,
+  };
   btn = null;
   function addOrRemoveBtnToTitle() {
     const widget = pagesList_component.owner.dc.resolve("widget");
@@ -73,18 +88,18 @@
     const widget = pagesList_component.owner.dc.resolve("widget");
 
     /*
-     ITaskOptions {
-  key?: string;
-  container?: Element;
-  title?: string;
-  type?: TaskType;
-  reportHandlers?: EventManager<IReportParam>;
-  task: Promise<any>;
-  notify?: boolean;
-  cancel?: () => void;
-}
+       ITaskOptions {
+    key?: string;
+    container?: Element;
+    title?: string;
+    type?: TaskType;
+    reportHandlers?: EventManager<IReportParam>;
+    task: Promise<any>;
+    notify?: boolean;
+    cancel?: () => void;
+  }
 
-    */
+      */
     const task = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);

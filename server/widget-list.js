@@ -7,14 +7,14 @@ const widgets = [
     id: "userWidget1.html",
     title: "ویجت داشبورد",
     name: "userWidget1",
-    icon :"asset/images/reminder_1.png"
+    icon: "asset/images/reminder_1.png",
   },
   {
     id: "external-file.html",
     title: "اکسترنال ویجت",
     name: "externalFile",
     container: "widget",
-    icon :"asset/images/reminders_1.png"
+    icon: "asset/images/reminders_1.png",
   },
 ];
 

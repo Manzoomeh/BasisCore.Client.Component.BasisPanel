@@ -65,7 +65,7 @@ const corporateList = [
     id: 8355,
     title: "میترا-گشت",
   },
-]
+];
 router.get("/:rKey/list", function (req, res) {
   res.json(corporateList);
 });
@@ -110,5 +110,85 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
   );
   res.send(widgetList);
 });
-
+router.get("/:rKey/widget/:widgetId", function (req, res) {
+  const widgetList = fs.readFileSync(
+    path.join(__dirname, "pages", req.params.widgetId),
+    {
+      encoding: "utf8",
+    }
+  );
+  res.send(widgetList);
+});
+router.get("/:rKey/issues", function (req, res) {
+  res.send([
+    {
+      issueid: 6044,
+      issuetitle: "داینامیک کردن صفحه تماس با ما - موبایل",
+      user: 1042574,
+      fname: "محسن",
+      lname: "کریموند",
+      date: "1402/8/28   15:11:47",
+      issuetypeid: 2045,
+      epicname: "طراحی نسخه موبایل",
+      color: "#40a6c4",
+      labelname: "",
+      labelcolor: "",
+      priority: "",
+      priorityicon: "",
+      issuedesc: "",
+      statusid: 1265,
+      status: null,
+    },
+    {
+      issueid: 6045,
+      issuetitle: "داینامیک کردن صفحه درباره ما - موبایل",
+      user: 1042574,
+      fname: "محسن",
+      lname: "کریموند",
+      date: "1402/8/28   15:12:14",
+      issuetypeid: 2045,
+      epicname: "طراحی نسخه موبایل",
+      color: "#40a6c4",
+      labelname: "",
+      labelcolor: "",
+      priority: "",
+      priorityicon: "",
+      issuedesc: "",
+      statusid: 1265,
+      status: null,
+    },
+  ]);
+});
+router.post("/:rKey/addrelation", function (req, res) {
+  res.send({ errorid: 5, message: "successful", id: 1234 });
+});
+router.get("/:rKey/columns", function (req, res) {
+  res.send([
+    {
+      id: 1265,
+      statustitle: "Done",
+      color: "#00A693",
+    },
+    {
+      id: 1301,
+      statustitle: "Doing",
+      color: "#f7ca86",
+    },
+    {
+      id: 1337,
+      statustitle: "To Do",
+      color: "#797979",
+    },
+    {
+      id: 1824,
+      statustitle: "تاییده شده",
+      color: "#2f7dd5",
+    },
+    {
+      id: 2169,
+      statustitle: "رد شده",
+      color: "#d21545",
+    },
+  ]);
+});
 module.exports = router;

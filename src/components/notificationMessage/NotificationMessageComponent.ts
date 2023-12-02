@@ -18,7 +18,7 @@ export default class NotificationMessageComponent
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
   }
-  public showMessage(type: string, message: "error" | "success") {
+  public showMessage(type: "error" | "success", message: string) {
     const container = this.container.querySelector(".NotificationMessage");
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       if (type === "success") {

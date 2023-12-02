@@ -1,245 +1,247 @@
 {
-    "default": {
-        "container": "dashboard",
-        "queryString": "?mid=20",
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "userWidget1.html",
-                        "title": "ویجت داشبورد",
-                        "name": "userWidget1",
-                        "container": "widget",
-                        "addToDashboard": false,
-                        "x": 0,
-                        "y": 0,
-                        "w": 12,
-                        "h": 4
-                    },
-                    {
-                        "id": "external-file.html",
-                        "title": "اکسترنال ویجت",
-                        "name": "externalFile",
-                        "container": "widget",
-                        "addToDashboard": false,
-                        "x": 0,
-                        "y": 4,
-                        "w": 12,
-                        "h": 2,
-                        "url": "server/external"
-                    },
+  "default": {
+    "container": "dashboard",
+    "queryString": "?mid=20",
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "userWidget1.html",
+            "title": "ویجت داشبورد",
+            "name": "userWidget1",
+            "container": "widget",
+            "addToDashboard": false,
+            "x": 0,
+            "y": 0,
+            "w": 12,
+            "h": 4
+          },
+          {
+            "id": "kanban.html",
+            "title": "kanban",
+            "name": "kanban",
+            "container": "widget",
+            "x": 0,
+            "y": 4,
+            "w": 12,
+            "h": 8
+          },
+          {
+            "id": "external-file.html",
+            "title": "اکسترنال ویجت",
+            "name": "externalFile",
+            "container": "widget",
+            "addToDashboard": false,
+            "x": 0,
+            "y": 12,
+            "w": 12,
+            "h": 2,
+            "url": "server/external"
+          },
 
-
-
-                    {
-                        "id": "userWidget1.html",
-                        "title": "ویجت داشبورد",
-                        "name": "userWidget1",
-                        "container": "widget",
-                        "addToDashboard": false,
-                        "x": 0,
-                        "y": 6,
-                        "w": 12,
-                        "h": 4
-                    },
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "widget",
-                        "addToDashboard": true,
-                        "x": 0,
-                        "y": 10,
-                        "w": 10,
-                        "h": 2
-                    },
-                    {
-                        "id": "userWidget1.html",
-                        "title": "ویجت داشبورد",
-                        "name": "userWidget1",
-                        "container": "widget",
-                        "addToDashboard": false,
-                        "x": 0,
-                        "y": 12,
-                        "w": 12,
-                        "h": 4
-                    },
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "widget",
-                        "addToDashboard": true,
-                        "x": 0,
-                        "y": 16,
-                        "w": 10,
-                        "h": 2
-                    }
-
-
-
-
-
-                    
-                ]
-            }
+          {
+            "id": "userWidget1.html",
+            "title": "ویجت داشبورد",
+            "name": "userWidget1",
+            "container": "widget",
+            "addToDashboard": false,
+            "x": 0,
+            "y": 14,
+            "w": 12,
+            "h": 4
+          },
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "widget",
+            "addToDashboard": true,
+            "x": 0,
+            "y": 18,
+            "w": 10,
+            "h": 2
+          },
+          {
+            "id": "userWidget1.html",
+            "title": "ویجت داشبورد",
+            "name": "userWidget1",
+            "container": "widget",
+            "addToDashboard": false,
+            "x": 0,
+            "y": 20,
+            "w": 12,
+            "h": 4
+          },
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "widget",
+            "addToDashboard": true,
+            "x": 0,
+            "y": 24,
+            "w": 10,
+            "h": 2
+          }
         ]
-    },
-    "userInfo": {
-        "container": "container",
-        "queryString": "?mid=20",
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "userWidget1.html",
-                        "title": "ویجت داشبورد",
-                        "name": "userWidget1",
-                        "container": "widget",
-                        "addToDashboard": true,
-                        "x": 0,
-                        "y": 0,
-                        "w": 5,
-                        "h": 4
-                    },
-                    {
-                        "id": "external-file.html",
-                        "title": "اکسترنال ویجت",
-                        "name": "externalFile",
-                        "container": "widget",
-                        "addToDashboard": true,
-                        "x": 5,
-                        "y": 0,
-                        "w": 5,
-                        "h": 4,
-                        "url": "server/external"
-                    },
-                    {
-                        "id": "sidebar.html",
-                        "title": "سایدبار",
-                        "name": "sidebar",
-                        "container": "sidebar",
-                        "addToDashboard": false,
-                        "x": 10,
-                        "y": 0,
-                        "w": 2,
-                        "h": 6
-                    },
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "widget",
-                        "addToDashboard": true,
-                        "x": 0,
-                        "y": 4,
-                        "w": 10,
-                        "h": 2
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "userInfo": {
+    "container": "container",
+    "queryString": "?mid=20",
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "userWidget1.html",
+            "title": "ویجت داشبورد",
+            "name": "userWidget1",
+            "container": "widget",
+            "addToDashboard": true,
+            "x": 0,
+            "y": 0,
+            "w": 5,
+            "h": 4
+          },
+          {
+            "id": "external-file.html",
+            "title": "اکسترنال ویجت",
+            "name": "externalFile",
+            "container": "widget",
+            "addToDashboard": true,
+            "x": 5,
+            "y": 0,
+            "w": 5,
+            "h": 4,
+            "url": "server/external"
+          },
+          {
+            "id": "sidebar.html",
+            "title": "سایدبار",
+            "name": "sidebar",
+            "container": "sidebar",
+            "addToDashboard": false,
+            "x": 10,
+            "y": 0,
+            "w": 2,
+            "h": 6
+          },
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "widget",
+            "addToDashboard": true,
+            "x": 0,
+            "y": 4,
+            "w": 10,
+            "h": 2
+          }
         ]
-    },
-    "myFiles": {
-        "container": "container",
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "widget",
-                        "x": 0,
-                        "y": 0,
-                        "w": 12,
-                        "h": 2
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "myFiles": {
+    "container": "container",
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "widget",
+            "x": 0,
+            "y": 0,
+            "w": 12,
+            "h": 2
+          }
         ]
-    },
-    "myFiles1": {
-        "container": "container",
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "fullPageWidget",
-                        "x": 0,
-                        "y": 0,
-                        "w": 12,
-                        "h": 2
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "myFiles1": {
+    "container": "container",
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "fullPageWidget",
+            "x": 0,
+            "y": 0,
+            "w": 12,
+            "h": 2
+          }
         ]
-    },
-    "calendare": {
-        "container": "page",
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "my-file.html",
-                        "title": "فایل های من",
-                        "name": "myFiles",
-                        "container": "widget",
-                        "x": 0,
-                        "y": 0,
-                        "w": 10,
-                        "h": 5
-                    },
-                    {
-                        "id": "sidebar.html",
-                        "title": "سایدبار",
-                        "name": "sidebar",
-                        "container": "sidebar",
-                        "x": 10,
-                        "y": 0,
-                        "w": 2,
-                        "h": 5
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  "calendare": {
+    "container": "page",
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "my-file.html",
+            "title": "فایل های من",
+            "name": "myFiles",
+            "container": "widget",
+            "x": 0,
+            "y": 0,
+            "w": 10,
+            "h": 5
+          },
+          {
+            "id": "sidebar.html",
+            "title": "سایدبار",
+            "name": "sidebar",
+            "container": "sidebar",
+            "x": 10,
+            "y": 0,
+            "w": 2,
+            "h": 5
+          }
         ]
-    }
+      }
+    ]
+  }
 }

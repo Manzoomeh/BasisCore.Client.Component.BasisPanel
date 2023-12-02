@@ -57,6 +57,7 @@ export default class MenuComponent
   }
 
   public async loadDataAsync(menuParam: IMenuLoaderParam): Promise<void> {
+    console.log("menuParam :>> ", menuParam);
     const newMenu = await this.cache.loadMenuAsync(
       menuParam,
       this.moduleMapper,

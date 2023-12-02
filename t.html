@@ -1,0 +1,865 @@
+<style>
+  .activesprintcontent {
+    display: grid;
+    grid-auto-columns: 32%;
+    grid-auto-flow: column;
+    grid-gap: 16px;
+
+    /* grid-template-columns: repeat(3, 1fr); */
+  }
+  [data-bc-bp-direction="rightToLeft"]
+    [data-bc-bp-widget-container]
+    [data-bc-widget-body-container] {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #eff2f5 transparent;
+    max-height: 325px;
+    max-height: calc(100% - 43px);
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px 20px;
+  }
+  .sprintdone {
+    border: 1px solid #d0d0d0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .sprintdoing {
+    border: 1px solid #d0d0d0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .sprinttodo {
+    border: 1px solid #d0d0d0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .sprintcontentDetail {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+  }
+
+  .sprintcancel {
+    border: 1px solid #d0d0d0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .item {
+    cursor: move;
+    border: 1px solid #d0d0d0;
+    width: 85%;
+
+    margin: 0 auto;
+    padding: 15px;
+    border-radius: 5px;
+    /* display: flex;
+    justify-content: space-between; */
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  .item:active {
+    border: 2px dashed #004b85;
+    opacity: 1 !important;
+  }
+  .epicType {
+    /* background: rgba(0, 166, 147, 0.1);
+    color: #00A693; */
+    width: fit-content;
+    height: 29px;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .tasksTitle {
+    font-size: 15px !important;
+  }
+  .activesprintdesc p {
+    color: #767676;
+  }
+  .activespeintHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  .activespeintHeader1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    direction: ltr;
+  }
+  .activesprintLabel {
+    /* background: rgba(0, 75, 133,0.1); */
+    color: #004b85;
+    border-radius: 5px;
+    width: fit-content;
+    height: 20px;
+    text-align: center;
+    padding: 5px 10px;
+    line-height: 10px;
+  }
+  .activesprintInformation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #d0d0d0;
+    margin-bottom: 15px;
+  }
+  .activesprintUsers img {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+  .activesprintUsersDoing img {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+  .activesprintUsersDone img {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+  }
+  .firstimg {
+    margin-left: -10px;
+  }
+  .activesprintPriority {
+    display: flex;
+
+    border-radius: 5px;
+    height: 25px;
+    width: 80px;
+    text-align: center;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  div[data-priority="force"] {
+    background: rgba(180, 0, 32, 0.1);
+  }
+  div[data-priority="force"] p {
+    color: #b40020;
+  }
+  div[data-priority="none"] {
+    background: #fff;
+  }
+  div[data-priority="none"] img {
+    display: none;
+  }
+  div[data-priority="high"] {
+    background: rgba(233, 98, 40, 0.1);
+  }
+  div[data-priority="low"] {
+    background: rgba(0, 166, 147, 0.1);
+  }
+  div[data-priority="middle"] {
+    background: rgba(0, 75, 133, 0.1);
+  }
+  div[data-priority="middle"] p {
+    color: #004b85;
+  }
+  div[data-priority="low"] p {
+    color: #00a693;
+  }
+  div[data-priority="high"] p {
+    color: #e96228;
+  }
+
+  /* .activesprintPriority p {
+    color: #B40020;
+    } */
+  .activesprintPriority svg {
+    vertical-align: middle;
+  }
+  .activesprintCalender {
+    display: flex;
+    justify-content: space-between;
+  }
+  .activesprintCalender svg {
+    vertical-align: middle;
+  }
+  .activesprintDateIcon {
+    background: rgba(0, 75, 133, 0.1);
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .activesprintDate {
+    display: flex;
+  }
+  .activesprintDate p {
+    color: #767676;
+    margin-left: 5px;
+    direction: ltr;
+  }
+  .activesprintdesc {
+    margin-bottom: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .activesprintdesc div {
+    background: rgba(118, 118, 118, 0.1);
+    border-radius: 5px;
+    width: 25px !important;
+    height: 25px !important;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .activesprintdesc svg {
+    vertical-align: middle;
+  }
+  [data-bc-bp-direction="rightToLeft"] [data-bc-bp-widget-container][gs-x="0"] {
+    overflow-y: scroll;
+  }
+  .activeSprinttBackToPage {
+    position: absolute;
+    top: 12px;
+    left: 100px;
+    display: block !important;
+  }
+
+  /* ********** tooltip common ********** */
+  [data-fileManager-tooltip] {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  [data-fileManager-tooltip]:before,
+  [data-fileManager-tooltip]:after {
+    visibility: hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+  }
+
+  [data-fileManager-tooltip]:before {
+    position: absolute;
+    top: -100%;
+    right: 50%;
+    /* margin-bottom: 5px; */
+    margin-right: -15px;
+    /* transform: translateX(-50%); */
+    padding: 7px;
+    width: max-content;
+    border-radius: 3px;
+    background-color: #000;
+    background-color: hsla(0, 0%, 20%, 0.9);
+    color: #fff;
+    content: attr(data-fileManager-tooltip);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  [data-fileManager-tooltip]:after {
+    position: absolute;
+    top: calc(-100% + 30px);
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid #000;
+    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+  }
+
+  [data-fileManager-tooltip]:hover:before,
+  [data-fileManager-tooltip]:hover:after {
+    visibility: visible;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
+  }
+  .activesprintUsers {
+    display: flex;
+    margin-left: 15px;
+  }
+  .activesprintUsersDoing {
+    display: flex;
+    margin-left: 15px;
+  }
+  .activesprintUsersDone {
+    display: flex;
+    margin-left: 15px;
+  }
+  .invisible {
+    display: none;
+  }
+  .activeSprintUsers {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  [data-fileManager-tooltip]::after {
+    top: calc(-76% + 30px) !important;
+  }
+  [data-fileManager-tooltip]::before {
+    top: -75% !important;
+  }
+  .activeSprint-userListContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .usersActiveMore {
+    background: #d0d0d0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+
+  .usersActiveMore p {
+    color: #767676;
+    padding: 5px 5px 0px;
+  }
+  .sharingAvatar img {
+    border-radius: 50%;
+  }
+
+  .loading-wrapper {
+    width: 100%;
+    height: 300px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+  .ActiveSprintHeader {
+    display: none;
+  }
+</style>
+<body>
+  <basis
+    core="dbsource"
+    name="db"
+    if="{##db.activeSprint.run|(false)##}"
+    run="AtClient"
+    source="taskmanager"
+    lid="1"
+    ownerid="1"
+    triggers="db.activeSprint"
+    projectid="{##db.activeSprint.id##}"
+    ><member
+      name="statuscolumn"
+      type="list"
+      request="statuscolumn"
+    ></member></basis
+  ><basis
+    core="dbsource"
+    name="db"
+    if="{##db.activeSprint.run|(false)##}"
+    run="AtClient"
+    source="taskmanager"
+    lid="1"
+    ownerid="1"
+    projectid="{##db.activeSprint.id##}"
+    triggers="db.activeSprint"
+    ><member
+      name="activesprintissuenumber"
+      type="scalar"
+      request="activescprintid"
+    ></member></basis
+  ><basis
+    core="dbsource"
+    name="db"
+    if="{##db.activesprintissuenumber.sprintid|(false)##}"
+    run="AtClient"
+    source="taskmanager"
+    lid="1"
+    ownerid="1"
+    usedforid="{##db.activesprintissuenumber.sprintid##}"
+    triggers="db.activesprintissuenumber db.rerun"
+    projectid="{##db.activeSprint.id##}"
+    uservalue="{##db.getUsersID.user##}"
+    onrendered="loadPageList"
+    ><member
+      name="activesprintissue"
+      type="list"
+      request="activesprintissue"
+    ></member></basis
+  ><basis
+    core="callback"
+    run="AtClient"
+    method="statuscolumnFn"
+    triggers="db.statuscolumn db.activesprintissue"
+  ></basis>
+
+  <!-- change status -->
+
+  <basis
+    core="dbsource"
+    name="db"
+    if="{##db.blgbelongs1.run|(false)##}"
+    run="AtClient"
+    source="taskmanager"
+    lid="1"
+    ownerid="1"
+    usedforid="{##db.blgbelongs.table1id##}"
+    status="{##db.blgbelongs1.table2id##}"
+    message=" وضعیت ایشوی {##db.blgbelongs.table1id##} به {##db.blgbelongs1.table2idtitle##} تغییر یافت."
+    triggers="db.blgbelongs1"
+    userid="1037559"
+    ><member
+      name="changestatus"
+      type="scalar"
+      request="changestatus"
+    ></member></basis
+  ><basis
+    core="callback"
+    run="AtClient"
+    method="changeStatusFn"
+    triggers="db.changestatus"
+  ></basis>
+
+  <!-- for access to this page -->
+  <basis
+    core="component.basiscore.exposer"
+    run="AtClient"
+    method="activesprintTitle"
+    component="activesprint_component"
+  ></basis>
+
+  <div id="activeSprint-show" class="activeSprinttBackToPage">
+    <span
+      class="backToList"
+      data-widget-header-btn-tooltip="برگشت به لیست"
+      data-sys-tooltip=""
+      onclick="reportBack()"
+    >
+      <svg
+        width="18"
+        height="12"
+        viewBox="0 0 18 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          data-sys-text=""
+          d="M18 5H3.83L7.41 1.41L6 0L0 6L6 12L7.41 10.59L3.83 7H18V5Z"
+          fill="#767676"
+        ></path>
+      </svg>
+    </span>
+  </div>
+  <div class="loading-wrapper" id="ActiveSprintLoadingWrapper">
+    <div class="loading-basispanel">
+      <div class="loading-part1"></div>
+      <div class="loading-part2"></div>
+      <div class="loading-part3"></div>
+      <div class="loading-part4"></div>
+    </div>
+  </div>
+
+  <basis
+    core="dbsource"
+    name="db"
+    if="{##db.activesprintissuenumber.sprintid|(false)##}"
+    run="AtClient"
+    source="taskmanager"
+    lid="1"
+    ownerid="1"
+    usedforid="{##db.activesprintissuenumber.sprintid##}"
+    triggers="db.activesprintissuenumber"
+    ><member
+      name="sprintuserslist"
+      type="list"
+      request="sprintuserslist"
+    ></member></basis
+  ><basis
+    core="callback"
+    run="AtClient"
+    method="sprintuserslistMethod"
+    triggers="db.sprintuserslist"
+  ></basis>
+
+  <div class="ActiveSprintHeader" id="ActiveSprintHeader">
+    <!-- user id to title for sprint users-->
+    <basis
+      core="api"
+      name="api.usertitle"
+      if="{##db.activeSprintUsresDtl.value|(false)##}"
+      run="AtClient"
+      body='{"userid":{##db.activeSprintUsresDtl.userid##}}'
+      url="https://basiserp.ir/trustservice/BB790877-A396-48D6-97CA-21DA0B40B3D9/fa/usersinfo"
+      method="post"
+      content-type="application/javascript"
+      triggers="db.activeSprintUsresDtl"
+      onprocessed="usersListData"
+    ></basis>
+    <div class="activeSprint-userListContainer">
+      <div
+        class="usersActiveMore firstimg"
+        id="activeSprintShowAllUsers"
+        data-filemanager-tooltip="نمایش همه"
+        onclick="showAll()"
+      >
+        <p id="usersicon">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17 5.75C18.9068 5.75 20.2615 5.75159 21.2892 5.88976C22.2952 6.02503 22.8749 6.27869 23.2981 6.7019C23.7852 7.18904 23.9973 7.56666 24.1147 8.23984C24.2471 8.9986 24.25 10.0809 24.25 12C24.25 12.4142 24.5858 12.75 25 12.75C25.4142 12.75 25.75 12.4142 25.75 12L25.75 11.9037C25.7501 10.1045 25.7501 8.88571 25.5924 7.98199C25.417 6.97665 25.0432 6.32568 24.3588 5.64124C23.6104 4.89288 22.6615 4.56076 21.489 4.40314C20.3498 4.24997 18.8942 4.24998 17.0564 4.25H17C16.5858 4.25 16.25 4.58579 16.25 5C16.25 5.41421 16.5858 5.75 17 5.75Z"
+              fill="#333333"
+            />
+            <path
+              d="M5.00001 17.25C5.41422 17.25 5.75001 17.5858 5.75001 18C5.75001 19.9191 5.75289 21.0014 5.88529 21.7602C6.00275 22.4333 6.21477 22.811 6.70191 23.2981C7.12512 23.7213 7.70476 23.975 8.71085 24.1102C9.73852 24.2484 11.0932 24.25 13 24.25C13.4142 24.25 13.75 24.5858 13.75 25C13.75 25.4142 13.4142 25.75 13 25.75H12.9436C11.1058 25.75 9.6502 25.75 8.51098 25.5969C7.33856 25.4392 6.38961 25.1071 5.64125 24.3588C4.95681 23.6743 4.58304 23.0233 4.40762 22.018C4.24992 21.1143 4.24995 19.8955 4.25 18.0964L4.25001 18C4.25001 17.5858 4.58579 17.25 5.00001 17.25Z"
+              fill="#333333"
+            />
+            <path
+              d="M25 17.25C25.4142 17.25 25.75 17.5858 25.75 18L25.75 18.0963C25.7501 19.8955 25.7501 21.1143 25.5924 22.018C25.417 23.0233 25.0432 23.6743 24.3588 24.3588C23.6104 25.1071 22.6615 25.4392 21.489 25.5969C20.3498 25.75 18.8942 25.75 17.0564 25.75H17C16.5858 25.75 16.25 25.4142 16.25 25C16.25 24.5858 16.5858 24.25 17 24.25C18.9068 24.25 20.2615 24.2484 21.2892 24.1102C22.2952 23.975 22.8749 23.7213 23.2981 23.2981C23.7852 22.811 23.9973 22.4333 24.1147 21.7602C24.2471 21.0014 24.25 19.9191 24.25 18C24.25 17.5858 24.5858 17.25 25 17.25Z"
+              fill="#333333"
+            />
+            <path
+              d="M12.9436 4.25H13C13.4142 4.25 13.75 4.58579 13.75 5C13.75 5.41421 13.4142 5.75 13 5.75C11.0932 5.75 9.73852 5.75159 8.71085 5.88976C7.70476 6.02503 7.12512 6.27869 6.70191 6.7019C6.21477 7.18904 6.00275 7.56666 5.88529 8.23984C5.75289 8.9986 5.75001 10.0809 5.75001 12C5.75001 12.4142 5.41422 12.75 5.00001 12.75C4.58579 12.75 4.25001 12.4142 4.25001 12L4.25 11.9037C4.24995 10.1045 4.24992 8.8857 4.40762 7.98199C4.58304 6.97665 4.95681 6.32568 5.64125 5.64124C6.38961 4.89288 7.33856 4.56076 8.51098 4.40314C9.65019 4.24997 11.1058 4.24998 12.9436 4.25Z"
+              fill="#333333"
+            />
+            <path
+              d="M15 13.75C14.3096 13.75 13.75 14.3096 13.75 15C13.75 15.6904 14.3096 16.25 15 16.25C15.6904 16.25 16.25 15.6904 16.25 15C16.25 14.3096 15.6904 13.75 15 13.75Z"
+              fill="#333333"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.89243 17.0598C8.29748 16.3697 8.00001 16.0246 8.00001 15C8.00001 13.9754 8.29748 13.6303 8.89243 12.9402C10.0804 11.5622 12.0727 10 15 10C17.9273 10 19.9196 11.5622 21.1076 12.9402C21.7025 13.6303 22 13.9754 22 15C22 16.0246 21.7025 16.3697 21.1076 17.0598C19.9196 18.4378 17.9273 20 15 20C12.0727 20 10.0804 18.4378 8.89243 17.0598ZM12.25 15C12.25 13.4812 13.4812 12.25 15 12.25C16.5188 12.25 17.75 13.4812 17.75 15C17.75 16.5188 16.5188 17.75 15 17.75C13.4812 17.75 12.25 16.5188 12.25 15Z"
+              fill="#333333"
+            />
+          </svg>
+        </p>
+      </div>
+      <div class="activeSprintUsers" id="activeSprintUsers"></div>
+    </div>
+    <div class="activesprintcontent container" id="activesprintcontent"></div>
+  </div>
+
+  <div class="NotificationMessage" id="activesprintMessage"></div>
+</body>
+<script>
+  function dragOver(e) {
+    e.preventDefault();
+  }
+
+  var dragItemactivesprint = null;
+
+  function dragStart() {
+    activesprint_component.owner.setSource("db.blgbelongs", {
+      table1id: this.getAttribute("data-id"),
+    });
+
+    dragItemactivesprint = this;
+    setTimeout(() => (this.className = "invisible"), 0);
+  }
+
+  function dragEnd(statusid) {
+    event.target.className = "item";
+    dragItemactivesprint = null;
+  }
+
+  function dragDrop(el, event, id) {
+    el.append(dragItemactivesprint);
+
+    activesprint_component.owner.setSource("db.blgbelongs1", {
+      table2id: el.getAttribute("data-cid"),
+      table2idtitle: el.getAttribute("data-title"),
+      run: true,
+    });
+  }
+
+  function reportBack() {
+    activesprint_component.owner.dc
+      .resolve("page_loader")
+      .tryLoadPageEx("corporate", 11, "1");
+  }
+  function activesprintTitle(com) {
+    const widget = com.owner.dc.resolve("widget");
+    const page = com.owner.dc.resolve("page");
+    widget.title = `اسپرینت فعال (${page.arguments.textvalue})`;
+    console.log("load page", page.arguments);
+    page.owner.setSource("db.activeSprint", [
+      {
+        id: page.arguments.id,
+        run: true,
+      },
+    ]);
+    activesprint_component.owner.setSource("db.getUsersID", {
+      user: "",
+    });
+    const btn = document.querySelector("#activeSprint-show .backToList");
+    widget.addNodeToHeader(btn);
+  }
+
+  var columnsFlag = false,
+    issuelistFlag = false;
+  var columnsArr = [];
+  var columnsArrFinal = [];
+  var issuelist = [];
+  if (typeof statuscolumnFn === "undefined") {
+    function statuscolumnFn(args) {
+      if (args.source._id == "db.statuscolumn") {
+        document.getElementById("activesprintcontent").innerHTML = "";
+        columnsArr = args.source.rows;
+        columnsFlag = true;
+        columnsArr.forEach((ee, index) => {
+          if (ee.statustitle == "To Do") {
+            columnsArrFinal[0] = ee;
+          } else if (ee.statustitle == "Doing") {
+            columnsArrFinal[1] = ee;
+          } else if (ee.statustitle == "Done") {
+            columnsArrFinal[2] = ee;
+          } else {
+            columnsArrFinal[index] = ee;
+          }
+        });
+      }
+      if (args.source._id == "db.activesprintissue") {
+        document.getElementById("activesprintcontent").innerHTML = "";
+        issuelist = args.source.rows;
+        issuelistFlag = true;
+      }
+
+      if (columnsFlag == true && issuelistFlag == true) {
+        responseJson = args.source.rows;
+        document.getElementById("activesprintcontent").innerHTML = "";
+        console.log("columns ", columnsArrFinal);
+        columnsArrFinal.forEach((e) => {
+          const div = document.createElement("div");
+          var todoid = 0;
+          if (e.statustitle == "To Do") {
+            todoid = e.id;
+          }
+          var html = "";
+          issuelist.forEach((el) => {
+            if (el.statusid == 0) {
+              el.statusid = todoid;
+            }
+            if (e.id == el.statusid) {
+              html += `<div class="item" data-id="${
+                el.issueid
+              }" draggable="true" >
+    <div class="activespeintHeader1">
+    
+    <span class="epicType" style="color:${
+      el.color == "" ? "" : el.color
+    };background-color:${el.color == "" ? "" : hexToRgbA(el.color)}">${
+                el.epicname
+              }</span>
+    </div>
+    <div class="activespeintHeader">
+    <p class="tasksTitle">${el.issuetitle}</p></div>
+    <div class="activesprintdesc">
+    <p>
+    ${el.issuedesc}
+    </p>
+    
+    </div>
+    <div class="activesprintInformation">
+    <div class="activesprintLabel" style="color:${
+      el.labelcolor == "" ? "" : el.labelcolor
+    };background-color:${el.labelcolor == "" ? "" : hexToRgbA(el.labelcolor)}">
+    ${el.labelname}
+    </div>
+    
+    <div class="activesprintUsers" id="activesprintUsers">
+    <div class="sharingAvatar">
+    ${el.fname} ${el.lname}
+    </div>
+    </div>
+   
+    </div>
+    <div class="activesprintCalender">
+    <div class="activesprintPriority" data-priority="${
+      el.priority == "" ? "none" : el.priority
+    }">
+    <img src="https://basispanel.ir/asset/images/${
+      el.priority
+    }.png" width="15" width="15" />
+    <p>${el.priority}</p>
+    </div>
+    <div class="activesprintDate">
+    <p>${el.date}</p>
+    <div class="activesprintDateIcon">
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_242_36711)">
+    <path d="M5.625 6.875H4.375V8.125H5.625V6.875ZM8.125 6.875H6.875V8.125H8.125V6.875ZM10.625 6.875H9.375V8.125H10.625V6.875ZM11.875 2.5H11.25V1.25H10V2.5H5V1.25H3.75V2.5H3.125C2.43125 2.5 1.88125 3.0625 1.88125 3.75L1.875 12.5C1.875 13.1875 2.43125 13.75 3.125 13.75H11.875C12.5625 13.75 13.125 13.1875 13.125 12.5V3.75C13.125 3.0625 12.5625 2.5 11.875 2.5ZM11.875 12.5H3.125V5.625H11.875V12.5Z" fill="#004B85"></path>
+    </g>
+    <defs>
+    <clipPath id="clip0_242_36711">
+    <rect width="15" height="15" fill="white"></rect>
+    </clipPath>
+    </defs>
+    </svg> 
+    </div>
+    </div>
+    </div></div>`;
+            }
+          });
+
+          div.innerHTML = ` <section class="sprinttodo column" id="div1" data-cid="${e.id}" data-title="${e.statustitle}">
+    <div class="sprintcontentDetail" style="border-bottom: 4px solid ${e.color};">
+    <h2>${e.statustitle}</h2>
+    </div>
+    <div class="activesprintdatas" id="drag1" >
+    ${html}
+    
+    </div>
+    
+    </section>`;
+          document.getElementById("activesprintcontent").appendChild(div);
+          const items = document.querySelectorAll(".item");
+
+          items.forEach((item) => {
+            item.addEventListener("click", function () {});
+            item.addEventListener("dragstart", dragStart);
+            // item.addEventListener('dragend', dragEnd)
+            item.addEventListener("dragend", function () {
+              dragEnd(`${e.id}`);
+            });
+          });
+          var columns = document.querySelectorAll(".column");
+          columns.forEach((column) => {
+            column.addEventListener("dragover", dragOver);
+            column.addEventListener("drop", function () {
+              dragDrop(this, event, e.id);
+            });
+          });
+        });
+      }
+    }
+  }
+  function hexToRgbA(hex) {
+    var c;
+    if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+      c = hex.substring(1).split("");
+      if (c.length == 3) {
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c = "0x" + c.join("");
+
+      return (
+        "rgba(" + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",") + ",0.2)"
+      );
+    }
+    throw new Error("Bad Hex");
+  }
+
+  function changeStatusFn(args) {
+    const messageBox = document.getElementById("activesprintMessage");
+    const result = JSON.parse(args.source.rows[0].resualt);
+    if (result != undefined) {
+      if (result.errorid == 3) {
+        showNotificationMessage(
+          messageBox,
+          "success",
+          "تغییرات با موفقیت ثبت شد "
+        );
+      } else {
+        showNotificationMessage(messageBox, "error", "خطا در انجام عملیات");
+      }
+    } else {
+      showNotificationMessage(messageBox, "error", "خطا در انجام عملیات");
+    }
+  }
+
+  var userslistAC = [];
+  function sprintuserslistMethod(args) {
+    responseJson = args.source.rows;
+    userslistDataAC = responseJson;
+    document.getElementById("activeSprintUsers").innerHTML = "";
+    responseJson.forEach((e) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+    
+    <div class="sharingAvatar" onclick="getUseridFn('${e.userid}')" userid="${e.userid}">
+    
+    </div>
+    `;
+
+      document.getElementById("activeSprintUsers").appendChild(div);
+      userslistAC.push(`${e.userid}`);
+      activesprint_component.owner.setSource("db.activeSprintUsresDtl", {
+        value: true,
+        userid: JSON.stringify(userslistAC),
+      });
+    });
+  }
+
+  var userslistDataAC = [];
+  async function usersListData(args) {
+    const response = args.response;
+    const responseJson = await response.json();
+    console.log("maindata333", userslistDataAC);
+    userslistDataAC.forEach((e1) => {
+      responseJson.forEach((e2) => {
+        if (e1.userid == e2.userid) {
+          console.log("nnn", e1.userid, e2.userid, e2.first_name);
+          document.querySelectorAll(".sharingAvatar").forEach((el) => {
+            if (el.getAttribute("userid") == e2.userid) {
+              el.setAttribute(
+                "data-filemanager-tooltip",
+                e2.first_name + " " + e2.last_name
+              );
+              el.innerHTML = `<img src="/panel/BB790877-A396-48D6-97CA-21DA0B40B3D9/users/${e2.avatar}" width="40px" class="firstimg" onerror="this.src = 'https://basispanel.ir/asset/images/unknown-avatar.png'" />`;
+            }
+          });
+        }
+      });
+    });
+  }
+  function getUseridFn(id) {
+    console.log("id", id);
+    activesprint_component.owner.setSource("db.getUsersID", {
+      user: id,
+      value: true,
+    });
+    id = "";
+    activesprint_component.owner.setSource("db.rerun", true);
+  }
+  function showAll() {
+    activesprint_component.owner.setSource("db.getUsersID", {
+      user: "",
+      value: true,
+    });
+    activesprint_component.owner.setSource("db.rerun", true);
+  }
+
+  function loadPageList() {
+    document.getElementById("ActiveSprintLoadingWrapper").style.display =
+      "none";
+    document.getElementById("ActiveSprintHeader").style.display = "block";
+  }
+</script>
