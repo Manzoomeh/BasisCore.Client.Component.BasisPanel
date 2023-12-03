@@ -1,3 +1,8 @@
 export default interface INotifiationMessage {
-  showMessage(type: string, message: string): void;
+  NotificationMessage(
+    Errorid: string,
+    Lid: number,
+    Type: number,
+    Message?: string
+  ): Promise<void>;
 }

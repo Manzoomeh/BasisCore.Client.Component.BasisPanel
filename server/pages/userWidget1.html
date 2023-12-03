@@ -1,17 +1,33 @@
 <span id="span_id">ویجت داشبورد سطح user</span>
 
-<button id="btn-ajax" onclick="click_notification_error(this)">
-  notification error
-</button>
-<button id="btn-ajax" onclick="click_notification_success(this)">
-  notification success
-</button>
 <button id="btn-ajax" onclick="click_process(this)">ajax process</button>
 
 <!-- <Basis core="component.local.DemoComponent" run="atclient" triggers="event.click">
 </Basis> -->
 <!-- <button id="btn">Load user info</button> -->
 
+<div style="display: flex; flex-direction: column">
+  <div style="width: 300px; margin-block: 10px; height: 30px">
+    <button id="btn-ajax" onclick="click_notification_4parameters(this)">
+      show notification method with 4 parameters
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_2parameters(this)">
+      show notification method with 2 parameters
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_emptyMessage(this)">
+      show notification method with no message
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_otherCulture(this)">
+      show notification method with other cultures
+    </button>
+  </div>
+</div>
 <form id="file-form" action="#">
   <input
     class="file-input"
@@ -60,31 +76,39 @@
       );
     }
   }
-  function click_notification_error() {
+  async function click_notification_4parameters() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.showMessage("error", "test error notification");
+    message.NotificationMessage(1, 1, 1, "عملیات با موفقیت انجام شد");
   }
-  function click_notification_success() {
+  function click_notification_2parameters() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.showMessage("success", "test success notification");
+    message.NotificationMessage(1, 1);
+  }
+  function click_notification_emptyMessage() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessage(1, 1, 1, "");
+  }
+  function click_notification_otherCulture() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessage(2, 2, 2);
   }
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
     const widget = pagesList_component.owner.dc.resolve("widget");
 
     /*
-     ITaskOptions {
-  key?: string;
-  container?: Element;
-  title?: string;
-  type?: TaskType;
-  reportHandlers?: EventManager<IReportParam>;
-  task: Promise<any>;
-  notify?: boolean;
-  cancel?: () => void;
-}
+       ITaskOptions {
+    key?: string;
+    container?: Element;
+    title?: string;
+    type?: TaskType;
+    reportHandlers?: EventManager<IReportParam>;
+    task: Promise<any>;
+    notify?: boolean;
+    cancel?: () => void;
+  }
 
-    */
+      */
     const task = new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(true);
