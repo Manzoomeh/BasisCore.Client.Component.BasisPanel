@@ -78,19 +78,19 @@
   }
   async function click_notification_4parameters() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessage(1, 1, 1, "عملیات با موفقیت انجام شد");
+    message.NotificationMessageMethod(1, 1, 1, "عملیات با موفقیت انجام شد");
   }
   function click_notification_2parameters() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessage(1, 1);
+    message.NotificationMessageMethod(1, 1);
   }
   function click_notification_emptyMessage() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessage(1, 1, 1, "");
+    message.NotificationMessageMethod(1, 1, 1, "");
   }
   function click_notification_otherCulture() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessage(2, 2, 2);
+    message.NotificationMessageMethod(2, 2, 2);
   }
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
