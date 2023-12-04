@@ -3,7 +3,12 @@ import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import desktopLayout from "./assets/layout.html";
 import "./assets/style.css";
 import INotifiationMessage from "./INotificationMessage";
+import HttpUtil from "../../HttpUtil";
 
+type errorMessageResponse = {
+  lid: number;
+  message: string;
+};
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
   implements INotifiationMessage
@@ -18,10 +23,37 @@ export default class NotificationMessageComponent
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
   }
-  public showMessage(type: string, message: "error" | "success") {
+  public async NotificationMessage(
+    Errorid: string,
+    Lid: number,
+    Type: number = 1,
+    Message?: string
+  ) {
+    let message = Message;
     const container = this.container.querySelector(".NotificationMessage");
     if (!container.hasAttribute("data-sys-message-fade-in")) {
-      if (type === "success") {
+      if (!message) {
+        try {
+          const url = HttpUtil.formatString(
+            this.options.culture.errorMessages,
+            {
+              rKey: this.options.rKey,
+            }
+          );
+
+          const res: errorMessageResponse =
+            await HttpUtil.checkRkeyFetchDataAsync(
+              url,
+              "POST",
+              this.options.checkRkey,
+              { id: Errorid, lid: Lid }
+            );
+          message = res.message;
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      if (Type === 1) {
         container.innerHTML = `<div class="NotificationMessage-content" >
         <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M18.5 36.8332C9.85754 36.8332 5.53633 36.8332 2.85148 34.1483C0.166626 31.4635 0.166626 27.1423 0.166626 18.4998C0.166626 9.85742 0.166626 5.53621 2.85148 2.85136C5.53633 0.166504 9.85754 0.166504 18.5 0.166504C27.1424 0.166504 31.4636 0.166504 34.1484 2.85136C36.8333 5.53621 36.8333 9.85742 36.8333 18.4998C36.8333 27.1423 36.8333 31.4635 34.1484 34.1483C31.4636 36.8332 27.1424 36.8332 18.5 36.8332ZM25.8889 12.9442C26.4259 13.4812 26.4259 14.3518 25.8889 14.8888L16.7222 24.0554C16.1853 24.5924 15.3147 24.5924 14.7777 24.0554L11.111 20.3888C10.574 19.8518 10.574 18.9812 11.111 18.4442C11.648 17.9073 12.5186 17.9073 13.0556 18.4442L15.75 21.1386L23.9444 12.9442C24.4813 12.4073 25.3519 12.4073 25.8889 12.9442Z" fill="#006A5E"/>
@@ -32,7 +64,6 @@ export default class NotificationMessageComponent
     </div><div class="progress success-progress"></div>`;
         const progress = document.querySelector(".progress");
         progress.classList.add("activeNotification");
-
         container.setAttribute("data-bc-message-success", "");
         container.setAttribute("data-sys-message-fade-in", "");
 
@@ -42,7 +73,7 @@ export default class NotificationMessageComponent
           container.removeAttribute("data-bc-message-success");
           progress.classList.remove("activeNotification");
         }, 3000);
-      } else if (type === "error") {
+      } else if (Type === 2) {
         container.setAttribute("data-sys-message-fade-in", "");
 
         container.innerHTML = `<div class="NotificationMessage-content" >

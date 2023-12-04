@@ -9,6 +9,8 @@ const externalMenuHttpServer = require("./server/external-menu");
 const notificationsHttpServer = require("./server/notifications");
 const externalHttpServer = require("./server/external");
 const dbSource = require("./server/db-source");
+const messageHttpServer = require("./server/messages");
+
 const widgetList = require("./server/widget-list");
 
 module.exports = (env, options) => {
@@ -48,6 +50,7 @@ module.exports = (env, options) => {
       ],
       onBeforeSetupMiddleware: function (server) {
         server.app.use("/server/trust", trustHttpServer);
+        server.app.use("/server/messages", messageHttpServer);
         server.app.use("/server/corporate", corporateHttpServer);
         server.app.use("/server/business", businessHttpServer);
         server.app.use("/server/active", activeManagerHttpServer);
@@ -97,7 +100,18 @@ module.exports = (env, options) => {
       ],
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".jsx", ".css", ".png", ".html", ".svg", ".jpg", ".jpeg"], // there's a dot missing
+      extensions: [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".css",
+        ".png",
+        ".html",
+        ".svg",
+        ".jpg",
+        ".jpeg",
+      ], // there's a dot missing
     },
     plugins: [
       new CircularDependencyPlugin({
