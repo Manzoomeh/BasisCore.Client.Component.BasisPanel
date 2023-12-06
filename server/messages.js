@@ -31,11 +31,12 @@ router.post("/:rKey/errorMessages", function (req, res) {
       ],
     },
   ];
+
   const { id, lid } = req.body;
   const result = errors
     .find((e) => e.id == id)
     ?.culture.find((e) => e.lid == lid);
   // const result = [];
-  res.json(result);
+  res.json({ ...result, v: "1.3" });
 });
 module.exports = router;
