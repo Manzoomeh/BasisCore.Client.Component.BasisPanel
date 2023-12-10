@@ -1,0 +1,18 @@
+<button data-btn-add>Add</button>
+<Basis core="schema" run="atclient" schemaUrl="http://localhost:3000/schema/questions/1166" displayMode="new" button="[data-btn-add]" resultSourceId="demo.data" errorResultSourceId="demo.error" qs_rKey="www" qs_name="haha">
+</Basis>
+<button data-btn-add>Add</button>
+<div id="errorResultSourceId"></div>
+<Basis datamembername="demo.data" core="schemauploader" run="atclient" url="http://localhost:3000/blob/answer-json" blob="http://localhost:3000/blob/answer-blob"> </Basis>
+
+<script>
+    function onSource(args) {
+        console.table(args.source.rows);
+        console.log("errorResultSourceId: ", args.source.rows[0].value);
+        const errorResultContainer = document.getElementById("errorResultSourceId");
+        errorResultContainer.textContent = "error in validation";
+        setTimeout(() => {
+            errorResultContainer.textContent = "";
+        }, 3000);
+    }
+</script>

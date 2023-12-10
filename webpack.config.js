@@ -37,6 +37,7 @@ module.exports = (env, options) => {
       basiscore: "basiscore",
     },
     devServer: {
+      port: 8080,
       static: [
         {
           directory: path.resolve(__dirname, "wwwroot"),

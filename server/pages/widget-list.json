@@ -35,9 +35,6 @@
                         "h": 2,
                         "url": "server/external"
                     },
-
-
-
                     {
                         "id": "userWidget1.html",
                         "title": "ویجت داشبورد",
@@ -82,12 +79,6 @@
                         "w": 10,
                         "h": 2
                     }
-
-
-
-
-
-                    
                 ]
             }
         ]
@@ -237,6 +228,33 @@
                         "y": 0,
                         "w": 2,
                         "h": 5
+                    }
+                ]
+            }
+        ]
+    },
+    "blob-schema": {
+        "container": "container",
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "blob-schema.html",
+                        "title": "اسکیما",
+                        "name": "blob-schema",
+                        "container": "widget",
+                        "addToDashboard": true,
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
                     }
                 ]
             }
