@@ -4,17 +4,41 @@ import desktopLayout from "./assets/layout.html";
 import "./assets/style.css";
 import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
-type errorMessageResponse = {
-  v: string;
-  lid: number;
-  message: string;
-};
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
   implements INotifiationMessage
 {
   public messageQueue = [];
+  public defaultMessages = [
+    {
+      id: 1.0,
+      culture: [
+        {
+          lid: 1.0,
+          message: "با موفقیت انجام شد",
+        },
+        {
+          lid: 2.0,
+          message: "successful",
+        },
+      ],
+    },
+    {
+      id: 2.0,
+      culture: [
+        {
+          lid: 1.0,
+          message: "خطا در انجام عملیات ",
+        },
+        {
+          lid: 2.0,
+          message: "its fail",
+        },
+      ],
+    },
+  ];
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, desktopLayout, "data-bc-bp-message-container");
     this.owner.dc
@@ -25,9 +49,9 @@ export default class NotificationMessageComponent
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
   }
-  public checkErrorCode(errorid: string, lid: string) {
+  public checkErrorCode(errorid: string, lid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
-    if (cached) {
+    if (cached && cached[mid]) {
       const errorData = cached.values[errorid];
       if (errorData) {
         const currentDate = new Date().getTime();
@@ -39,50 +63,82 @@ export default class NotificationMessageComponent
     }
   }
   private async showMessage() {
+    const currentPage = JSON.parse(
+      localStorage.getItem("__bc_panel_last_state__")
+    );
+    const currentModule = currentPage?.m?.info?.mid || 1;
     const container = this.container.querySelector(".NotificationMessage");
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
     if (!message) {
       try {
-        const chachedItem = this.checkErrorCode(Errorid, String(Lid));
+        const chachedItem = this.checkErrorCode(
+          Errorid,
+          String(Lid),
+          currentModule
+        );
         if (chachedItem) {
           message = chachedItem;
         } else {
-          const url = HttpUtil.formatString(
-            this.options.culture.errorMessages,
-            {
+          let url;
+          if (currentModule == 1) {
+            url = HttpUtil.formatString(this.options.culture.errorMessages, {
               rKey: this.options.rKey,
-            }
-          );
-
-          const res: errorMessageResponse =
-            await HttpUtil.checkRkeyFetchDataAsync(
-              url,
-              "POST",
-              this.options.checkRkey,
-              { id: Errorid, lid: Lid }
-            );
-          message = res.message;
-          const cached = JSON.parse(localStorage.getItem("errorKeys")) || {};
-          cached.date = new Date().getTime();
-          if (cached.v != res.v) {
-            cached.values = {};
-            cached.v = res.v;
-            cached.values[Errorid] = {};
-            cached.values[Errorid][Lid] = res.message;
+            });
           } else {
-            if (cached.values[Errorid]) {
-              cached.values[Errorid][Lid] = res.message;
-            } else {
-              cached.values[Errorid] = {};
-              cached.values[Errorid][Lid] = res.message;
-            }
+            url = HttpUtil.formatString(
+              currentPage.p.ownerUrl + this.options.culture.errorMessages,
+              {
+                rKey: this.options.rKey,
+              }
+            );
           }
 
-          localStorage.setItem("errorKeys", JSON.stringify(cached));
+          const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+            url,
+            "GET",
+            this.options.checkRkey
+          );
+          if (res) {
+            const cachedObject =
+              JSON.parse(localStorage.getItem("errorKeys")) || {};
+            const cached = cachedObject[currentModule] || {};
+            cached.date = new Date().getTime();
+
+            if (cached.v != res[0].v) {
+              cached.v = res[0].v;
+              cached.values = {};
+
+              res.map((e) => {
+                if (e.id) {
+                  cached.values[e.id] = {};
+                  e.culture.map((i) => {
+                    cached.values[e.id][i.lid] = i.message;
+                  });
+                }
+              });
+            }
+            cachedObject[currentModule] = cached;
+            localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+            if (res.find((e) => e.id == Errorid)[Lid].message) {
+              message = res
+                .find((e) => e.id == Errorid)
+                .culture.find((e) => e.lid == Lid).message;
+            } else {
+              message = this.defaultMessages
+                .find((e) => e.id == Errorid)
+                .culture.find((e) => e.lid == Lid).message;
+            }
+          } else {
+            message = this.defaultMessages
+              .find((e) => e.id == Errorid)
+              .culture.find((e) => e.lid == Lid).message;
+          }
         }
       } catch (e) {
-        console.log(e);
+        message = this.defaultMessages
+          .find((e) => e.id == Errorid)
+          .culture.find((e) => e.lid == Lid).message;
       }
     }
     if (Type === 1) {
