@@ -5,7 +5,7 @@ router.use(express.json());
 router.get("/:rKey/errorMessages", function (req, res) {
   const errors = [
     {
-      v: "1.3",
+      v: "1.4",
     },
     {
       id: 1.0,
@@ -33,7 +33,21 @@ router.get("/:rKey/errorMessages", function (req, res) {
         },
       ],
     },
+    {
+      id: 3.0,
+      culture: [
+        {
+          lid: 1.0,
+          message: "test",
+        },
+        {
+          lid: 2.0,
+          message: "its fail",
+        },
+      ],
+    },
   ];
+  
 
   res.json(errors);
 });
