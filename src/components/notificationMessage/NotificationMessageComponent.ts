@@ -56,7 +56,10 @@ export default class NotificationMessageComponent
       if (errorData) {
         const currentDate = new Date().getTime();
 
-        if (errorData[lid] && currentDate - cached.date < 3600 * 1000 * 24) {
+        if (
+          errorData[lid] &&
+          currentDate - cached[mid].date < 3600 * 1000 * 24
+        ) {
           return errorData[lid];
         }
       }
