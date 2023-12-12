@@ -1,5 +1,5 @@
 export default interface INotifiationMessage {
-  NotificationMessage(
+  NotificationMessageMethod(
     Errorid: string,
     Lid: number,
     Type: number,

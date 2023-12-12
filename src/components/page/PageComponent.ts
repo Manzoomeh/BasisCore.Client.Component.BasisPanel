@@ -30,11 +30,12 @@ export default abstract class PageComponent
       "[data-bc-widget-drop-area-container]"
     );
   }
-
+  
   public async initializeAsync(): Promise<void> {
     this.loaderParam = JSON.parse(
       await this.owner.getAttributeValueAsync("params")
     );
+    
     const url = HttpUtil.formatString(
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam

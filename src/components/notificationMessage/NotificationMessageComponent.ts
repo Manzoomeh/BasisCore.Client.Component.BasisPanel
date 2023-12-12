@@ -6,10 +6,12 @@ import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
 
+
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
   implements INotifiationMessage
 {
+
   public messageQueue = [];
   public defaultMessages = [
     {
@@ -70,9 +72,10 @@ export default class NotificationMessageComponent
       localStorage.getItem("__bc_panel_last_state__")
     );
     const currentModule = currentPage?.m?.info?.mid || 1;
-    const container = this.container.querySelector(".NotificationMessage");
+    const container = this.container.querySelector(".NotificationMessageMethod");
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
+      
     if (!message) {
       try {
         const chachedItem = this.checkErrorCode(
@@ -198,13 +201,13 @@ export default class NotificationMessageComponent
       }, 3000);
     }
   }
-  public async NotificationMessage(
+  public async NotificationMessageMethod(
     Errorid: string,
     Lid: number,
     Type: number = 1,
     Message?: string
   ) {
-    const container = this.container.querySelector(".NotificationMessage");
+    const container = this.container.querySelector(".NotificationMessageMethod");
     this.messageQueue.push({ Errorid, Lid, Type, Message: Message });
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();
