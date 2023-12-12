@@ -52,7 +52,7 @@ export default class NotificationMessageComponent
   public checkErrorCode(errorid: string, lid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
     if (cached && cached[mid]) {
-      const errorData = cached.values[errorid];
+      const errorData = cached[mid].values[errorid];
       if (errorData) {
         const currentDate = new Date().getTime();
 
