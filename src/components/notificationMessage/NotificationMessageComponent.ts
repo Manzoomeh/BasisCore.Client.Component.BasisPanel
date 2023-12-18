@@ -6,43 +6,42 @@ import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
 
-
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
   implements INotifiationMessage
 {
-
   public messageQueue = [];
-  public defaultMessages = [
-    {
-      id: 1.0,
-      culture: [
-        {
-          lid: 1.0,
-          message: "با موفقیت انجام شد",
-        },
-        {
-          lid: 2.0,
-          message: "successful",
-        },
-      ],
-    },
-    {
-      id: 2.0,
-      culture: [
-        {
-          lid: 1.0,
-          message: "خطا در انجام عملیات ",
-        },
-        {
-          lid: 2.0,
-          message: "its fail",
-        },
-      ],
-    },
-  ];
+  public defaultMessages;
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, desktopLayout, "data-bc-bp-message-container");
+    this.defaultMessages = [
+      {
+        id: 1.0,
+        culture: [
+          {
+            lid: 1.0,
+            message: "با موفقیت انجام شد",
+          },
+          {
+            lid: 2.0,
+            message: "successful",
+          },
+        ],
+      },
+      {
+        id: 2.0,
+        culture: [
+          {
+            lid: 1.0,
+            message: "خطا در انجام عملیات ",
+          },
+          {
+            lid: 2.0,
+            message: "its fail",
+          },
+        ],
+      },
+    ];
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("message", this);
@@ -54,25 +53,29 @@ export default class NotificationMessageComponent
   public checkErrorCode(errorid: string, lid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
     if (cached && cached[mid]) {
-      const errorData = cached.values[errorid];
+      const errorData = cached[mid].values[errorid];
       if (errorData) {
         const currentDate = new Date().getTime();
 
-        if (errorData[lid] && currentDate - cached.date < 3600 * 1000 * 24) {
+        if (
+          errorData[lid] &&
+          currentDate - cached[mid].date < 3600 * 1000 * 24
+        ) {
           return errorData[lid];
         }
       }
     }
   }
   private async showMessage() {
-    const currentPage = JSON.parse(
-      localStorage.getItem("__bc_panel_last_state__")
+    const currentPage = LocalStorageUtil.getCurrentPage();
+    const currentMenu = LocalStorageUtil.getCurrentMenu();
+    const currentModule = currentMenu?.info?.mid || "1";
+    const container = this.container.querySelector(
+      ".NotificationMessageMethod"
     );
-    const currentModule = currentPage?.m?.info?.mid || 1;
-    const container = this.container.querySelector(".NotificationMessageMethod");
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
-      
+
     if (!message) {
       try {
         const chachedItem = this.checkErrorCode(
@@ -84,13 +87,13 @@ export default class NotificationMessageComponent
           message = chachedItem;
         } else {
           let url;
-          if (currentModule == 1) {
+          if (currentModule == "1") {
             url = HttpUtil.formatString(this.options.culture.errorMessages, {
               rKey: this.options.rKey,
             });
           } else {
             url = HttpUtil.formatString(
-              currentPage.p.ownerUrl + this.options.culture.errorMessages,
+              currentPage.ownerUrl + this.options.culture.errorMessages,
               {
                 rKey: this.options.rKey,
               }
@@ -123,7 +126,7 @@ export default class NotificationMessageComponent
             }
             cachedObject[currentModule] = cached;
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-            if (res.find((e) => e.id == Errorid)[Lid].message) {
+            if (res.find((e) => e.id == Errorid).culture[Lid].message) {
               message = res
                 .find((e) => e.id == Errorid)
                 .culture.find((e) => e.lid == Lid).message;
@@ -204,7 +207,9 @@ export default class NotificationMessageComponent
     Type: number = 1,
     Message?: string
   ) {
-    const container = this.container.querySelector(".NotificationMessageMethod");
+    const container = this.container.querySelector(
+      ".NotificationMessageMethod"
+    );
     this.messageQueue.push({ Errorid, Lid, Type, Message: Message });
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();
