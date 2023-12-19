@@ -67,7 +67,7 @@ export default abstract class PageComponent
       groupElement.setAttribute("run", "atclient");
       groupElement.setAttribute("name", groupInfo.groupName);
       groupElement.setAttribute("options", optionsName);
-
+     
       pageBody.appendChild(groupElement);
       const components = await this.owner.processNodesAsync([groupElement]);
       const groupContainer =
@@ -103,6 +103,8 @@ export default abstract class PageComponent
     
       group.addWidgetAsync(...widgetParamList);
     }
+    const currentPageBody = this.container.querySelector('[data-bc-page-body=""]');
+    const pageBodyGroup = currentPageBody.querySelector("[data-bc-bp-group-container]") as HTMLElement
     const windowHeight = window.innerHeight;
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
@@ -120,8 +122,12 @@ export default abstract class PageComponent
 
     if (cell * maxHeight > windowHeight - otherHeight) {
       (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+      pageBodyGroup.style.height = `${cell * maxHeight}px`;
     } else {
       (pageBody as HTMLElement).style.height = `${
+        windowHeight - otherHeight
+      }px`;
+      pageBodyGroup.style.height = `${
         windowHeight - otherHeight
       }px`;
     }

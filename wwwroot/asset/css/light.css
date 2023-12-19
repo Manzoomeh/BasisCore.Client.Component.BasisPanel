@@ -817,9 +817,7 @@ tbody [data-sys-td] {
   transition: all 0.3s ease-in-out;
 }
 
-[data-bc-bp-widget-container] [data-bc-widget-container] {
-  padding: 15px !important;
-}
+
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-widget-buttons] {
   display: flex !important;

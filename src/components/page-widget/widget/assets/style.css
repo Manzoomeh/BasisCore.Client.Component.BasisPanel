@@ -2,6 +2,7 @@
     position: absolute;
     /* padding: 0; */
     overflow: hidden;
+    padding: 7px;
 }
 
 [data-bc-bp-widget-container] [data-bc-widget-container] {
@@ -9,10 +10,14 @@
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
-    padding: 10px;
+    
     transition: all 0.5s ease-in-out;
 }
 
+
+[data-bc-bp-group-container]{
+    padding: 7px;
+}
 [data-bc-bp-widget-container] [data-bc-widget-inner-container] {
     width: 100%;
     box-sizing: border-box;
