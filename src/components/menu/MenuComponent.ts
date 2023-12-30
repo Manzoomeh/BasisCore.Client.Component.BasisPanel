@@ -75,7 +75,12 @@ export default class MenuComponent
             : model.Category === "business"
             ? model.BusinessId
             : model.CorporateId;
-        this.tryLoadPageEx(model.Category, ownerId, model.PageId, null);
+        this.tryLoadPageEx(
+          model.Category,
+          ownerId.toString(),
+          model.PageId,
+          null
+        );
         this._isSilent = false;
         break;
       }
@@ -109,18 +114,18 @@ export default class MenuComponent
     this.tryLoadPage(pageId, null);
   }
 
-  public tryLoadPageEx(
-    category: MenuOwnerType,
-    ownerId: number,
+  public async tryLoadPageEx(
+    owner: MenuOwnerType,
+    moduleId: string,
     pageId: string,
     args?: any
-  ): boolean {
-    const menu = this.cache.tryGetMenu(category, ownerId.toString());
+  ): Promise<boolean> {
+    const menu = this.cache.tryGetMenu(owner, moduleId);
     this.showMenu(menu);
-    return menu ? this.tryLoadPage(pageId, args) : false;
+    return menu ? await this.tryLoadPage(pageId, args) : false;
   }
 
-  public tryLoadPage(pageId: string, args?: any): boolean {
+  public tryLoadPage(pageId: string, args?: any): Promise<boolean> {
     let retVal = false;
     if (this.current) {
       const menuItem = this.current.pageLookup.get(pageId);
@@ -158,6 +163,6 @@ export default class MenuComponent
         retVal = true;
       }
     }
-    return retVal;
+    return Promise.resolve(retVal);
   }
 }

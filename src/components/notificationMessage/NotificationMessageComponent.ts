@@ -67,8 +67,8 @@ export default class NotificationMessageComponent
     }
   }
   private async showMessage() {
-    const currentPage = LocalStorageUtil.getCurrentPage();
-    const currentMenu = LocalStorageUtil.getCurrentMenu();
+    const currentPage = <any>{}; //LocalStorageUtil.getCurrentPage();
+    const currentMenu = <any>{}; //LocalStorageUtil.getCurrentMenu();
     const currentModule = currentMenu?.info?.mid || "1";
     const container = this.container.querySelector(
       ".NotificationMessageMethod"
@@ -100,7 +100,7 @@ export default class NotificationMessageComponent
             );
           }
 
-          const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+          const res: any = await HttpUtil.checkRKeyFetchDataAsync(
             url,
             "GET",
             this.options.checkRkey

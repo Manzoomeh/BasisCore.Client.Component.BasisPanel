@@ -13,7 +13,11 @@ import { IModuleInfo } from "../../type-alias";
 
 export default class MenuElementMaker {
   readonly rKey: string;
-  readonly onMenuItemClick: (pageId: string) => void;
+  readonly onMenuItemClick: (
+    pageId: string,
+    param: IMenuLoaderParam,
+    target: EventTarget
+  ) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
   private moduleMapper: Map<string, IModuleInfo>;
