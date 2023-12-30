@@ -10,6 +10,7 @@ import SidebarComponent from "./components/page-widget/sidebar/SidebarComponent"
 import FullPageWidgetComponent from "./components/page-widget/full-page-widget/FullPageWidgetComponent";
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
+import NotificationMessageComponent from "./components/notificationMessage/NotificationMessageComponent";
 import SchedulerComponent from "./components/scheduler/SchedulerComponent";
 import LogoutComponent from "./components/logout/LogoutComponent";
 import CartComponent from "./components/cart/CartComponent";
@@ -32,6 +33,7 @@ const widget = WidgetComponent;
 const sidebar = SidebarComponent;
 const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
+const message = NotificationMessageComponent;
 const scheduler = SchedulerComponent;
 const logout = LogoutComponent;
 const cart = CartComponent;
@@ -52,6 +54,7 @@ export {
   menu,
   page,
   widget,
+  message,
   sidebar,
   fullPageWidget,
   notification,

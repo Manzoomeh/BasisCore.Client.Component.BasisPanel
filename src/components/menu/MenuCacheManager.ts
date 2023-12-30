@@ -3,7 +3,7 @@ import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
-import { MenuOwnerType } from "../../type-alias";
+import { IModuleInfo, MenuOwnerType } from "../../type-alias";
 
 export default class MenuCacheManager {
   private readonly cache: Map<string, MenuCacheItem>;
@@ -22,12 +22,20 @@ export default class MenuCacheManager {
 
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (pageId: string) => void
+    moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>>,
+    onMenuItemClick: (
+      pageId: string,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
+      const mapper = new Map<string, IModuleInfo>();
+      moduleMapper.set(menuParam.owner, mapper);
       cache = new MenuCacheItem(
         menuParam,
+        mapper,
         onMenuItemClick,
         this.checkRkeyOption,
         this.deviceId
@@ -44,12 +52,18 @@ class MenuCacheItem {
   private checkRkeyOption: ICheckRkeyOptions;
   constructor(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (pageId: string) => void,
+    moduleMapper: Map<string, IModuleInfo>,
+    onMenuItemClick: (
+      pageId: string,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
     this.menuMaker = new MenuElementMaker(
       menuParam.rKey,
+      moduleMapper,
       onMenuItemClick,
       checkRkey,
       deviceId

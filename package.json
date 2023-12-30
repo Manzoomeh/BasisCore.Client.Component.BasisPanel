@@ -1,6 +1,6 @@
 {
   "name": "basispanel",
-  "version": "1.0.1",
+  "version": "1.5.0",
   "description": "Fundamental infrastructure for manage and present user created widget or component, based in BasisCore(TM) technology.",
   "main": "dist/basiscore.basispanel.component.js",
   "types": "dist/basiscore.basispanel.component.d.ts",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "circular-dependency-plugin": "^5.2.2",
     "css-loader": "^6.7.3",
+    "dts-bundle-generator": "^8.0.1",
     "style-loader": "^3.3.2",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",

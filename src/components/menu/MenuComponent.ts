@@ -5,7 +5,7 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import { DefaultSource, MenuOwnerType } from "../../type-alias";
+import { DefaultSource, IModuleInfo, MenuOwnerType } from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
@@ -21,6 +21,10 @@ export default class MenuComponent
   private cache: MenuCacheManager;
   private current?: MenuElement;
   private _isSilent: boolean = false;
+  private moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>> = new Map<
+    MenuOwnerType,
+    Map<string, IModuleInfo>
+  >();
 
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-menu-container");
@@ -48,6 +52,10 @@ export default class MenuComponent
     switch (source?.id) {
       case DefaultSource.LOAD_MENU:
       case DefaultSource.SHOW_MENU: {
+        this.container.setAttribute(
+          `data-bc-bp-menu-seperation`,
+          source.rows[0].owner
+        );
         const menuParam: IMenuLoaderParam = source.rows[0];
         await this.loadDataAsync(
           menuParam,
@@ -81,6 +89,7 @@ export default class MenuComponent
     this.container.setAttribute(`data-bc-bp-menu-seperation`, menuParam.owner);
     const newMenu = await this.cache.loadMenuAsync(
       menuParam,
+      this.moduleMapper,
       this.onMenuItemClick.bind(this)
     );
     if (show) {

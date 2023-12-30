@@ -68,20 +68,25 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.ownerId = checkRKeyInfo["ownerid"];
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     const elClick = this.element
+    // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
+    const elClicks = this.element
       .closest("[data-bc-main-list-container]")
-      .querySelector("[data-bc-drop-down-click]");
-    elClick.addEventListener("click", async (_) => {
-      if (this.mustReload) {
-        this.mustReload = false;
-        await this.fillComboAsync();
-      }
-      const elStatus = this.element.closest("[data-bc-drop-down-container]");
-      const status = elStatus.getAttribute("data-status");
-      if (status == "close") {
-        elStatus.setAttribute("data-status", "open");
-      } else {
-        elStatus.setAttribute("data-status", "close");
-      }
+      .querySelectorAll("[data-bc-drop-down-click]");
+
+    elClicks.forEach(elClick => {
+      elClick.addEventListener("click", async (e) => {
+        if (this.mustReload) {
+          this.mustReload = false;
+          await this.fillComboAsync();
+        }
+        const elStatus = this.element.closest("[data-bc-drop-down-container]");
+        const status = elStatus.getAttribute("data-status");
+        if (status == "close") {
+          elStatus.setAttribute("data-status", "open");
+        } else {
+          elStatus.setAttribute("data-status", "close");
+        }
+      });
     });
 
     const msgElClick = this.element
@@ -124,10 +129,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   public async runAsync(source?: ISource) {
-    if (source?.id == DefaultSource.USER_INFO_SOURCE) {
-      this.profile = source.rows[0];
-      if (this.ownerType == "corporate") {
-        const corporateList = await this.getEntitiesAsync();
+    switch (source?.id) {
+      case DefaultSource.USER_INFO_SOURCE: {
+        this.profile = source.rows[0];
+        
+        if (this.ownerType == "corporate") {
+          const corporateList = await this.getEntitiesAsync();
 
         if (corporateList.length > 0) {
           if (this.deviceId == 1) {
@@ -137,15 +144,25 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             corporateElement.style.transform = "scaleY(1)";
           }
         } else {
+            let serviceListMobile = document.querySelector("[data-bc-corporate-list]") as HTMLElement
+            if(serviceListMobile){
+              serviceListMobile.style.display="none"
+            }
+            let businessListMobile = document.querySelector("[data-bc-bp-business-container]") as HTMLElement
+            if(businessListMobile){
+              businessListMobile.style.display="none"
+            }
           const parentElement = this.element.closest(
             "[data-bc-bp-corporate-container]"
           );
           const buyService = document.createElement("div");
           buyService.innerHTML = `<div data-bc-corporate-buy="">
+            <a href="${this.options.serviceLink}" target="_blank">
               <span>${this.labels.corporateBuy}</span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
               </svg>
+              </a>
             </div>`;
           parentElement.prepend(buyService);
           if (this.deviceId == 1) {
@@ -181,11 +198,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async fillComboAsync() {
+    
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector<HTMLElement>("[data-bc-business-list]");
     this.entityList = await this.getEntitiesAsync();
-
+    
     if (this.deviceId == 1) {
       if (this.businessComponentFlag && this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -202,34 +220,34 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       if (this.ownerType == "corporate") {
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("data-bc-corporate-search-input", "");
-        searchInput.setAttribute("data-sys-input-text", "");
-        searchInput.setAttribute(
-          "placeHolder",
-          this.labels.corporateSearchPlaceholder
-        );
+        searchInput.setAttribute("placeHolder", this.labels.corporateSearchPlaceholder);
         searchWrapper.appendChild(searchInput);
-
+        
         if (this.deviceId == 2) {
+          searchInput.setAttribute("data-sys-input-text-secondary", "");
           const searchButton = document.createElement("div");
           searchButton.setAttribute("data-bc-corporate-search-button", "");
-          searchButton.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.5285 2.18931C5.92614 2.18931 2.19517 5.92028 2.19517 10.5226C2.19517 15.125 5.92614 18.856 10.5285 18.856C15.1309 18.856 18.8618 15.125 18.8618 10.5226C18.8618 5.92028 15.1309 2.18931 10.5285 2.18931ZM0.766602 10.5226C0.766602 5.1313 5.13716 0.760742 10.5285 0.760742C15.9199 0.760742 20.2904 5.1313 20.2904 10.5226C20.2904 12.9612 19.3963 15.191 17.9179 16.9019L21.0336 20.0176C21.3125 20.2965 21.3125 20.7488 21.0336 21.0277C20.7546 21.3067 20.3024 21.3067 20.0234 21.0277L16.9078 17.912C15.1968 19.3904 12.9671 20.2846 10.5285 20.2846C5.13716 20.2846 0.766602 15.914 0.766602 10.5226Z" fill="#004B85"/></svg>`;
+          searchButton.setAttribute("data-sys-plus", "");
+          searchButton.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path data-sys-plus-icon="" fill-rule="evenodd" clip-rule="evenodd" d="M10.5285 2.18931C5.92614 2.18931 2.19517 5.92028 2.19517 10.5226C2.19517 15.125 5.92614 18.856 10.5285 18.856C15.1309 18.856 18.8618 15.125 18.8618 10.5226C18.8618 5.92028 15.1309 2.18931 10.5285 2.18931ZM0.766602 10.5226C0.766602 5.1313 5.13716 0.760742 10.5285 0.760742C15.9199 0.760742 20.2904 5.1313 20.2904 10.5226C20.2904 12.9612 19.3963 15.191 17.9179 16.9019L21.0336 20.0176C21.3125 20.2965 21.3125 20.7488 21.0336 21.0277C20.7546 21.3067 20.3024 21.3067 20.0234 21.0277L16.9078 17.912C15.1968 19.3904 12.9671 20.2846 10.5285 20.2846C5.13716 20.2846 0.766602 15.914 0.766602 10.5226Z" fill="#004B85"/></svg>`;
           searchWrapper.appendChild(searchButton);
+        } else {
+          searchInput.setAttribute("data-sys-input-text", "");
         }
       } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
-        searchInput.setAttribute("data-sys-input-text", "");
-        searchInput.setAttribute(
-          "placeHolder",
-          this.labels.businessSearchPlaceholder
-        );
+        searchInput.setAttribute("placeHolder", this.labels.businessSearchPlaceholder);
         searchWrapper.appendChild(searchInput);
-
+        
         if (this.deviceId == 2) {
+          searchInput.setAttribute("data-sys-input-text-secondary", "");
           const searchButton = document.createElement("div");
           searchButton.setAttribute("data-bc-business-search-button", "");
-          searchButton.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.5285 2.18931C5.92614 2.18931 2.19517 5.92028 2.19517 10.5226C2.19517 15.125 5.92614 18.856 10.5285 18.856C15.1309 18.856 18.8618 15.125 18.8618 10.5226C18.8618 5.92028 15.1309 2.18931 10.5285 2.18931ZM0.766602 10.5226C0.766602 5.1313 5.13716 0.760742 10.5285 0.760742C15.9199 0.760742 20.2904 5.1313 20.2904 10.5226C20.2904 12.9612 19.3963 15.191 17.9179 16.9019L21.0336 20.0176C21.3125 20.2965 21.3125 20.7488 21.0336 21.0277C20.7546 21.3067 20.3024 21.3067 20.0234 21.0277L16.9078 17.912C15.1968 19.3904 12.9671 20.2846 10.5285 20.2846C5.13716 20.2846 0.766602 15.914 0.766602 10.5226Z" fill="#004B85"/></svg>`;
+          searchButton.setAttribute("data-sys-plus", "");
+          searchButton.innerHTML = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path data-sys-plus-icon="" fill-rule="evenodd" clip-rule="evenodd" d="M10.5285 2.18931C5.92614 2.18931 2.19517 5.92028 2.19517 10.5226C2.19517 15.125 5.92614 18.856 10.5285 18.856C15.1309 18.856 18.8618 15.125 18.8618 10.5226C18.8618 5.92028 15.1309 2.18931 10.5285 2.18931ZM0.766602 10.5226C0.766602 5.1313 5.13716 0.760742 10.5285 0.760742C15.9199 0.760742 20.2904 5.1313 20.2904 10.5226C20.2904 12.9612 19.3963 15.191 17.9179 16.9019L21.0336 20.0176C21.3125 20.2965 21.3125 20.7488 21.0336 21.0277C20.7546 21.3067 20.3024 21.3067 20.0234 21.0277L16.9078 17.912C15.1968 19.3904 12.9671 20.2846 10.5285 20.2846C5.13716 20.2846 0.766602 15.914 0.766602 10.5226Z" fill="#004B85"/></svg>`;
           searchWrapper.appendChild(searchButton);
+        } else {
+          searchInput.setAttribute("data-sys-input-text", "");
         }
       }
     }
@@ -251,19 +269,52 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   entryListMaker(list) {
     this.element.innerHTML = "";
-
+    if (this.ownerType == "business" && list?.length == 0) {
+      
+      document.getElementById("ctaForBusinessBuy")?.remove()
+      
+      const parentElementForBusiness = this.element.closest(
+        "[data-bc-bp-business-container]"
+      );
+      
+      
+      const buyBusiness = document.createElement("div");
+      buyBusiness.setAttribute("id","ctaForBusinessBuy")
+      buyBusiness.innerHTML = `<div data-bc-corporate-buy="">
+      <a href="${this.options.businessLink}" target="_blank">
+        <span>${this.labels.businessBuy}</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
+        </svg>
+        </a>
+      </div>`;
+      parentElementForBusiness.prepend(buyBusiness);
+      let businessListMobile = parentElementForBusiness.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
+      if(businessListMobile){
+        businessListMobile.style.display="none"
+      }
+      
+    }
     if (list?.length > 0) {
-      list.forEach(async (item) => {
+      
+      list.forEach(async item => {
+        let businessListMobile = document.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
+        if(businessListMobile){
+          businessListMobile.style.display="block"
+        }
+        
         const li = document.createElement("li");
         li.setAttribute("data-id", item.id.toString());
-        li.setAttribute("data-title", item.title);
-        li.innerHTML = `<div data-bc-main-title="">${item.title}</div>`;
+        li.innerHTML = `<div data-bc-main-title="">${item.title} <span data-bc-id="">(${item.id})</span></div>`;
         const id = parseInt(li.getAttribute("data-id"));
         if (this.ownerType == "business") {
           const lockIcon = document.createElement("span");
           lockIcon.setAttribute("data-bc-business-freeze-btn", "");
-          lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
-          lockIcon.addEventListener("click", (e) => {
+          // lockIcon.classList.add("lock-blue-background")
+                    lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
+          // lockIcon.classList.add("bs-icons-no-margin")
+          
+          lockIcon.addEventListener("click", async (e) => {
             e.preventDefault();
             e.stopPropagation();
             if (!this.setSilent) {
@@ -277,33 +328,62 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             }
           });
           li.appendChild(lockIcon);
+          
         }
-        //TODO : why?
-        if (
-          id == this.currentOwnerId &&
-          this.ownerId != 30 &&
-          this.firstLoginFromOtherWebSitesService == false
-        ) {
-          const entity = this.entityList.find((x) => x.id == id);
-          this.ownerType = "corporate";
-          this.owner.setSource(this.getSourceId(), entity ?? {});
-          this.resetBusinessEntity();
-          this.selectItem(li);
-          this.firstLoginFromOtherWebSitesService = true;
-          await this.trySelectFromLocalStorageAsync();
-        }
+       
+      //   if(id == this.currentOwnerid && this.ownerId != 30){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
+      //      this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     //  this.signalToDisplayPage(id);
+      //     //  this.setActive();
+      //      this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
 
-        if (
-          id == this.currentDomainId &&
-          this.domainId != 30 &&
-          this.firstLoginFromOtherWebSitesBusiness == false
-        ) {
-          this.ownerType = "business";
-          this.selectItem(li);
-          this.firstLoginFromOtherWebSitesBusiness = true;
-          await this.trySelectFromLocalStorageAsync();
-        }
-        li.addEventListener("click", (e) => {
+      //   }
+   
+      //   if(id == this.currentDomianid && this.domainId != 30){
+      //     const entity = this.entityList.find((x) => x.id == id);
+      //     await this.setActiveAsync(id);
+      //     this.owner.setSource(this.getSourceId(), entity ?? {});
+      //     this.selectItem(li);
+      //      const businessActive = this.container.querySelector(".active-business")
+      //      const serviceActive = this.container.querySelector(".active-corporate")
+      //      if(businessActive){
+      //       businessActive.classList.remove("active-business")
+      //      }
+      //      if(serviceActive){
+      //       serviceActive.classList.remove("active-corporate")
+      //      }
+
+
+      //  }
+      if(id == this.currentOwnerid && this.ownerId != 30 && this.firstLoginFromOtherWebSitesService == false){
+        const entity = this.entityList.find((x) => x.id == id);
+        this.ownerType = "corporate"
+        this.owner.setSource(this.getSourceId(), entity ?? {});
+        this.resetBusinessEntity();
+        this.selectItem(li);        
+        this.firstLoginFromOtherWebSitesService = true
+        await this.trySelectFromLocalStorageAsync()
+      }
+      
+      if(id == this.currentDomianid && this.domainId != 30 && this.firstLoginFromOtherWebSitesBusiness == false){
+        this.ownerType = "business"
+        this.selectItem(li);        
+        this.firstLoginFromOtherWebSitesBusiness = true
+        this.trySelectFromLocalStorageAsync()
+      }
+        li.addEventListener("click", async (e) => {
+        
           e.preventDefault();
           const id = parseInt(li.getAttribute("data-id"));
           const entity = this.entityList.find((x) => x.id == id);
@@ -327,6 +407,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           if (this.ownerType == "corporate") {
             // choose corporate
             this.resetBusinessEntity();
+            this.resetNotification();
           } else if (this.ownerType == "business") {
             $bc.setSource(
               "basispanelcomponent_entityselectorcomponent.businessid",
@@ -452,14 +533,22 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     businessMsgElement.textContent = this.labels.businessTitle;
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
+    header.querySelector("#ctaForBusinessBuy")?.remove()
     header
       .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
       ?.remove();
+    // header.innerHTML = ""
   }
-  private async getCurrentService() {
-    const url = HttpUtil.formatString(this.options.checkRkey.url, {
-      rKey: this.options.rKey,
+
+  protected resetNotification() {
+    this.owner.setSource("notification.websocket", {
+      type: "reset",
+      usedforid: ""
     });
+  }
+  
+  private async getCurrentService(){
+    const url = HttpUtil.formatString(this.options.checkRkey.url, { rKey: this.options.rKey });
     const result = await HttpUtil.fetchDataAsync(url, "GET");
     return result;
   }
@@ -517,6 +606,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     selectiveList.addEventListener("click", (e) => {
       this.selectService(selectiveList);
     });
+
+    if (this.deviceId == 2) {
+      selectiveList.querySelector("[data-bc-main-list-msg]").removeAttribute("data-bc-drop-down-click");
+    }
+
     this.element
       .closest("[data-bc-drop-down-container]")
       .setAttribute("data-status", "close");

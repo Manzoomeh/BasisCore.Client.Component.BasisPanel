@@ -22,7 +22,7 @@
     position: relative;
     border-radius: 5px;
     /* direction: rtl; */
-    z-index: 99;
+    z-index: 98;
     transform-origin: top;
     transform: scaleY(0);
     transition: all 0.3s ease-in-out;
@@ -242,6 +242,10 @@
     display: inline-block;
     width: calc(100% - 20px);
     word-wrap: break-word;
+}
+
+[data-bc-d1-business-list] [data-bc-d1-business-drop-down] li div span[data-bc-id] {
+    font-size: 12px;
 }
 
 [data-bc-d1-business-list] [data-bc-d1-business-drop-down] [data-bc-business-freeze-btn] {

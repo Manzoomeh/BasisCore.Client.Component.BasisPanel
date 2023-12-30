@@ -6,8 +6,36 @@
 </Basis> -->
 <!-- <button id="btn">Load user info</button> -->
 
+<div style="display: flex; flex-direction: column">
+  <div style="width: 300px; margin-block: 10px; height: 30px">
+    <button id="btn-ajax" onclick="click_notification_4parameters(this)">
+      show notification method with 4 parameters
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_2parameters(this)">
+      show notification method with 2 parameters
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_emptyMessage(this)">
+      show notification method with no message
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_otherCulture(this)">
+      show notification method with other cultures
+    </button>
+  </div>
+</div>
 <form id="file-form" action="#">
-  <input class="file-input" type="file" id="file-form" name="file" multiple="multiple">
+  <input
+    class="file-input"
+    type="file"
+    id="file-form"
+    name="file"
+    multiple="multiple"
+  />
   <i class="fas fa-cloud-upload-alt"></i>
   <p>Browse File to Upload</p>
 </form>
@@ -19,7 +47,11 @@
 <Basis core="component.grid.grid" run="atclient" dataMemberName="book.list" options="demo_grid_options" optionsUrl="/server/dbsource/grid-options.js">
 </Basis>
 <basis core="callback" run="atclient" triggers="sample.data"></basis> -->
-<basis core="component.basiscore.exposer" run="atclient" component="pagesList_component"></basis>
+<basis
+  core="component.basiscore.exposer"
+  run="atclient"
+  component="pagesList_component"
+></basis>
 <!-- <script src="/server/dbsource/grid-options.js"></script> -->
 <!-- <script>
   const demo_grid_options = {
@@ -29,41 +61,59 @@
 
 <button onclick="addOrRemoveBtnToTitle()">Add/remove btn to header</button>
 <script>
-  btn = null
+  btn = null;
   function addOrRemoveBtnToTitle() {
     const widget = pagesList_component.owner.dc.resolve("widget");
     if (btn) {
-      btn.remove()
+      btn.remove();
       btn = null;
     } else {
       // btn = document.createElement("button")
       // btn.innerText = "click me!"
       // btn.addEventListener("click", e => alert("oops! it work ..."))
-      btn = widget.addActionToHeader("click me!", e => alert("oops! it work ..."))
+      btn = widget.addActionToHeader("click me!", (e) =>
+        alert("oops! it work ...")
+      );
     }
+  }
+  async function click_notification_4parameters() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(1, 1, 1, "عملیات با موفقیت انجام شد");
+  }
+  function click_notification_2parameters() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(3, 1);
+  }
+  function click_notification_emptyMessage() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(1, 1, 1, "");
+  }
+  function click_notification_otherCulture() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(2, 2, 2);
   }
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
     const widget = pagesList_component.owner.dc.resolve("widget");
 
     /*
-     ITaskOptions {
-  key?: string;
-  container?: Element;
-  title?: string;
-  type?: TaskType;
-  reportHandlers?: EventManager<IReportParam>;
-  task: Promise<any>;
-  notify?: boolean;
-  cancel?: () => void;
-}
+       ITaskOptions {
+    key?: string;
+    container?: Element;
+    title?: string;
+    type?: TaskType;
+    reportHandlers?: EventManager<IReportParam>;
+    task: Promise<any>;
+    notify?: boolean;
+    cancel?: () => void;
+  }
 
-    */
+      */
     const task = new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(true)
+        resolve(true);
       }, 3000);
-    })
+    });
     const taskOptions = {
       key: "process-1",
       container: widget.body,
@@ -72,16 +122,16 @@
       reportHandlers: null,
       task: task,
       notify: false,
-      cancel: null
-    }
-    const r = scheduler.startTask(taskOptions)
-    console.log(r);
+      cancel: null,
+    };
+    const r = scheduler.startTask(taskOptions);
+    // console.log(r);
   }
   document.getElementById("file-form").addEventListener("change", (e) => {
     let data = new FormData(e.currentTarget);
-    console.log(data);
+    // console.log(data);
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
-    console.log(scheduler);
+    // console.log(scheduler);
     const x = scheduler.startPost(data, "/app", "Demo-upload", (x) => {
       console.log(x.percent, x);
     });

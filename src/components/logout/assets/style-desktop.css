@@ -1,4 +1,15 @@
 [data-bc-bp-logout-container="d1"] {
+    cursor: pointer;
+    font-size: 12px;
+    color: #000;
+}
+
+[data-bc-bp-logout-container="d1"]:hover {
+    background: rgba(0, 75, 133, 0.1);
+    border-radius: 5px;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-wrapper] {
     display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
     display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
     display: -ms-flexbox; /* TWEENER - IE 10 */
@@ -17,11 +28,6 @@
     color: #000;
 }
 
-[data-bc-bp-logout-container="d1"]:hover {
-    background: rgba(0, 75, 133, 0.1);
-    border-radius: 5px;
-}
-
 [data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-title] {
     cursor: pointer;
 }
@@ -36,4 +42,141 @@
 [data-bc-bp-logout-container="d1"] [data-bc-d1-logout-icon] * {
     color: #2b2b2b;
     fill: #2b2b2b;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal] {
+    display: none;
+    position: fixed;
+    z-index: 99999999;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal][data-status="close"] {
+    display: none;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal][data-status="open"] {
+    display: block;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-background] {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: default;
+    background-color: transparent;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-content] {
+    position: relative;
+    background-color: #fbfdff;
+    margin: auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    width: 500px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.5s;
+    animation-name: animatetop;
+    animation-duration: 0.5s;
+    cursor: auto;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-body] {
+    padding: 0 0 15px 0;
+    /* text-align: right; */
+    /* direction: rtl; */
+}
+
+[data-bc-bp-direction="rightToLeft"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-body] {
+    text-align: right;
+    direction: rtl;
+}
+
+[data-bc-bp-direction="leftToRight"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-body] {
+    text-align: left;
+    direction: ltr;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-footer] {
+    padding: 15px 0px 0px;
+    /* border-top: 0.5px solid #D0D0D0; */
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-buttons] {
+    width: 100%;
+    /* text-align: right; */
+}
+
+[data-bc-bp-direction="rightToLeft"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-buttons] {
+    text-align: right;
+}
+
+[data-bc-bp-direction="leftToRight"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-buttons] {
+    text-align: left;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-button] {
+    display: inline-block;
+    font-size: 14px;
+    text-align: center;
+    border: 0;
+    padding: 0;
+    /* margin-left: 10px; */
+    border-radius: 5px;
+    cursor: pointer;
+    width: 93px;
+    height: 34px;
+}
+
+[data-bc-bp-direction="rightToLeft"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-button] {
+    margin-left: 10px;
+}
+
+[data-bc-bp-direction="leftToRight"][data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-button] {
+    margin-right: 10px;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-button="remove"] {
+    background-color: #B40020;
+    border: 1px solid #B40020;
+    color: #fff;
+}
+
+[data-bc-bp-logout-container="d1"] [data-bc-bp-d1-logout-modal-button="cancel"] {
+    background-color: transparent;
 }

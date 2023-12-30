@@ -9,16 +9,23 @@ import IMenuInfo, {
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import { IModuleInfo } from "../../type-alias";
 
 export default class MenuElementMaker {
   readonly rKey: string;
   readonly onMenuItemClick: (pageId: string) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
+  private moduleMapper: Map<string, IModuleInfo>;
 
   constructor(
     rKey: string,
-    onMenuItemClick: (pageId: string) => void,
+    moduleMapper: Map<string, IModuleInfo>,
+    onMenuItemClick: (
+      pageId: string,
+      param: IMenuLoaderParam,
+      target: EventTarget
+    ) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
@@ -26,6 +33,7 @@ export default class MenuElementMaker {
     this.onMenuItemClick = onMenuItemClick;
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
+    this.moduleMapper = moduleMapper;
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -42,6 +50,12 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>
   ) {
     items.forEach((node) => {
+      if ((node as IMenuExternalItemInfo).url) {
+        this.moduleMapper.set(node.mid, {
+          owner: menuParam.owner,
+          ownerUrl: (node as IMenuExternalItemInfo).url,
+        });
+      }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
           this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
@@ -100,6 +114,7 @@ export default class MenuElementMaker {
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
+          // collapseSubMenu();
           li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
           li.classList.remove("active");
         } else {
@@ -112,8 +127,10 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-submenu]");
+          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
           (subMenu as HTMLElement).style.maxHeight = "20rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
+          // subMenu.classList.add("show");
         }
       });
     } else {
@@ -143,6 +160,12 @@ export default class MenuElementMaker {
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLLIElement {
+    if (!this.moduleMapper.has(node.mid)) {
+      this.moduleMapper.set(node.mid, {
+        owner: menuParam.owner,
+        ownerUrl: menuParam.ownerUrl,
+      });
+    }
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
@@ -152,7 +175,8 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onMenuItemClick(node.pid);
+      this.onMenuItemClick(node.pid, menuParam, e.target);
+      document.body.classList.remove("scrolling");
 
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
@@ -247,9 +271,12 @@ export default class MenuElementMaker {
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
+          // collapseSubMenu();
           li.querySelector("[data-bc-bp-menu-external]").removeAttribute(
             "style"
           );
+          document.body.classList.remove("scrolling");
+
           li.classList.remove("active");
         } else {
           // Collapse Existing Expanded menuItemHasChildren
@@ -263,8 +290,10 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-menu-external]");
+          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
           (subMenu as HTMLElement).style.maxHeight = "20rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
+          // subMenu.classList.add("show");
         }
       });
     } else {

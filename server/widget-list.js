@@ -23,7 +23,7 @@ router.get("/:rkey/:pageId", function (req, res) {
 });
 
 router.post("/:rkey/:pageId", function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   res.json(true);
 });
 module.exports = router;

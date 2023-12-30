@@ -22,6 +22,8 @@ export default interface IBasisPanelOptions {
   addtoDashboard: string;
   removeFromDashbaord: string;
   tempwidgets: string;
+  serviceLink?: string;
+  businessLink?: string;
 }
 
 interface IUrlCollectionOption {
@@ -59,16 +61,21 @@ export interface ICultureOptions {
   direction: IDirection;
   deviceId: number | string;
   labels: ILabels;
+  errorMessages: string;
 }
 
-export type IDirection =  "leftToRight" | "rightToLeft";
+export type IDirection = "leftToRight" | "rightToLeft";
 
 export interface ILabels {
   userTitle: string;
   logoutTitle: string;
+  logoutBtn: string;
+  logoutMessage: string;
+  cancelBtn: string;
   corporateTitle: string;
   corporateSearchPlaceholder: string;
   corporateBuy: string;
+  businessBuy: string;
   businessTitle: string;
   businessSearchPlaceholder: string;
   schedulerNoTask: string;
@@ -83,4 +90,3 @@ export interface ILabels {
   lightModeTitle: string;
   darkModeTitle: string;
 }
-

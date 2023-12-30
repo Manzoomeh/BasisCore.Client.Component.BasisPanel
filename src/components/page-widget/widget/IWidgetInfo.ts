@@ -9,5 +9,6 @@ export default interface IWidgetInfo {
   w: number;
   h: number;
   url: string;
+  sidebar: boolean;
   addToDashboard?: boolean;
 }

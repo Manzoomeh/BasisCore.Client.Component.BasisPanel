@@ -101,8 +101,24 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
 
       // for close userinfo drop down
       if (
+        currentElement.getAttribute("data-bc-bp-logout-wrapper") === null &&
         currentElement.getAttribute("data-bc-user-info-image") === null &&
-        currentElement.getAttribute("data-bc-user-image") === null
+        currentElement.getAttribute("data-bc-user-image") === null &&
+        currentElement.getAttribute("data-bc-bp-logout-container") === null &&
+        currentElement.getAttribute("data-bc-bp-logout-title") === null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal") === null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-background") ===
+          null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-content") ===
+          null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-body") === null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-body-text") ===
+          null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-footer") ===
+          null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-buttons") ===
+          null &&
+        currentElement.getAttribute("data-bc-bp-logout-modal-button") === null
       ) {
         document
           .querySelector("[data-bc-user-info]")

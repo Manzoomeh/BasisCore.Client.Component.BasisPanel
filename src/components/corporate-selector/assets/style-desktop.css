@@ -22,7 +22,7 @@
     position: relative;
     border-radius: 5px;
     /* direction: rtl; */
-    z-index: 99;
+    z-index: 98;
     transform-origin: top;
     transform: scaleY(0);
     transition: all 0.3s ease-in-out;
@@ -229,6 +229,10 @@
     display: inline-block;
     width: 100%;
     word-wrap: break-word;
+}
+
+[data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li div span[data-bc-id] {
+    font-size: 12px;
 }
 
 /* .autocomplete-active {
