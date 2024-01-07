@@ -1,6 +1,6 @@
 import { ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
-import { DefaultSource, MenuOwnerType  } from "../type-alias";
+import { DefaultSource, MenuOwnerType } from "../type-alias";
 import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
@@ -16,13 +16,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   private entityList: Array<IEntityInfo>;
   private _isFirst = true;
   protected mustReload = true;
-  private currentOwnerid:number = 0
-  private currentDomianid:number = 0
-  private ownerId : number = 0 
-  private domainId :number = 0
-  private firstLoginFromOtherWebSitesService = false
-  private firstLoginFromOtherWebSitesBusiness = false
-  
+  private currentOwnerid: number = 0;
+  private currentDomianid: number = 0;
+  private ownerId: number = 0;
+  private domainId: number = 0;
+  private firstLoginFromOtherWebSitesService = false;
+  private firstLoginFromOtherWebSitesBusiness = false;
+
   public businessComponentFlag: boolean = false;
   constructor(
     owner: IUserDefineComponent,
@@ -30,7 +30,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     mobileLayout: string,
     entityType: MenuOwnerType
   ) {
-    super(owner, desktopLayout, mobileLayout, `data-bc-bp-${entityType}-container`);
+    super(
+      owner,
+      desktopLayout,
+      mobileLayout,
+      `data-bc-bp-${entityType}-container`
+    );
     this.ownerType = entityType;
     this.owner.dc
       .resolve<DependencyContainer>("parent.dc")
@@ -42,7 +47,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected abstract getOwnerUrl(): string;
 
   protected abstract getSourceId(): string;
-  public selectService(el:HTMLElement){
+  public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
     if (id != 0) {
@@ -56,18 +61,18 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     }
   }
   public async initializeAsync(): Promise<void> {
-    const checkkrkeyInfo  =await this.getCurrentService()
-    this.currentOwnerid = checkkrkeyInfo["currentOwnerid"]
-    this.currentDomianid = checkkrkeyInfo["currentDmnid"]
-    this.domainId = checkkrkeyInfo["dmnid"]
-    this.ownerId = checkkrkeyInfo["ownerid"]
+    const checkkrkeyInfo = await this.getCurrentService();
+    this.currentOwnerid = checkkrkeyInfo["currentOwnerid"];
+    this.currentDomianid = checkkrkeyInfo["currentDmnid"];
+    this.domainId = checkkrkeyInfo["dmnid"];
+    this.ownerId = checkkrkeyInfo["ownerid"];
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
     const elClicks = this.element
       .closest("[data-bc-main-list-container]")
       .querySelectorAll("[data-bc-drop-down-click]");
 
-    elClicks.forEach(elClick => {
+    elClicks.forEach((elClick) => {
       elClick.addEventListener("click", async (e) => {
         if (this.mustReload) {
           this.mustReload = false;
@@ -87,16 +92,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
     msgElClick?.addEventListener("click", async (e) => {
-      this.selectService(msgElClick)
+      this.selectService(msgElClick);
     });
 
     this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
     return Promise.resolve();
   }
 
-
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
-    
     if (this._isFirst) {
       this._isFirst = false;
       if (this.mustReload) {
@@ -119,7 +122,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
         this.profile = source.rows[0];
-        
+
         if (this.ownerType == "corporate") {
           const corporateList = await this.getEntitiesAsync();
 
@@ -131,13 +134,17 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               corporateElement.style.transform = "scaleY(1)";
             }
           } else {
-            let serviceListMobile = document.querySelector("[data-bc-corporate-list]") as HTMLElement
-            if(serviceListMobile){
-              serviceListMobile.style.display="none"
+            let serviceListMobile = document.querySelector(
+              "[data-bc-corporate-list]"
+            ) as HTMLElement;
+            if (serviceListMobile) {
+              serviceListMobile.style.display = "none";
             }
-            let businessListMobile = document.querySelector("[data-bc-bp-business-container]") as HTMLElement
-            if(businessListMobile){
-              businessListMobile.style.display="none"
+            let businessListMobile = document.querySelector(
+              "[data-bc-bp-business-container]"
+            ) as HTMLElement;
+            if (businessListMobile) {
+              businessListMobile.style.display = "none";
             }
             const parentElement = this.element.closest(
               "[data-bc-bp-corporate-container]"
@@ -187,12 +194,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async fillComboAsync() {
-    
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-    
+
     if (this.deviceId == 1) {
       if (this.businessComponentFlag == true && this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -212,9 +218,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       if (this.ownerType == "corporate") {
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("data-bc-corporate-search-input", "");
-        searchInput.setAttribute("placeHolder", this.labels.corporateSearchPlaceholder);
+        searchInput.setAttribute(
+          "placeHolder",
+          this.labels.corporateSearchPlaceholder
+        );
         searchWrapper.appendChild(searchInput);
-        
+
         if (this.deviceId == 2) {
           searchInput.setAttribute("data-sys-input-text-secondary", "");
           const searchButton = document.createElement("div");
@@ -228,9 +237,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       } else if (this.ownerType == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
-        searchInput.setAttribute("placeHolder", this.labels.businessSearchPlaceholder);
+        searchInput.setAttribute(
+          "placeHolder",
+          this.labels.businessSearchPlaceholder
+        );
         searchWrapper.appendChild(searchInput);
-        
+
         if (this.deviceId == 2) {
           searchInput.setAttribute("data-sys-input-text-secondary", "");
           const searchButton = document.createElement("div");
@@ -244,7 +256,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       }
     }
     let listFilter = this.entityList;
-    
+
     searchInput.addEventListener("keyup", (e) => {
       listFilter = [];
       if (e.target["value"] == "") {
@@ -268,19 +280,17 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.signalToDisplayPage(id);
   }
 
-   entryListMaker(list) {
+  entryListMaker(list) {
     this.element.innerHTML = "";
     if (this.ownerType == "business" && list?.length == 0) {
-      
-      document.getElementById("ctaForBusinessBuy")?.remove()
-      
+      document.getElementById("ctaForBusinessBuy")?.remove();
+
       const parentElementForBusiness = this.element.closest(
         "[data-bc-bp-business-container]"
       );
-      
-      
+
       const buyBusiness = document.createElement("div");
-      buyBusiness.setAttribute("id","ctaForBusinessBuy")
+      buyBusiness.setAttribute("id", "ctaForBusinessBuy");
       buyBusiness.innerHTML = `<div data-bc-corporate-buy="">
       <a href="${this.options.businessLink}" target="_blank">
         <span>${this.labels.businessBuy}</span>
@@ -290,20 +300,22 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         </a>
       </div>`;
       parentElementForBusiness.prepend(buyBusiness);
-      let businessListMobile = parentElementForBusiness.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
-      if(businessListMobile){
-        businessListMobile.style.display="none"
+      let businessListMobile = parentElementForBusiness.querySelector(
+        "[data-bc-d2-business-list-wrapper]"
+      ) as HTMLElement;
+      if (businessListMobile) {
+        businessListMobile.style.display = "none";
       }
-      
     }
     if (list?.length > 0) {
-      
-      list.forEach(async item => {
-        let businessListMobile = document.querySelector("[data-bc-d2-business-list-wrapper]") as HTMLElement
-        if(businessListMobile){
-          businessListMobile.style.display="block"
+      list.forEach(async (item) => {
+        let businessListMobile = document.querySelector(
+          "[data-bc-d2-business-list-wrapper]"
+        ) as HTMLElement;
+        if (businessListMobile) {
+          businessListMobile.style.display = "block";
         }
-        
+
         const li = document.createElement("li");
         // const div = document.createElement("div");
         li.setAttribute("data-id", item.id.toString());
@@ -313,77 +325,85 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           const lockIcon = document.createElement("span");
           lockIcon.setAttribute("data-bc-business-freeze-btn", "");
           // lockIcon.classList.add("lock-blue-background")
-                    lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
+          lockIcon.innerHTML = `<svg width="12" height="15" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.1403 7.58398C4.49863 7.58398 3.97363 8.10898 3.97363 8.75065C3.97363 9.39232 4.49863 9.91732 5.1403 9.91732C5.78197 9.91732 6.30697 9.39232 6.30697 8.75065C6.30697 8.10898 5.78197 7.58398 5.1403 7.58398ZM8.6403 4.66732H8.05697V3.50065C8.05697 1.89065 6.7503 0.583984 5.1403 0.583984C3.8103 0.583984 2.64947 1.48232 2.31697 2.77148C2.2353 3.08648 2.42197 3.40148 2.73697 3.48315C3.04613 3.56482 3.36697 3.37815 3.44863 3.06315C3.64697 2.29315 4.34113 1.75065 5.1403 1.75065C6.1028 1.75065 6.8903 2.53815 6.8903 3.50065V4.66732H1.6403C0.998633 4.66732 0.473633 5.19232 0.473633 5.83398V11.6673C0.473633 12.309 0.998633 12.834 1.6403 12.834H8.6403C9.28197 12.834 9.80697 12.309 9.80697 11.6673V5.83398C9.80697 5.19232 9.28197 4.66732 8.6403 4.66732ZM8.6403 11.084C8.6403 11.4048 8.3778 11.6673 8.05697 11.6673H2.22363C1.9028 11.6673 1.6403 11.4048 1.6403 11.084V6.41732C1.6403 6.09648 1.9028 5.83398 2.22363 5.83398H8.05697C8.3778 5.83398 8.6403 6.09648 8.6403 6.41732V11.084Z" fill="#767676"/></svg>`;
           // lockIcon.classList.add("bs-icons-no-margin")
-          
+
           lockIcon.addEventListener("click", async (e) => {
             e.preventDefault();
-            e.stopPropagation();            
+            e.stopPropagation();
             this.setActiveAsync(id);
-            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
-      
+            $bc.setSource(
+              "basispanelcomponent_entityselectorcomponent.businessid",
+              id
+            );
+
             this.selectItem(li, true);
           });
           li.appendChild(lockIcon);
-          
         }
-       
-      //   if(id == this.currentOwnerid && this.ownerId != 30){
-      //     const entity = this.entityList.find((x) => x.id == id);
-      //     await this.setActiveAsync(id);
-      //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
-      //      this.owner.setSource(this.getSourceId(), entity ?? {});
-      //     //  this.signalToDisplayPage(id);
-      //     //  this.setActive();
-      //      this.selectItem(li);
-      //      const businessActive = this.container.querySelector(".active-business")
-      //      const serviceActive = this.container.querySelector(".active-corporate")
-      //      if(businessActive){
-      //       businessActive.classList.remove("active-business")
-      //      }
-      //      if(serviceActive){
-      //       serviceActive.classList.remove("active-corporate")
-      //      }
 
-      //   }
-   
-      //   if(id == this.currentDomianid && this.domainId != 30){
-      //     const entity = this.entityList.find((x) => x.id == id);
-      //     await this.setActiveAsync(id);
-      //     this.owner.setSource(this.getSourceId(), entity ?? {});
-      //     this.selectItem(li);
-      //      const businessActive = this.container.querySelector(".active-business")
-      //      const serviceActive = this.container.querySelector(".active-corporate")
-      //      if(businessActive){
-      //       businessActive.classList.remove("active-business")
-      //      }
-      //      if(serviceActive){
-      //       serviceActive.classList.remove("active-corporate")
-      //      }
+        //   if(id == this.currentOwnerid && this.ownerId != 30){
+        //     const entity = this.entityList.find((x) => x.id == id);
+        //     await this.setActiveAsync(id);
+        //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
+        //      this.owner.setSource(this.getSourceId(), entity ?? {});
+        //     //  this.signalToDisplayPage(id);
+        //     //  this.setActive();
+        //      this.selectItem(li);
+        //      const businessActive = this.container.querySelector(".active-business")
+        //      const serviceActive = this.container.querySelector(".active-corporate")
+        //      if(businessActive){
+        //       businessActive.classList.remove("active-business")
+        //      }
+        //      if(serviceActive){
+        //       serviceActive.classList.remove("active-corporate")
+        //      }
 
+        //   }
 
-      //  }
-      if(id == this.currentOwnerid && this.ownerId != 30 && this.firstLoginFromOtherWebSitesService == false){
-        const entity = this.entityList.find((x) => x.id == id);
-        this.ownerType = "corporate"
-        this.owner.setSource(this.getSourceId(), entity ?? {});
-        this.resetBusinessEntity();
-        this.selectItem(li);        
-        this.firstLoginFromOtherWebSitesService = true
-        this.trySelectFromLocalStorageAsync()
-      }
-      
-      if(id == this.currentDomianid && this.domainId != 30 && this.firstLoginFromOtherWebSitesBusiness == false){
-        this.ownerType = "business"
-        this.selectItem(li);        
-        this.firstLoginFromOtherWebSitesBusiness = true
-        this.trySelectFromLocalStorageAsync()
-      }
+        //   if(id == this.currentDomianid && this.domainId != 30){
+        //     const entity = this.entityList.find((x) => x.id == id);
+        //     await this.setActiveAsync(id);
+        //     this.owner.setSource(this.getSourceId(), entity ?? {});
+        //     this.selectItem(li);
+        //      const businessActive = this.container.querySelector(".active-business")
+        //      const serviceActive = this.container.querySelector(".active-corporate")
+        //      if(businessActive){
+        //       businessActive.classList.remove("active-business")
+        //      }
+        //      if(serviceActive){
+        //       serviceActive.classList.remove("active-corporate")
+        //      }
+
+        //  }
+        if (
+          id == this.currentOwnerid &&
+          this.ownerId != 30 &&
+          this.firstLoginFromOtherWebSitesService == false
+        ) {
+          const entity = this.entityList.find((x) => x.id == id);
+          this.ownerType = "corporate";
+          this.owner.setSource(this.getSourceId(), entity ?? {});
+          this.resetBusinessEntity();
+          this.selectItem(li);
+          this.firstLoginFromOtherWebSitesService = true;
+          this.trySelectFromLocalStorageAsync();
+        }
+
+        if (
+          id == this.currentDomianid &&
+          this.domainId != 30 &&
+          this.firstLoginFromOtherWebSitesBusiness == false
+        ) {
+          // this.ownerType = "business";
+          this.selectItem(li);
+          this.firstLoginFromOtherWebSitesBusiness = true;
+          this.trySelectFromLocalStorageAsync();
+        }
         li.addEventListener("click", async (e) => {
-        
           e.preventDefault();
           const id = parseInt(li.getAttribute("data-id"));
-         
+
           const entity = this.entityList.find((x) => x.id == id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
           if (this.profile) {
@@ -391,21 +411,23 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               await this.onItemSelectAsync(id);
             }
           }
-       
+
           this.owner.setSource(this.getSourceId(), entity ?? {});
           if (this.ownerType == "corporate") {
             // choose corporate
             this.resetBusinessEntity();
             this.resetNotification();
           } else if (this.ownerType == "business") {
-            $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", id);
+            $bc.setSource(
+              "basispanelcomponent_entityselectorcomponent.businessid",
+              id
+            );
           }
-       
+
           this.setActive();
           this.selectItem(li);
         });
-      
-        
+
         // if(list?.length == 1 ){
         //   await this.setActiveAsync(list[0].id);
         //   LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
@@ -423,7 +445,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         // }
         this.element.appendChild(li);
       });
-     
     }
   }
 
@@ -437,7 +458,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       this.options.checkRkey,
       {
         type: this.ownerType,
-        id: id
+        id: id,
       }
     );
     if (this.deviceId == 2) {
@@ -453,30 +474,34 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         .closest("[data-bc-bp-main-header]")
         .querySelector(".active-user")
         ?.classList.remove("active-user");
-        if (this.ownerType == "corporate") {
-          // choose corporate
-          this.element
-            .closest("[data-bc-bp-main-header]")
-            .querySelector(".active-business")
-            ?.classList.remove("active-business");
-          this.element
-            .closest("[data-bc-bp-corporate-container]")
-            .classList.add("active-corporate");
-          this.element.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "corporate");
-        } else if (this.ownerType == "business") {
-          // choose business
-          this.element
-            .closest("[data-bc-bp-main-header]")
-            .querySelector(".active-corporate")
-            ?.classList.remove("active-corporate");
-          this.element
-            .closest("[data-bc-bp-business-container]")
-            .classList.add("active-business");
-          this.element.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "business");
-        }
+      if (this.ownerType == "corporate") {
+        // choose corporate
         this.element
-          .closest("[data-bc-bp-header-levels]")
-          .classList.remove("active");
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-business")
+          ?.classList.remove("active-business");
+        this.element
+          .closest("[data-bc-bp-corporate-container]")
+          .classList.add("active-corporate");
+        this.element
+          .closest("[data-bc-bp-header-levels-container]")
+          .setAttribute("data-active", "corporate");
+      } else if (this.ownerType == "business") {
+        // choose business
+        this.element
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-corporate")
+          ?.classList.remove("active-corporate");
+        this.element
+          .closest("[data-bc-bp-business-container]")
+          .classList.add("active-business");
+        this.element
+          .closest("[data-bc-bp-header-levels-container]")
+          .setAttribute("data-active", "business");
+      }
+      this.element
+        .closest("[data-bc-bp-header-levels]")
+        .classList.remove("active");
     } else {
       if (this.ownerType == "corporate") {
         // choose corporate
@@ -526,17 +551,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     $bc.setSource("basispanelcomponent_entityselectorcomponent.businessid", 0);
 
     const header = this.element.closest("[data-bc-bp-main-header]");
-    const businessMsgElement = header.querySelector(
-      "[data-bc-business-msg]"
-    );
+    const businessMsgElement = header.querySelector("[data-bc-business-msg]");
     businessMsgElement.textContent = this.labels.businessTitle;
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
-    header.querySelector("#ctaForBusinessBuy")?.remove()
+    header.querySelector("#ctaForBusinessBuy")?.remove();
     header
-      .querySelector(
-        "[data-bc-bp-business-container] [data-bc-main-name]"
-      )
+      .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
       ?.remove();
     // header.innerHTML = ""
   }
@@ -544,14 +565,16 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected resetNotification() {
     this.owner.setSource("notification.websocket", {
       type: "reset",
-      usedforid: ""
+      usedforid: "",
     });
   }
-  
-  private async getCurrentService(){
-    const url = HttpUtil.formatString(this.options.checkRkey.url, { rKey: this.options.rKey });
+
+  private async getCurrentService() {
+    const url = HttpUtil.formatString(this.options.checkRkey.url, {
+      rKey: this.options.rKey,
+    });
     const result = await HttpUtil.fetchDataAsync(url, "GET");
-    return result
+    return result;
   }
   protected selectItem(li: HTMLElement, freeze: boolean = false) {
     const entityElement = this.element
@@ -597,20 +620,20 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       containerMsgElement.nextSibling
     );
 
-
-    const selectiveList = entityName.closest("[data-bc-main-list-info]") as HTMLElement
+    const selectiveList = entityName.closest(
+      "[data-bc-main-list-info]"
+    ) as HTMLElement;
     containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
     selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
-    selectiveList.setAttribute(
-      "data-id",
-      li.getAttribute("data-id")
-    );
-    selectiveList.addEventListener("click" , (e) => {
-      this.selectService(selectiveList)
-    })
+    selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
+    selectiveList.addEventListener("click", (e) => {
+      this.selectService(selectiveList);
+    });
 
     if (this.deviceId == 2) {
-      selectiveList.querySelector("[data-bc-main-list-msg]").removeAttribute("data-bc-drop-down-click");
+      selectiveList
+        .querySelector("[data-bc-main-list-msg]")
+        .removeAttribute("data-bc-drop-down-click");
     }
 
     this.element
