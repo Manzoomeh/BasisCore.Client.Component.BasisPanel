@@ -78,13 +78,13 @@ export default class NotificationMessageComponent
 
     if (!message) {
       try {
-        const chachedItem = this.checkErrorCode(
+        const cachedItem = this.checkErrorCode(
           Errorid,
           String(Lid),
           currentModule
         );
-        if (chachedItem) {
-          message = chachedItem;
+        if (cachedItem) {
+          message = cachedItem;
         } else {
           let url;
           if (currentModule == "1") {
@@ -111,11 +111,11 @@ export default class NotificationMessageComponent
             const cached = cachedObject[currentModule] || {};
             cached.date = new Date().getTime();
 
-            if (cached.v != res[0].v) {
-              cached.v = res[0].v;
+            if (cached.v != res.v) {
+              cached.v = res.v;
               cached.values = {};
 
-              res.map((e) => {
+              res.messages.map((e) => {
                 if (e.id) {
                   cached.values[e.id] = {};
                   e.culture.map((i) => {
@@ -126,8 +126,10 @@ export default class NotificationMessageComponent
             }
             cachedObject[currentModule] = cached;
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-            if (res.find((e) => e.id == Errorid).culture[Lid].message) {
-              message = res
+            if (
+              res.messages.find((e) => e.id == Errorid).culture[Lid].message
+            ) {
+              message = res.messages
                 .find((e) => e.id == Errorid)
                 .culture.find((e) => e.lid == Lid).message;
             } else {
