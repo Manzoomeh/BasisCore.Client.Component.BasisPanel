@@ -83,10 +83,10 @@ export default class LogoutComponent extends BasisPanelChildComponent {
       const logoutUrl = HttpUtil.formatString(this.options.logout.url, {
         rKey: this.options.rKey,
       });
-      const result = await HttpUtil.sendFormData<IResponseLogout>(
+      const result = await HttpUtil.fetchDataAsync<IResponseLogout>(
         logoutUrl,
         "POST",
-        `dmntoken=${dmnToken.dmnToken}`
+        {"dmntoken": dmnToken.dmnToken}
       );
       const cookieName = this.options.logout.cookieName;
       if (result.errorid == this.options.logout.successId) {
