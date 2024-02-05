@@ -51,9 +51,10 @@ export default class MenuElementMaker {
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>,
+    isExternal: boolean = false
   ) {
-    items.forEach((node) => {
+    items.forEach((node, i) => {
       if ((node as IMenuExternalItemInfo).url) {
         this.moduleMapper.set(node.mid, {
           owner: menuParam.owner,
@@ -62,7 +63,13 @@ export default class MenuElementMaker {
       }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
-          this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
+          this.createPageMenuItem(
+            node as IMenuPageInfo,
+            menuParam,
+            pageLookup,
+            i,
+            isExternal
+          )
         );
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
@@ -70,7 +77,9 @@ export default class MenuElementMaker {
             node as IMenuLevelInfo,
             menuParam,
             pageLookup,
-            this.deviceId
+            this.deviceId,
+            i,
+            isExternal
           )
         );
       } else if (
@@ -82,7 +91,9 @@ export default class MenuElementMaker {
             node as IMenuExternalItemInfo,
             menuParam,
             pageLookup,
-            this.deviceId
+            this.deviceId,
+            i,
+            isExternal
           )
         );
       } else if (
@@ -93,26 +104,55 @@ export default class MenuElementMaker {
           this.createExternalMenuItemSingleItem(
             node as IMenuExternalItemInfo,
             menuParam,
-            pageLookup
+            pageLookup,
+            i
           )
         );
       }
     });
   }
+  dragStart(event) {
+    event.dataTransfer.setData(
+      "text/plain",
+      event.target.attributes["key"].value
+    );
+  }
 
+  dragOver(event) {
+    event.preventDefault();
+  }
+
+  drop(event) {
+    event.preventDefault();
+
+    var itemId = event.dataTransfer.getData("text/plain");
+    var item = document.querySelector(`[key="${itemId}"]`);
+
+    event.target.parentNode.insertAdjacentElement("beforebegin", item);
+  }
   private createLevelMenuItem(
     node: IMenuLevelInfo,
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>,
-    deviceId: number
+    deviceId: number,
+    key: number,
+    isExternal: boolean
   ): HTMLLIElement {
     const li = document.createElement("li");
+    if (!isExternal) {
+      li.setAttribute("key", String(key));
+      li.setAttribute("draggable", String(true));
+      li.addEventListener("dragstart", (e) => this.dragStart(e));
+      li.addEventListener("dragover", (e) => this.dragOver(e));
+      li.addEventListener("drop", (e) => this.drop(e));
+    }
+
     const content = document.createElement("a");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
+    this.createMenu(innerUl, node.nodes, menuParam, pageLookup, true);
     li.appendChild(content);
     li.appendChild(innerUl);
     if (deviceId == 2) {
@@ -162,7 +202,9 @@ export default class MenuElementMaker {
   private createPageMenuItem(
     node: IMenuPageInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>,
+    key: number,
+    isExternal: boolean
   ): HTMLLIElement {
     if (!this.moduleMapper.has(node.mid)) {
       this.moduleMapper.set(node.mid, {
@@ -171,6 +213,13 @@ export default class MenuElementMaker {
       });
     }
     const li = document.createElement("li");
+    if (!isExternal) {
+      li.setAttribute("key", String(key));
+      li.setAttribute("draggable", String(true));
+      li.addEventListener("dragstart", (e) => this.dragStart(e));
+      li.addEventListener("dragover", (e) => this.dragOver(e));
+      li.addEventListener("drop", (e) => this.drop(e));
+    }
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
@@ -213,7 +262,8 @@ export default class MenuElementMaker {
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>,
+    key: number
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
@@ -223,11 +273,16 @@ export default class MenuElementMaker {
       rKey: menuParam.rKey,
     };
     const li = document.createElement("li");
+
     const ul = document.createElement("ul");
     li.setAttribute("data-bc-bp-menu-external-title", "");
     li.setAttribute("data-sys-menu-external", "");
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
-
+    li.setAttribute("key", String(key));
+    li.setAttribute("draggable", String(true));
+    li.addEventListener("dragstart", (e) => this.dragStart(e));
+    li.addEventListener("dragover", (e) => this.dragOver(e));
+    li.addEventListener("drop", (e) => this.drop(e));
     li.appendChild(ul);
     const url = HttpUtil.formatString(
       `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
@@ -243,7 +298,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, true);
       }
     });
     return li;
@@ -252,7 +307,9 @@ export default class MenuElementMaker {
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>,
-    deviceId: number
+    deviceId: number,
+    key: number,
+    isExternal: boolean
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
@@ -262,14 +319,22 @@ export default class MenuElementMaker {
       rKey: menuParam.rKey,
     };
     const li = document.createElement("li");
+
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
     li.setAttribute("data-bc-bp-menu-external-title", "");
     li.setAttribute("data-sys-menu-external", "");
     content.appendChild(document.createTextNode(node.title));
     li.appendChild(content);
+    if (!isExternal) {
+      li.setAttribute("key", String(key));
+      li.setAttribute("draggable", String(true));
+      li.addEventListener("dragstart", (e) => this.dragStart(e));
+      li.addEventListener("dragover", (e) => this.dragOver(e));
+      li.addEventListener("drop", (e) => this.drop(e));
+    }
+    li.setAttribute("data-bc-bp-menu-external", "");
     const ul = document.createElement("ul");
-    ul.setAttribute("data-bc-bp-menu-external", "");
     content.setAttribute("data-bc-bp-menu-external-level", "");
     li.appendChild(ul);
     let subMenuFlag = false;
@@ -332,7 +397,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, true);
       }
     });
 
