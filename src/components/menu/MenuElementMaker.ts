@@ -128,7 +128,7 @@ export default class MenuElementMaker {
     var itemId = event.dataTransfer.getData("text/plain");
     var item = document.querySelector(`[key="${itemId}"]`);
 
-    event.target.parentNode.insertAdjacentElement("beforebegin", item);
+    event.target.closest("[key]").insertAdjacentElement("beforebegin", item);
   }
   private createLevelMenuItem(
     node: IMenuLevelInfo,
