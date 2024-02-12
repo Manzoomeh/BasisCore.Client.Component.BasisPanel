@@ -52,7 +52,7 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d2-menu] li {
   /* padding-right: 15px; */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-menu] li {
