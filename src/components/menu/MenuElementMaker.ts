@@ -132,7 +132,7 @@ export default class MenuElementMaker {
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-submenu]");
           // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.maxHeight = "50rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
           // subMenu.classList.add("show");
         }
@@ -296,7 +296,7 @@ export default class MenuElementMaker {
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-menu-external]");
           // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-          (subMenu as HTMLElement).style.maxHeight = "20rem";
+          (subMenu as HTMLElement).style.maxHeight = "50rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
           // subMenu.classList.add("show");
         }
