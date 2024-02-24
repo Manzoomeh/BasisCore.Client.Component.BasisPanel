@@ -116,7 +116,7 @@
             logout: {
               url: "/server/trust/${rKey}/logout",
               cookieName: "rkey",
-              successId: 4,
+              errorIDsForRedirect: [4, 5],
               getDmnTokenUrl: "/server/trust/getDmnToken",
               defaultRedirectUrl: "https://www.google.com",
             },

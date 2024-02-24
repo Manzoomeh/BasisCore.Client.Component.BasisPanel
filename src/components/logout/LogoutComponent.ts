@@ -89,7 +89,7 @@ export default class LogoutComponent extends BasisPanelChildComponent {
         {"dmntoken": dmnToken.dmnToken}
       );
       const cookieName = this.options.logout.cookieName;
-      if (result.errorid == this.options.logout.successId) {
+      if (this.options.logout.errorIDsForRedirect?.includes(result.errorid)) {
         if (cookieName && cookieName != "") {
           const cookies = document.cookie.split(";");
           for (var i = 0; i < cookies.length; i++) {
