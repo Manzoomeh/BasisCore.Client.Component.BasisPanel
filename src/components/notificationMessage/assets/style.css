@@ -54,6 +54,9 @@
 .error-progress:before {
   background-color: #b40020;
 }
+.default-progress:before{
+  background-color: #E96228;
+}
 [data-bc-bp-direction="leftToRight"] .NotificationMessageMethod {
   position: fixed;
   top: 80px;
@@ -113,6 +116,14 @@
   padding: 7px 15px;
   border-radius: 5px;
   border: 1px solid #f6d5da;
+  transition: all 0.5s ease-in-out;
+}
+[data-bc-message-default]{
+  background-color: #FFEEE7;
+  color: #E96228;
+  padding: 7px 15px;
+  border-radius: 5px;
+  border: 1px solid rgba(233, 98, 40, 0.1);
   transition: all 0.5s ease-in-out;
 }
 [data-sys-message-fade-in] {

@@ -202,11 +202,41 @@ export default class NotificationMessageComponent
         }
       }, 3000);
     }
+    else  {
+      
+      container.setAttribute("data-sys-message-fade-in", "");
+
+      container.innerHTML = `<div class="NotificationMessage-content" >
+      <svg width="37" height="33" viewBox="0 0 37 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M6.23749 14.2294C11.5878 4.74314 14.263 0 18.4993 0C22.7357 0 25.4109 4.74313 30.7612 14.2294L31.4279 15.4115C35.874 23.2945 38.0971 27.236 36.0879 30.118C34.0787 33 29.1078 33 19.1661 33H17.8326C7.89088 33 2.92 33 0.91082 30.118C-1.09836 27.236 1.12469 23.2945 5.57078 15.4115L6.23749 14.2294ZM18.4993 7.79167C19.2587 7.79167 19.8743 8.40728 19.8743 9.16667V18.3333C19.8743 19.0927 19.2587 19.7083 18.4993 19.7083C17.74 19.7083 17.1243 19.0927 17.1243 18.3333V9.16667C17.1243 8.40728 17.74 7.79167 18.4993 7.79167ZM18.4993 25.6667C19.5119 25.6667 20.3327 24.8459 20.3327 23.8333C20.3327 22.8208 19.5119 22 18.4993 22C17.4868 22 16.666 22.8208 16.666 23.8333C16.666 24.8459 17.4868 25.6667 18.4993 25.6667Z" fill="#E96228"/>
+      </svg>
+      
+      <div class="message">
+          <span id="messageText" class="text text-2"> ${message} </span>
+      </div>
+  </div><div class="progress default-progress"></div>
+      `;
+      const progress = document.querySelector(".progress");
+      progress.classList.add("activeNotification");
+      container.setAttribute("data-bc-message-default", "");
+      setTimeout(() => {
+        container.removeAttribute("data-sys-message-fade-in");
+        container.setAttribute("data-sys-message-fade-out", "");
+        container.removeAttribute("data-bc-message-default");
+
+        progress.classList.remove("activeNotification");
+        if (this.messageQueue.length != 0) {
+          setTimeout(() => {
+            this.showMessage();
+          }, 300);
+        }
+      }, 3000);
+    }
   }
   public async NotificationMessageMethod(
     Errorid: string,
     Lid: number,
-    Type: number = 1,
+    Type: number ,
     Message?: string
   ) {
     const container = this.container.querySelector(
