@@ -71,16 +71,16 @@ export default class NotificationMessageComponent
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
     let type = Type;
-
+    let lid = Lid || 1;
     if (!(message || type)) {
       try {
         const cachedItem = this.checkErrorCode(
           Errorid,
-          String(Lid || 1),
+          String(lid),
           currentModule
         );
         if (cachedItem) {
-          message = cachedItem.messages[Lid || 1];
+          message = cachedItem.messages[lid];
           type = cachedItem.messageType;
         } else {
           let url;
@@ -132,12 +132,12 @@ export default class NotificationMessageComponent
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
             const found = res.messages.find((e) => e.id == Errorid);
             if (found) {
-              message = found.culture.find((e) => e.lid == Lid || 1).message;
+              message = found.culture.find((e) => e.lid == lid).message;
               type = found.messageType;
             } else {
               message = this.defaultMessages
                 .find((e) => e.id == Errorid)
-                .culture.find((e) => e.lid == Lid).message;
+                .culture.find((e) => e.lid == lid).message;
               type = this.defaultMessages.find(
                 (e) => e.id == Errorid
               ).messageType;
@@ -145,7 +145,7 @@ export default class NotificationMessageComponent
           } else {
             message = this.defaultMessages
               .find((e) => e.id == Errorid)
-              .culture.find((e) => e.lid == Lid || 1).message;
+              .culture.find((e) => e.lid == lid).message;
             type = this.defaultMessages.find(
               (e) => e.id == Errorid
             ).messageType;
@@ -154,7 +154,7 @@ export default class NotificationMessageComponent
       } catch (e) {
         message = this.defaultMessages
           .find((e) => e.id == Errorid)
-          ?.culture?.find((e) => e.lid == Lid || 1)?.message;
+          ?.culture?.find((e) => e.lid == lid)?.message;
         type = this.defaultMessages.find((e) => e.id == Errorid)?.messageType;
       }
     }
@@ -292,6 +292,7 @@ export default class NotificationMessageComponent
       ".NotificationMessageMethod"
     );
     this.messageQueue.push({ Errorid, Lid, Type, Message });
+
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();
     }
