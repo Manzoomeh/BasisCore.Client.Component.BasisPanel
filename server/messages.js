@@ -8,6 +8,7 @@ router.get("/:rKey/errorMessages", function (req, res) {
     messages: [
       {
         id: 1.0,
+        messageType: 1, // 1 : success
         culture: [
           {
             lid: 1.0,
@@ -21,6 +22,8 @@ router.get("/:rKey/errorMessages", function (req, res) {
       },
       {
         id: 2.0,
+        messageType: 2, // 2 : error
+
         culture: [
           {
             lid: 1.0,
@@ -34,14 +37,30 @@ router.get("/:rKey/errorMessages", function (req, res) {
       },
       {
         id: 3.0,
+        messageType: 3, // 3 : info
+
         culture: [
           {
             lid: 1.0,
-            message: "test",
+            message: "اطلاعات",
           },
           {
             lid: 2.0,
-            message: "its fail",
+            message: "info message",
+          },
+        ],
+      },
+      {
+        id: 4.0,
+
+        culture: [
+          {
+            lid: 1.0,
+            message: "تست",
+          },
+          {
+            lid: 2.0,
+            message: "test",
           },
         ],
       },
