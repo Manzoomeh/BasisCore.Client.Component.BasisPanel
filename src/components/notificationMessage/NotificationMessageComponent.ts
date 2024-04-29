@@ -246,7 +246,7 @@ export default class NotificationMessageComponent
       if (this.messageQueue.length != 0) {
         setTimeout(() => {
           this.showMessage();
-        }, 300);
+        }, 500);
       }
     }, 3000);
   }
@@ -278,7 +278,7 @@ export default class NotificationMessageComponent
       if (this.messageQueue.length != 0) {
         setTimeout(() => {
           this.showMessage();
-        }, 300);
+        }, 500);
       }
     }, 3000);
   }
