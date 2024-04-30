@@ -283,6 +283,98 @@ export default class NotificationMessageComponent
       }, 500);
     }, 3000);
   }
+  public async getMessageTypeByErrorId(errorid: number) {
+    const currentPage = LocalStorageUtil.getCurrentPage();
+    const currentMenu = LocalStorageUtil.getCurrentMenu();
+    const currentModule = currentMenu?.info?.mid || "1";
+    try {
+      const cached = JSON.parse(localStorage.getItem("errorKeys"));
+      if (cached && cached[currentModule]) {
+        const messageData = cached[currentModule].values[errorid];
+        if (messageData) {
+          const currentDate = new Date().getTime();
+
+          if (currentDate - cached[currentModule].date < 3600 * 1000 * 24) {
+            return messageData.messageType;
+          }
+        }
+      } else {
+        let url;
+        if (currentModule == "1") {
+          url = HttpUtil.formatString(this.options.culture.errorMessages, {
+            rKey: this.options.rKey,
+          });
+        } else {
+          url = HttpUtil.formatString(
+            currentPage.ownerUrl + this.options.culture.errorMessages,
+            {
+              rKey: this.options.rKey,
+            }
+          );
+        }
+
+        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+          url,
+          "GET",
+          this.options.checkRkey
+        );
+        if (res) {
+          const cachedObject =
+            JSON.parse(localStorage.getItem("errorKeys")) || {};
+          const cached = cachedObject[currentModule] || {};
+          cached.date = new Date().getTime();
+
+          if (cached.v != res.v) {
+            cached.v = res.v;
+            cached.values = {};
+
+            res.messages.map((i) => {
+              try {
+                if (i.id) {
+                  cached.values[i.id] = {
+                    messageType: i.messageType,
+                    messages: {},
+                  };
+                  i.culture.map((e) => {
+                    cached.values[i.id]["messages"][e.lid] = e.message;
+                  });
+                }
+              } catch (e) {
+                console.log("e :>> ", e);
+              }
+            });
+          }
+          cachedObject[currentModule] = cached;
+          localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+          const found = res.messages.find((e) => e.id == errorid);
+          if (found) {
+            return found.messageType;
+          } else {
+            const message = this.defaultMessages.find((e) => e.id == errorid);
+            if (message) {
+              return message.messageType;
+            } else {
+              return null;
+            }
+          }
+        } else {
+          const message = this.defaultMessages.find((e) => e.id == errorid);
+          if (message) {
+            return message.messageType;
+          } else {
+            return null;
+          }
+        }
+      }
+    } catch (e) {
+      const message = this.defaultMessages.find((e) => e.id == errorid);
+      if (message) {
+        return message.messageType;
+      } else {
+        return null;
+      }
+    }
+  }
   public async NotificationMessageMethod(
     Errorid: string,
     Lid: number,

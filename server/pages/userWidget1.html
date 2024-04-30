@@ -35,6 +35,11 @@
       show notification with all parameters
     </button>
   </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="testGetMessageTypeByErrorId(this)">
+      test GetMessageTypeByErrorId function
+    </button>
+  </div>
 </div>
 <form id="file-form" action="#">
   <input
@@ -104,6 +109,11 @@
     const message = pagesList_component.owner.dc.resolve("message");
     message.NotificationMessageMethod(4, 1, 3, "تست پارامتر ها");
   }
+  async function testGetMessageTypeByErrorId() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    console.log(await message.getMessageTypeByErrorId(3));
+  }
+
   function click_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
     const widget = pagesList_component.owner.dc.resolve("widget");
