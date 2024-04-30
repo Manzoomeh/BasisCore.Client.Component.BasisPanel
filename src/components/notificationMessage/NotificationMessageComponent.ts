@@ -1,6 +1,7 @@
 import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import desktopLayout from "./assets/layout.html";
+import desktopLayout from "./assets/desktop-layout.html";
+import mobileLayout from "./assets/mobile-layout.html";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import INotifiationMessage from "./INotificationMessage";
@@ -23,7 +24,7 @@ export default class NotificationMessageComponent
     },
   };
   constructor(owner: IUserDefineComponent) {
-    super(owner, desktopLayout, desktopLayout, "data-bc-bp-message-container");
+    super(owner, desktopLayout, mobileLayout, "data-bc-bp-message-container");
     this.defaultMessages = [
       {
         id: 1.0,
@@ -164,9 +165,9 @@ export default class NotificationMessageComponent
     }
   }
   showInfoMessage(message: string) {
-    const container = this.container.querySelector(
-      ".NotificationMessageMethod"
-    );
+    const container =
+      this.container.querySelector(".NotificationMessageMethod") ||
+      this.container.querySelector(".NotificationMessageMethodMobile");
     container.innerHTML = `<div class="NotificationMessage-content" >
     <svg enable-background="new 0 0 48 48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" height="40px" width="40px"><circle cx="24" cy="24" fill="#005386" r="21"/><g fill="#fff"><path d="m22 22h4v11h-4z"/><circle cx="24" cy="16.5" r="2.5"/></g></svg>
     <div class="message">
@@ -191,9 +192,9 @@ export default class NotificationMessageComponent
     }, 3000);
   }
   showSuccessMessage(message: string) {
-    const container = this.container.querySelector(
-      ".NotificationMessageMethod"
-    );
+    const container =
+      this.container.querySelector(".NotificationMessageMethod") ||
+      this.container.querySelector(".NotificationMessageMethodMobile");
 
     container.innerHTML = `<div class="NotificationMessage-content" >
     <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,9 +222,9 @@ export default class NotificationMessageComponent
     }, 3000);
   }
   showErrorMessage(message: string) {
-    const container = this.container.querySelector(
-      ".NotificationMessageMethod"
-    );
+    const container =
+      this.container.querySelector(".NotificationMessageMethod") ||
+      this.container.querySelector(".NotificationMessageMethodMobile");
     container.setAttribute("data-sys-message-fade-in", "");
 
     container.innerHTML = `<div class="NotificationMessage-content" >
@@ -252,9 +253,9 @@ export default class NotificationMessageComponent
     }, 3000);
   }
   showDefaultMessage(message: string) {
-    const container = this.container.querySelector(
-      ".NotificationMessageMethod"
-    );
+    const container =
+      this.container.querySelector(".NotificationMessageMethod") ||
+      this.container.querySelector(".NotificationMessageMethodMobile");
     container.setAttribute("data-sys-message-fade-in", "");
 
     container.innerHTML = `<div class="NotificationMessage-content" >
@@ -381,9 +382,9 @@ export default class NotificationMessageComponent
     Type: number,
     Message?: string
   ) {
-    const container = this.container.querySelector(
-      ".NotificationMessageMethod"
-    );
+    const container =
+      this.container.querySelector(".NotificationMessageMethod") ||
+      this.container.querySelector(".NotificationMessageMethodMobile");
     this.messageQueue.push({ Errorid, Lid, Type, Message });
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {

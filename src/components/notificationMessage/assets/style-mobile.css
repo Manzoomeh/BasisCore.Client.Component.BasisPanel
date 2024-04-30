@@ -14,7 +14,9 @@
     right: 0%;
   }
 }
-[data-bc-bp-direction="rightToLeft"] .NotificationMessageMethod .progress {
+[data-bc-bp-direction="rightToLeft"]
+  .NotificationMessageMethodMobile
+  .progress {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -22,7 +24,7 @@
   width: 100%;
 }
 [data-bc-bp-direction="rightToLeft"]
-  .NotificationMessageMethod
+  .NotificationMessageMethodMobile
   .progress:before {
   content: "";
   position: absolute;
@@ -32,7 +34,9 @@
   width: 100%;
   border-radius: 15px;
 }
-[data-bc-bp-direction="leftToRight"] .NotificationMessageMethod .progress {
+[data-bc-bp-direction="leftToRight"]
+  .NotificationMessageMethodMobile
+  .progress {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -40,7 +44,7 @@
   width: 100%;
 }
 [data-bc-bp-direction="leftToRight"]
-  .NotificationMessageMethod
+  .NotificationMessageMethodMobile
   .progress:before {
   content: "";
   position: absolute;
@@ -63,7 +67,7 @@
 .default-progress:before {
   background-color: #e96228;
 }
-[data-bc-bp-direction="leftToRight"] .NotificationMessageMethod {
+[data-bc-bp-direction="leftToRight"] .NotificationMessageMethodMobile {
   position: fixed;
   top: 80px;
   left: 15px;
@@ -76,7 +80,7 @@
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
   z-index: 9999999999;
 }
-[data-bc-bp-direction="rightToLeft"] .NotificationMessageMethod {
+[data-bc-bp-direction="rightToLeft"] .NotificationMessageMethodMobile {
   position: fixed;
   top: 80px;
   width: 300px;
@@ -88,9 +92,10 @@
   height: 60px;
   overflow: hidden;
   transform: translateY(-350px);
+  z-index: 9999;
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
 }
-.NotificationMessageMethod .NotificationMessage-content {
+.NotificationMessageMethodMobile .NotificationMessage-content {
   display: flex;
   align-items: center;
 }
