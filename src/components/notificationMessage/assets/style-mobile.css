@@ -70,8 +70,9 @@
 [data-bc-bp-direction="leftToRight"] .NotificationMessageMethodMobile {
   position: fixed;
   top: 80px;
-  left: 15px;
-  min-width: 300px;
+  left: 0;
+  right: 0;
+  width: 300px;
   border-radius: 12px;
   height: 60px;
 
@@ -79,6 +80,7 @@
   transform: translateY(-350px);
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
   z-index: 9999999999;
+  margin: 0 auto;
 }
 [data-bc-bp-direction="rightToLeft"] .NotificationMessageMethodMobile {
   position: fixed;
@@ -94,6 +96,7 @@
   transform: translateY(-350px);
   z-index: 9999;
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  direction: rtl;
 }
 .NotificationMessageMethodMobile .NotificationMessage-content {
   display: flex;
