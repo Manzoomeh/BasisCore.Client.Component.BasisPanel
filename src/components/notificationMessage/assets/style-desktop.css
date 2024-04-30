@@ -143,9 +143,11 @@
 [data-sys-message-fade-in] {
   transform: translate(0%) !important;
 }
-[data-bc-bp-direction="leftToRight"] [data-sys-message-fade-out] {
+[data-bc-bp-direction="leftToRight"]
+  .NotificationMessageMethod[data-sys-message-fade-out] {
   transform: translateX(-350px);
 }
-[data-bc-bp-direction="rightToLeft"] [data-sys-message-fade-out] {
+[data-bc-bp-direction="rightToLeft"]
+  .NotificationMessageMethod[data-sys-message-fade-out] {
   transform: translateX(calc(100% + 350px));
 }
