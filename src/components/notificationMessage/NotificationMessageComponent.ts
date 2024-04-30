@@ -1,7 +1,8 @@
 import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import desktopLayout from "./assets/layout.html";
-import "./assets/style.css";
+import "./assets/style-desktop.css";
+import "./assets/style-mobile.css";
 import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
@@ -182,11 +183,11 @@ export default class NotificationMessageComponent
       container.removeAttribute("data-bc-message-info");
       progress.classList.remove("activeNotification");
 
-      if (this.messageQueue.length != 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (this.messageQueue.length != 0) {
           this.showMessage();
-        }, 500);
-      }
+        }
+      }, 500);
     }, 3000);
   }
   showSuccessMessage(message: string) {
@@ -212,11 +213,11 @@ export default class NotificationMessageComponent
       container.removeAttribute("data-bc-message-success");
       progress.classList.remove("activeNotification");
 
-      if (this.messageQueue.length != 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (this.messageQueue.length != 0) {
           this.showMessage();
-        }, 500);
-      }
+        }
+      }, 500);
     }, 3000);
   }
   showErrorMessage(message: string) {
@@ -243,11 +244,11 @@ export default class NotificationMessageComponent
       container.removeAttribute("data-bc-message-error");
 
       progress.classList.remove("activeNotification");
-      if (this.messageQueue.length != 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (this.messageQueue.length != 0) {
           this.showMessage();
-        }, 500);
-      }
+        }
+      }, 500);
     }, 3000);
   }
   showDefaultMessage(message: string) {
@@ -275,11 +276,11 @@ export default class NotificationMessageComponent
       container.removeAttribute("data-bc-message-default");
 
       progress.classList.remove("activeNotification");
-      if (this.messageQueue.length != 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (this.messageQueue.length != 0) {
           this.showMessage();
-        }, 500);
-      }
+        }
+      }, 500);
     }, 3000);
   }
   public async NotificationMessageMethod(
