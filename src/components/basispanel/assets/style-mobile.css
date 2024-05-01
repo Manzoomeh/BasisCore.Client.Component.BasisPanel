@@ -274,10 +274,25 @@
   z-index: 99999;
 }
 
-[data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels-opened] {
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels-opened] {
   position: absolute;
   top: 0;
   left: 0;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  z-index: 10;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-levels-opened] {
+  position: absolute;
+  top: 0;
+  right: 0;
   cursor: pointer;
   width: 45px;
   height: 45px;

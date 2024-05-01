@@ -60,7 +60,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list-icon] {
-    float: right;
+    float: left;
 }
 
 /* [data-bc-d1-corporate-list] [data-bc-d1-corporate-notification] {
@@ -95,6 +95,8 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-select] {
     float: right;
+    display: flex;
+    direction: ltr;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg] {
@@ -111,7 +113,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg] {
-    right: 10px;
+    left: 10px;
 }
 
 /* [data-bc-d1-corporate-list] [data-bc-d1-corporate-msg][data-bc-d1-corporate-msg-inactive] {
@@ -213,7 +215,8 @@
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li {
-    margin-left: 5px;
+    margin-right: 5px;
+    text-align: left;
 }
 
 [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] li:hover {
@@ -288,7 +291,7 @@
 }
 
 [data-bc-bp-direction="leftToRight"][data-bc-bp-corporate-container="d1"] .active-corporate [data-bc-d1-corporate-list-icon] {
-    border-right: 0;
+    border-left: 0;
 }
 
 /* main */
@@ -308,5 +311,25 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-main-list-info] {
     float: right;
-    padding-right: 10px;
+    padding-left: 10px;
+    direction: ltr;
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-corporate-business-wrapper]{
+    direction: rtl;
+    display: flex;
+    width: fit-content;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-corporate-business-wrapper]{
+    direction: rtl;
+    display: flex;
+    width: fit-content;
+    float: right;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-corporate-search] input {
+    text-align: left;
+    direction: ltr;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-d1-corporate-list] [data-bc-d1-corporate-drop-down] ul{
+    direction: ltr !important;
 }

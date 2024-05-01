@@ -37,7 +37,7 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-logo] {
   float: left;
-  margin-left: 15px;
+  /* margin-left: 15px; */
 }
 
 [data-bc-bp-d1-logo] a {

@@ -1,3 +1,4 @@
 export default interface IStoreOptions {
-    url:string;
+    existence : boolean,
+    url:string ;
 }

@@ -431,9 +431,15 @@ body.scrolling {
   direction: ltr;
   width: 95%;
 }
-[data-bc-bp-d2-header-levels-item] [data-bc-corporate-buy] a {
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-d2-header-levels-item] [data-bc-corporate-buy] a {
   display: flex;
   direction: rtl;
+  justify-content: space-between;
+  width: 100%;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-d2-header-levels-item] [data-bc-corporate-buy] a {
+  display: flex;
+  direction: ltr;
   justify-content: space-between;
   width: 100%;
 }

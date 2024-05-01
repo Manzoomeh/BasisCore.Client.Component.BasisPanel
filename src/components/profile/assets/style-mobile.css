@@ -27,13 +27,21 @@
     cursor: pointer;
 }
 
-[data-bc-d2-user-info] [data-bc-d2-user-info-image] {
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-user-info] [data-bc-d2-user-info-image] {
     float: right;
     width: 30px;
     height: 30px;
     border-radius: 10px;
     cursor: pointer;
     margin-left: 15px;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-user-info] [data-bc-d2-user-info-image] {
+    float: left;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 15px;
 }
 
 [data-bc-d2-user-info] [data-bc-d2-user-info-image] img {
@@ -48,18 +56,38 @@
     float: right;
 }
 
-[data-bc-d2-user-info] [data-bc-d2-user-title] {
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-user-info] [data-bc-d2-user-title] {
     font-size: 8px;
     line-height: 10px;
     text-align: right;
     opacity: 0.6;
     margin-bottom: 6px;
 }
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-user-info] [data-bc-d2-user-title] {
+    font-size: 8px;
+    line-height: 10px;
+    text-align: left;
+    opacity: 0.6;
+    margin-bottom: 6px;
+}
 
-[data-bc-d2-user-info] [data-bc-d2-user-name] {
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-d2-user-info] [data-bc-d2-user-name] {
     font-size: 10px;
     line-height: 12px;
     text-align: right;
+    width: 100%;
+    height: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-d2-user-info] [data-bc-d2-user-name] {
+    font-size: 10px;
+    line-height: 12px;
+    text-align: left;
     width: 100%;
     height: 12px;
     overflow: hidden;

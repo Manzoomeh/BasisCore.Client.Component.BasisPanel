@@ -279,3 +279,26 @@ direction: ltr;
 [data-bc-bp-direction="rightToLeft"] [data-bc-corporate-buy] svg{
 	margin-left: 15px;
 }
+
+
+[data-bc-bp-direction="leftToRight"] [data-bc-corporate-buy]{
+	background: #E4E7F4;
+	width: 160px;
+	height: 34px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #004B85;
+	cursor: pointer;
+	margin-right: 15px;
+	direction: ltr;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-corporate-buy] a{
+	display: flex;
+	align-items: center;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-corporate-buy] svg{
+	margin-left: 15px;
+}
