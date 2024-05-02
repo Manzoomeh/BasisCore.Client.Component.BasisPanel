@@ -128,9 +128,7 @@
 	border-left: 0.7px solid #004B85;
 } */
 
-[data-bc-d1-menu] [data-bc-bp-submenu] li > a {
-	/* border-right: 4px solid #D0D0D0; */
-}
+
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-menu] [data-bc-bp-submenu] li > a {
 	border-right: 4px solid #D0D0D0;

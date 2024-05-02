@@ -282,7 +282,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   entryListMaker(list) {
     this.element.innerHTML = "";
-    if (this.ownerType == "business" && list?.length == 0) {
+    
+     if (this.ownerType == "business" && this.entityList.length == 0) {
       document.getElementById("ctaForBusinessBuy")?.remove();
 
       const parentElementForBusiness = this.element.closest(
