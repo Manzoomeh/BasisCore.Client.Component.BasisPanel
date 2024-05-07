@@ -64,9 +64,38 @@ router.get("/:rKey/errorMessages", function (req, res) {
           },
         ],
       },
+      {
+        id: 5.0,
+
+        culture: [
+          {
+            lid: 1.0,
+            message: "تست",
+          },
+          {
+            lid: 2.0,
+            message: "test",
+          },
+        ],
+      },
+      {
+        id: 6.0,
+
+        culture: [
+          {
+            lid: 1.0,
+            message: "تست",
+          },
+          {
+            lid: 2.0,
+            message: "test",
+          },
+        ],
+      },
     ],
   };
 
   res.json(errors);
 });
+
 module.exports = router;

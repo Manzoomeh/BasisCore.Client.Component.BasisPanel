@@ -51,25 +51,41 @@ export default class NotificationMessageComponent
   }
   public checkErrorCode(errorid: string, lid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
-    if (cached && cached[mid]) {
-      const messageData = cached[mid].values[errorid];
+    let messageData;
+    if (cached && cached["1"]) {
+      messageData = cached["1"].values[errorid];
       if (messageData) {
         const currentDate = new Date().getTime();
 
         if (
           messageData.messages[lid] &&
-          currentDate - cached[mid].date < 3600 * 1000 * 24
+          currentDate - cached["1"].date < 3600 * 1000 * 24
         ) {
           return messageData;
+        }
+      }
+    } else {
+      if (cached && cached[mid]) {
+        messageData = cached[mid].values[errorid];
+        if (messageData) {
+          const currentDate = new Date().getTime();
+
+          if (
+            messageData.messages[lid] &&
+            currentDate - cached[mid].date < 3600 * 1000 * 24
+          ) {
+            return messageData;
+          }
         }
       }
     }
   }
   private async showMessage() {
-    const currentPage = LocalStorageUtil.getCurrentPage();
+    const currentPage = JSON.parse(
+      localStorage.getItem("__bc_panel_last_state__")
+    ).p;
     const currentMenu = LocalStorageUtil.getCurrentMenu();
-    const currentModule = currentMenu?.info?.mid || "1";
-
+    const currentModule = currentMenu?.ownerId || "1";
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
     let type = Type;
@@ -86,19 +102,22 @@ export default class NotificationMessageComponent
           type = cachedItem.messageType;
         } else {
           let url;
+          //@ts-ignore
           if (currentModule == "1") {
-            url = HttpUtil.formatString(this.options.culture.errorMessages, {
-              rKey: this.options.rKey,
-            });
+            url = HttpUtil.formatString(
+              this.options.culture.generalErrorMessages,
+              {
+                rKey: this.options.rKey,
+              }
+            );
           } else {
             url = HttpUtil.formatString(
-              currentPage.ownerUrl + this.options.culture.errorMessages,
+              currentPage.ownerUrl + this.options.method.errorMessages,
               {
                 rKey: this.options.rKey,
               }
             );
           }
-
           const res: any = await HttpUtil.checkRkeyFetchDataAsync(
             url,
             "GET",
@@ -154,6 +173,7 @@ export default class NotificationMessageComponent
           }
         }
       } catch (e) {
+        console.log("e :>> ", e);
         message = this.defaultMessages
           .find((e) => e.id == Errorid)
           ?.culture?.find((e) => e.lid == lid)?.message;
@@ -285,9 +305,12 @@ export default class NotificationMessageComponent
     }, 3000);
   }
   public async getMessageTypeByErrorId(errorid: number) {
-    const currentPage = LocalStorageUtil.getCurrentPage();
+    const currentPage = JSON.parse(
+      localStorage.getItem("__bc_panel_last_state__")
+    ).p;
     const currentMenu = LocalStorageUtil.getCurrentMenu();
-    const currentModule = currentMenu?.info?.mid || "1";
+    const currentModule = currentMenu?.ownerId || "1";
+
     try {
       const cached = JSON.parse(localStorage.getItem("errorKeys"));
       if (cached && cached[currentModule]) {
@@ -301,13 +324,18 @@ export default class NotificationMessageComponent
         }
       } else {
         let url;
+        //@ts-ignore
+
         if (currentModule == "1") {
-          url = HttpUtil.formatString(this.options.culture.errorMessages, {
-            rKey: this.options.rKey,
-          });
+          url = HttpUtil.formatString(
+            this.options.culture.generalErrorMessages,
+            {
+              rKey: this.options.rKey,
+            }
+          );
         } else {
           url = HttpUtil.formatString(
-            currentPage.ownerUrl + this.options.culture.errorMessages,
+            currentPage.ownerUrl + this.options.method.errorMessages,
             {
               rKey: this.options.rKey,
             }

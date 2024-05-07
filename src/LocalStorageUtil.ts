@@ -124,7 +124,7 @@ export default class LocalStorageUtil {
   public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
     LocalStorageUtil._lastMenu = {
       ownerId: ownerId,
-      info: menu
+      info: menu,
     };
     LocalStorageUtil.save();
   }

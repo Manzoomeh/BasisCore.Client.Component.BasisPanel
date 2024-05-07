@@ -72,7 +72,7 @@ router.get("/:rKey/menu", function (req, res) {
         mid: 4,
         title: "TaskManager",
         multi: false,
-        url: "/server/external/task",
+        url: "http://localhost:8080/server/external/task",
       },
     ],
   };
@@ -138,7 +138,7 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
 });
 
 router.get("/getDmnToken", function (req, res) {
-  const result = {"dmnToken": "asdfgh"};
+  const result = { dmnToken: "asdfgh" };
   res.json(result);
 });
 
@@ -177,13 +177,13 @@ router.get("/:rKey/tempwidgets", function (req, res) {
     {
       id: 28,
       widgetid: 2,
-      title: "تصویر پنل کاربری"
+      title: "تصویر پنل کاربری",
     },
     {
       id: 29,
       widgetid: 3,
-      title: "ویرایش اطلاعات کاربری"
-    }
+      title: "ویرایش اطلاعات کاربری",
+    },
   ];
   // const result = [];
   res.json(result);

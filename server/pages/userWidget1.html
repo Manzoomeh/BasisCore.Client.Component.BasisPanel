@@ -23,7 +23,7 @@
     </button>
   </div>
   <div style="width: 300px; margin-block: 10px">
-    <button id="btn-ajax" onclick="click_notification_no_type(this)">
+    <button id="btn-ajax" onclick="click_notification_type_7(this)">
       show notification no type
     </button>
   </div>
@@ -101,9 +101,9 @@
     const message = pagesList_component.owner.dc.resolve("message");
     message.NotificationMessageMethod(3, 2);
   }
-  function click_notification_no_type() {
+  function click_notification_type_7() {
     const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessageMethod(4, 1);
+    message.NotificationMessageMethod(7, 1);
   }
   function click_notification_with_all_parameters() {
     const message = pagesList_component.owner.dc.resolve("message");

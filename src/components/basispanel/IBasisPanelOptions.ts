@@ -50,6 +50,7 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
+  errorMessages: string;
 }
 
 export interface ICheckRkeyOptions {
@@ -61,7 +62,7 @@ export interface ICultureOptions {
   direction: IDirection;
   deviceId: number | string;
   labels: ILabels;
-  errorMessages: string;
+  generalErrorMessages: string;
 }
 
 export type IDirection = "leftToRight" | "rightToLeft";
