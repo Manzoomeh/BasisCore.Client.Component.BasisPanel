@@ -49,31 +49,26 @@ export default class NotificationMessageComponent
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
   }
-  public checkErrorCode(errorid: string, lid: string, mid: string) {
+  public checkErrorCode(errorid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
     let messageData;
-    if (cached && cached["1"]) {
-      messageData = cached["1"].values[errorid];
-      if (messageData) {
-        const currentDate = new Date().getTime();
+    if (cached && cached["/"] && cached["/"]?.values[errorid]) {
+      messageData = cached["/"].values[errorid];
+      const currentDate = new Date().getTime();
 
-        if (
-          messageData.messages[lid] &&
-          currentDate - cached["1"].date < 3600 * 1000 * 24
-        ) {
-          return messageData;
-        }
+      if (
+        messageData.messages &&
+        currentDate - cached["/"].date < 3600 * 1000 * 24
+      ) {
+        return messageData;
       }
     } else {
-      if (cached && cached[mid]) {
+      if (cached && cached[mid] && cached[mid]?.values[errorid]) {
         messageData = cached[mid].values[errorid];
         if (messageData) {
           const currentDate = new Date().getTime();
 
-          if (
-            messageData.messages[lid] &&
-            currentDate - cached[mid].date < 3600 * 1000 * 24
-          ) {
+          if (currentDate - cached[mid].date < 3600 * 1000 * 24) {
             return messageData;
           }
         }
@@ -84,26 +79,23 @@ export default class NotificationMessageComponent
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
-    const currentMenu = LocalStorageUtil.getCurrentMenu();
-    const currentModule = currentMenu?.ownerId || "1";
+    const owner = currentPage.owner;
+    const ownerUrl = currentPage.ownerUrl;
+    const currentModule = owner == "external" ? ownerUrl : "/";
     const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
     let message = Message;
     let type = Type;
     let lid = Lid || 1;
     if (!(message || type)) {
       try {
-        const cachedItem = this.checkErrorCode(
-          Errorid,
-          String(lid),
-          currentModule
-        );
-        if (cachedItem) {
+        const cachedItem = this.checkErrorCode(Errorid, currentModule);
+        if (cachedItem && cachedItem?.messages[lid]) {
           message = cachedItem.messages[lid];
           type = cachedItem.messageType;
         } else {
           let url;
           //@ts-ignore
-          if (currentModule == "1") {
+          if (currentModule == "/") {
             url = HttpUtil.formatString(
               this.options.culture.generalErrorMessages,
               {
@@ -112,7 +104,7 @@ export default class NotificationMessageComponent
             );
           } else {
             url = HttpUtil.formatString(
-              currentPage.ownerUrl + this.options.method.errorMessages,
+              ownerUrl + this.options.method.errorMessages,
               {
                 rKey: this.options.rKey,
               }
@@ -144,9 +136,7 @@ export default class NotificationMessageComponent
                       cached.values[i.id]["messages"][e.lid] = e.message;
                     });
                   }
-                } catch (e) {
-                  console.log("e :>> ", e);
-                }
+                } catch (e) {}
               });
             }
             cachedObject[currentModule] = cached;
@@ -173,7 +163,6 @@ export default class NotificationMessageComponent
           }
         }
       } catch (e) {
-        console.log("e :>> ", e);
         message = this.defaultMessages
           .find((e) => e.id == Errorid)
           ?.culture?.find((e) => e.lid == lid)?.message;
@@ -308,25 +297,18 @@ export default class NotificationMessageComponent
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
-    const currentMenu = LocalStorageUtil.getCurrentMenu();
-    const currentModule = currentMenu?.ownerId || "1";
-
+    const owner = currentPage.owner;
+    const ownerUrl = currentPage.ownerUrl;
+    const currentModule = owner == "external" ? ownerUrl : "/";
     try {
-      const cached = JSON.parse(localStorage.getItem("errorKeys"));
-      if (cached && cached[currentModule]) {
-        const messageData = cached[currentModule].values[errorid];
-        if (messageData) {
-          const currentDate = new Date().getTime();
-
-          if (currentDate - cached[currentModule].date < 3600 * 1000 * 24) {
-            return messageData.messageType;
-          }
-        }
+      const cachedItem = this.checkErrorCode(String(errorid), currentModule);
+      if (cachedItem) {
+        return cachedItem.messageType;
       } else {
         let url;
         //@ts-ignore
 
-        if (currentModule == "1") {
+        if (currentModule == "/") {
           url = HttpUtil.formatString(
             this.options.culture.generalErrorMessages,
             {
@@ -335,7 +317,7 @@ export default class NotificationMessageComponent
           );
         } else {
           url = HttpUtil.formatString(
-            currentPage.ownerUrl + this.options.method.errorMessages,
+            ownerUrl + this.options.method.errorMessages,
             {
               rKey: this.options.rKey,
             }
@@ -368,9 +350,7 @@ export default class NotificationMessageComponent
                     cached.values[i.id]["messages"][e.lid] = e.message;
                   });
                 }
-              } catch (e) {
-                console.log("e :>> ", e);
-              }
+              } catch (e) {}
             });
           }
           cachedObject[currentModule] = cached;
