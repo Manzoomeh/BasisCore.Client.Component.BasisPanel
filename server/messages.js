@@ -84,7 +84,7 @@ router.get("/:rKey/errorMessages", function (req, res) {
         culture: [
           {
             lid: 1.0,
-            message: "تست",
+            message: "تست تمپلیت شرکت {$}",
           },
           {
             lid: 2.0,

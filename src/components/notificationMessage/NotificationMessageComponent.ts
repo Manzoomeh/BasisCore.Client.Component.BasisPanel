@@ -82,7 +82,8 @@ export default class NotificationMessageComponent
     const owner = currentPage.owner;
     const ownerUrl = currentPage.ownerUrl;
     const currentModule = owner == "external" ? ownerUrl : "/";
-    const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
+    const { Message, Errorid, Lid, Type, templateValue } =
+      this.messageQueue.shift();
     let message = Message;
     let type = Type;
     let lid = Lid || 1;
@@ -169,8 +170,11 @@ export default class NotificationMessageComponent
         type = this.defaultMessages.find((e) => e.id == Errorid)?.messageType;
       }
     }
+    console.log("message :>> ", message);
     if (message) {
-      this.messageActionCases.get(type)(message);
+      this.messageActionCases.get(type)(
+        message.replace("{$}", templateValue || "")
+      );
     }
   }
   showInfoMessage(message: string) {
@@ -387,13 +391,14 @@ export default class NotificationMessageComponent
   public async NotificationMessageMethod(
     Errorid: string,
     Lid: number,
-    Type: number,
-    Message?: string
+    Type?: number,
+    Message?: string,
+    templateValue?: string
   ) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
-    this.messageQueue.push({ Errorid, Lid, Type, Message });
+    this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue });
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();
