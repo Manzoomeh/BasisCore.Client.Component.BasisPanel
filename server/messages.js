@@ -84,7 +84,21 @@ router.get("/:rKey/errorMessages", function (req, res) {
         culture: [
           {
             lid: 1.0,
-            message: "تست تمپلیت شرکت {$}",
+            message: "تست تمپلیت شرکت ${usedforid}",
+          },
+          {
+            lid: 2.0,
+            message: "test",
+          },
+        ],
+      },
+      {
+        id: 7.0,
+
+        culture: [
+          {
+            lid: 1.0,
+            message: "تست تمپلیت شرکت ${param1} و ${param2}",
           },
           {
             lid: 2.0,
@@ -94,7 +108,6 @@ router.get("/:rKey/errorMessages", function (req, res) {
       },
     ],
   };
-
   res.json(errors);
 });
 

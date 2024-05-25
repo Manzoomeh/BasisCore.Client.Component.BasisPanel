@@ -170,11 +170,18 @@ export default class NotificationMessageComponent
         type = this.defaultMessages.find((e) => e.id == Errorid)?.messageType;
       }
     }
-    console.log("message :>> ", message);
     if (message) {
-      this.messageActionCases.get(type)(
-        message.replace("{$}", templateValue || "")
-      );
+      const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
+        if (
+          templateValue &&
+          Object.keys(templateValue).find((e) => e == value)
+        ) {
+          return templateValue[value];
+        } else {
+          return "";
+        }
+      });
+      this.messageActionCases.get(type)(newText);
     }
   }
   showInfoMessage(message: string) {
