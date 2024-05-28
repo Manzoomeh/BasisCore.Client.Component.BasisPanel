@@ -16,24 +16,76 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    let topPosition = 0
-    const hasSidebar = this.owner.node.getAttribute("has-sidebar") 
-    if(hasSidebar== "true" && this.options.culture.deviceId == 2){
-      topPosition = 50
+    let topPosition = 0;
+    const hasSidebar = this.owner.node.getAttribute("has-sidebar");
+    if (hasSidebar == "true" && this.options.culture.deviceId == 2) {
+      topPosition = 50;
     }
+
+    this.container.setAttribute("data-bc-bp-widget-container-drag", "");
+    this.container.setAttribute("id", String(this.param.id));
+    const closeBtn = this.container.querySelector(
+      "[data-bc-widget-btn-close]"
+    ) as HTMLElement;
+    console.log("heree", closeBtn);
+    closeBtn.setAttribute("style", "display:none !important;z-index:10");
+    // closeBtn.addEventListener("mouseenter", (e) => {
+    //   console.log("1");
+    //   this.container.setAttribute("draggable", "false");
+    //   this.container.removeAttribute("data-bc-bp-widget-container-drag");
+    // });
+    // closeBtn.addEventListener("mouseleave", (e) => {
+    //   console.log("2");
+
+    //   this.container.setAttribute("draggable", "true");
+    //   this.container.setAttribute("data-bc-bp-widget-container-drag", "");
+    // });
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const disableWidgets = document.querySelector(
+        "[data-bc-page-widget-disableList]"
+      );
+      console.log("disableWidgets :>> ", disableWidgets);
+      try {
+        this.removeAsync();
+        console.log("hhkk");
+        const widgetElement = document.createElement("div");
+        const container = document.createElement("div");
+
+        const widgetIcon = document.createElement("img");
+        widgetElement.setAttribute("draggable", "true");
+        widgetElement.setAttribute("id", String(this.param.id));
+        widgetElement.setAttribute("pallete-widget-element", "");
+        widgetIcon.setAttribute(
+          "src",
+          this.param.icon ? this.param.icon : "asset/images/no_icon.png"
+        );
+        container.appendChild(document.createTextNode(this.param.title));
+        container.appendChild(widgetIcon);
+        widgetElement.appendChild(container);
+
+        widgetElement.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", JSON.stringify(this.param));
+        });
+
+        disableWidgets.appendChild(widgetElement);
+      } catch (e) {
+        console.log("e :>> ", e);
+      }
+    });
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     const cell = parent.offsetWidth / 12;
-
+    console.log("cell :>> ", cell, parent.offsetWidth);
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
     (this.container as HTMLElement).style.top = `${
       this.param.y * cell + (parent.clientTop + topPosition)
     }px`;
-   
-    
+
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     // if (this.deviceId == 2) {
@@ -49,7 +101,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     //   span.textContent = `${this.param.id.toString()}`;
     //   li.appendChild(span);
     //   this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
-    // }    
+    // }
 
     this.title = this.param.title;
 
@@ -116,9 +168,14 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   private async removeAsync(): Promise<void> {
-    await this.owner.disposeAsync();
+    console.log("this.owner.com :>> ", this.owner.manager);
+    try {
+      await this.owner.disposeAsync();
+    } catch (e) {
+      console.log("e :>> ", e);
+    }
     this.container.remove();
-    this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
+    // this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
 
   private async addToDashboard(): Promise<void> {

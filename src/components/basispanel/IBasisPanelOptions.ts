@@ -48,6 +48,7 @@ interface IPanelPartMethodOptions {
   userNoName: string;
   menu: string;
   page: string;
+  saveWidgets: string;
   sidebarMenu: string;
   widget: string;
   errorMessages: string;

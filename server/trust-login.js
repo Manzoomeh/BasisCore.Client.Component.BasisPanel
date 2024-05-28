@@ -176,12 +176,14 @@ router.get("/:rKey/tempwidgets", function (req, res) {
   const result = [
     {
       id: 28,
-      widgetid: 2,
+      w: 6,
+      h: 6,
       title: "تصویر پنل کاربری",
     },
     {
       id: 29,
-      widgetid: 3,
+      w: 6,
+      h: 6,
       title: "ویرایش اطلاعات کاربری",
     },
   ];

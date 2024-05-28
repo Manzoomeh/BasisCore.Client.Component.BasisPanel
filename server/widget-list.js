@@ -7,14 +7,18 @@ const widgets = [
     id: "userWidget1.html",
     title: "ویجت داشبورد",
     name: "userWidget1",
-    icon :"asset/images/reminder_1.png"
+    w: 12,
+    h: 4,
+    icon: "asset/images/reminder_1.png",
   },
   {
     id: "external-file.html",
     title: "اکسترنال ویجت",
     name: "externalFile",
+    w: 6,
+    h: 4,
     container: "widget",
-    icon :"asset/images/reminders_1.png"
+    icon: "asset/images/reminders_1.png",
   },
 ];
 
@@ -25,5 +29,9 @@ router.get("/:rkey/:pageId", function (req, res) {
 router.post("/:rkey/:pageId", function (req, res) {
   // console.log(req.body);
   res.json(true);
+});
+router.post("/saveWidgets/:rkey/:pageId", function (req, res) {
+  // console.log(req.body);
+  res.json({ errorid: 3, message: "successful" });
 });
 module.exports = router;
