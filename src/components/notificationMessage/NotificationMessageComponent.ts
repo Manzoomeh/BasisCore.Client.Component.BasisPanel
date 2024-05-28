@@ -41,6 +41,10 @@ export default class NotificationMessageComponent
         ],
       },
     ];
+    const cached = localStorage.getItem("errorKeys");
+    if (!cached) {
+      this.getGeneralErrors();
+    }
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("message", this);
@@ -48,6 +52,45 @@ export default class NotificationMessageComponent
 
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
+  }
+  private async getGeneralErrors() {
+    const url = HttpUtil.formatString(
+      this.options.culture.generalErrorMessages,
+      {
+        rKey: this.options.rKey,
+      }
+    );
+    const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
+    if (res) {
+      const cachedObject = JSON.parse(localStorage.getItem("errorKeys")) || {};
+      const cached = cachedObject["/"] || {};
+      cached.date = new Date().getTime();
+
+      if (cached.v != res.v) {
+        cached.v = res.v;
+        cached.values = {};
+
+        res.messages.map((i) => {
+          try {
+            if (i.id) {
+              cached.values[i.id] = {
+                messageType: i.messageType,
+                messages: {},
+              };
+              i.culture.map((e) => {
+                cached.values[i.id]["messages"][e.lid] = e.message;
+              });
+            }
+          } catch (e) {}
+        });
+      }
+      cachedObject["/"] = cached;
+      localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+    }
   }
   public checkErrorCode(errorid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
