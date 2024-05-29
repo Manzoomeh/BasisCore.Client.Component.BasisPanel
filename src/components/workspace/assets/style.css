@@ -10,12 +10,7 @@
   cursor: pointer;
   position: relative;
 }
-[pallete-widget-element] div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+
 [data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-close] {
   float: left;
   margin-left: 60px;
