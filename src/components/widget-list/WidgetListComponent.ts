@@ -584,6 +584,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                   "POST",
                   this.options.checkRkey,
                   {
+                    //@ts-ignore
                     widgetid: data.widgetid,
                   }
                 );
@@ -929,6 +930,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           "POST",
           this.options.checkRkey,
           {
+            //@ts-ignore
             widgetid: widgetList.widgetid,
           }
         );
