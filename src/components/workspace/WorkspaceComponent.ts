@@ -51,7 +51,14 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         LocalStorageUtil.setCurrentPage(pageParam.pageId, pageParam.owner);
         const currentState = LocalStorageUtil.getLastState();
         const pageName = pageParam.owner;
-        history.pushState(currentState, "", `/${pageName}/${pageParam.pageId}`);
+        console.log(`/${pageName}/${pageParam.pageId}`, currentState);
+        history.pushState(
+          currentState,
+          "",
+          `${
+            this.options.urlPrefix ? this.options.urlPrefix : ""
+          }/${pageName}/${pageParam.pageId}`
+        );
       }
       const doc = this.owner.toNode(
         `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`

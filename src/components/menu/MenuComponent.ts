@@ -111,10 +111,11 @@ export default class MenuComponent
     return menu ? this.tryLoadPage(pageId, args) : false;
   }
 
-  public tryLoadPage(pageId: string, args?: any): boolean {
+  public tryLoadPage(pageId: string | number, args?: any): boolean {
     let retVal = false;
+    const newPageId = typeof pageId === "string" ? pageId : pageId.toString();
     if (this.current) {
-      const menuItem = this.current.pageLookup.get(pageId);
+      const menuItem = this.current.pageLookup.get(newPageId);
       if (menuItem) {
         //update ui
         this.ul
@@ -134,7 +135,7 @@ export default class MenuComponent
         li?.setAttribute("data-bc-menu-active", "");
         //show page
         const newParam: IPageLoaderParam = {
-          pageId: pageId,
+          pageId: newPageId,
           owner: menuItem.owner,
           ownerId: menuItem.ownerId,
           ownerUrl: menuItem.ownerUrl,

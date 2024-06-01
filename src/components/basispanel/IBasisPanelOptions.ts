@@ -22,6 +22,7 @@ export default interface IBasisPanelOptions {
   addtoDashboard: string;
   removeFromDashbaord: string;
   tempwidgets: string;
+  urlPrefix?: string;
 }
 
 interface IUrlCollectionOption {
@@ -61,7 +62,7 @@ export interface ICultureOptions {
   labels: ILabels;
 }
 
-export type IDirection =  "leftToRight" | "rightToLeft";
+export type IDirection = "leftToRight" | "rightToLeft";
 
 export interface ILabels {
   userTitle: string;
@@ -83,4 +84,3 @@ export interface ILabels {
   lightModeTitle: string;
   darkModeTitle: string;
 }
-
