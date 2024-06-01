@@ -122,9 +122,14 @@ export default class NotificationMessageComponent
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
-    const owner = currentPage.owner;
+
     const ownerUrl = currentPage.ownerUrl;
-    const currentModule = owner == "external" ? ownerUrl : "/";
+    const currentModule =
+      this.options.baseUrl.business == currentPage.ownerUrl ||
+      this.options.baseUrl.corporate == currentPage.ownerUrl ||
+      this.options.baseUrl.profile == currentPage.ownerUrl
+        ? "/"
+        : ownerUrl;
     const { Message, Errorid, Lid, Type, templateValue } =
       this.messageQueue.shift();
     let message = Message;
