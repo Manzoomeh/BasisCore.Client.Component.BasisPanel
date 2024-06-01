@@ -22,17 +22,32 @@
       show notification type 3
     </button>
   </div>
-  <div style="width: 300px; margin-block: 10px">
-    <button id="btn-ajax" onclick="click_notification_type_7(this)">
-      show notification no type
-    </button>
-  </div>
+
   <div style="width: 300px; margin-block: 10px">
     <button
       id="btn-ajax"
       onclick="click_notification_with_all_parameters(this)"
     >
       show notification with all parameters
+    </button>
+  </div>
+
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_external(this)">
+      show notification with external api
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button id="btn-ajax" onclick="click_notification_with_template(this)">
+      show notification with template
+    </button>
+  </div>
+  <div style="width: 300px; margin-block: 10px">
+    <button
+      id="btn-ajax"
+      onclick="click_notification_with_template_2parameters(this)"
+    >
+      show notification with template and 2 parameters
     </button>
   </div>
   <div style="width: 300px; margin-block: 10px">
@@ -101,13 +116,27 @@
     const message = pagesList_component.owner.dc.resolve("message");
     message.NotificationMessageMethod(3, 2);
   }
-  function click_notification_type_7() {
-    const message = pagesList_component.owner.dc.resolve("message");
-    message.NotificationMessageMethod(7, 1);
-  }
+
   function click_notification_with_all_parameters() {
     const message = pagesList_component.owner.dc.resolve("message");
     message.NotificationMessageMethod(4, 1, 3, "تست پارامتر ها");
+  }
+  function click_notification_with_template_2parameters() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(8, 1, null, null, {
+      param1: "منظومه نگاران",
+      param2: "basisfly",
+    });
+  }
+  function click_notification_with_template() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(8, 1, null, null, {
+      param1: "منظومه نگاران",
+    });
+  }
+  function click_notification_external() {
+    const message = pagesList_component.owner.dc.resolve("message");
+    message.NotificationMessageMethod(7, 1);
   }
   async function testGetMessageTypeByErrorId() {
     const message = pagesList_component.owner.dc.resolve("message");

@@ -41,6 +41,10 @@ export default class NotificationMessageComponent
         ],
       },
     ];
+    const cached = localStorage.getItem("errorKeys");
+    if (!cached) {
+      this.getGeneralErrors();
+    }
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("message", this);
@@ -48,6 +52,45 @@ export default class NotificationMessageComponent
 
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
+  }
+  private async getGeneralErrors() {
+    const url = HttpUtil.formatString(
+      this.options.culture.generalErrorMessages,
+      {
+        rKey: this.options.rKey,
+      }
+    );
+    const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "GET",
+      this.options.checkRkey
+    );
+    if (res) {
+      const cachedObject = JSON.parse(localStorage.getItem("errorKeys")) || {};
+      const cached = cachedObject["/"] || {};
+      cached.date = new Date().getTime();
+
+      if (cached.v != res.v) {
+        cached.v = res.v;
+        cached.values = {};
+
+        res.messages.map((i) => {
+          try {
+            if (i.id) {
+              cached.values[i.id] = {
+                messageType: i.messageType,
+                messages: {},
+              };
+              i.culture.map((e) => {
+                cached.values[i.id]["messages"][e.lid] = e.message;
+              });
+            }
+          } catch (e) {}
+        });
+      }
+      cachedObject["/"] = cached;
+      localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+    }
   }
   public checkErrorCode(errorid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
@@ -79,10 +122,16 @@ export default class NotificationMessageComponent
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
-    const owner = currentPage.owner;
+
     const ownerUrl = currentPage.ownerUrl;
-    const currentModule = owner == "external" ? ownerUrl : "/";
-    const { Message, Errorid, Lid, Type } = this.messageQueue.shift();
+    const currentModule =
+      this.options.baseUrl.business == currentPage.ownerUrl ||
+      this.options.baseUrl.corporate == currentPage.ownerUrl ||
+      this.options.baseUrl.profile == currentPage.ownerUrl
+        ? "/"
+        : ownerUrl;
+    const { Message, Errorid, Lid, Type, templateValue } =
+      this.messageQueue.shift();
     let message = Message;
     let type = Type;
     let lid = Lid || 1;
@@ -170,7 +219,17 @@ export default class NotificationMessageComponent
       }
     }
     if (message) {
-      this.messageActionCases.get(type)(message);
+      const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
+        if (
+          templateValue &&
+          Object.keys(templateValue).find((e) => e == value)
+        ) {
+          return templateValue[value];
+        } else {
+          return "";
+        }
+      });
+      this.messageActionCases.get(type)(newText);
     }
   }
   showInfoMessage(message: string) {
@@ -387,13 +446,14 @@ export default class NotificationMessageComponent
   public async NotificationMessageMethod(
     Errorid: string,
     Lid: number,
-    Type: number,
-    Message?: string
+    Type?: number,
+    Message?: string,
+    templateValue?: string
   ) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
-    this.messageQueue.push({ Errorid, Lid, Type, Message });
+    this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue });
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();
