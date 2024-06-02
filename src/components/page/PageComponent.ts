@@ -15,6 +15,7 @@ export default abstract class PageComponent
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
+  private hasSidebar :boolean = false
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
@@ -34,11 +35,12 @@ export default abstract class PageComponent
       "[data-bc-widget-drop-area-container]"
     );
   }
-
+  
   public async initializeAsync(): Promise<void> {
     this.loaderParam = JSON.parse(
       await this.owner.getAttributeValueAsync("params")
     );
+    
     const url = HttpUtil.formatString(
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
@@ -70,7 +72,7 @@ export default abstract class PageComponent
       groupElement.setAttribute("run", "atclient");
       groupElement.setAttribute("name", groupInfo.groupName);
       groupElement.setAttribute("options", optionsName);
-
+     
       pageBody.appendChild(groupElement);
       const components = await this.owner.processNodesAsync([groupElement]);
       const groupContainer =
@@ -84,18 +86,30 @@ export default abstract class PageComponent
   }
 
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
+    
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
-
+    for (var i = 0; i < pageInfo.groups.length; i++) {
+      const groupInfo = pageInfo.groups[i];
+      groupInfo.widgets.forEach((widgetParam) => { 
+        if(widgetParam.container == "sidebar"){
+          this.hasSidebar = true
+        }
+      })
+    }
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
       const widgetParamList = groupInfo.widgets.map((widgetInfo) => {
         widgets.push(widgetInfo.y + widgetInfo.h);
-        return { ...widgetInfo, ...{ page: this.loaderParam } };
+      
+        return { ...widgetInfo, ...{ page: this.loaderParam } , "sidebar":this.hasSidebar};
       });
+    
       group.addWidgetAsync(...widgetParamList);
     }
+    const currentPageBody = this.container.querySelector('[data-bc-page-body=""]');
+    const pageBodyGroup = currentPageBody.querySelector("[data-bc-bp-group-container]") as HTMLElement
     const windowHeight = window.innerHeight;
     const cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
@@ -113,8 +127,12 @@ export default abstract class PageComponent
 
     if (cell * maxHeight > windowHeight - otherHeight) {
       (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
+      pageBodyGroup.style.height = `${cell * maxHeight}px`;
     } else {
       (pageBody as HTMLElement).style.height = `${
+        windowHeight - otherHeight
+      }px`;
+      pageBodyGroup.style.height = `${
         windowHeight - otherHeight
       }px`;
     }

@@ -206,6 +206,32 @@
             }
         ]
     },
+    "ticket": {
+        "container": "container",
+        "groups": [
+            {
+                "groupName": "group1",
+                "options": {
+                    "repositories": {
+                        "bc.grid": "/assets/js/basiscore.grid.component.js"
+                    },
+                    "settings": {}
+                },
+                "widgets": [
+                    {
+                        "id": "userWidget1.html",
+                        "title": "فایل های من",
+                        "name": "myFiles",
+                        "container": "fullPageWidget",
+                        "x": 0,
+                        "y": 0,
+                        "w": 12,
+                        "h": 2
+                    }
+                ]
+            }
+        ]
+    },
     "calendare": {
         "container": "page",
         "groups": [
@@ -242,4 +268,5 @@
             }
         ]
     }
+   
 }

@@ -8,6 +8,7 @@ import { IUserDefineComponent } from "basiscore";
 import { ISource } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
 import PageWidgetComponent from "../PageWidgetComponent";
+import { sidebar } from "../../../ComponentLoader";
 
 export default class WidgetComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
@@ -15,6 +16,11 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   public async initializeAsync(): Promise<void> {
+    let topPosition = 0
+    const hasSidebar = this.owner.node.getAttribute("has-sidebar") 
+    if(hasSidebar== "true" && this.options.culture.deviceId == 2){
+      topPosition = 50
+    }
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
@@ -24,8 +30,10 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
     (this.container as HTMLElement).style.top = `${
-      this.param.y * cell + parent.clientTop
+      this.param.y * cell + (parent.clientTop + topPosition)
     }px`;
+   
+    
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     // if (this.deviceId == 2) {

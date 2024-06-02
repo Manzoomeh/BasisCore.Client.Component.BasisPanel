@@ -76,15 +76,15 @@ export default class ProfileComponent extends BasisPanelChildComponent {
           .querySelector(".active-corporate")
           ?.classList.remove("active-corporate");
 
-        if (this.deviceId == 2) {
-          this.container
-            .closest("[data-bc-bp-header-levels-container]")
-            .setAttribute("data-active", "user");
-          this.container
-            .closest("[data-bc-bp-header-levels]")
-            .classList.remove("active");
-        }
-      });
+      if (this.deviceId == 2) {
+        this.container.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "user");
+        this.container.closest("[data-bc-bp-header-levels]").classList.remove("active");
+      }
+    });
+    if(this.options.store.existence == false){
+      const store =  this.container.querySelector("[data-bc-store-wrapper]")
+      store.remove()
+    }
 
     return Promise.resolve();
   }

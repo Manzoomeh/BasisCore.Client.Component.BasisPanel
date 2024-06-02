@@ -22,6 +22,8 @@ export default interface IBasisPanelOptions {
   addtoDashboard: string;
   removeFromDashbaord: string;
   tempwidgets: string;
+  serviceLink?: string;
+  businessLink?: string;
   urlPrefix?: string;
 }
 
@@ -49,6 +51,7 @@ interface IPanelPartMethodOptions {
   page: string;
   sidebarMenu: string;
   widget: string;
+  errorMessages: string;
 }
 
 export interface ICheckRkeyOptions {
@@ -60,6 +63,7 @@ export interface ICultureOptions {
   direction: IDirection;
   deviceId: number | string;
   labels: ILabels;
+  generalErrorMessages: string;
 }
 
 export type IDirection = "leftToRight" | "rightToLeft";
@@ -67,9 +71,13 @@ export type IDirection = "leftToRight" | "rightToLeft";
 export interface ILabels {
   userTitle: string;
   logoutTitle: string;
+  logoutBtn: string;
+  logoutMessage: string;
+  cancelBtn: string;
   corporateTitle: string;
   corporateSearchPlaceholder: string;
   corporateBuy: string;
+  businessBuy: string;
   businessTitle: string;
   businessSearchPlaceholder: string;
   schedulerNoTask: string;

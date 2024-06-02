@@ -1,64 +1,128 @@
 <basis core="group" run="atclient">
-    <div data-bc-bp-main-header="" data-bc-bp-d2-main-header="" data-alertCount="0" data-sys-header="">
-        <div data-bc-bp-d2-header-right="">
-            <button type="button" data-bc-bp-header-more-opened="" data-bc-bp-d2-header-more-opened="">
-                <span data-bc-bp-d2-header-more-opened-line=""></span>
-                <span data-bc-bp-d2-header-more-opened-line=""></span>
-                <span data-bc-bp-d2-header-more-opened-line=""></span>
-                <span data-bc-bp-d2-header-more-opened-alert=""></span>
-            </button>
-            <nav data-bc-bp-header-more-container="" data-bc-bp-d2-header-more-container="">
-                <div data-bc-bp-d2-header-more-top="" data-sys-border-color="">
-                    <button type="button" data-bc-bp-header-more-closed="" data-bc-bp-d2-header-more-closed="">
-                        <span data-bc-bp-d2-header-more-closed-line=""></span>
-                        <span data-bc-bp-d2-header-more-closed-line=""></span>
-                    </button>
-                    <div data-bc-bp-header-items="" data-bc-bp-d2-header-items="">
-                        <div data-bc-bp-d2-header-items-left="" data-sys-border-color="">
-                            <basis core="component.basispanel.cart" run="atclient"></basis>
-                        </div>
-                        <div data-bc-bp-d2-header-items-right="" data-sys-border-color="">
-                            <basis core="component.basispanel.scheduler" run="atclient"></basis>
-                            <basis core="component.basispanel.notification" run="atclient"></basis>
-                        </div>
-                    </div>
-                    <div class="clr"></div>
-                </div>
-                <basis core="component.basispanel.menu" run="atclient"></basis>
-                <div class="clr"></div>
-                <div data-bc-bp-d2-header-more-bottom="" data-sys-border-color="">
-                    <basis core="component.basispanel.logout" run="atclient"></basis>
-                    <basis core="component.basispanel.theme" run="atclient"></basis>
-                </div>
-            </nav>
-        </div>
-        <div data-bc-bp-d2-header-center="">
-            <div data-bc-bp-header-levels="" data-bc-bp-d2-header-levels="">
-                <div data-bc-bp-header-levels-back="" data-bc-bp-d2-header-levels-back=""></div>
-                <div data-bc-bp-header-levels-opened="" data-bc-bp-d2-header-levels-opened="">
-                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.36016 4.51196C4.16 4.76216 3.77945 4.76216 3.57929 4.51196L0.619605 0.812348C0.357699 0.484966 0.590786 0 1.01004 0H6.92941C7.34867 0 7.58175 0.484966 7.31985 0.812348L4.36016 4.51196Z" fill="#767676"/>
-                    </svg>
-                </div>
-                <div data-bc-bp-header-levels-container="" data-bc-bp-d2-header-levels-container="">
-                    <div data-bc-bp-d2-header-levels-item="" data-sys-border-color="">
-                        <basis core="component.basispanel.profile" run="atclient"></basis>
-                        <div class="clr"></div>
-                    </div>
-                    <div data-bc-bp-d2-header-levels-item="">
-                        <basis core="component.basispanel.corporate" run="atclient"></basis>
-                        <div class="clr"></div>
-                        <basis core="component.basispanel.business" run="atclient"></basis>
-                        <div class="clr"></div>
-                    </div>
-                </div>
+  <basis core="component.basispanel.message" run="atclient"></basis>
+
+  <div
+    data-bc-bp-main-header=""
+    data-bc-bp-d2-main-header=""
+    data-alertCount="0"
+    data-sys-header=""
+  >
+    <div data-bc-bp-d2-header-right="">
+      <button
+        type="button"
+        data-bc-bp-header-more-opened=""
+        data-bc-bp-d2-header-more-opened=""
+      >
+        <span
+          data-bc-bp-d2-header-more-opened-line=""
+          data-sys-burger-menu=""
+        ></span>
+        <span
+          data-bc-bp-d2-header-more-opened-line=""
+          data-sys-burger-menu=""
+        ></span>
+        <span
+          data-bc-bp-d2-header-more-opened-line=""
+          data-sys-burger-menu=""
+        ></span>
+        <span
+          data-bc-bp-d2-header-more-opened-alert=""
+          data-sys-burger-menu=""
+        ></span>
+      </button>
+      <nav
+        data-bc-bp-header-more-container=""
+        data-bc-bp-d2-header-more-container=""
+        data-sys-popup=""
+      >
+        <div data-bc-bp-d2-header-more-top="" data-sys-border-color="">
+          <button
+            type="button"
+            data-bc-bp-header-more-closed=""
+            data-bc-bp-d2-header-more-closed=""
+          >
+            <span
+              data-bc-bp-d2-header-more-closed-line=""
+              data-sys-burger-menu=""
+            ></span>
+            <span
+              data-bc-bp-d2-header-more-closed-line=""
+              data-sys-burger-menu=""
+            ></span>
+          </button>
+          <div data-bc-bp-header-items="" data-bc-bp-d2-header-items="">
+            <div data-bc-bp-d2-header-items-left="" data-sys-border-color="">
+              <basis core="component.basispanel.cart" run="atclient"></basis>
             </div>
+            <div data-bc-bp-d2-header-items-right="" data-sys-border-color="">
+              <basis
+                core="component.basispanel.scheduler"
+                run="atclient"
+              ></basis>
+              <basis
+                core="component.basispanel.notification"
+                run="atclient"
+              ></basis>
+            </div>
+          </div>
+          <div class="clr"></div>
         </div>
-        <div data-bc-bp-d2-header-left="">
-            <div data-bc-bp-logo="" data-bc-bp-d2-logo=""><a href="" data-sys-header-logo=""></a></div>
-        </div>
+        <basis core="component.basispanel.menu" run="atclient"></basis>
         <div class="clr"></div>
+        <div data-bc-bp-d2-header-more-bottom="" data-sys-border-color="">
+          <basis core="component.basispanel.logout" run="atclient"></basis>
+          <basis core="component.basispanel.theme" run="atclient"></basis>
+        </div>
+      </nav>
     </div>
-    <basis core="component.basispanel.workspace" run="atclient"></basis>
-    <!-- <basis core="component.basispanel.footer" run="atclient"></basis> -->
+    <div data-bc-bp-d2-header-center="">
+      <div data-bc-bp-header-levels="" data-bc-bp-d2-header-levels="">
+        <div
+          data-bc-bp-header-levels-back=""
+          data-bc-bp-d2-header-levels-back=""
+        ></div>
+        <div
+          data-bc-bp-header-levels-opened=""
+          data-bc-bp-d2-header-levels-opened=""
+        >
+          <svg
+            width="8"
+            height="5"
+            viewBox="0 0 8 5"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.36016 4.51196C4.16 4.76216 3.77945 4.76216 3.57929 4.51196L0.619605 0.812348C0.357699 0.484966 0.590786 0 1.01004 0H6.92941C7.34867 0 7.58175 0.484966 7.31985 0.812348L4.36016 4.51196Z"
+              fill="#767676"
+            />
+          </svg>
+        </div>
+        <div
+          data-bc-bp-header-levels-container=""
+          data-bc-bp-d2-header-levels-container=""
+          data-sys-levels=""
+        >
+          <div data-bc-bp-d2-header-levels-item="" data-sys-border-color="">
+            <basis core="component.basispanel.profile" run="atclient"></basis>
+            <div class="clr"></div>
+          </div>
+          <div data-bc-bp-d2-header-levels-item="">
+            <basis core="component.basispanel.corporate" run="atclient"></basis>
+            <div class="clr"></div>
+            <basis core="component.basispanel.business" run="atclient"></basis>
+            <div class="clr"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-bc-bp-d2-header-left="">
+      <div data-bc-bp-logo="" data-bc-bp-d2-logo="">
+        <a href="" data-sys-header-logo1=""></a>
+      </div>
+    </div>
+    <div class="clr"></div>
+  </div>
+  <basis core="component.basispanel.workspace" run="atclient"></basis>
+  <!-- <basis core="component.basispanel.footer" run="atclient"></basis> -->
 </basis>

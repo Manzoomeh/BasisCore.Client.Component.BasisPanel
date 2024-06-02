@@ -8,6 +8,7 @@
   <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
   <!-- <link href="assets/css/styles-1.css" rel="stylesheet" /> -->
   <link href="asset/css/styles-1.css" rel="stylesheet" />
+  <link href="https://basispanel.ir/asset/css/icons.css?v=12" rel="stylesheet" type="text/css" />
   <style>
     body {
       background: var(--light_blue);
@@ -32,6 +33,7 @@
     const host = {
       settings: {
         "connection.web.demo": "/server/dbsource/demo",
+        "connection.websocket.simple": "ws://localhost:8084/list",
         "basispanel.option": {
           rKey: "C4F54E8F",
           avatar: "https://trust-login.com",
@@ -56,7 +58,7 @@
             light: "/asset/css/light.css",
             dark: "/asset/css/dark.css",
             addThemeUrl: "/server/trust/${rKey}/editcolormode",
-            defaultTheme: "/server/trust/${rKey}/visualmode"
+            defaultTheme: "/server/trust/${rKey}/visualmode",
           },
           method: {
             userImage: "/${rKey}/users/${profile.thumbnail}",
@@ -65,8 +67,8 @@
             menu: "/${rKey}/menu?level=${level}",
             page: "/${rKey}/page/${pageId}",
             sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
-            widget: "/${rKey}/widget/${widgetId}"
-
+            widget: "/${rKey}/widget/${widgetId}",
+            errorMessages: "/${rKey}/errorMessages",
           },
           checkRkey: {
             url: "/server/trust/checkrkey/${rKey}",
@@ -79,55 +81,50 @@
             labels: {
               userTitle: "نام کاربری",
               logoutTitle: "خارج شدن",
+              logoutBtn: "خروج از اکانت",
+              logoutMessage: "آیا میخواهید از اکانت خود خارج شوید؟",
+              cancelBtn: "انصراف",
               corporateTitle: "شرکت‌ها",
               corporateSearchPlaceholder: "جستجوی شرکت ...",
               corporateBuy: "خرید سرویس",
               businessTitle: "کسب‌و‌کارها",
               businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
               schedulerNoTask: "در انتظار کار جدید",
+              schedulerCountTask: "",
               addToDashboardTooltip: "افزودن به داشبورد",
               dragAndDropMessage: "ویجت‌ها را بکشید و رها کنید",
               widgetsTitle: "ویجت‌ها",
               widgetsTab: "ویجت‌ها",
               dashboardWidgetsTab: "ویجت‌ میزکار",
               widgetsSettingButton: "ذخیره تغییرات",
-              storeTitle: "فروشگاه"
-
-              // userTitle: "user name",
-              // logoutTitle: "logout",
-              // corporateTitle: "companies",
-              // corporateSearchPlaceholder: "company search ...",
-              // corporateBuy: "buy service",
-              // businessTitle: "businesses",
-              // businessSearchPlaceholder: "business search ...",
-              // schedulerNoTask: "waiting for new task",
-              // addToDashboardTooltip: "add to dashboard",
-              // dragAndDropMessage: "drag and drop widgets",
-              // widgetsTitle: "widgets",
-              // widgetsTab: "widgets",
-              // dashboardWidgetsTab: "desk widgets",
-              // widgetsSettingButton: "save changes",
+              storeTitle: "فروشگاه",
+              lightModeTitle: "",
+              darkModeTitle: "",
             },
+
+            generalErrorMessages: "/server/messages/${rKey}/errorMessages",
           },
           logout: {
             url: "/server/trust/${rKey}/logout",
             cookieName: "rkey",
-            successId: 4,
-            dmnToken: "asdfr",
+            errorIDsForRedirect: [4, 5],
+            getDmnTokenUrl: "/server/trust/getDmnToken",
             defaultRedirectUrl: "https://www.google.com",
           },
           cart: {
-            url: "https://www.google.com"
+            url: "https://www.google.com",
           },
           store: {
-            url: "https://www.google.com"
+            existence: true,
+            url: "https://www.google.com",
           },
           notification: {
             providers: [
               {
+                rKey: "C4F54E8F",
                 name: "messages",
                 title: "پیام ها",
-                url: "/server/notifications/${rKey}/unread-messages",
+                // url: "/server/notifications/${rKey}/unread-messages",
                 config: {
                   filter: "none",
                   paging: null,
@@ -146,59 +143,60 @@
                 },
                 link: "#",
               },
-              {
-                name: "notes",
-                title: "یادداشت ها",
-                url: "/server/notifications/${rKey}/new-notes",
-                config: {
-                  filter: "none",
-                  paging: null,
-                  information: false,
-                  columns: {
-                    title: "ایجاد کننده",
-                    date: "تاریخ",
-                    action: {
-                      title: "عملیات",
-                      cellMaker: (row, data, td) =>
-                        `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
-                    },
-                  },
-                  noData: "یادداشت جدیدی ندارید",
-                  rowNumber: "#",
-                },
-                link: "#",
-              },
-              {
-                name: "tasks",
-                title: "تسک ها",
-                url: "/server/notifications/${rKey}/new-tasks",
-                config: {
-                  filter: "none",
-                  paging: null,
-                  information: false,
-                  columns: {
-                    img: {
-                      source: "img",
-                      title: "تصویر",
-                      cellMaker: (row, data, td) =>
-                        `<img src="${row.img}" width="40" height="40" />`,
-                    },
-                    title: "پروژه",
-                    date: "تاریخ",
-                    action: {
-                      title: "عملیات",
-                      cellMaker: (row, data, td) =>
-                        `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`,
-                    },
-                  },
-                  noData: "تسک جدیدی ندارید",
-                  rowNumber: "#",
-                },
-                link: "#",
-              },
+              // {
+              //   name: "notes",
+              //   title: "یادداشت ها",
+              //   url: "/server/notifications/${rKey}/new-notes",
+              //   config: {
+              //     filter: "none",
+              //     paging: null,
+              //     information: false,
+              //     columns: {
+              //       title: "ایجاد کننده",
+              //       date: "تاریخ",
+              //       action: {
+              //         title: "عملیات",
+              //         cellMaker: (row, data, td) =>
+              //           `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a><a title="Share" onclick="onClickRowShareBtn(this)"><i class="lni lni-share"></i></a><a title="Download" onclick="onClickRowDownloadBtn(this)"><i class="lni lni-cloud-download"></i></a><a title="Remove" onclick="onClickRowRemoveBtn(this)"><i class="lni lni-trash"></i></a></div>`,
+              //       },
+              //     },
+              //     noData: "یادداشت جدیدی ندارید",
+              //     rowNumber: "#",
+              //   },
+              //   link: "#",
+              // },
+              // {
+              //   name: "tasks",
+              //   title: "تسک ها",
+              //   url: "/server/notifications/${rKey}/new-tasks",
+              //   config: {
+              //     filter: "none",
+              //     paging: null,
+              //     information: false,
+              //     columns: {
+              //       img: {
+              //         source: "img",
+              //         title: "تصویر",
+              //         cellMaker: (row, data, td) =>
+              //           `<img src="${row.img}" width="40" height="40" />`,
+              //       },
+              //       title: "پروژه",
+              //       date: "تاریخ",
+              //       action: {
+              //         title: "عملیات",
+              //         cellMaker: (row, data, td) =>
+              //           `<div class="icons"><a title="Edit" onclick="onClickRowEditBtn(this)"><i class="lni lni-pencil-alt"></i></a></div>`,
+              //       },
+              //     },
+              //     noData: "تسک جدیدی ندارید",
+              //     rowNumber: "#",
+              //   },
+              //   link: "#",
+              // },
             ],
           },
-          urlPrefix: "/panel",
+          serviceLink: "https://manzoomeh.ir/large-businesses?t=1",
+          businessLink: "https://manzoomeh.ir/large-businesses?t=2",
         },
       },
       repositories: {

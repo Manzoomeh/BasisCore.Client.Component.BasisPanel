@@ -1,8 +1,8 @@
 export default interface ILogoutOptions {
     url:string;
     cookieName?: string;
-    successId: number;
-    dmnToken: string;
+    errorIDsForRedirect: Array<number>;
+    getDmnTokenUrl: string;
     defaultRedirectUrl: string;
 }
 

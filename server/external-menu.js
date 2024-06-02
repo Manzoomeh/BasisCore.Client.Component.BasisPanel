@@ -7,7 +7,7 @@ router.get("/calender/:rKey/menu", function (req, res) {
       {
         title: "مدیریت پیام ها",
         nodes: [
-          { title: "لیست پیام ها", pid: 11 },
+          { title: "لیست پیام ها", pid: "default" },
           { title: "مدیریت برچسب ها", pid: 13 },
         ],
       },
@@ -23,7 +23,7 @@ router.get("/task/:rKey/menu", function (req, res) {
         title: "مدیریت تسک",
         nodes: [
           { title: "لیست پروژه ها", pid: 11 },
-          { title: "مدیریت پروژه ها", pid: 13 },
+          { title: "مدیریت پروژه ها", pid: "default" },
         ],
       },
     ],

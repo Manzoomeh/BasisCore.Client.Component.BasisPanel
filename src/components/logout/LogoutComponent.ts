@@ -23,20 +23,73 @@ export default class LogoutComponent extends BasisPanelChildComponent {
     }
     let eventContainer = this.container;
     if (this.deviceId == 2) {
-      eventContainer = this.container.querySelector("[data-bc-logout-icon]");
+      eventContainer = this.container.querySelector("[data-bc-logout-btn]");
+
+      const logoutIcon = this.container.querySelector("[data-bc-logout-icon]");
+      logoutIcon?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        this.container
+          .querySelector("[data-bc-bp-logout]")
+          .setAttribute("data-logout-confirm", "true");
+      });
+
+      const logoutCancel = this.container.querySelector(
+        "[data-bc-logout-cancel]"
+      );
+      logoutCancel?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        this.container
+          .querySelector("[data-bc-bp-logout]")
+          .setAttribute("data-logout-confirm", "");
+      });
+    } else {
+      eventContainer = this.container.querySelector("[data-bc-logout-btn]");
+      const logoutPopupContainer = this.container.querySelector(
+        "[data-bc-bp-logout-modal]"
+      );
+
+      const logout = this.container.querySelector(
+        "[data-bc-bp-logout-wrapper]"
+      );
+      logout?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        (logoutPopupContainer as HTMLElement).style.display = "block";
+      });
+
+      const logoutClosed = this.container.querySelectorAll(
+        "[data-bc-bp-logout-modal-closed]"
+      );
+      logoutClosed.forEach((element) => {
+        element.addEventListener("click", async (e) => {
+          e.preventDefault();
+          (logoutPopupContainer as HTMLElement).style.display = "none";
+        });
+      });
     }
+
     eventContainer?.addEventListener("click", async (e) => {
       e.preventDefault();
-      const url = HttpUtil.formatString(this.options.logout.url, {
+      const getDmnTokenUrl = HttpUtil.formatString(
+        this.options.logout.getDmnTokenUrl,
+        {
+          rKey: this.options.rKey,
+        }
+      );
+      const dmnToken = await HttpUtil.fetchDataAsync<IResponseDmnToken>(
+        getDmnTokenUrl,
+        "GET"
+      );
+
+      const logoutUrl = HttpUtil.formatString(this.options.logout.url, {
         rKey: this.options.rKey,
       });
-      const result = await HttpUtil.sendFormData<IResponseLogout>(
-        url,
+      const result = await HttpUtil.fetchDataAsync<IResponseLogout>(
+        logoutUrl,
         "POST",
-        `dmntoken=${this.options.logout.dmnToken}`
+        {"dmntoken": dmnToken.dmnToken}
       );
       const cookieName = this.options.logout.cookieName;
-      if (result.errorid == this.options.logout.successId) {
+      if (this.options.logout.errorIDsForRedirect?.includes(result.errorid)) {
         if (cookieName && cookieName != "") {
           const cookies = document.cookie.split(";");
           for (var i = 0; i < cookies.length; i++) {
@@ -118,4 +171,8 @@ interface IResponseLogout {
   message: string;
   errorid: number;
   redirectUrl?: string;
+}
+
+interface IResponseDmnToken {
+  dmnToken: string;
 }

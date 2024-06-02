@@ -39,6 +39,11 @@ export interface IResponseCheckRkey {
   checked: boolean;
 }
 
+export interface IModuleInfo {
+  owner: MenuOwnerType;
+  ownerUrl: string;
+}
+
 export interface IRoutingQueryString {
   category: MenuOwnerType;
   pageId: string;

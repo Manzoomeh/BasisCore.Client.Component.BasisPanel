@@ -54,7 +54,9 @@ export default class NotificationProvider implements INotificationProvider {
   }
 
   public initializeAsync(): Promise<void> {
-    return this.loadDataAsync();
+    // this.loadDataAsync();
+
+    return Promise.resolve();
   }
 
   public async loadDataAsync(): Promise<void> {

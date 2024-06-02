@@ -20,9 +20,13 @@ export default abstract class BasisPanelChildComponent
         labels: {
           userTitle: "نام کاربری",
           logoutTitle: "خارج شدن",
+          logoutBtn: "خروج از اکانت",
+          logoutMessage: "آیا میخواهید از اکانت خود خارج شوید؟",
+          cancelBtn: "انصراف",
           corporateTitle: "شرکت‌ها",
           corporateSearchPlaceholder: "جستجوی شرکت ...",
           corporateBuy: "خرید سرویس",
+          businessBuy:"خرید کسب‌وکار",
           businessTitle: "کسب‌و‌کارها",
           businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
           schedulerNoTask: "در انتظار کار جدید",
@@ -96,6 +100,9 @@ export default abstract class BasisPanelChildComponent
       const copyLayout = layout
         .replace("@userTitle", this.labels.userTitle)
         .replace("@logoutTitle", this.labels.logoutTitle)
+        .replace("@logoutBtn", this.labels.logoutBtn)
+        .replace("@logoutMessage", this.labels.logoutMessage)
+        .replace("@cancelBtn", this.labels.cancelBtn)
         .replace("@corporateTitle", this.labels.corporateTitle)
         .replace("@corporateDropDownTitle", this.labels.corporateTitle)
         // .replace("@corporateSearchPlaceholder", this.labels.corporateSearchPlaceholder)
