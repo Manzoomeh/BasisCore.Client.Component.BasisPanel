@@ -30,28 +30,25 @@ export default class MenuElementMaker {
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
     const tmpUL = document.createElement("ul");
-    const pageLookup = new Map<string, IMenuLoaderParam>();
-    this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
-    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes));
+    this.createMenu(tmpUL, menuInfo.nodes, menuParam);
+    return new MenuElement(menuParam, Array.from(tmpUL.childNodes));
   }
 
   private createMenu(
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    menuParam: IMenuLoaderParam
   ) {
     items.forEach((node) => {
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
-          this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
+          this.createPageMenuItem(node as IMenuPageInfo, menuParam)
         );
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
           this.createLevelMenuItem(
             node as IMenuLevelInfo,
             menuParam,
-            pageLookup,
             this.deviceId
           )
         );
@@ -63,7 +60,6 @@ export default class MenuElementMaker {
           this.createExternalMenuItem(
             node as IMenuExternalItemInfo,
             menuParam,
-            pageLookup,
             this.deviceId
           )
         );
@@ -74,8 +70,7 @@ export default class MenuElementMaker {
         ul.appendChild(
           this.createExternalMenuItemSingleItem(
             node as IMenuExternalItemInfo,
-            menuParam,
-            pageLookup
+            menuParam
           )
         );
       }
@@ -85,7 +80,6 @@ export default class MenuElementMaker {
   private createLevelMenuItem(
     node: IMenuLevelInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
     deviceId: number
   ): HTMLLIElement {
     const li = document.createElement("li");
@@ -94,7 +88,7 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
+    this.createMenu(innerUl, node.nodes, menuParam);
     li.appendChild(content);
     li.appendChild(innerUl);
     if (deviceId == 2) {
@@ -140,8 +134,7 @@ export default class MenuElementMaker {
 
   private createPageMenuItem(
     node: IMenuPageInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    menuParam: IMenuLoaderParam
   ): HTMLLIElement {
     const li = document.createElement("li");
     const content = document.createElement("a");
@@ -176,15 +169,13 @@ export default class MenuElementMaker {
         );
       }
     });
-    pageLookup.set(node.pid.toString(), menuParam);
     li.appendChild(content);
     return li;
   }
 
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    menuParam: IMenuLoaderParam
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
@@ -214,7 +205,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam);
       }
     });
     return li;
@@ -222,7 +213,6 @@ export default class MenuElementMaker {
   private createExternalMenuItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
     deviceId: number
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
@@ -298,7 +288,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam);
       }
     });
 

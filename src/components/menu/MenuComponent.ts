@@ -115,40 +115,37 @@ export default class MenuComponent
     let retVal = false;
     const newPageId = typeof pageId === "string" ? pageId : pageId.toString();
     if (this.current) {
-      const menuItem = this.current.pageLookup.get(newPageId);
-      if (menuItem) {
-        //update ui
-        this.ul
-          .querySelectorAll(`[data-bc-menu-active]`)
-          .forEach((x) => x.removeAttribute("data-bc-menu-active"));
-        const content = this.ul.querySelector(
-          `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`
-        );
-        const li = content?.closest("li");
-        const parent = content?.closest("[data-bc-bp-submenu]");
-        if (parent) {
-          parent
-            .closest("li")
-            .querySelector("[data-bc-level]")
-            .setAttribute("data-bc-menu-active", "");
-        }
-        li?.setAttribute("data-bc-menu-active", "");
-        //show page
-        const newParam: IPageLoaderParam = {
-          pageId: newPageId,
-          owner: menuItem.owner,
-          ownerId: menuItem.ownerId,
-          ownerUrl: menuItem.ownerUrl,
-          rKey: menuItem.rKey,
-          pageMethod: this.options.method.page,
-          arguments: args,
-        };
-        this.owner.setSource(
-          this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
-          newParam
-        );
-        retVal = true;
+      //update ui
+      this.ul
+        .querySelectorAll(`[data-bc-menu-active]`)
+        .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+      const content = this.ul.querySelector(
+        `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${this.current.param?.ownerId}"]`
+      );
+      const li = content?.closest("li");
+      const parent = content?.closest("[data-bc-bp-submenu]");
+      if (parent) {
+        parent
+          .closest("li")
+          .querySelector("[data-bc-level]")
+          .setAttribute("data-bc-menu-active", "");
       }
+      li?.setAttribute("data-bc-menu-active", "");
+      //show page
+      const newParam: IPageLoaderParam = {
+        pageId: newPageId,
+        owner: this.current.param.owner,
+        ownerId: this.current.param.ownerId,
+        ownerUrl: this.current.param.ownerUrl,
+        rKey: this.current.param.rKey,
+        pageMethod: this.options.method.page,
+        arguments: args,
+      };
+      this.owner.setSource(
+        this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
+        newParam
+      );
+      retVal = true;
     }
     return retVal;
   }
