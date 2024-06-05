@@ -92,9 +92,47 @@ export default class NotificationMessageComponent
       localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
     }
   }
-  public checkErrorCode(errorid: string, mid: string) {
+  public async checkErrorCode(errorid: string, mid: string) {
     const cached = JSON.parse(localStorage.getItem("errorKeys"));
     let messageData;
+    if (!cached || !cached["/"]) {
+      const url = HttpUtil.formatString(
+        this.options.culture.generalErrorMessages,
+        {
+          rKey: this.options.rKey,
+        }
+      );
+      const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+        url,
+        "GET",
+        this.options.checkRkey
+      );
+      if (res) {
+        const cachedObject =
+          JSON.parse(localStorage.getItem("errorKeys")) || {};
+        const cached = cachedObject["/"] || {};
+        cached.date = new Date().getTime();
+
+        cached.v = res.v;
+        cached.values = {};
+
+        res.messages.map((i) => {
+          try {
+            if (i.id) {
+              cached.values[i.id] = {
+                messageType: i.messageType,
+                messages: {},
+              };
+              i.culture.map((e) => {
+                cached.values[i.id]["messages"][e.lid] = e.message;
+              });
+            }
+          } catch (e) {}
+        });
+        cachedObject["/"] = cached;
+        localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+      }
+    }
     if (cached && cached["/"] && cached["/"]?.values[errorid]) {
       messageData = cached["/"].values[errorid];
       const currentDate = new Date().getTime();
@@ -137,7 +175,7 @@ export default class NotificationMessageComponent
     let lid = Lid || 1;
     if (!(message || type)) {
       try {
-        const cachedItem = this.checkErrorCode(Errorid, currentModule);
+        const cachedItem = await this.checkErrorCode(Errorid, currentModule);
         if (cachedItem && cachedItem?.messages[lid]) {
           message = cachedItem.messages[lid];
           type = cachedItem.messageType;
@@ -170,24 +208,22 @@ export default class NotificationMessageComponent
             const cached = cachedObject[currentModule] || {};
             cached.date = new Date().getTime();
 
-            if (cached.v != res.v) {
-              cached.v = res.v;
-              cached.values = {};
+            cached.v = res.v;
+            cached.values = {};
 
-              res.messages.map((i) => {
-                try {
-                  if (i.id) {
-                    cached.values[i.id] = {
-                      messageType: i.messageType,
-                      messages: {},
-                    };
-                    i.culture.map((e) => {
-                      cached.values[i.id]["messages"][e.lid] = e.message;
-                    });
-                  }
-                } catch (e) {}
-              });
-            }
+            res.messages.map((i) => {
+              try {
+                if (i.id) {
+                  cached.values[i.id] = {
+                    messageType: i.messageType,
+                    messages: {},
+                  };
+                  i.culture.map((e) => {
+                    cached.values[i.id]["messages"][e.lid] = e.message;
+                  });
+                }
+              } catch (e) {}
+            });
             cachedObject[currentModule] = cached;
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
             const found = res.messages.find((e) => e.id == Errorid);
@@ -218,6 +254,7 @@ export default class NotificationMessageComponent
         type = this.defaultMessages.find((e) => e.id == Errorid)?.messageType;
       }
     }
+
     if (message) {
       const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
         if (
@@ -356,11 +393,19 @@ export default class NotificationMessageComponent
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
-    const owner = currentPage.owner;
+
     const ownerUrl = currentPage.ownerUrl;
-    const currentModule = owner == "external" ? ownerUrl : "/";
+    const currentModule =
+      this.options.baseUrl.business == currentPage.ownerUrl ||
+      this.options.baseUrl.corporate == currentPage.ownerUrl ||
+      this.options.baseUrl.profile == currentPage.ownerUrl
+        ? "/"
+        : ownerUrl;
     try {
-      const cachedItem = this.checkErrorCode(String(errorid), currentModule);
+      const cachedItem = await this.checkErrorCode(
+        String(errorid),
+        currentModule
+      );
       if (cachedItem) {
         return cachedItem.messageType;
       } else {
@@ -394,24 +439,22 @@ export default class NotificationMessageComponent
           const cached = cachedObject[currentModule] || {};
           cached.date = new Date().getTime();
 
-          if (cached.v != res.v) {
-            cached.v = res.v;
-            cached.values = {};
+          cached.v = res.v;
+          cached.values = {};
 
-            res.messages.map((i) => {
-              try {
-                if (i.id) {
-                  cached.values[i.id] = {
-                    messageType: i.messageType,
-                    messages: {},
-                  };
-                  i.culture.map((e) => {
-                    cached.values[i.id]["messages"][e.lid] = e.message;
-                  });
-                }
-              } catch (e) {}
-            });
-          }
+          res.messages.map((i) => {
+            try {
+              if (i.id) {
+                cached.values[i.id] = {
+                  messageType: i.messageType,
+                  messages: {},
+                };
+                i.culture.map((e) => {
+                  cached.values[i.id]["messages"][e.lid] = e.message;
+                });
+              }
+            } catch (e) {}
+          });
           cachedObject[currentModule] = cached;
           localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
           const found = res.messages.find((e) => e.id == errorid);
