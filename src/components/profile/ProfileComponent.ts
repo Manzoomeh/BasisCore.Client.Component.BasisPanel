@@ -29,7 +29,10 @@ export default class ProfileComponent extends BasisPanelChildComponent {
       await this.loadDataAsync();
       this.refreshUI();
       this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-      if (LocalStorageUtil.Category === "profile") {
+      if (
+        !LocalStorageUtil.Category ||
+        LocalStorageUtil.Category === "profile"
+      ) {
         this.signalToDisplayMenu();
       }
       this.isFirst = false;
@@ -76,14 +79,18 @@ export default class ProfileComponent extends BasisPanelChildComponent {
           .querySelector(".active-corporate")
           ?.classList.remove("active-corporate");
 
-      if (this.deviceId == 2) {
-        this.container.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "user");
-        this.container.closest("[data-bc-bp-header-levels]").classList.remove("active");
-      }
-    });
-    if(this.options.store.existence == false){
-      const store =  this.container.querySelector("[data-bc-store-wrapper]")
-      store.remove()
+        if (this.deviceId == 2) {
+          this.container
+            .closest("[data-bc-bp-header-levels-container]")
+            .setAttribute("data-active", "user");
+          this.container
+            .closest("[data-bc-bp-header-levels]")
+            .classList.remove("active");
+        }
+      });
+    if (!this.options.store.existence) {
+      const store = this.container.querySelector("[data-bc-store-wrapper]");
+      store.remove();
     }
 
     return Promise.resolve();
@@ -104,7 +111,9 @@ export default class ProfileComponent extends BasisPanelChildComponent {
 
   private signalToDisplayMenu() {
     const pageId =
-      this.isFirst && LocalStorageUtil.Category === "profile"
+      this.isFirst &&
+      LocalStorageUtil.PageId &&
+      LocalStorageUtil.Category === "profile"
         ? LocalStorageUtil.PageId
         : "default";
     if (this.profile) {

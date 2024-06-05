@@ -51,7 +51,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         LocalStorageUtil.setCurrentPage(pageParam.pageId, pageParam.owner);
         const currentState = LocalStorageUtil.getLastState();
         const pageName = pageParam.owner;
-        console.log(`/${pageName}/${pageParam.pageId}`, currentState);
         history.pushState(
           currentState,
           "",
