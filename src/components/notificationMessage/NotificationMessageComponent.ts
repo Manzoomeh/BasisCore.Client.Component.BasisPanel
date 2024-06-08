@@ -133,15 +133,56 @@ export default class NotificationMessageComponent
         localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
       }
     }
+
     if (cached && cached["/"] && cached["/"]?.values[errorid]) {
       messageData = cached["/"].values[errorid];
       const currentDate = new Date().getTime();
 
       if (
         messageData.messages &&
-        currentDate - cached["/"].date < 3600 * 1000 * 24
+        currentDate - cached["/"].date < 3600 * 1000 * 24 &&
+        cached["/"].v != "1.0.0"
       ) {
         return messageData;
+      } else {
+        const url = HttpUtil.formatString(
+          this.options.culture.generalErrorMessages,
+          {
+            rKey: this.options.rKey,
+          }
+        );
+        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+          url,
+          "GET",
+          this.options.checkRkey
+        );
+        if (res) {
+          const cachedObject =
+            JSON.parse(localStorage.getItem("errorKeys")) || {};
+          const cached = cachedObject["/"] || {};
+          cached.date = new Date().getTime();
+
+          cached.v = res.v;
+          cached.values = {};
+
+          res.messages.map((i) => {
+            try {
+              if (i.id) {
+                cached.values[i.id] = {
+                  messageType: i.messageType,
+                  messages: {},
+                };
+                i.culture.map((e) => {
+                  cached.values[i.id]["messages"][e.lid] = e.message;
+                });
+              }
+            } catch (e) {}
+          });
+          cachedObject["/"] = cached;
+          localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+
+          return cachedObject["/"].values[errorid];
+        }
       }
     } else {
       if (cached && cached[mid] && cached[mid]?.values[errorid]) {
