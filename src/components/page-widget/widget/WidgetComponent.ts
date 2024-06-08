@@ -107,7 +107,7 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${
-        this.options.method.widget
+        this.options.method.reservedWidget
       }`,
       { rKey: this.options.rKey, widgetId: this.param.id }
     );

@@ -893,9 +893,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "[data-bc-page-widget-dashboard-wrapper]"
     ) as HTMLElement;
     parent.innerHTML = "";
-    const url = HttpUtil.formatString(this.options.tempwidgets, {
-      rKey: this.options.rKey,
-    });
+    const url = HttpUtil.formatString(
+      this.options.method.dashboardReservedWidgets,
+      {
+        rKey: this.options.rKey,
+      }
+    );
     const removewidgetUrl = HttpUtil.formatString(
       this.options.removeFromDashbaord,
       {

@@ -21,7 +21,6 @@ export default interface IBasisPanelOptions {
   notification: INotificationOptions;
   addtoDashboard: string;
   removeFromDashbaord: string;
-  tempwidgets: string;
   serviceLink?: string;
   businessLink?: string;
 }
@@ -50,7 +49,9 @@ interface IPanelPartMethodOptions {
   page: string;
   saveWidgets: string;
   sidebarMenu: string;
-  widget: string;
+  dashboardReservedWidgets: string;
+
+  reservedWidget: string;
   errorMessages: string;
 }
 

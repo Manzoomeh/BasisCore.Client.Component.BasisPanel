@@ -39,7 +39,6 @@
             addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
             addtoDashboard: "/server/trust/${rKey}/addtodashboard",
             removeFromDashbaord: "/server/trust/${rKey}/removetempwidget",
-            tempwidgets: "/server/trust/${rKey}/tempwidgets",
             baseUrl: {
               profile: "/server/trust",
               corporate: "/server/corporate",
@@ -64,8 +63,9 @@
               menu: "/${rKey}/menu?level=${level}",
               page: "/${rKey}/page/${pageId}",
               sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
-              widget: "/${rKey}/widget/${widgetId}",
+              reservedWidget: "/${rKey}/widget/${widgetId}",
               errorMessages: "/${rKey}/errorMessages",
+              dashboardReservedWidgets: "/server/trust/${rKey}/tempwidgets",
             },
             checkRkey: {
               url: "/server/trust/checkrkey/${rKey}",

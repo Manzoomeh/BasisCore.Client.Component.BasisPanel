@@ -45,7 +45,6 @@
             addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
             addtoDashboard: "/server/trust/${rKey}/addtodashboard",
             removeFromDashbaord: "/server/trust/${rKey}/removetempwidget",
-            tempwidgets: "/server/trust/${rKey}/tempwidgets",
             baseUrl: {
               profile: "/server/trust",
               corporate: "/server/corporate",
@@ -69,9 +68,11 @@
               userNoName: "بدون نام",
               menu: "/${rKey}/menu?level=${level}",
               page: "/${rKey}/page/${pageId}",
+              dashboardReservedWidgets: "/server/trust/${rKey}/tempwidgets",
+
               sidebarMenu: "/${rKey}/sidebarMenu/${pageId}",
               saveWidgets: "server/widget-list/saveWidgets/${rKey}/${pageId}",
-              widget: "/${rKey}/widget/${widgetId}",
+              reservedWidget: "/${rKey}/widget/${widgetId}",
               errorMessages: "/${rKey}/errorMessages",
             },
             checkRkey: {
