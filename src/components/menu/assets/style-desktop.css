@@ -32,7 +32,8 @@
   content: "";
   position: fixed;
   left: 0;
-  height: 60px;
+  top: 0;
+  height: 400px;
   width: 220px;
   z-index: 1000;
   box-shadow: 160px 0px 13px -73px rgba(255, 255, 255, 0.77) inset;
@@ -43,17 +44,20 @@
   content: "";
   position: fixed;
   right: 0;
+  top: 0;
   width: 220px;
-  height: 60px;
+  height: 400px;
   z-index: 1000;
   box-shadow: -160px 0px 13px -73px rgba(255, 255, 255, 0.77) inset;
 }
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-menu] {
   direction: rtl;
+  padding-inline-end: 220px;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-menu] {
   direction: ltr;
+  padding-inline-end: 220px;
 }
 
 [data-bc-d1-menu] li {
@@ -102,6 +106,8 @@
   padding: 0 15px;
   cursor: pointer;
   height: 100%;
+  white-space: nowrap;
+  overflow: visible;
   display: inline-block;
 }
 

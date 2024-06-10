@@ -3,6 +3,7 @@
   background-color: #fff;
   padding: 20px;
   position: relative;
+  z-index: 10;
   min-height: 88px;
   box-sizing: border-box;
 }
@@ -16,12 +17,12 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-left-items] {
   float: left;
-  border-right: 0.5px solid #D0D0D0;
+  border-right: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-left-items] {
   float: left;
-  border-right: 0.5px solid #D0D0D0;
+  border-right: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-d1-logo] {
@@ -44,7 +45,7 @@
   display: block;
   width: 140px;
   height: 32px;
-  background-image: url('basispanel_light.jpg');
+  background-image: url("basispanel_light.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -60,11 +61,11 @@
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-items] {
   float: right;
   padding: 7.5px 0 7.5px 15px;
-  border-left: 0.5px solid #D0D0D0;
+  border-left: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-items] {
   float: right;
   padding: 7.5px 0 7.5px 15px;
-  border-left: 0.5px solid #D0D0D0;
+  border-left: 0.5px solid #d0d0d0;
 }
