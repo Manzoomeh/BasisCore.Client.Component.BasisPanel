@@ -28,27 +28,15 @@ export default class WidgetComponent extends PageWidgetComponent {
       "[data-bc-widget-btn-close]"
     ) as HTMLElement;
     closeBtn.setAttribute("style", "display:none !important;z-index:10");
-    // closeBtn.addEventListener("mouseenter", (e) => {
-    //   console.log("1");
-    //   this.container.setAttribute("draggable", "false");
-    //   this.container.removeAttribute("data-bc-bp-widget-container-drag");
-    // });
-    // closeBtn.addEventListener("mouseleave", (e) => {
-    //   console.log("2");
 
-    //   this.container.setAttribute("draggable", "true");
-    //   this.container.setAttribute("data-bc-bp-widget-container-drag", "");
-    // });
     closeBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       e.preventDefault();
       const disableWidgets = document.querySelector(
         "[data-bc-page-widget-disableList]"
       );
-      console.log("disableWidgets :>> ", disableWidgets);
       try {
         this.removeAsync();
-        console.log("hhkk");
         const widgetElement = document.createElement("div");
         const container = document.createElement("div");
 
@@ -70,7 +58,7 @@ export default class WidgetComponent extends PageWidgetComponent {
 
         disableWidgets.appendChild(widgetElement);
       } catch (e) {
-        console.log("e :>> ", e);
+        console.log("error :>> ", e);
       }
     });
     this.container.setAttribute("gs-x", this.param.x.toString());
@@ -79,7 +67,6 @@ export default class WidgetComponent extends PageWidgetComponent {
     this.container.setAttribute("gs-h", this.param.h.toString());
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     const cell = parent.offsetWidth / 12;
-    console.log("cell :>> ", cell, parent.offsetWidth);
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
     (this.container as HTMLElement).style.top = `${
       this.param.y * cell + (parent.clientTop + topPosition)
@@ -167,11 +154,10 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   private async removeAsync(): Promise<void> {
-    console.log("this.owner.com :>> ", this.owner.manager);
     try {
       await this.owner.disposeAsync();
     } catch (e) {
-      console.log("e :>> ", e);
+      console.log("error :>> ", e);
     }
     this.container.remove();
     // this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);

@@ -68,7 +68,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       .querySelector("[data-bc-page-widget-save-setting]")
       .addEventListener("click", async (e) => {
         e.preventDefault();
-        // await this.sendSelectedWidgetToServerAsync();
         await this.saveWidgets();
       });
 
@@ -91,17 +90,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._page.widgetDropAreaContainer.addEventListener("dragover", (e) =>
       e.preventDefault()
     );
-    // this._page.widgetDropAreaContainer.addEventListener("drop", (e) => {
-    //   e.preventDefault();
-    //   this.tryAddingWidget(JSON.parse(e.dataTransfer.getData("text/plain")));
-    // });
   }
   private async saveWidgets(): Promise<void> {
     const widgets = document.querySelectorAll("[data-bc-bp-widget-container]");
     const data = [];
-    const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     widgets.forEach((e: HTMLElement) => {
-      console.log("e :>> ", e);
       const widgetData = {};
       widgetData["id"] = e.getAttribute("id");
       widgetData["y"] = Math.floor(e.offsetTop / this._page.cell);
@@ -121,12 +114,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     res = await res.json();
     //@ts-ignore
     if (res.message == "successful") {
-      // this._page.container
-      //   .querySelectorAll("[data-bc-bp-widget-container]")
-      //   .forEach((i) => {
-      //     i.remove();
-      //   });
-
       const btn = document.querySelector(
         "[data-bc-page-widget-list-dlg-btn-add]"
       );
@@ -157,35 +144,35 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     }
   }
 
-  public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
-    // const container = this._page.widgetDropAreaContainer.querySelector(
-    //   "[data-bc-widget-drop-area]"
-    // ) as HTMLElement;
-    // let element = container.querySelector<HTMLElement>(
-    //   `[data-bc-widget-id='${widgetInfo.id}']`
-    // );
-    // if (!element) {
-    //   const layout = widgetItemLayout
-    //     .replace("@title", widgetInfo.title)
-    //     .replace("@id", widgetInfo.id.toString())
-    //     .replace(
-    //       "@image",
-    //       widgetInfo.icon ? widgetInfo.icon : "asset/images/no_icon.png"
-    //     );
-    //   const widgetMessage = container.querySelector(
-    //     "[data-bc-widget-drop-area-message]"
-    //   );
-    //   if (widgetMessage) widgetMessage.remove();
-    //   element = this.owner.toHTMLElement(layout);
-    //   container.appendChild(element);
-    //   element
-    //     .querySelector("[data-bc-btn-remove]")
-    //     .addEventListener("click", (x) => {
-    //       x.preventDefault();
-    //       element.remove();
-    //     });
-    // }
-  }
+  // public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
+  // const container = this._page.widgetDropAreaContainer.querySelector(
+  //   "[data-bc-widget-drop-area]"
+  // ) as HTMLElement;
+  // let element = container.querySelector<HTMLElement>(
+  //   `[data-bc-widget-id='${widgetInfo.id}']`
+  // );
+  // if (!element) {
+  //   const layout = widgetItemLayout
+  //     .replace("@title", widgetInfo.title)
+  //     .replace("@id", widgetInfo.id.toString())
+  //     .replace(
+  //       "@image",
+  //       widgetInfo.icon ? widgetInfo.icon : "asset/images/no_icon.png"
+  //     );
+  //   const widgetMessage = container.querySelector(
+  //     "[data-bc-widget-drop-area-message]"
+  //   );
+  //   if (widgetMessage) widgetMessage.remove();
+  //   element = this.owner.toHTMLElement(layout);
+  //   container.appendChild(element);
+  //   element
+  //     .querySelector("[data-bc-btn-remove]")
+  //     .addEventListener("click", (x) => {
+  //       x.preventDefault();
+  //       element.remove();
+  //     });
+  // }
+  // }
 
   public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.WIDGET_CLOSED]);
@@ -236,11 +223,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         });
 
         disableWidgets.appendChild(widgetElement);
-        // widgetElement.addEventListener("dblclick", (e) => {
-        //   console.log("hhh");
-        //   e.preventDefault();
-        //   this.tryAddingWidget(widget);
-        // });
       });
     } catch {}
   }
@@ -275,9 +257,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.removeEventListener("mouseenter", this.onMouseEnter);
       el.removeEventListener("mouseleave", this.onMouseLeave);
     });
-    // this._page.widgetDropAreaContainer.querySelector(
-    //   "[data-bc-widget-drop-area]"
-    // ).innerHTML = "";
+
     this.fillWidgetListAsync().then(() => {
       this._page.widgetDropAreaContainer.setAttribute(
         "data-bc-display-none",
@@ -297,18 +277,13 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     }
     widgetContainer.style.width = "100%";
     this.sortable.destroy();
-    // document
-    //   .querySelectorAll("[data-bc-add-width] , [data-bc-add-height]")
-    //   .forEach((i) => {
-    //     i.remove();
-    //   });
+
     this._page.container
       .querySelector('[data-bc-bp-group-container="d1"]')
       .remove();
     this._page.addingPageGroupsAsync(this._page.info);
   }
   disableDragDrop() {
-    console.log("hhh");
     this.sortable.destroy();
   }
   enableDragDrop() {
@@ -358,7 +333,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });
 
     this.sortable.on("drag:over:container", (event) => {
-      //@ts-ignore
       if (
         event.overContainer.attributes.getNamedItem(
           "data-bc-page-widget-disablelist"
@@ -367,18 +341,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       ) {
         event.source.setAttribute("style", "");
       }
-      console.log(
-        "object :>> ",
-        event,
-        event.sourceContainer,
-        event.overContainer,
-        event.overContainer.attributes.getNamedItem(
-          "[data-bc-bp-group-container]"
-        ),
-        event.sourceContainer.attributes.getNamedItem(
-          "[data-bc-bp-group-container]"
-        )
-      );
 
       if (
         event.overContainer.attributes.getNamedItem(
@@ -402,7 +364,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         const parent = document.querySelector(
           "[data-bc-page-body]"
         ) as HTMLElement;
-        //@ts-ignore
         event.source.setAttribute(
           "style",
           `display: flex !important;border-radius:24px;outline: 2px solid #ccc;outline-offset: -9px;height:${
@@ -422,8 +383,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });
     this.sortable.on("drag:stop", (event) => {
       window.removeEventListener("handleMouseMove", () => {});
-      // Run your desired function when drag over occurs
-      console.log("event :>> ", event);
       if (
         event.sourceContainer.attributes.getNamedItem(
           "data-bc-bp-group-container"
@@ -450,7 +409,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             (e) => String(e.id) === event.source.getAttribute("id")
           );
         }
-        console.log("widgetData :>> ", widgetData);
         event.originalSource.setAttribute("gs-w", widgetData.w.toString());
         event.originalSource.setAttribute("gs-h", widgetData.h.toString());
         event.originalSource.setAttribute(
@@ -477,7 +435,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             event.source.children[0].attributes.getNamedItem("style")?.value
           );
         }
-        //@ts-ignore
         if (!event.originalSource.querySelector("[data-bc-add-height]")) {
           const increaseHeight = document.createElement("div");
           const removeBtn = document.createElement("div");
@@ -489,16 +446,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           });
           removeBtn.addEventListener("mouseleave", () => {
             this.enableDragDrop();
-            //   // increaseHeight.removeEventListener("mousedown", (event) =>
-            //   //   handleMouseDown(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("handleMouseMove", (event) =>
-            //   //   handlehandleMouseMove(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("mouseup", (event) =>
-            //   //   handleMouseUp(event)
-            //   // );
-            //   e.draggable = true;
           });
           removeBtn.addEventListener("mousedown", (event) => {
             event.stopPropagation();
@@ -520,11 +467,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                 (e) =>
                   String(e.id) == (event.target as HTMLElement).parentElement.id
               );
-              console.log(
-                "object ::>> ",
-                this.widgetList,
-                event.target as HTMLElement
-              );
+
               widgetElement.setAttribute("draggable", "true");
               widgetElement.setAttribute("id", String(data.id));
               widgetElement.setAttribute("pallete-widget-element", "");
@@ -612,16 +555,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           increaseWidth.addEventListener("mouseleave", () => {
             this.enableDragDrop();
-            //   // increaseHeight.removeEventListener("mousedown", (event) =>
-            //   //   handleMouseDown(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("handleMouseMove", (event) =>
-            //   //   handlehandleMouseMove(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("mouseup", (event) =>
-            //   //   handleMouseUp(event)
-            //   // );
-            //   e.draggable = true;
           });
 
           increaseWidth.addEventListener("mousedown", (event) =>
@@ -634,16 +567,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           increaseHeight.addEventListener("mouseleave", () => {
             this.enableDragDrop();
-            //   // increaseHeight.removeEventListener("mousedown", (event) =>
-            //   //   handleMouseDown(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("handleMouseMove", (event) =>
-            //   //   handlehandleMouseMove(event)
-            //   // );
-            //   // increaseHeight.removeEventListener("mouseup", (event) =>
-            //   //   handleMouseUp(event)
-            //   // );
-            //   e.draggable = true;
           });
 
           increaseHeight.addEventListener("mousedown", (event) =>
@@ -704,9 +627,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "gs-w",
             String(Math.floor(newWidth / this._page.cell) + 1)
           );
-          // this.currentResizeHandle.style.width = `${
-          //   this.currentResizeHandle.offsetWidth + this._page.cell
-          // }px`;
         }
         if (
           newWidth - this.currentResizeHandle.offsetWidth <
@@ -716,9 +636,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "gs-w",
             String(Math.floor(newWidth / this._page.cell) + 1)
           );
-          // this.currentResizeHandle.style.width = `${
-          //   this.currentResizeHandle.offsetWidth - this._page.cell
-          // }px`;
         }
         break;
       case "height":
@@ -740,25 +657,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           }px`;
         }
         break;
-      //   case "top":
-      //     newHeight = this.startHeight - (ev.clientY - this.startY);
-      //     e.style.height = `${newHeight}px`;
-      //     e.style.top = `${ev.clientY - this.startY}px`;
-      //     break;
-      //   case "right":
-      //     newWidth = ev.clientX - this.startX;
-      //     e.style.width = `${newWidth}px`;
-      //     break;
-      //   case "bottom":
-      //     newHeight = ev.clientY - this.startY;
-      //     e.style.height = `${newHeight}px`;
-      //     break;
-      //   case "left":
-      //     newWidth = this.startWidth - (ev.clientX - this.startX);
-      //     e.style.width = `${newWidth}px`;
-      //     e.style.left = `${ev.clientX - this.startX}px`;
-      //     break;
-      // }
     }
   }
   handleMouseUp() {
@@ -785,7 +683,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.addEventListener("mouseenter", this.onMouseEnter);
       el.addEventListener("mouseleave", this.onMouseLeave);
     });
-    console.log("hhjj");
     const dashbaordBtn = this.container.querySelector(
       ".tabWrapperForWidgets"
     ) as HTMLElement;
@@ -815,16 +712,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       });
       increaseWidth.addEventListener("mouseleave", () => {
         this.enableDragDrop();
-        //   // increaseHeight.removeEventListener("mousedown", (event) =>
-        //   //   handleMouseDown(event)
-        //   // );
-        //   // increaseHeight.removeEventListener("handleMouseMove", (event) =>
-        //   //   handlehandleMouseMove(event)
-        //   // );
-        //   // increaseHeight.removeEventListener("mouseup", (event) =>
-        //   //   handleMouseUp(event)
-        //   // );
-        //   e.draggable = true;
       });
       increaseWidth.addEventListener("mousedown", (event) =>
         this.handleMouseDown(event)
@@ -838,16 +725,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
       increaseHeight.addEventListener("mouseleave", () => {
         this.enableDragDrop();
-        //   // increaseHeight.removeEventListener("mousedown", (event) =>
-        //   //   handleMouseDown(event)
-        //   // );
-        //   // increaseHeight.removeEventListener("handleMouseMove", (event) =>
-        //   //   handlehandleMouseMove(event)
-        //   // );
-        //   // increaseHeight.removeEventListener("mouseup", (event) =>
-        //   //   handleMouseUp(event)
-        //   // );
-        //   e.draggable = true;
       });
 
       increaseHeight.addEventListener("mousedown", (event) =>
@@ -866,9 +743,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         .querySelector("[data-bc-bp-group-container]")
         .setAttribute("drop-zone", "");
       this._widgetDialog.removeAttribute("data-bc-display-none");
-      // this._page.widgetDropAreaContainer.removeAttribute(
-      //   "data-bc-display-none"
-      // );
     });
     const widgetBox: HTMLElement = this.container.querySelector(
       "[data-bc-page-widget-list]"
@@ -878,10 +752,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     ) as HTMLElement;
     widgetBox.style.transform = "translateX(0px)";
     widgetContainer.style.width = "calc(100% - 300px)";
-    console.log(
-      'document.querySelector("[data-bc-bp-group-container]") :>> ',
-      document.querySelector("[data-bc-bp-group-container]")
-    );
+
     this.enableDragDrop();
   }
   public async addingDashboardWidgets(): Promise<void> {
