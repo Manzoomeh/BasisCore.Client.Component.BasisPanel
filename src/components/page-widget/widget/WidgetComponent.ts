@@ -27,7 +27,6 @@ export default class WidgetComponent extends PageWidgetComponent {
     const closeBtn = this.container.querySelector(
       "[data-bc-widget-btn-close]"
     ) as HTMLElement;
-    console.log("heree", closeBtn);
     closeBtn.setAttribute("style", "display:none !important;z-index:10");
     // closeBtn.addEventListener("mouseenter", (e) => {
     //   console.log("1");

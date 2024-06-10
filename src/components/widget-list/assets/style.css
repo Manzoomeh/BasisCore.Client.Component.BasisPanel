@@ -12,16 +12,14 @@
   padding: 10px;
 }
 [data-bc-remove-widget] {
-  left: 1%;
-  top: calc(-100% + 35px);
-  /* margin-bottom: 59px; */
-  height: 16px;
-  width: 16px;
+  left: 5%;
+  top: calc(-100% + 45px);
+  height: 24px;
+  width: 24px;
   margin-right: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-block: auto; */
   border-radius: 50%;
   position: relative;
   background-color: #eb5757;
