@@ -8,6 +8,7 @@ const corporateList = [
   {
     id: 8956,
     title: "Avasys",
+    erp: true,
   },
   {
     id: 20,
@@ -65,7 +66,7 @@ const corporateList = [
     id: 8355,
     title: "میترا-گشت",
   },
-]
+];
 router.get("/:rKey/list", function (req, res) {
   res.json(corporateList);
 });

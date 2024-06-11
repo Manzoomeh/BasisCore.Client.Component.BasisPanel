@@ -1,21 +1,25 @@
 [data-bc-main-list-msg-select] {
-    font-size: 8px !important;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    /* position: absolute; */
-    top: 0 !important;
-    /* right: 10px; */
-    transform: translateY(0) !important;
-    line-height: 10px;
+  font-size: 8px !important;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  /* position: absolute; */
+  top: 0 !important;
+  /* right: 10px; */
+  transform: translateY(0) !important;
+  line-height: 10px;
 }
-
+[data-bc-erp-icon] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 [data-bc-main-name] {
-    font-size: 12px;
-    margin-top: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    display: block ruby;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+  font-size: 12px;
+  margin-top: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  display: block ruby;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
