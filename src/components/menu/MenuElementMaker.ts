@@ -42,6 +42,7 @@ export default class MenuElementMaker {
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
     const tmpUL = document.createElement("ul");
+
     const pageLookup = new Map<string, IMenuLoaderParam>();
     this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
     return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes));
@@ -114,7 +115,7 @@ export default class MenuElementMaker {
     innerUl.setAttribute("data-bc-bp-submenu", "");
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
-    li.appendChild(innerUl);
+    document.querySelector("[data-bc-bp-main-container]").appendChild(innerUl);
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
@@ -138,7 +139,23 @@ export default class MenuElementMaker {
         }
       });
     } else {
+      const liBoundingRect = document
+        .querySelector("[data-bc-menu]")
+        .getBoundingClientRect();
+      innerUl.style.top = `${
+        liBoundingRect.y + liBoundingRect.height + window.pageYOffset
+      }px`;
       li.addEventListener("click", function (e) {
+        const parentBoundingRect = (
+          e.target as HTMLElement
+        ).getBoundingClientRect();
+
+        innerUl.style.top = `${
+          parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
+        }px`;
+        innerUl.style.left = `${
+          parentBoundingRect.x - parentBoundingRect.width / 2
+        }px`;
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
@@ -146,6 +163,7 @@ export default class MenuElementMaker {
             e.removeAttribute("data-bc-ul-level-open");
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
+
           innerUl.style.transform = `scaleY(1)`;
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
