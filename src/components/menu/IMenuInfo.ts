@@ -13,6 +13,7 @@ export interface IMenuExternalItemInfo extends IMenuItemInfo {
   multi: boolean;
   url: string;
   mid: string;
+  name: string;
 }
 
 export interface IMenuLevelInfo extends IMenuItemInfo {
@@ -26,4 +27,5 @@ export interface IMenuPageInfo extends IMenuItemInfo {
 export interface IMenuLoaderParam extends ILoaderParam {
   menuMethod: string;
   pageId?: string;
+  module?: string;
 }

@@ -45,6 +45,7 @@ export default class MenuComponent
   }
 
   public async runAsync(source?: ISource) {
+    console.log("qam menu runasync", source?.id, source?.rows[0]);
     switch (source?.id) {
       case DefaultSource.LOAD_MENU:
       case DefaultSource.SHOW_MENU: {
@@ -54,20 +55,30 @@ export default class MenuComponent
           source?.id === DefaultSource.SHOW_MENU
         );
         if (menuParam.pageId) {
-          this.tryLoadPage(menuParam.pageId, null);
+          this.tryLoadPage(
+            menuParam.ownerId.toString(),
+            menuParam.pageId.toString(),
+            null
+          );
         }
         break;
       }
       case DefaultSource.SET_MENU: {
         this._isSilent = true;
         const model: IStateModel = source.rows[0];
-        const ownerId =
-          model.Category === "profile"
-            ? 0
-            : model.Category === "business"
-            ? model.BusinessId
-            : model.CorporateId;
-        this.tryLoadPageEx(model.Category, ownerId, model.PageId, null);
+        const ownerId = model.ModuleId
+          ? model.ModuleId
+          : model.Category === "profile"
+          ? 0
+          : model.Category === "business"
+          ? model.BusinessId
+          : model.CorporateId;
+        this.tryLoadPageEx(
+          model.Category,
+          ownerId.toString(),
+          model.PageId,
+          null
+        );
         this._isSilent = false;
         break;
       }
@@ -96,56 +107,86 @@ export default class MenuComponent
     }
   }
 
-  private async onMenuItemClick(pageId: string) {
-    this.tryLoadPage(pageId, null);
+  private async onMenuItemClick(ownerId: string, pageId: string) {
+    this.tryLoadPage(ownerId, pageId, null);
   }
 
   public tryLoadPageEx(
     category: MenuOwnerType,
-    ownerId: number,
+    ownerId: string,
     pageId: string,
     args?: any
   ): boolean {
     const menu = this.cache.tryGetMenu(category, ownerId.toString());
+    console.log("qam load menu ex", {
+      category,
+      ownerId,
+      pageId,
+      args,
+      menu,
+      cache: this.cache,
+    });
     this.showMenu(menu);
-    return menu ? this.tryLoadPage(pageId, args) : false;
+    return menu ? this.tryLoadPage(ownerId.toString(), pageId, args) : false;
   }
 
-  public tryLoadPage(pageId: string | number, args?: any): boolean {
+  public tryLoadPage(ownerId: string, pageId: string, args?: any): boolean {
     let retVal = false;
-    const newPageId = typeof pageId === "string" ? pageId : pageId.toString();
+    //const newPageId = typeof pageId === "string" ? pageId : pageId.toString();
     if (this.current) {
-      //update ui
-      this.ul
-        .querySelectorAll(`[data-bc-menu-active]`)
-        .forEach((x) => x.removeAttribute("data-bc-menu-active"));
-      const content = this.ul.querySelector(
-        `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${this.current.param?.ownerId}"]`
+      const c = JSON.stringify(this.current.pageLookup);
+      const menuItem = this.current.pageLookup.get(ownerId.toString());
+      console.log(
+        "qam menu",
+        ownerId,
+        pageId,
+        menuItem,
+        [...this.current.pageLookup.values()],
+        this.current.pageLookup.get(ownerId.toString())
       );
-      const li = content?.closest("li");
-      const parent = content?.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
+      if (menuItem) {
+        //update ui
+        this.ul
+          .querySelectorAll(`[data-bc-menu-active]`)
+          .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+        const content = this.ul.querySelector(
+          `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`
+        );
+        const li = content?.closest("li");
+        const parent = content?.closest("[data-bc-bp-submenu]");
+        if (parent) {
+          parent
+            .closest("li")
+            .querySelector("[data-bc-level]")
+            .setAttribute("data-bc-menu-active", "");
+        }
+        li?.setAttribute("data-bc-menu-active", "");
+        console.log("qam menu element", {
+          sel: `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`,
+          ownerId,
+          pageId,
+          menuItem,
+          content,
+          li,
+          parent,
+        });
+        //show page
+        const newParam: IPageLoaderParam = {
+          pageId: pageId,
+          owner: this.current.param.owner, // menuItem.owner,
+          ownerId: menuItem.ownerId,
+          ownerUrl: menuItem.ownerUrl,
+          rKey: menuItem.rKey,
+          pageMethod: this.options.method.page,
+          arguments: args,
+          module: menuItem.module,
+        };
+        this.owner.setSource(
+          this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
+          newParam
+        );
+        retVal = true;
       }
-      li?.setAttribute("data-bc-menu-active", "");
-      //show page
-      const newParam: IPageLoaderParam = {
-        pageId: newPageId,
-        owner: this.current.param.owner,
-        ownerId: this.current.param.ownerId,
-        ownerUrl: this.current.param.ownerUrl,
-        rKey: this.current.param.rKey,
-        pageMethod: this.options.method.page,
-        arguments: args,
-      };
-      this.owner.setSource(
-        this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
-        newParam
-      );
-      retVal = true;
     }
     return retVal;
   }

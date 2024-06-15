@@ -4,5 +4,6 @@ export default interface IPageLoaderParam extends ILoaderParam {
   pageId: string;
   pageMethod: string;
   arguments?: any;
-  dashboard? : boolean;
+  dashboard?: boolean;
+  module: string;
 }

@@ -124,6 +124,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         rKey: this.options.rKey,
         menuMethod: this.options.method.menu,
         pageId: pageId,
+        module: LocalStorageUtil.ModuleName,
       };
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
     }

@@ -46,5 +46,7 @@ export interface IModuleInfo {
 
 export interface IRoutingQueryString {
   category: MenuOwnerType;
+  moduleId: string;
+  moduleName: string;
   pageId: string;
 }

@@ -4,7 +4,6 @@ import { DefaultSource, MenuOwnerType } from "../type-alias";
 import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
-import IPageLoaderParam from "./menu/IPageLoaderParam";
 import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
 
@@ -53,11 +52,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const id = parseInt(msgElId);
     if (id != 0) {
       LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
-      this.owner.setSource(
-        DefaultSource.SHOW_MENU,
-        this.createMenuLoaderParam(id)
-      );
-      const _ = this.signalToDisplayPage(id).then(() => this.setActive());
+      this.signalToDisplayPage(id, "default").then(() => this.setActive());
     }
   }
   public async initializeAsync(): Promise<void> {
@@ -116,9 +111,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
       await this.trySelectItemSilentAsync(id);
       if (LocalStorageUtil.Category == this.ownerType) {
-        const param = this.createMenuLoaderParam(id);
-        param.pageId = LocalStorageUtil.PageId;
-        this.owner.setSource(DefaultSource.SHOW_MENU, param);
+        this.signalToDisplayPage(id, LocalStorageUtil.PageId);
       }
     }
   }
@@ -313,13 +306,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
                 this.ownerType,
                 id
               );
-              const _ = this.setActiveAsync(id).then(async () => {
-                this.owner.setSource(
-                  DefaultSource.SHOW_MENU,
-                  this.createMenuLoaderParam(id)
-                );
-                await this.signalToDisplayPage(id);
-              });
+              this.setActiveAsync(id).then(async () =>
+                this.signalToDisplayPage(id, "default")
+              );
             }
           }
           this.setSilent = false;
@@ -526,33 +515,32 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.innerHTML = "";
   }
 
-  protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
+  protected createMenuLoaderParam(
+    id: Number,
+    pageId: string
+  ): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
       // ownerId: this.element.value,
       ownerId: id.toString(),
       ownerUrl: this.getOwnerUrl(),
+      pageId: pageId,
       rKey: this.options.rKey,
       menuMethod: this.options.method.menu,
     };
     return menuParam;
   }
 
-  private async signalToDisplayPage(id: Number) {
+  private async signalToDisplayPage(id: Number, pageId: string) {
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
-
-    const newParam: IPageLoaderParam = {
-      pageId: "default",
-      owner: this.ownerType,
-      ownerId: id.toString(),
-      ownerUrl: this.getOwnerUrl(),
-      rKey: this.options.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    console.log("qam signalToDisplayPage", id.toString(), pageId);
+    this.owner.setSource(
+      DefaultSource.SHOW_MENU,
+      this.createMenuLoaderParam(id, pageId)
+    );
   }
 }
 

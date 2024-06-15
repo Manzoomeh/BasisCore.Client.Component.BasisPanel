@@ -1,4 +1,3 @@
-import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
 import { IRoutingQueryString, MenuOwnerType } from "./type-alias";
 import { IMenuLoaderParam, IMenuPageInfo } from "./components/menu/IMenuInfo";
@@ -8,6 +7,8 @@ export default class LocalStorageUtil {
   public static BusinessId?: number;
   public static CorporateId?: number;
   public static PageId?: string;
+  public static ModuleId?: string;
+  public static ModuleName?: string;
   public static Category?: MenuOwnerType;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
@@ -24,6 +25,8 @@ export default class LocalStorageUtil {
       ) {
         LocalStorageUtil.Category = routingQueryObject.category;
         LocalStorageUtil.PageId = routingQueryObject.pageId;
+        LocalStorageUtil.ModuleId = routingQueryObject.moduleId;
+        LocalStorageUtil.ModuleName = routingQueryObject.moduleName;
         switch (LocalStorageUtil.Category) {
           case "profile": {
             LocalStorageUtil.CorporateId = null;
@@ -50,6 +53,8 @@ export default class LocalStorageUtil {
             LocalStorageUtil.BusinessId = obj.BusinessId ?? null;
             LocalStorageUtil.Category = obj.Category ?? "profile";
             LocalStorageUtil.PageId = obj.PageId ?? "default";
+            LocalStorageUtil.ModuleId = obj.ModuleId ?? null;
+            LocalStorageUtil.ModuleName = obj.ModuleName ?? null;
           } catch (ex) {
             console.error("error in  load local storage data", ex);
           }
@@ -91,6 +96,8 @@ export default class LocalStorageUtil {
       CorporateId: LocalStorageUtil.CorporateId,
       PageId: LocalStorageUtil.PageId,
       Category: LocalStorageUtil.Category,
+      ModuleId: LocalStorageUtil.ModuleId,
+      ModuleName: LocalStorageUtil.ModuleName,
     };
   }
 
@@ -100,6 +107,8 @@ export default class LocalStorageUtil {
     LocalStorageUtil.CorporateId = state.CorporateId;
     LocalStorageUtil.PageId = state.PageId;
     LocalStorageUtil.Category = state.Category;
+    LocalStorageUtil.ModuleId = state.ModuleId;
+    LocalStorageUtil.ModuleName = state.ModuleName;
     LocalStorageUtil.save();
   }
 
@@ -113,9 +122,16 @@ export default class LocalStorageUtil {
     return retVal;
   }
 
-  public static setCurrentPage(pageId: string, category: MenuOwnerType) {
+  public static setCurrentPage(
+    moduleName: string,
+    moduleId: string,
+    pageId: string,
+    category: MenuOwnerType
+  ) {
     LocalStorageUtil.PageId = pageId;
     LocalStorageUtil.Category = category;
+    LocalStorageUtil.ModuleId = moduleId;
+    LocalStorageUtil.ModuleName = moduleName;
     LocalStorageUtil.save();
   }
 }
@@ -147,4 +163,6 @@ export interface IStateModel {
   CorporateId?: number;
   PageId: string;
   Category?: MenuOwnerType;
+  ModuleId?: string;
+  ModuleName?: string;
 }

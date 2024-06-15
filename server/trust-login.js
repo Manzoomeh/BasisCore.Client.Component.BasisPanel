@@ -64,16 +64,18 @@ router.get("/:rKey/menu", function (req, res) {
       },
       { title: "تقویم", pid: "myFiles" },
       {
-        mid: 2,
+        mid: 200,
         title: "Ticketing",
         multi: true,
         url: "/server/external/calender",
+        name: "Ticketing",
       },
       {
         mid: 4,
         title: "TaskManager",
         multi: false,
         url: "http://localhost:8080/server/external/task",
+        name: "TaskManager",
       },
     ],
   };

@@ -17,12 +17,12 @@ export default class MenuCacheManager {
 
   public tryGetMenu(category: MenuOwnerType, ownerId: string): MenuElement {
     let cache = this.cache.get(category);
-    return cache?.tryGetMenu(ownerId);
+    return cache?.tryGetMenu(category == "profile" ? "0" : ownerId);
   }
 
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (pageId: string) => void
+    onMenuItemClick: (ownerId: string, pageId: string) => void
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
@@ -44,7 +44,7 @@ class MenuCacheItem {
   private checkRkeyOption: ICheckRkeyOptions;
   constructor(
     menuParam: IMenuLoaderParam,
-    onMenuItemClick: (pageId: string) => void,
+    onMenuItemClick: (ownerId: string, pageId: string) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
@@ -79,7 +79,7 @@ class MenuCacheItem {
         this.checkRkeyOption
       );
       menu = this.menuMaker.create(menuData, menuParam);
-      this.cache.set(menuParam.ownerId, menu);
+      this.cache.set(menuParam.ownerId.toString(), menu);
     }
     return menu;
   }

@@ -162,6 +162,7 @@ export default class SidebarComponent extends PageWidgetComponent {
       rKey: this.param.page.rKey,
       pageMethod: this.param.page.pageMethod,
       arguments: args,
+      module: null,
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }

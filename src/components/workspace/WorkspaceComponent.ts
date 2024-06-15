@@ -20,6 +20,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   }
 
   public async runAsync(source?: ISource) {
+    console.log("qam page", source?.id, source?.rows[0]);
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
       let pageParam: IPageLoaderParam = source.rows[0] as IPageLoaderParam;
       await this.displayPageAsync(pageParam);
@@ -48,15 +49,20 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       this.pageType = info?.container;
       const param = JSON.stringify(pageParam);
       if (!this._isSilent) {
-        LocalStorageUtil.setCurrentPage(pageParam.pageId, pageParam.owner);
+        LocalStorageUtil.setCurrentPage(
+          pageParam.module,
+          pageParam.ownerId,
+          pageParam.pageId,
+          pageParam.owner
+        );
         const currentState = LocalStorageUtil.getLastState();
         const pageName = pageParam.owner;
         history.pushState(
           currentState,
           "",
-          `${
-            this.options.urlPrefix ? this.options.urlPrefix : ""
-          }/${pageName}/${pageParam.pageId}`
+          `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageName}${
+            pageParam.module ? `/${pageParam.module}` : ""
+          }/${pageParam.pageId}`
         );
       }
       const doc = this.owner.toNode(
