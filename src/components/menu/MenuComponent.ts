@@ -66,7 +66,26 @@ export default class MenuComponent
       this.current = newMenu;
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
-
+      if (this.deviceId == 1) {
+        window.addEventListener("scroll", () => {
+          document
+            .querySelectorAll("[data-bc-ul-level-open]")
+            .forEach((el: HTMLElement) => {
+              el.style.transform = ` scaleY(0)`;
+              el.removeAttribute("data-bc-ul-level-open");
+              el.previousElementSibling.removeAttribute("data-bc-level-open");
+            });
+        });
+        this.ul.addEventListener("scroll", () => {
+          document
+            .querySelectorAll("[data-bc-ul-level-open]")
+            .forEach((el: HTMLElement) => {
+              el.style.transform = ` scaleY(0)`;
+              el.removeAttribute("data-bc-ul-level-open");
+              el.previousElementSibling.removeAttribute("data-bc-level-open");
+            });
+        });
+      }
       const tempPage = LocalStorageUtil.getCurrentPage();
       if (tempPage && parseInt(tempPage.pageId) > 0) {
         if (LocalStorageUtil.hasMenuToActive()) {
