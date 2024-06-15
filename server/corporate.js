@@ -8,6 +8,7 @@ const corporateList = [
   {
     id: 8956,
     title: "Avasys",
+    erp: true,
   },
   {
     id: 20,
