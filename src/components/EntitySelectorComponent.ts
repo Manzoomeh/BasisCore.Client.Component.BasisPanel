@@ -569,11 +569,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async signalToDisplayPage(id: Number, pageId: string) {
-    const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-    activeMenus.forEach((e) => {
-      e.removeAttribute("data-bc-menu-active");
-    });
-    console.log("qam signalToDisplayPage", id.toString(), pageId);
+    // const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+    // activeMenus.forEach((e) => {
+    //   e.removeAttribute("data-bc-menu-active");
+    // });
+    console.log("qam signalToDisplayPage", id?.toString(), pageId);
     this.owner.setSource(
       DefaultSource.SHOW_MENU,
       this.createMenuLoaderParam(id, pageId)

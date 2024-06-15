@@ -125,6 +125,7 @@ export default class ProfileComponent extends BasisPanelChildComponent {
         menuMethod: this.options.method.menu,
         pageId: pageId,
         module: LocalStorageUtil.ModuleName,
+        moduleId: LocalStorageUtil.ModuleId ?? "1",
       };
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
     }

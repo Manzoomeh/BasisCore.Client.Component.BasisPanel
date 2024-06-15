@@ -51,7 +51,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       if (!this._isSilent) {
         LocalStorageUtil.setCurrentPage(
           pageParam.module,
-          pageParam.ownerId,
+          pageParam.moduleId,
           pageParam.pageId,
           pageParam.owner
         );

@@ -104,14 +104,15 @@ export default class NotificationTab {
           rKey: this.optionsRkey,
           pageMethod: obj.p.pageMethod,
           module: obj.p.module,
+          moduleId: obj.p.moduleId,
         };
 
         $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
 
-        const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-        activeMenus.forEach((e) => {
-          e.removeAttribute("data-bc-menu-active");
-        });
+        // const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+        // activeMenus.forEach((e) => {
+        //   e.removeAttribute("data-bc-menu-active");
+        // });
       });
   }
 

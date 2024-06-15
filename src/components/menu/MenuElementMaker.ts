@@ -8,16 +8,27 @@ import IMenuInfo, {
 } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
+import { MenuOwnerType } from "../../type-alias";
 
 export default class MenuElementMaker {
   readonly rKey: string;
-  readonly onMenuItemClick: (ownerId: string, pageId: string) => void;
+  readonly onMenuItemClick: (
+    category: MenuOwnerType,
+    ownerId: string,
+    moduleId: string,
+    pageId: string
+  ) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
 
   constructor(
     rKey: string,
-    onMenuItemClick: (ownerId: string, pageId: string) => void,
+    onMenuItemClick: (
+      category: MenuOwnerType,
+      ownerId: string,
+      moduleId: string,
+      pageId: string
+    ) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
@@ -151,23 +162,28 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onMenuItemClick(menuParam.ownerId.toString(), node.pid.toString());
+      this.onMenuItemClick(
+        menuParam.owner,
+        menuParam.ownerId,
+        node.mid,
+        node.pid.toString()
+      );
 
-      const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-      activeMenus.forEach((e) => {
-        e.removeAttribute("data-bc-menu-active");
-      });
+      //const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+      // activeMenus.forEach((e) => {
+      //   e.removeAttribute("data-bc-menu-active");
+      // });
 
-      const parent = content.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
-        li.setAttribute("data-bc-menu-active", "");
-      } else {
-        li.setAttribute("data-bc-menu-active", "");
-      }
+      //const parent = content.closest("[data-bc-bp-submenu]");
+      // if (parent) {
+      //   parent
+      //     .closest("li")
+      //     .querySelector("[data-bc-level]")
+      //     .setAttribute("data-bc-menu-active", "");
+      //   li.setAttribute("data-bc-menu-active", "");
+      // } else {
+      //   li.setAttribute("data-bc-menu-active", "");
+      // }
 
       if (this.deviceId == 2) {
         li.closest("[data-bc-bp-header-more-container]").classList.remove(
@@ -175,7 +191,7 @@ export default class MenuElementMaker {
         );
       }
     });
-    pageLookup.set(menuParam.ownerId.toString(), menuParam);
+    pageLookup.set(node.mid.toString(), menuParam);
     li.appendChild(content);
     return li;
   }
@@ -186,11 +202,12 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
-      owner: "external",
-      ownerId: node.mid,
+      owner: menuParam.owner,
+      ownerId: menuParam.ownerId, //node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,
       rKey: menuParam.rKey,
+      moduleId: node.mid,
       module: node.name,
     };
     const li = document.createElement("li");
@@ -226,12 +243,13 @@ export default class MenuElementMaker {
     deviceId: number
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
-      owner: "external",
-      ownerId: node.mid,
+      owner: menuParam.owner,
+      ownerId: menuParam.ownerId, //node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,
       rKey: menuParam.rKey,
       module: node.name,
+      moduleId: node.mid,
     };
     const li = document.createElement("li");
     const content = document.createElement("a");

@@ -27,5 +27,6 @@ export interface IMenuPageInfo extends IMenuItemInfo {
 export interface IMenuLoaderParam extends ILoaderParam {
   menuMethod: string;
   pageId?: string;
+  moduleId?: string;
   module?: string;
 }

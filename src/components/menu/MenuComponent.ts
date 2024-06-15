@@ -56,26 +56,46 @@ export default class MenuComponent
         );
         if (menuParam.pageId) {
           this.tryLoadPage(
-            menuParam.ownerId.toString(),
-            menuParam.pageId.toString(),
+            menuParam.owner,
+            menuParam.ownerId,
+            menuParam.moduleId,
+            menuParam.pageId,
             null
           );
+          // this.tryLoadPage(
+          //   menuParam.ownerId.toString(),
+          //   menuParam.pageId.toString(),
+          //   null
+          // );
         }
         break;
       }
       case DefaultSource.SET_MENU: {
         this._isSilent = true;
         const model: IStateModel = source.rows[0];
-        const ownerId = model.ModuleId
-          ? model.ModuleId
-          : model.Category === "profile"
-          ? 0
-          : model.Category === "business"
-          ? model.BusinessId
-          : model.CorporateId;
-        this.tryLoadPageEx(
+        // const ownerId = model.ModuleId
+        //   ? model.ModuleId
+        //   : model.Category === "profile"
+        //   ? 0
+        //   : model.Category === "business"
+        //   ? model.BusinessId
+        //   : model.CorporateId;
+        // this.tryLoadPageEx(
+        //   model.Category,
+        //   ownerId.toString(),
+        //   model.PageId,
+        //   null
+        // );
+        const categoryId =
+          model.Category === "profile"
+            ? 0
+            : model.Category === "business"
+            ? model.BusinessId
+            : model.CorporateId;
+        this.tryLoadPage(
           model.Category,
-          ownerId.toString(),
+          categoryId.toString(),
+          model.ModuleId,
           model.PageId,
           null
         );
@@ -107,9 +127,17 @@ export default class MenuComponent
     }
   }
 
-  private async onMenuItemClick(ownerId: string, pageId: string) {
-    this.tryLoadPage(ownerId, pageId, null);
+  private async onMenuItemClick(
+    category: MenuOwnerType,
+    ownerId: string,
+    moduleId: string,
+    pageId: string
+  ) {
+    this.tryLoadPage(category, ownerId, moduleId ?? ownerId, pageId, null);
   }
+  // private async onMenuItemClick(ownerId: string, pageId: string) {
+  //   this.tryLoadPage(ownerId, pageId, null);
+  // }
 
   public tryLoadPageEx(
     category: MenuOwnerType,
@@ -127,66 +155,115 @@ export default class MenuComponent
       cache: this.cache,
     });
     this.showMenu(menu);
-    return menu ? this.tryLoadPage(ownerId.toString(), pageId, args) : false;
+    return menu
+      ? this.tryLoadPage(
+          category,
+          ownerId.toString(),
+          ownerId.toString(),
+          pageId,
+          args
+        )
+      : false;
   }
 
-  public tryLoadPage(ownerId: string, pageId: string, args?: any): boolean {
+  public tryLoadPage(
+    category: MenuOwnerType,
+    ownerId: string,
+    moduleId: string,
+    pageId: string,
+    args?: any
+  ): boolean {
     let retVal = false;
+    const menu = this.cache.tryGetMenu(category, ownerId.toString());
+    if (
+      this.current?.param.owner != category ||
+      this.current?.param.ownerId != ownerId
+    ) {
+      this.showMenu(menu);
+    }
+    console.log("qam load menu ex_", {
+      category,
+      ownerId,
+      moduleId,
+      pageId,
+      args,
+      menu,
+      cache: this.cache,
+      current: this.current,
+      menuItem: this.current.pageLookup.get(ownerId.toString()),
+      sel: `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid="${ownerId}"]`,
+      parent,
+    });
     //const newPageId = typeof pageId === "string" ? pageId : pageId.toString();
     if (this.current) {
-      const c = JSON.stringify(this.current.pageLookup);
-      const menuItem = this.current.pageLookup.get(ownerId.toString());
-      console.log(
-        "qam menu",
-        ownerId,
-        pageId,
-        menuItem,
-        [...this.current.pageLookup.values()],
-        this.current.pageLookup.get(ownerId.toString())
+      const menuItem = this.current.pageLookup.get(
+        (moduleId ?? ownerId).toString()
       );
+      var ownerUrl: string;
+      var module: string;
       if (menuItem) {
-        //update ui
-        this.ul
-          .querySelectorAll(`[data-bc-menu-active]`)
-          .forEach((x) => x.removeAttribute("data-bc-menu-active"));
-        const content = this.ul.querySelector(
-          `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`
-        );
-        const li = content?.closest("li");
-        const parent = content?.closest("[data-bc-bp-submenu]");
-        if (parent) {
-          parent
-            .closest("li")
-            .querySelector("[data-bc-level]")
-            .setAttribute("data-bc-menu-active", "");
-        }
-        li?.setAttribute("data-bc-menu-active", "");
-        console.log("qam menu element", {
-          sel: `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`,
-          ownerId,
-          pageId,
-          menuItem,
-          content,
-          li,
-          parent,
-        });
-        //show page
-        const newParam: IPageLoaderParam = {
-          pageId: pageId,
-          owner: this.current.param.owner, // menuItem.owner,
-          ownerId: menuItem.ownerId,
-          ownerUrl: menuItem.ownerUrl,
-          rKey: menuItem.rKey,
-          pageMethod: this.options.method.page,
-          arguments: args,
-          module: menuItem.module,
-        };
-        this.owner.setSource(
-          this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
-          newParam
-        );
-        retVal = true;
+        ownerUrl = menuItem.ownerUrl;
+        module = menuItem.module;
+      } else {
+        ownerUrl = this.current.param.ownerUrl;
+        module = null;
       }
+      //update ui
+      this.ul
+        .querySelectorAll(`[data-bc-menu-active]`)
+        .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+      const content = this.ul.querySelector(
+        `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid="${ownerId}"]`
+      );
+      const li = content?.closest("li");
+      const parent = content?.closest("[data-bc-bp-submenu]");
+      parent
+        ?.closest("li")
+        .querySelector("[data-bc-level]")
+        .setAttribute("data-bc-menu-active", "");
+
+      li?.setAttribute("data-bc-menu-active", "");
+
+      // console.log("qam menu element", {
+      //   sel: `a[data-bc-pid="${pageId}"][data-bc-mid][data-bc-ownerid="${menuItem?.ownerId}"]`,
+      //   ownerId,
+      //   pageId,
+      //   menuItem,
+      //   content,
+      //   li,
+      //   parent,
+      // });
+      console.log("qam load menu ex_", {
+        li,
+        category,
+        ownerId,
+        moduleId,
+        pageId,
+        args,
+        menu,
+        cache: this.cache,
+        current: this.current,
+        menuItem: this.current.pageLookup.get(ownerId.toString()),
+        sel: `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid="${ownerId}"]`,
+        parent,
+      });
+      //show page
+      const newParam: IPageLoaderParam = {
+        pageId: pageId,
+        owner: category,
+        ownerId: ownerId,
+        ownerUrl: ownerUrl,
+        rKey: this.options.rKey,
+        pageMethod: this.options.method.page,
+        moduleId: moduleId,
+        module: module,
+        arguments: args,
+      };
+      this.owner.setSource(
+        this._isSilent ? DefaultSource.SET_PAGE : DefaultSource.DISPLAY_PAGE,
+        newParam
+      );
+      retVal = true;
     }
     return retVal;
   }
