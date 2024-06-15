@@ -112,10 +112,15 @@ export default class MenuElementMaker {
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
+    const outerUl = document.createElement("ul");
+
     innerUl.setAttribute("data-bc-bp-submenu", "");
+    outerUl.setAttribute("data-bc-bp-submenu", "");
     this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
+    this.createMenu(outerUl, node.nodes, menuParam, pageLookup);
     li.appendChild(content);
-    document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
+    li.appendChild(innerUl);
+    document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(outerUl);
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
@@ -142,16 +147,16 @@ export default class MenuElementMaker {
       const liBoundingRect = document
         .querySelector("[data-bc-menu]")
         .getBoundingClientRect();
-      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height + window.pageYOffset
+      outerUl.style.top = `${liBoundingRect.y + liBoundingRect.height + window.pageYOffset
         }px`;
       li.addEventListener("click", function (e) {
         const parentBoundingRect = (
           e.target as HTMLElement
         ).getBoundingClientRect();
 
-        innerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
+        outerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
           }px`;
-        innerUl.style.left = `${parentBoundingRect.x - parentBoundingRect.width / 2
+        outerUl.style.left = `${parentBoundingRect.x - parentBoundingRect.width / 2
           }px`;
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
@@ -161,13 +166,14 @@ export default class MenuElementMaker {
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
 
-          innerUl.style.transform = `scaleY(1)`;
+          outerUl.style.transform = `scaleY(1)`;
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
         } else {
           innerUl.style.transform = ` scaleY(0)`;
           innerUl.removeAttribute("data-bc-ul-level-open");
           innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
+          outerUl.style.transform = ` scaleY(0)`;
         }
       });
     }
@@ -195,6 +201,7 @@ export default class MenuElementMaker {
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onMenuItemClick(node.pid, menuParam, e.target);
+
       document.body.classList.remove("scrolling");
 
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
@@ -202,15 +209,13 @@ export default class MenuElementMaker {
         e.removeAttribute("data-bc-menu-active");
       });
 
-      const parent = content.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
-        li.setAttribute("data-bc-menu-active", "");
+      const innerLi = document.querySelector('[data-bc-d1-menu]').querySelector(`[data-bc-pid="${content.getAttribute('data-bc-pid')}"][data-bc-mid="${content.getAttribute('data-bc-mid')}"][data-bc-ownerid]`)
+      if (innerLi) {
+
+        content.parentElement.firstElementChild.setAttribute("data-bc-menu-active", "")
+        innerLi.closest('ul').parentElement.firstElementChild.setAttribute("data-bc-menu-active", "");
       } else {
-        li.setAttribute("data-bc-menu-active", "");
+        innerLi.setAttribute("data-bc-menu-active", "");
       }
 
       if (this.deviceId == 2) {
@@ -220,6 +225,11 @@ export default class MenuElementMaker {
       }
 
       LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
+      document.querySelectorAll('[data-bc-bp-submenu]').forEach((el: HTMLElement) => {
+        if (el.style.transform == 'scaleY(1)') {
+          el.style.transform = 'scaleY(0)'
+        }
+      })
     });
     pageLookup.set(node.pid, menuParam);
     li.appendChild(content);
