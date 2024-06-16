@@ -10,7 +10,7 @@ export default interface IPageLoader {
   ): boolean;
   tryLoadPageEx(
     owner: MenuOwnerType,
-    ownerId: string,
+    moduleId: string,
     pageId: string,
     args?: any
   ): boolean;

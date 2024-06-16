@@ -11,7 +11,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
-import { IStateModel } from "../../LocalStorageUtil";
+import LocalStorageUtil, { IStateModel } from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -141,29 +141,31 @@ export default class MenuComponent
 
   public tryLoadPageEx(
     category: MenuOwnerType,
-    ownerId: string,
+    moduleId: string,
     pageId: string,
     args?: any
   ): boolean {
-    const menu = this.cache.tryGetMenu(category, ownerId.toString());
+    const ownerId =
+      LocalStorageUtil.Category === "profile"
+        ? 0
+        : LocalStorageUtil.Category === "business"
+        ? LocalStorageUtil.BusinessId
+        : LocalStorageUtil.CorporateId;
     console.log("qam load menu ex", {
       category,
       ownerId,
+      moduleId,
       pageId,
       args,
-      menu,
       cache: this.cache,
     });
-    this.showMenu(menu);
-    return menu
-      ? this.tryLoadPage(
-          category,
-          ownerId.toString(),
-          ownerId.toString(),
-          pageId,
-          args
-        )
-      : false;
+    return this.tryLoadPage(
+      category,
+      ownerId.toString(),
+      moduleId.toString(),
+      pageId,
+      args
+    );
   }
 
   public tryLoadPage(
@@ -181,7 +183,7 @@ export default class MenuComponent
     ) {
       this.showMenu(menu);
     }
-    console.log("qam load menu ex_", {
+    console.log("qam load menu", {
       category,
       ownerId,
       moduleId,
