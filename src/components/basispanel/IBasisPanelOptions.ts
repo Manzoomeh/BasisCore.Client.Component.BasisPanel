@@ -91,5 +91,5 @@ export interface ILabels {
   widgetsSettingButton: string;
   storeTitle: string;
   lightModeTitle: string;
-  darkModeTitle: string;
+  darkModeTitle: string; widgetsHeaderTitle: string
 }

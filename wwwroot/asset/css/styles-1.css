@@ -1843,18 +1843,22 @@ body.darkmode {
     position: relative;
     margin-bottom: 15px;
     /* padding: 0 20px; */
+    width: -webkit-fill-available;
 }
 
-.tabWrapper .tabContainer {
-    /* border: 1px solid #efefef; */
-    background-color: rgba(0, 75, 133, 0.05);
+.tabWrapper .tabWrapper {
     border-radius: 5px;
+    display: flex;
     padding: 5px;
-    width: max-content;
+    background-color: transparent;
+    width: -webkit-fill-available;
     position: relative;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.tabWrapper .tabButton {
+
+.tabWrapper .tabBtn {
     color: #030229;
     background: transparent;
     font-size: 14px;
@@ -1876,15 +1880,15 @@ body.darkmode {
     line-height: 35px;
 }
 
-.tabWrapper .tabButton[tab-button-status="active"] {
-    color: #fff;
+.tabWrapper .tabBtn[tab-button-status="active"] {
+    color: #004B85;
 }
 
-.tabWrapper .tabActive {
+.tabWrapper .tabAct {
     position: absolute;
     bottom: 5px;
     display: flex;
-    height: 35px;
+    height: 1px;
     width: 100px;
     background-color: #004B85;
     z-index: 1;

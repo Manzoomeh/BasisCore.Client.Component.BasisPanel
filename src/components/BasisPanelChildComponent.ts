@@ -2,8 +2,7 @@ import { IComponentManager, ISource, IUserDefineComponent } from "basiscore";
 import IBasisPanelOptions, { ICultureOptions, IDirection, ILabels } from "./basispanel/IBasisPanelOptions";
 
 export default abstract class BasisPanelChildComponent
-  implements IComponentManager
-{
+  implements IComponentManager {
   protected readonly owner: IUserDefineComponent;
   public readonly container: Element;
   protected readonly options: IBasisPanelOptions;
@@ -26,7 +25,7 @@ export default abstract class BasisPanelChildComponent
           corporateTitle: "شرکت‌ها",
           corporateSearchPlaceholder: "جستجوی شرکت ...",
           corporateBuy: "خرید سرویس",
-          businessBuy:"خرید کسب‌وکار",
+          businessBuy: "خرید کسب‌وکار",
           businessTitle: "کسب‌و‌کارها",
           businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
           schedulerNoTask: "در انتظار کار جدید",
@@ -37,9 +36,10 @@ export default abstract class BasisPanelChildComponent
           widgetsTab: "ویجت‌ها",
           dashboardWidgetsTab: "ویجت‌ میزکار",
           widgetsSettingButton: "ذخیره تغییرات",
-          storeTitle:"فروشگاه",
+          storeTitle: "فروشگاه",
           lightModeTitle: "روز",
-          darkModeTitle: "شب"
+          darkModeTitle: "شب",
+          widgetsHeaderTitle: "ابزار های پایه"
         },
       };
     }
@@ -85,7 +85,7 @@ export default abstract class BasisPanelChildComponent
     this.container.setAttribute(dataAttr, `d${this.deviceId}`);
 
     let layout;
-    switch(this.deviceId) {
+    switch (this.deviceId) {
       case 1:
         layout = desktopLayout;
         break;
@@ -93,7 +93,7 @@ export default abstract class BasisPanelChildComponent
         layout = mobileLayout;
         break;
       default:
-        // code block
+      // code block
     }
 
     if (layout?.length > 0) {
@@ -116,6 +116,7 @@ export default abstract class BasisPanelChildComponent
         // .replace("@dragAndDropMessage", this.labels.dragAndDropMessage)
         .replace("@widgetsTitle", this.labels.widgetsTitle)
         .replace("@widgetsTab", this.labels.widgetsTab)
+        .replace("@widgetsHeaderTitle", this.labels.widgetsHeaderTitle)
         .replace("@dashboardWidgetsTab", this.labels.dashboardWidgetsTab)
         .replace("@widgetsSettingButton", this.labels.widgetsSettingButton)
         .replace("@storeTitle", this.labels.storeTitle)

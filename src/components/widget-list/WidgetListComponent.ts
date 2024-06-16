@@ -224,7 +224,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
         disableWidgets.appendChild(widgetElement);
       });
-    } catch {}
+    } catch { }
   }
 
   private displayWidgetList(e) {
@@ -271,9 +271,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "[data-bc-page-body-container]"
     ) as HTMLElement;
     if (this.direction == "leftToRight") {
-      widgetBox.style.transform = "translateX(300px)";
+      widgetBox.style.transform = "translateX(330px)";
     } else {
-      widgetBox.style.transform = "translateX(-300px)";
+      widgetBox.style.transform = "translateX(-330px)";
     }
     widgetContainer.style.width = "100%";
     this.sortable.destroy();
@@ -366,8 +366,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         ) as HTMLElement;
         event.source.setAttribute(
           "style",
-          `display: flex !important;border-radius:24px;outline: 2px solid #ccc;outline-offset: -9px;height:${
-            widgetData.h * this._page.cell
+          `display: flex !important;border-radius:24px;outline: 2px solid #ccc;outline-offset: -9px;height:${widgetData.h * this._page.cell
           }px;position:relative;background-color:transparent;justify-content:center;align-items:center;flex-direction:column`
         );
         if (
@@ -382,7 +381,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       }
     });
     this.sortable.on("drag:stop", (event) => {
-      window.removeEventListener("handleMouseMove", () => {});
+      window.removeEventListener("handleMouseMove", () => { });
       if (
         event.sourceContainer.attributes.getNamedItem(
           "data-bc-bp-group-container"
@@ -425,9 +424,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           "style",
           event.source.attributes.getNamedItem("style")?.value || ""
         );
-        event.originalSource.style.height = `${
-          widgetData.h * this._page.cell
-        }px`;
+        event.originalSource.style.height = `${widgetData.h * this._page.cell
+          }px`;
 
         if (event.source.attributes.getNamedItem("pallete-widget-element")) {
           event.originalSource.children[0].setAttribute(
@@ -644,17 +642,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           newHeight - this.currentResizeHandle.offsetHeight >=
           this._page.cell
         ) {
-          this.currentResizeHandle.style.height = `${
-            this.currentResizeHandle.offsetHeight + this._page.cell
-          }px`;
+          this.currentResizeHandle.style.height = `${this.currentResizeHandle.offsetHeight + this._page.cell
+            }px`;
         }
         if (
           newHeight - this.currentResizeHandle.offsetHeight <=
           -this._page.cell
         ) {
-          this.currentResizeHandle.style.height = `${
-            this.currentResizeHandle.offsetHeight - this._page.cell
-          }px`;
+          this.currentResizeHandle.style.height = `${this.currentResizeHandle.offsetHeight - this._page.cell
+            }px`;
         }
         break;
     }
@@ -699,7 +695,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     widgetsContainer.style.display = "flex";
     widgetsContainer.style.flexWrap = "wrap";
     widgetsContainer.style.flexDirection = "row-reverse";
-    dashbaordBtn.style.display = "none";
     widgets.forEach((e: HTMLElement) => {
       const increaseHeight = document.createElement("div");
       const increaseWidth = document.createElement("div");
@@ -751,11 +746,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "[data-bc-page-body-container]"
     ) as HTMLElement;
     widgetBox.style.transform = "translateX(0px)";
-    widgetContainer.style.width = "calc(100% - 300px)";
+    widgetContainer.style.width = "calc(100% - 330px)";
 
     this.enableDragDrop();
   }
   public async addingDashboardWidgets(): Promise<void> {
+    console.log('heree')
     const dashbaordBtn = this.container.querySelector(
       ".tabWrapperForWidgets"
     ) as HTMLElement;
@@ -764,10 +760,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "[data-bc-page-widget-dashboard-wrapper]"
     ) as HTMLElement;
     parent.innerHTML = "";
+    console.log('this.options', this.options, this._page)
     const url = HttpUtil.formatString(
-      this.options.method.dashboardReservedWidgets,
+      this.options.baseUrl[this._page.loaderParam.owner] + this.options.method.dashboardReservedWidgets,
       {
         rKey: this.options.rKey,
+        pid: this._page.loaderParam.pageId
       }
     );
     const removewidgetUrl = HttpUtil.formatString(
@@ -776,9 +774,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         rKey: this.options.rKey,
       }
     );
+    console.log('11111')
     const data = await HttpUtil.fetchStringAsync(url, "GET");
+    console.log('22222')
+
     this.dashboardWidgetList = JSON.parse(data);
-    this.dashboardWidgetList.forEach((widgetList) => {
+    this.dashboardWidgetList?.forEach((widgetList) => {
       const widgetDiv = document.createElement("div");
       const insideContainer = document.createElement("div");
       insideContainer.setAttribute("data-bc-dashboard-widget-container", "");
@@ -788,7 +789,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       widgetDiv.setAttribute("data-sys-text", "");
       closeDiv.setAttribute("data-bc-btn-remove", "");
       closeDiv.innerHTML = `<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM8.96963 8.96965C9.26252 8.67676 9.73739 8.67676 10.0303 8.96965L12 10.9393L13.9696 8.96967C14.2625 8.67678 14.7374 8.67678 15.0303 8.96967C15.3232 9.26256 15.3232 9.73744 15.0303 10.0303L13.0606 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0303 15.0303C9.73742 15.3232 9.26254 15.3232 8.96965 15.0303C8.67676 14.7374 8.67676 14.2625 8.96965 13.9697L10.9393 12L8.96963 10.0303C8.67673 9.73742 8.67673 9.26254 8.96963 8.96965Z" fill="#EB5757"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM8.96963 8.96965C9.26252 8.67676 9.73739 8.67676 10.0303 8.96965L12 10.9393L13.9696 8.96967C14.2625 8.67678 14.7374 8.67678 15.0303 8.96967C15.3232 9.26256 15.3232 9.73744 15.0303 10.0303L13.0606 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0303 15.0303C9.73742 15.3232 9.26254 15.3232 8.96965 15.0303C8.67676 14.7374 8.67676 14.2625 8.96965 13.9697L10.9393 12L8.96963 10.0303C8.67673 9.73742 8.67673 9.26254 8.96963 8.96965Z" fill="white"/>
       </svg>`;
       insideContainer.textContent = widgetList.title;
       const widgetIcon = document.createElement("img");
@@ -821,12 +822,14 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "[data-dashboard-widgets]"
     );
     const activeElement = this.container.querySelector(
-      ".tabActive"
+      ".tabAct"
     ) as HTMLElement;
+    console.log('hhhhhhh')
     dashboardWidgetBtn.addEventListener("click", (e) => {
       parent.style.display = "flex";
       allWidget.style.display = "none";
-      activeElement.style.transform = `translateX(-100px)`;
+      console.log('moz', `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft - (e.target as HTMLElement).offsetLeft})`)
+      activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft - (e.target as HTMLElement).offsetLeft}px)`;
       dashboardWidgetBtn.setAttribute("tab-button-status", "active");
       allWidgetBtn.removeAttribute("tab-button-status");
     });
@@ -837,5 +840,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       allWidgetBtn.setAttribute("tab-button-status", "active");
       dashboardWidgetBtn.removeAttribute("tab-button-status");
     });
+    console.log('dash :>', dashboardWidgetBtn, allWidgetBtn)
   }
 }

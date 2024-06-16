@@ -35,18 +35,14 @@
   width: 2px;
 }
 
-[data-bc-bp-direction="rightToLeft"]
-  [data-bc-page-widget-list-dlg-btn-close]::after,
-[data-bc-bp-direction="rightToLeft"]
-  [data-bc-page-widget-list-dlg-btn-close]::before {
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-close]::after,
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-close]::before {
   right: auto;
   left: 50%;
 }
 
-[data-bc-bp-direction="leftToRight"]
-  [data-bc-page-widget-list-dlg-btn-close]::after,
-[data-bc-bp-direction="leftToRight"]
-  [data-bc-page-widget-list-dlg-btn-close]::before {
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-close]::after,
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-close]::before {
   left: auto;
   right: 50%;
 }
@@ -59,8 +55,7 @@
   /* transform: translateX(-50%) translateY(-50%) rotate(-45deg); */
 }
 
-[data-bc-bp-direction="rightToLeft"]
-  [data-bc-page-widget-list-dlg-btn-close]::before {
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-close]::before {
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
   -moz-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
   -ms-transform: translateX(-50%) translateY(-50%) rotate(-45deg);
@@ -68,8 +63,7 @@
   transform: translateX(-50%) translateY(-50%) rotate(-45deg);
 }
 
-[data-bc-bp-direction="leftToRight"]
-  [data-bc-page-widget-list-dlg-btn-close]::before {
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-close]::before {
   -webkit-transform: translateX(50%) translateY(-50%) rotate(-45deg);
   -moz-transform: translateX(50%) translateY(-50%) rotate(-45deg);
   -ms-transform: translateX(50%) translateY(-50%) rotate(-45deg);
@@ -85,8 +79,7 @@
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
 }
 
-[data-bc-bp-direction="rightToLeft"]
-  [data-bc-page-widget-list-dlg-btn-close]::after {
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list-dlg-btn-close]::after {
   -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
   -moz-transform: translateX(-50%) translateY(-50%) rotate(45deg);
   -ms-transform: translateX(-50%) translateY(-50%) rotate(45deg);
@@ -94,8 +87,7 @@
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
 }
 
-[data-bc-bp-direction="leftToRight"]
-  [data-bc-page-widget-list-dlg-btn-close]::after {
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-close]::after {
   -webkit-transform: translateX(50%) translateY(-50%) rotate(45deg);
   -moz-transform: translateX(50%) translateY(-50%) rotate(45deg);
   -ms-transform: translateX(50%) translateY(-50%) rotate(45deg);
@@ -118,7 +110,7 @@ div[data-bc-page-body] {
 }
 
 [data-bc-page-widget-list] {
-  width: 300px;
+  width: 330px;
   /* direction: ltr; */
   padding: 15px;
   box-sizing: border-box;
@@ -134,13 +126,13 @@ div[data-bc-page-body] {
 [data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-list] {
   direction: ltr;
   left: 0;
-  transform: translateX(-300px);
+  transform: translateX(-330px);
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list] {
   direction: rtl;
   right: 0;
-  transform: translateX(300px);
+  transform: translateX(330px);
 }
 
 [data-bc-page-widget-save-setting] {
@@ -185,23 +177,81 @@ div[data-bc-page-body] {
   border-radius: 5px;
   cursor: pointer;
   z-index: 99;
-  width: 120px;
-  height: 110px;
+  width: 140px;
+  height: 115px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
+[data-bc-page-widget-search] {
+  padding-block: 10px;
+  display: flex;
+  justify-content: center;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  align-items: center;
+}
+
+[data-bc-bp-direction="rightToLeft"] input {
+  direction: rtl;
+}
+
+[data-bc-bp-direction="leftToRight"] input {
+  direction: ltr;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-page-widget-search] input {
+  background: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2026%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20clip-path%3D%22url%28%23clip0_12092_106198%29%22%3E%0A%3Cpath%20d%3D%22M11.7429%2010.3421C12.7112%209.02083%2013.1449%207.38264%2012.9572%205.7553C12.7695%204.12796%2011.9743%202.63149%2010.7307%201.56528C9.48701%200.499068%207.88665%20-0.0582491%206.24973%200.00482408C4.61282%200.0678972%203.06008%200.746709%201.90217%201.90545C0.744249%203.0642%200.0665484%204.61742%200.00464653%206.25438C-0.0572553%207.89134%200.501207%209.49131%201.56831%2010.7342C2.6354%2011.9771%204.13244%2012.7712%205.75992%2012.9577C7.38739%2013.1442%209.02528%2012.7094%2010.3459%2011.7401H10.3449C10.3749%2011.7801%2010.4069%2011.8181%2010.4429%2011.8551L14.2929%2015.7051C14.4804%2015.8928%2014.7348%2015.9983%2015%2015.9983C15.2653%2015.9984%2015.5198%2015.8932%2015.7074%2015.7056C15.895%2015.5181%2016.0005%2015.2638%2016.0006%2014.9985C16.0007%2014.7332%2015.8954%2014.4788%2015.7079%2014.2911L11.8579%2010.4411C11.8221%2010.405%2011.7837%2010.3715%2011.7429%2010.3411V10.3421ZM12.0009%206.49815C12.0009%207.22042%2011.8586%207.93562%2011.5822%208.60291C11.3058%209.2702%2010.9007%209.87651%2010.39%2010.3872C9.87926%2010.898%209.27295%2011.3031%208.60566%2011.5795C7.93837%2011.8559%207.22317%2011.9981%206.5009%2011.9981C5.77863%2011.9981%205.06343%2011.8559%204.39614%2011.5795C3.72885%2011.3031%203.12253%2010.898%202.61181%2010.3872C2.10109%209.87651%201.69596%209.2702%201.41956%208.60291C1.14316%207.93562%201.0009%207.22042%201.0009%206.49815C1.0009%205.03946%201.58036%203.64051%202.61181%202.60906C3.64326%201.57761%205.04221%200.998147%206.5009%200.998147C7.95959%200.998147%209.35853%201.57761%2010.39%202.60906C11.4214%203.64051%2012.0009%205.03946%2012.0009%206.49815Z%22%20fill%3D%22%23ADADAD%22%2F%3E%0A%3C%2Fg%3E%0A%3Cdefs%3E%0A%3CclipPath%20id%3D%22clip0_12092_106198%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22white%22%2F%3E%0A%3C%2FclipPath%3E%0A%3C%2Fdefs%3E%0A%3C%2Fsvg%3E%0A") no-repeat left;
+  background-size: 20px;
+
+}
+
+[data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-search] input {
+  background: url("data:image/svg+xml,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2026%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20clip-path%3D%22url%28%23clip0_12092_106198%29%22%3E%0A%3Cpath%20d%3D%22M11.7429%2010.3421C12.7112%209.02083%2013.1449%207.38264%2012.9572%205.7553C12.7695%204.12796%2011.9743%202.63149%2010.7307%201.56528C9.48701%200.499068%207.88665%20-0.0582491%206.24973%200.00482408C4.61282%200.0678972%203.06008%200.746709%201.90217%201.90545C0.744249%203.0642%200.0665484%204.61742%200.00464653%206.25438C-0.0572553%207.89134%200.501207%209.49131%201.56831%2010.7342C2.6354%2011.9771%204.13244%2012.7712%205.75992%2012.9577C7.38739%2013.1442%209.02528%2012.7094%2010.3459%2011.7401H10.3449C10.3749%2011.7801%2010.4069%2011.8181%2010.4429%2011.8551L14.2929%2015.7051C14.4804%2015.8928%2014.7348%2015.9983%2015%2015.9983C15.2653%2015.9984%2015.5198%2015.8932%2015.7074%2015.7056C15.895%2015.5181%2016.0005%2015.2638%2016.0006%2014.9985C16.0007%2014.7332%2015.8954%2014.4788%2015.7079%2014.2911L11.8579%2010.4411C11.8221%2010.405%2011.7837%2010.3715%2011.7429%2010.3411V10.3421ZM12.0009%206.49815C12.0009%207.22042%2011.8586%207.93562%2011.5822%208.60291C11.3058%209.2702%2010.9007%209.87651%2010.39%2010.3872C9.87926%2010.898%209.27295%2011.3031%208.60566%2011.5795C7.93837%2011.8559%207.22317%2011.9981%206.5009%2011.9981C5.77863%2011.9981%205.06343%2011.8559%204.39614%2011.5795C3.72885%2011.3031%203.12253%2010.898%202.61181%2010.3872C2.10109%209.87651%201.69596%209.2702%201.41956%208.60291C1.14316%207.93562%201.0009%207.22042%201.0009%206.49815C1.0009%205.03946%201.58036%203.64051%202.61181%202.60906C3.64326%201.57761%205.04221%200.998147%206.5009%200.998147C7.95959%200.998147%209.35853%201.57761%2010.39%202.60906C11.4214%203.64051%2012.0009%205.03946%2012.0009%206.49815Z%22%20fill%3D%22%23ADADAD%22%2F%3E%0A%3C%2Fg%3E%0A%3Cdefs%3E%0A%3CclipPath%20id%3D%22clip0_12092_106198%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22white%22%2F%3E%0A%3C%2FclipPath%3E%0A%3C%2Fdefs%3E%0A%3C%2Fsvg%3E%0A") no-repeat right;
+  background-size: 20px;
+
+}
+
+[data-bc-section-header] {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+[data-bc-section-header-text] {
+  position: absolute;
+  background: white;
+  padding-inline: 10px;
+}
+
+[data-bc-section-header-line] {
+  width: -webkit-fill-available;
+}
+
+[data-bc-page-widget-search] input {
+  width: -webkit-fill-available;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  outline: none;
+  padding: 5px 30px;
+  background-size: 20px;
+  height: 30px;
+}
+
+[data-bc-page-widget-search] input:focus-within {
+  border: 1px solid #adadad !important;
+}
+
 [data-bc-page-widget-setting] {
   display: flex;
+  gap: 10px;
   align-items: center;
-  justify-content: space-between;
-  /* direction: rtl; */
-  border-bottom: 1px dashed #ccc;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
 }
+
+
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-page-widget-setting] {
   direction: rtl;
