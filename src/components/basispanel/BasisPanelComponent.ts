@@ -7,7 +7,8 @@ import desktopLayout from "./assets/layout-desktop.html";
 import mobileLayout from "./assets/layout-mobile.html";
 import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
-import LocalStorageUtil from "../../LocalStorageUtil";
+import LocalStorageUtil, { IStateModel } from "../../LocalStorageUtil";
+import { DefaultSource } from "../../type-alias";
 
 declare const $bc: any;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -24,6 +25,31 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
 
   async runAsync(source?: ISourceOptions): Promise<any> {
     if (!this.runTask) {
+      window.addEventListener("popstate", (event) => {
+        if (event.state) {
+          event.preventDefault();
+          this.container
+            .querySelector("[data-bc-bp-main-header]")
+            .querySelector(".active-business")
+            ?.classList.remove("active-business");
+          this.container
+            .querySelector("[data-bc-bp-main-header]")
+            .querySelector(".active-corporate")
+            ?.classList.remove("active-corporate");
+          const state: IStateModel = event.state;
+          console.log("qam set state in back", state);
+          LocalStorageUtil.setCurrentState(state);
+          if (state.CorporateId) {
+            this.owner.setSource(DefaultSource.SET_CORPORATE, state);
+          }
+          if (state.BusinessId) {
+            this.owner.setSource(DefaultSource.SET_BUSINESS, state);
+          }
+          if (state.PageId) {
+            this.owner.setSource(DefaultSource.SET_MENU, state);
+          }
+        }
+      });
       this.runTask = this.owner.processNodesAsync(
         Array.from(this.container.childNodes)
       );

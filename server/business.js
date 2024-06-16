@@ -119,12 +119,16 @@ router.get("/:rKey/menu", function (req, res) {
       title: `منوی کسب و کار ${business.title}`,
       nodes: [
         {
+          title: `زیر منوی پیش فرض کسب و کار ${business.title}`,
+          pid: "default",
+        },
+        {
           title: `زیر منوی اول کسب و کار ${business.title}`,
-          pid: business.id * 3,
+          pid: (business.id * 3).toString(),
         },
         {
           title: `زیر منوی دوم کسب و کار ${business.title}`,
-          pid: business.id * 4,
+          pid: (business.id * 4).toString(),
         },
       ],
     });
@@ -133,23 +137,59 @@ router.get("/:rKey/menu", function (req, res) {
 });
 
 router.get("/:rKey/page/:pageId", function (req, res) {
+  const business = businessList.find((x) => x.id == active.business);
   const widgetList = fs.readFileSync(
     path.join(__dirname, "pages/business-widget-list.json"),
     {
       encoding: "utf8",
     }
   );
-  res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
+  let result = Reflect.get(JSON.parse(widgetList), req.params.pageId);
+  if (!result) {
+    result = {
+      container: "container",
+      groups: [
+        {
+          groupName: "group1",
+          options: {
+            repositories: {
+              "bc.grid": "/assets/js/basiscore.grid.component.js",
+            },
+            settings: {},
+          },
+          widgets: [
+            {
+              id: `businessWidget-${req.params.pageId}.html`,
+              title: `ویجت کسب و کار ${business.title}`,
+              name: `businessWidget-${req.params.pageId}`,
+              container: "widget",
+              x: 0,
+              y: 0,
+              w: 12,
+              h: 2,
+            },
+          ],
+          deactiveWidgets: [],
+        },
+      ],
+    };
+  }
+  res.json(result);
 });
 
 router.get("/:rKey/widget/:widgetId", function (req, res) {
-  const widgetList = fs.readFileSync(
-    path.join(__dirname, "pages", req.params.widgetId),
+  const business = businessList.find((x) => x.id == active.business);
+  const widgetContent = fs.readFileSync(
+    path.join(__dirname, "pages", "businessWidget1.html"),
     {
       encoding: "utf8",
     }
   );
-  res.send(widgetList);
+  res.send(
+    widgetContent
+      .replace("{0}", business.title)
+      .replace("{1}", req.params.widgetId)
+  );
 });
 
 module.exports = router;

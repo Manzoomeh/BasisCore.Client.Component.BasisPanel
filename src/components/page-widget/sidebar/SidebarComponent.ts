@@ -28,10 +28,18 @@ export default class SidebarComponent extends PageWidgetComponent {
   public async initializeAsync(): Promise<void> {
     if (this.deviceId == 2) {
       // add Event Listeners
-      const openedSidebar = this.container.querySelector("[data-bc-bp-sidebar-opened]");
-      const closedSidebar = this.container.querySelector("[data-bc-bp-sidebar-closed]");
-      const navbarSidebar = this.container.querySelector("[data-bc-sidebar-container]");
-      const sidebarOverlay = this.container.querySelector("[data-bc-bp-d2-sidebar-overlay]");
+      const openedSidebar = this.container.querySelector(
+        "[data-bc-bp-sidebar-opened]"
+      );
+      const closedSidebar = this.container.querySelector(
+        "[data-bc-bp-sidebar-closed]"
+      );
+      const navbarSidebar = this.container.querySelector(
+        "[data-bc-sidebar-container]"
+      );
+      const sidebarOverlay = this.container.querySelector(
+        "[data-bc-bp-d2-sidebar-overlay]"
+      );
 
       openedSidebar.addEventListener("click", (e) => {
         this.toggleSidebar([navbarSidebar, sidebarOverlay]);
@@ -47,10 +55,9 @@ export default class SidebarComponent extends PageWidgetComponent {
       this.container.setAttribute("gs-y", this.param.y.toString());
       this.container.setAttribute("gs-w", this.param.w.toString());
       this.container.setAttribute("gs-h", this.param.h.toString());
-      
-      const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
+
+      const parent = document.querySelector<HTMLElement>("[data-bc-page-body]");
       const cell = parent.offsetWidth / 12;
-  
       (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
       (this.container as HTMLElement).style.top = `${
         this.param.y * cell + parent.offsetTop
@@ -67,7 +74,7 @@ export default class SidebarComponent extends PageWidgetComponent {
       { rKey: this.param.page.rKey, pageId: this.param.page.pageId }
     );
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.options.checkRkey
@@ -136,13 +143,17 @@ export default class SidebarComponent extends PageWidgetComponent {
     content.setAttribute("data-sys-text", "");
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onSidebarItemClick(node.pid, e.target , this.param.page.arguments);
+      this.onSidebarItemClick(node.pid, e.target, this.param.page.arguments);
     });
     div.appendChild(content);
     return div;
   }
 
-  private async onSidebarItemClick(pageId: string, target: EventTarget, args?:any) {
+  private async onSidebarItemClick(
+    pageId: string,
+    target: EventTarget,
+    args?: any
+  ) {
     const newParam: IPageLoaderParam = {
       pageId: pageId,
       owner: this.param.page.owner,
@@ -150,15 +161,17 @@ export default class SidebarComponent extends PageWidgetComponent {
       ownerUrl: this.param.page.ownerUrl,
       rKey: this.param.page.rKey,
       pageMethod: this.param.page.pageMethod,
-      arguments: args
+      arguments: args,
+      module: this.param.page.module,
+      moduleId: this.param.page.moduleId,
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private toggleSidebar(elements: Array<Element>) {
     elements.forEach((el) => {
-      el.classList.toggle('active');
+      el.classList.toggle("active");
     });
-    document.body.classList.toggle('scrolling');
+    document.body.classList.toggle("scrolling");
   }
 }

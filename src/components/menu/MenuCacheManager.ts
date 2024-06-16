@@ -3,7 +3,7 @@ import IMenuInfo, { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import MenuElementMaker from "./MenuElementMaker";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
-import { IModuleInfo, MenuOwnerType } from "../../type-alias";
+import { MenuOwnerType } from "../../type-alias";
 
 export default class MenuCacheManager {
   private readonly cache: Map<string, MenuCacheItem>;
@@ -15,22 +15,24 @@ export default class MenuCacheManager {
     this.deviceId = deviceId;
   }
 
+  public tryGetMenu(category: MenuOwnerType, ownerId: string): MenuElement {
+    let cache = this.cache.get(category);
+    return cache?.tryGetMenu(ownerId);
+  }
+
   public loadMenuAsync(
     menuParam: IMenuLoaderParam,
-    moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>>,
     onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
+      category: MenuOwnerType,
+      ownerId: string,
+      moduleId: string,
+      pageId: string
     ) => void
   ): Promise<MenuElement> {
     let cache = this.cache.get(menuParam.owner);
     if (!cache) {
-      const mapper = new Map<string, IModuleInfo>();
-      moduleMapper.set(menuParam.owner, mapper);
       cache = new MenuCacheItem(
         menuParam,
-        mapper,
         onMenuItemClick,
         this.checkRkeyOption,
         this.deviceId
@@ -47,18 +49,17 @@ class MenuCacheItem {
   private checkRkeyOption: ICheckRkeyOptions;
   constructor(
     menuParam: IMenuLoaderParam,
-    moduleMapper: Map<string, IModuleInfo>,
     onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
+      category: MenuOwnerType,
+      ownerId: string,
+      moduleId: string,
+      pageId: string
     ) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
     this.menuMaker = new MenuElementMaker(
       menuParam.rKey,
-      moduleMapper,
       onMenuItemClick,
       checkRkey,
       deviceId
@@ -66,10 +67,14 @@ class MenuCacheItem {
     this.checkRkeyOption = checkRkey;
   }
 
+  public tryGetMenu(ownerId: string): MenuElement {
+    return this.cache.get(ownerId);
+  }
+
   public async loadMenuAsync(
     menuParam: IMenuLoaderParam
   ): Promise<MenuElement> {
-    let menu = this.cache.get(menuParam.ownerId);
+    let menu = this.tryGetMenu(menuParam.ownerId);
     if (!menu) {
       const url = HttpUtil.formatString(
         `${menuParam.ownerUrl}${menuParam.menuMethod}`,
@@ -78,14 +83,13 @@ class MenuCacheItem {
           level: menuParam.owner,
         }
       );
-      //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
-      const menuData = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+      const menuData = await HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
         url,
         "GET",
         this.checkRkeyOption
       );
       menu = this.menuMaker.create(menuData, menuParam);
-      this.cache.set(menuParam.ownerId, menu);
+      this.cache.set(menuParam.ownerId.toString(), menu);
     }
     return menu;
   }

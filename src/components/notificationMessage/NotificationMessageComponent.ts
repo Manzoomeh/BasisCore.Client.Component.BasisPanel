@@ -60,7 +60,7 @@ export default class NotificationMessageComponent
         rKey: this.options.rKey,
       }
     );
-    const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+    const res: any = await HttpUtil.checkRKeyFetchDataAsync(
       url,
       "GET",
       this.options.checkRkey
@@ -102,7 +102,7 @@ export default class NotificationMessageComponent
           rKey: this.options.rKey,
         }
       );
-      const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+      const res: any = await HttpUtil.checkRKeyFetchDataAsync(
         url,
         "GET",
         this.options.checkRkey
@@ -151,7 +151,7 @@ export default class NotificationMessageComponent
             rKey: this.options.rKey,
           }
         );
-        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+        const res: any = await HttpUtil.checkRKeyFetchDataAsync(
           url,
           "GET",
           this.options.checkRkey
@@ -238,7 +238,7 @@ export default class NotificationMessageComponent
               }
             );
           }
-          const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+          const res: any = await HttpUtil.checkRKeyFetchDataAsync(
             url,
             "GET",
             this.options.checkRkey
@@ -469,7 +469,7 @@ export default class NotificationMessageComponent
           );
         }
 
-        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+        const res: any = await HttpUtil.checkRKeyFetchDataAsync(
           url,
           "GET",
           this.options.checkRkey

@@ -12,6 +12,7 @@ const dbSource = require("./server/db-source");
 const messageHttpServer = require("./server/messages");
 
 const widgetList = require("./server/widget-list");
+const pageRouter = require("./server/pages");
 
 module.exports = (env, options) => {
   return {
@@ -59,6 +60,9 @@ module.exports = (env, options) => {
         server.app.use("/server/external", externalHttpServer);
         server.app.use("/server/dbsource", dbSource);
         server.app.use("/server/widget-list", widgetList);
+        server.app.use("/profile", pageRouter("profile"));
+        server.app.use("/corporate", pageRouter("corporate"));
+        server.app.use("/business", pageRouter("business"));
       },
       open: true,
     },

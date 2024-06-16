@@ -17,13 +17,6 @@ export default class ThemeComponent extends BasisPanelChildComponent {
   }
 
   public initializeAsync(): Promise<void> {
-    // var selector = this.container.querySelector<HTMLSelectElement>(
-    //   "[data-bc-basispanel-theme-selector]"
-    // );
-    // Object.getOwnPropertyNames(this.themes).forEach((theme) => {
-    //   selector.appendChild(new Option(theme, this.themes[theme]));
-    // });
-
     return Promise.resolve();
   }
 
@@ -36,36 +29,38 @@ export default class ThemeComponent extends BasisPanelChildComponent {
     const themeName = this.defaultTheme["colorMode"].split(" ")[0];
     this.setTheme(themeName);
 
-    const themeSelector = this.container.querySelector("[data-bc-basispanel-theme-selector]");
+    const themeSelector = this.container.querySelector(
+      "[data-bc-basispanel-theme-selector]"
+    );
     if (themeSelector) {
       if (themeName == "dark") {
         themeSelector.setAttribute("checked", "");
       }
       themeSelector.addEventListener("change", async (e) => {
-          const op = e.target as HTMLInputElement;
-  
-          if (op.checked) {
-            this.setTheme("dark");
-            const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
-              rKey: this.options.rKey,
-            });
-            await HttpUtil.sendFormData(url, "POST", `mode=dark mode`);
-          } else {
-            this.setTheme("light");
-            const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
-              rKey: this.options.rKey,
-            });
-            await HttpUtil.sendFormData(url, "POST", `mode=light mode`);
-          }
-        });
+        const op = e.target as HTMLInputElement;
+
+        if (op.checked) {
+          this.setTheme("dark");
+          const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
+            rKey: this.options.rKey,
+          });
+          await HttpUtil.sendFormData(url, "POST", `mode=dark mode`);
+        } else {
+          this.setTheme("light");
+          const url = HttpUtil.formatString(this.options.themeUrl.addThemeUrl, {
+            rKey: this.options.rKey,
+          });
+          await HttpUtil.sendFormData(url, "POST", `mode=light mode`);
+        }
+      });
     }
   }
-  
+
   private setTheme(theme: string): boolean {
     const path = this.themes[theme];
     let ret_val = false;
     if (path) {
-      var style = document.querySelector("link[data-bc-basispanel-theme]");
+      let style = document.querySelector("link[data-bc-basispanel-theme]");
       if (!style) {
         style = document.createElement("link");
         style.setAttribute("rel", "stylesheet");
@@ -84,7 +79,7 @@ export default class ThemeComponent extends BasisPanelChildComponent {
       }
     }
     if (ret_val) {
-      var context = this.owner.dc.resolve<any>("parent.context");
+      const context = this.owner.dc.resolve<any>("parent.context");
       context.setAsSource(DefaultSource.THEME_CHANGE, {
         name: theme,
         path: path,
@@ -98,7 +93,7 @@ export default class ThemeComponent extends BasisPanelChildComponent {
       rKey: this.options.rKey,
     });
 
-    this.defaultTheme = await HttpUtil.checkRkeyFetchDataAsync(
+    this.defaultTheme = await HttpUtil.checkRKeyFetchDataAsync(
       url,
       "GET",
       this.options.checkRkey

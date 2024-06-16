@@ -121,14 +121,12 @@ export default class LogoutComponent extends BasisPanelChildComponent {
         `return \`${this.options.dataUrl.profile}\``
       );
 
-      const questions = await HttpUtil.checkRkeyFetchDataAsync<
+      const questions = await HttpUtil.checkRKeyFetchDataAsync<
         Array<IQuestionItem>
       >(urlFormatter(this.options.rKey), "GET", this.options.checkRkey);
 
       this.profile = QuestionUtil.toObject(questions);
       this.refreshUI();
-      // this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-      // this.signalToDisplayMenu();
     }
   }
 

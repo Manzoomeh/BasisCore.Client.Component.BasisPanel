@@ -24,6 +24,7 @@ export default interface IBasisPanelOptions {
   tempwidgets: string;
   serviceLink?: string;
   businessLink?: string;
+  urlPrefix?: string;
 }
 
 interface IUrlCollectionOption {

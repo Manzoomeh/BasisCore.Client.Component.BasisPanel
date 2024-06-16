@@ -23,7 +23,12 @@ export default abstract class PageComponent
   public _groupsAdded: boolean = false;
   readonly _groups: Map<string, PageGroupComponent> = new Map();
 
-  constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
+  constructor(
+    owner: IUserDefineComponent,
+    desktopLayout: string,
+    mobileLayout: string,
+    dataAttr: string
+  ) {
     super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("page", this);
     this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
@@ -41,7 +46,7 @@ export default abstract class PageComponent
       this.loaderParam
     );
 
-    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+    this.info = await HttpUtil.checkRKeyFetchDataAsync<IPageInfo>(
       url,
       "GET",
       this.options.checkRkey
@@ -62,7 +67,7 @@ export default abstract class PageComponent
     try {
       const pageBody = this.container.querySelector('[data-bc-page-body=""]');
       const groupElement = document.createElement("basis");
-      var optionsName = this.owner.storeAsGlobal(groupInfo.options);
+      const optionsName = this.owner.storeAsGlobal(groupInfo.options);
       groupElement.setAttribute("core", "component.basispanel.pageGroup");
       groupElement.setAttribute("run", "atclient");
       groupElement.setAttribute("name", groupInfo.groupName);
@@ -115,9 +120,9 @@ export default abstract class PageComponent
     const menuHeight = (
       document.querySelector("[data-bc-bp-menu-container]") as HTMLElement
     ).offsetHeight;
-    const footerHeight = (
-      document.querySelector("[data-bc-bp-footer-container]") as HTMLElement
-    )?.offsetHeight ?? 0;
+    const footerHeight =
+      (document.querySelector("[data-bc-bp-footer-container]") as HTMLElement)
+        ?.offsetHeight ?? 0;
     const otherHeight = headerHeight + menuHeight + footerHeight;
 
     if (cell * maxHeight > windowHeight - otherHeight) {
@@ -134,12 +139,18 @@ export default abstract class PageComponent
 
     if (this.deviceId == 1) {
       // for fix menu after scroll (after load page content and determining the height that)
-      const bodyHeight = (this.container.closest("[data-bc-bp-main-container]") as HTMLElement).offsetHeight;
+      const bodyHeight = (
+        this.container.closest("[data-bc-bp-main-container]") as HTMLElement
+      ).offsetHeight;
       if (bodyHeight - windowHeight > 200) {
-        const menu = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-menu-container]");
-        const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
-        var sticky = (menu as HTMLElement).offsetTop;
-        window.onscroll = function() {
+        const menu = this.container
+          .closest("[data-bc-bp-main-container]")
+          .querySelector("[data-bc-bp-menu-container]");
+        const themeContainer = this.container
+          .closest("[data-bc-bp-main-container]")
+          .querySelector("[data-bc-bp-theme-container]");
+        const sticky = (menu as HTMLElement).offsetTop;
+        window.onscroll = function () {
           if (window.pageYOffset >= sticky) {
             menu.setAttribute("data-bc-bp-sticky", "");
             themeContainer.setAttribute("data-bc-bp-sticky", "");

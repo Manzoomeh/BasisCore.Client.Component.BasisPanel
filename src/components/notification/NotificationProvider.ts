@@ -2,10 +2,8 @@ import NotificationTab from "./NotificationTab";
 import INotificationComponent from "./INotificationComponent";
 import INotificationProviderOptions from "./options/INotificationProviderOptions";
 import { INotificationProvider } from "./INotificationProvider";
-import { IDisposable, ISourceOptions } from "basiscore"; //"bclib/dist/bclib";
-//import ISourceOptions from "basiscore";
+import { IDisposable, ISourceOptions } from "basiscore";
 import HttpUtil from "../../HttpUtil";
-//import ISource from "basiscore";
 
 export default class NotificationProvider implements INotificationProvider {
   readonly _owner: INotificationComponent;
@@ -25,7 +23,6 @@ export default class NotificationProvider implements INotificationProvider {
   ) {
     this._owner = owner;
     this.options = options;
-
     this.tab = new NotificationTab(this, index);
   }
 
@@ -61,11 +58,6 @@ export default class NotificationProvider implements INotificationProvider {
 
     return Promise.resolve();
   }
-
-  // public runAsync(source?: ISource) {
-  //   console.log("runAsync")
-  //   return true;
-  // }
 
   public async loadDataAsync(): Promise<void> {
     //TODO: start fetch data from url and display related list

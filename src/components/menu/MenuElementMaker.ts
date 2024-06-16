@@ -8,27 +8,26 @@ import IMenuInfo, {
 } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
-import LocalStorageUtil from "../../LocalStorageUtil";
-import { IModuleInfo } from "../../type-alias";
+import { MenuOwnerType } from "../../type-alias";
 
 export default class MenuElementMaker {
   readonly rKey: string;
   readonly onMenuItemClick: (
-    pageId: string,
-    param: IMenuLoaderParam,
-    target: EventTarget
+    category: MenuOwnerType,
+    ownerId: string,
+    moduleId: string,
+    pageId: string
   ) => void;
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
-  private moduleMapper: Map<string, IModuleInfo>;
 
   constructor(
     rKey: string,
-    moduleMapper: Map<string, IModuleInfo>,
     onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
+      category: MenuOwnerType,
+      ownerId: string,
+      moduleId: string,
+      pageId: string
     ) => void,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
@@ -37,7 +36,6 @@ export default class MenuElementMaker {
     this.onMenuItemClick = onMenuItemClick;
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
-    this.moduleMapper = moduleMapper;
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -54,12 +52,6 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>
   ) {
     items.forEach((node) => {
-      if ((node as IMenuExternalItemInfo).url) {
-        this.moduleMapper.set(node.mid, {
-          owner: menuParam.owner,
-          ownerUrl: (node as IMenuExternalItemInfo).url,
-        });
-      }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
           this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
@@ -75,7 +67,7 @@ export default class MenuElementMaker {
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == true
+        (node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
           this.createExternalMenuItem(
@@ -87,7 +79,7 @@ export default class MenuElementMaker {
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == false
+        !(node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
           this.createExternalMenuItemSingleItem(
@@ -118,7 +110,6 @@ export default class MenuElementMaker {
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
-          // collapseSubMenu();
           li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
           li.classList.remove("active");
         } else {
@@ -131,10 +122,8 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-submenu]");
-          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-          (subMenu as HTMLElement).style.maxHeight = "50rem";
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
-          // subMenu.classList.add("show");
         }
       });
     } else {
@@ -164,63 +153,62 @@ export default class MenuElementMaker {
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLLIElement {
-    if (!this.moduleMapper.has(node.mid)) {
-      this.moduleMapper.set(node.mid, {
-        owner: menuParam.owner,
-        ownerUrl: menuParam.ownerUrl,
-      });
-    }
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
-    content.setAttribute("data-bc-pid", node.pid.toString());
-    content.setAttribute("data-bc-mid", node.mid?.toString());
-    content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
+    content.setAttribute("data-bc-pid", node.pid);
+    content.setAttribute("data-bc-mid", node.mid);
+    content.setAttribute("data-bc-ownerid", menuParam.ownerId);
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onMenuItemClick(node.pid, menuParam, e.target);
-      document.body.classList.remove("scrolling");
+      this.onMenuItemClick(
+        menuParam.owner,
+        menuParam.ownerId,
+        node.mid,
+        node.pid.toString()
+      );
 
-      const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-      activeMenus.forEach((e) => {
-        e.removeAttribute("data-bc-menu-active");
-      });
+      //const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+      // activeMenus.forEach((e) => {
+      //   e.removeAttribute("data-bc-menu-active");
+      // });
 
-      const parent = content.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
-        li.setAttribute("data-bc-menu-active", "");
-      } else {
-        li.setAttribute("data-bc-menu-active", "");
-      }
+      //const parent = content.closest("[data-bc-bp-submenu]");
+      // if (parent) {
+      //   parent
+      //     .closest("li")
+      //     .querySelector("[data-bc-level]")
+      //     .setAttribute("data-bc-menu-active", "");
+      //   li.setAttribute("data-bc-menu-active", "");
+      // } else {
+      //   li.setAttribute("data-bc-menu-active", "");
+      // }
 
       if (this.deviceId == 2) {
         li.closest("[data-bc-bp-header-more-container]").classList.remove(
           "active"
         );
       }
-
-      LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
     });
-    pageLookup.set(node.pid, menuParam);
+    pageLookup.set(node.mid.toString(), menuParam);
     li.appendChild(content);
     return li;
   }
+
   private createExternalMenuItemSingleItem(
     node: IMenuExternalItemInfo,
     menuParam: IMenuLoaderParam,
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
-      owner: "external",
-      ownerId: node.mid,
+      owner: menuParam.owner,
+      ownerId: menuParam.ownerId, //node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,
       rKey: menuParam.rKey,
+      moduleId: node.mid,
+      module: node.name,
     };
     const li = document.createElement("li");
     const ul = document.createElement("ul");
@@ -237,7 +225,7 @@ export default class MenuElementMaker {
       }
     );
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption
@@ -255,11 +243,13 @@ export default class MenuElementMaker {
     deviceId: number
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
-      owner: "external",
-      ownerId: node.mid,
+      owner: menuParam.owner,
+      ownerId: menuParam.ownerId, //node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,
       rKey: menuParam.rKey,
+      module: node.name,
+      moduleId: node.mid,
     };
     const li = document.createElement("li");
     const content = document.createElement("a");
@@ -276,12 +266,9 @@ export default class MenuElementMaker {
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
-          // collapseSubMenu();
           li.querySelector("[data-bc-bp-menu-external]").removeAttribute(
             "style"
           );
-          document.body.classList.remove("scrolling");
-
           li.classList.remove("active");
         } else {
           // Collapse Existing Expanded menuItemHasChildren
@@ -295,15 +282,13 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-menu-external]");
-          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-          (subMenu as HTMLElement).style.maxHeight = "50rem";
+          (subMenu as HTMLElement).style.maxHeight = "20rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
-          // subMenu.classList.add("show");
         }
       });
     } else {
       content.addEventListener("click", function () {
-        if (subMenuFlag == false) {
+        if (!subMenuFlag) {
           ul.style.transition = "all 0.3s ease-in-out";
           ul.style.width = `auto`;
           ul.style.overflow = `visible`;
@@ -326,7 +311,7 @@ export default class MenuElementMaker {
       }
     );
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    HttpUtil.checkRKeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption

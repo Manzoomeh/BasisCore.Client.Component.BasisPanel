@@ -2,6 +2,7 @@ var fs = require("fs");
 const path = require("path");
 var express = require("express");
 var router = express.Router();
+const { active } = require("./active-manager");
 
 // // middleware that is specific to this router
 // router.use(function timeLog (req, res, next) {
@@ -63,16 +64,18 @@ router.get("/:rKey/menu", function (req, res) {
       },
       { title: "تقویم", pid: "myFiles" },
       {
-        mid: 2,
+        mid: 200,
         title: "Ticketing",
         multi: true,
         url: "/server/external/calender",
+        name: "Ticketing",
       },
       {
         mid: 4,
         title: "TaskManager",
         multi: false,
         url: "http://localhost:8080/server/external/task",
+        name: "TaskManager",
       },
     ],
   };
@@ -148,7 +151,17 @@ router.post("/:rKey/logout", function (req, res) {
 });
 
 router.get("/checkrkey/:rKey", function (req, res) {
-  const result = { checked: true };
+  const result = {
+    checked: true,
+    userid: 122503,
+    currentOwnerid: active.corporate,
+    currentDmnid: active.business,
+    ownerid: 30,
+    dmnid: 30,
+    rkey: req.params.rKey,
+    usercat: "48,5475,",
+    ERP: false,
+  };
   res.json(result);
 });
 

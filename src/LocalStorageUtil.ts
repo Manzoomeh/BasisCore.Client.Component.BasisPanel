@@ -1,174 +1,168 @@
-import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
-import { MenuOwnerType } from "./type-alias";
-import { IMenuPageInfo } from "./components/menu/IMenuInfo";
+import { IRoutingQueryString, MenuOwnerType } from "./type-alias";
+import { IMenuLoaderParam, IMenuPageInfo } from "./components/menu/IMenuInfo";
 
 export default class LocalStorageUtil {
-  private static _lastBusiness: number;
-  private static _lastCorporate: number;
-  private static _lastPage: IPageLoaderParam;
-  private static _lastMenu: ICurrentMenu;
-
-  private static _currentBusiness: number;
-  private static _currentCorporate: number;
-  private static _currentPage: IPageLoaderParam;
-  private static _currentUserId: number;
-
-  private static _hasPageToShow: boolean = false;
-  private static _hasMenuToActive: boolean = false;
+  public static UserId: number;
+  public static BusinessId?: number;
+  public static CorporateId?: number;
+  public static PageId?: string;
+  public static ModuleId?: string;
+  public static ModuleName?: string;
+  public static Category?: MenuOwnerType;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
     const result = await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
     if (result.checked) {
-      LocalStorageUtil._currentUserId = result.userid;
-      const str = localStorage.getItem("__bc_panel_last_state__");
-      if (str) {
-        try {
-          const obj = JSON.parse(str);
-          if (obj.i && result.userid == obj.i) {
-            if (obj.b) {
-              LocalStorageUtil._lastBusiness = obj.b;
-            }
-            if (obj.c) {
-              LocalStorageUtil._lastCorporate = obj.c;
-            }
-            if (obj.p) {
-              LocalStorageUtil._lastPage = obj.p;
-              LocalStorageUtil._hasPageToShow = true;
-            }
-            if (obj.m) {
-              LocalStorageUtil._lastMenu = obj.m;
-              LocalStorageUtil._hasMenuToActive = true;
-            }
+      LocalStorageUtil.UserId = result.userid;
+      const routingQueryObject =
+        HttpUtil.getQueryStringObject() as IRoutingQueryString;
+      if (
+        routingQueryObject &&
+        routingQueryObject.category &&
+        routingQueryObject.pageId
+      ) {
+        LocalStorageUtil.Category = routingQueryObject.category;
+        LocalStorageUtil.PageId = routingQueryObject.pageId;
+        LocalStorageUtil.ModuleId = routingQueryObject.moduleId;
+        LocalStorageUtil.ModuleName = routingQueryObject.moduleName;
+        switch (LocalStorageUtil.Category) {
+          case "profile": {
+            LocalStorageUtil.CorporateId = null;
+            LocalStorageUtil.BusinessId = null;
+            break;
           }
-        } catch (ex) {
-          console.error("error in  load local storage data", ex);
+          case "corporate": {
+            LocalStorageUtil.CorporateId = result.currentOwnerid;
+            LocalStorageUtil.BusinessId = null;
+            break;
+          }
+          case "business": {
+            LocalStorageUtil.CorporateId = result.currentOwnerid;
+            LocalStorageUtil.BusinessId = result.currentDmnid;
+            break;
+          }
+        }
+      } else {
+        const str = localStorage.getItem("__bc_panel_last_state__");
+        if (str) {
+          try {
+            const obj: IStateModel = JSON.parse(str);
+            LocalStorageUtil.CorporateId = obj.CorporateId ?? null;
+            LocalStorageUtil.BusinessId = obj.BusinessId ?? null;
+            LocalStorageUtil.Category = obj.Category ?? "profile";
+            LocalStorageUtil.PageId = obj.PageId ?? "default";
+            LocalStorageUtil.ModuleId = obj.ModuleId ?? null;
+            LocalStorageUtil.ModuleName = obj.ModuleName ?? null;
+          } catch (ex) {
+            console.error("error in  load local storage data", ex);
+          }
         }
       }
     }
   }
 
   public static resetCurrentUserId() {
-    LocalStorageUtil._currentBusiness = null;
-    LocalStorageUtil._currentCorporate = null;
+    LocalStorageUtil.BusinessId = null;
+    LocalStorageUtil.CorporateId = null;
     LocalStorageUtil.save();
   }
 
   public static setEntitySelectorCurrentValue(
     ownerType: MenuOwnerType,
-    value: number
+    id: number
   ) {
     if (ownerType == "business") {
-      LocalStorageUtil._currentBusiness = value;
+      LocalStorageUtil.BusinessId = id;
     } else if (ownerType == "corporate") {
-      LocalStorageUtil._currentCorporate = value;
-      LocalStorageUtil._currentBusiness = null;
+      LocalStorageUtil.CorporateId = id;
+      LocalStorageUtil.BusinessId = null;
     }
     LocalStorageUtil.save();
   }
 
   private static save(): void {
-    var obj = {
-      i: LocalStorageUtil._currentUserId,
-      b: LocalStorageUtil._currentBusiness,
-      c: LocalStorageUtil._currentCorporate,
-      p: LocalStorageUtil._currentPage,
-      m: LocalStorageUtil._lastMenu,
+    localStorage.setItem(
+      "__bc_panel_last_state__",
+      JSON.stringify(LocalStorageUtil.getLastState())
+    );
+  }
+
+  public static getLastState(): IStateModel {
+    return {
+      UserId: LocalStorageUtil.UserId,
+      BusinessId: LocalStorageUtil.BusinessId,
+      CorporateId: LocalStorageUtil.CorporateId,
+      PageId: LocalStorageUtil.PageId,
+      Category: LocalStorageUtil.Category,
+      ModuleId: LocalStorageUtil.ModuleId,
+      ModuleName: LocalStorageUtil.ModuleName,
     };
-    localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
+  }
+
+  public static setCurrentState(state: IStateModel): void {
+    LocalStorageUtil.UserId = state.UserId;
+    LocalStorageUtil.BusinessId = state.BusinessId;
+    LocalStorageUtil.CorporateId = state.CorporateId;
+    LocalStorageUtil.PageId = state.PageId;
+    LocalStorageUtil.Category = state.Category;
+    LocalStorageUtil.ModuleId = state.ModuleId;
+    LocalStorageUtil.ModuleName = state.ModuleName;
+    LocalStorageUtil.save();
   }
 
   public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
-    var retVal: number = null;
+    let retVal: number = null;
     if (ownerType == "business") {
-      retVal = LocalStorageUtil._lastBusiness;
+      retVal = LocalStorageUtil.BusinessId;
     } else if (ownerType == "corporate") {
-      retVal = LocalStorageUtil._lastCorporate;
+      retVal = LocalStorageUtil.CorporateId;
     }
     return retVal;
   }
 
-  public static setCurrentPage(page: IPageLoaderParam) {
-    LocalStorageUtil._currentPage = page;
+  public static setCurrentPage(
+    moduleName: string,
+    moduleId: string,
+    pageId: string,
+    category: MenuOwnerType
+  ) {
+    LocalStorageUtil.PageId = pageId;
+    LocalStorageUtil.Category = category;
+    LocalStorageUtil.ModuleId = moduleId;
+    LocalStorageUtil.ModuleName = moduleName;
     LocalStorageUtil.save();
-  }
-
-  public static getCurrentPage(): IPageLoaderParam {
-    return LocalStorageUtil._lastPage;
-  }
-
-  public static mustLoadPage(owner: MenuOwnerType) {
-    let load = false;
-    if (LocalStorageUtil._lastBusiness) {
-      if (owner == "business") {
-        load = true;
-      }
-    } else if (LocalStorageUtil._lastCorporate) {
-      if (owner == "corporate") {
-        load = true;
-      }
-    } else if (owner == "profile") {
-      load = true;
-    }
-    if (load) {
-      LocalStorageUtil._hasPageToShow = false;
-    }
-    return load;
-  }
-
-  public static hasPageToShow() {
-    return LocalStorageUtil._hasPageToShow;
-  }
-
-  public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
-    LocalStorageUtil._lastMenu = {
-      ownerId: ownerId,
-      info: menu,
-    };
-    LocalStorageUtil.save();
-  }
-
-  public static getCurrentMenu(): ICurrentMenu {
-    return LocalStorageUtil._lastMenu;
-  }
-
-  public static mustActiveMenuItem(owner: MenuOwnerType) {
-    let load = false;
-    if (LocalStorageUtil._lastBusiness) {
-      if (owner == "business") {
-        load = true;
-      }
-    } else if (LocalStorageUtil._lastCorporate) {
-      if (owner == "corporate") {
-        load = true;
-      }
-    } else if (owner == "profile") {
-      load = true;
-    }
-    if (load) {
-      LocalStorageUtil._hasMenuToActive = false;
-    }
-    return load;
-  }
-
-  public static hasMenuToActive() {
-    return LocalStorageUtil._hasMenuToActive;
   }
 }
 
 interface ICheckRkeyResult {
   checked: boolean;
   userid: number;
+  /*current corporate*/
   currentOwnerid: number;
+  /*current business*/
   currentDmnid: number;
   ownerid: number;
   dmnid: number;
   rkey: string;
   usercat: string;
+  ERP: boolean;
 }
 
-interface ICurrentMenu {
+export interface ICurrentMenu {
+  menu: IMenuLoaderParam;
+  pageId: string;
   ownerId: string;
   info: IMenuPageInfo;
+}
+
+export interface IStateModel {
+  UserId: number;
+  BusinessId?: number;
+  CorporateId?: number;
+  PageId: string;
+  Category?: MenuOwnerType;
+  ModuleId?: string;
+  ModuleName?: string;
 }

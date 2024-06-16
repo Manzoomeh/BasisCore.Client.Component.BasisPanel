@@ -27,7 +27,7 @@ export default class DashboardComponent extends PageComponent {
       this.loaderParam
     );
 
-    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+    this.info = await HttpUtil.checkRKeyFetchDataAsync<IPageInfo>(
       url,
       "GET",
       this.options.checkRkey
@@ -35,11 +35,6 @@ export default class DashboardComponent extends PageComponent {
     const body = this.container.querySelector("[data-bc-page-body]");
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
-
-    // const wrapper = this.container;
-    // this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
-    //   wrapper.querySelector("[data-bc-page-widgets-list-toggle]").classList.toggle('active');
-    // });
   }
 
   public async runAsync(source?: ISource) {

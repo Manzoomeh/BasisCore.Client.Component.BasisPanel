@@ -1,4 +1,3 @@
-import { MenuOwnerType } from "../../type-alias";
 import { IMenuLoaderParam } from "./IMenuInfo";
 
 export default class MenuElement {
