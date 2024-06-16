@@ -28,6 +28,14 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       window.addEventListener("popstate", (event) => {
         if (event.state) {
           event.preventDefault();
+          this.container
+            .querySelector("[data-bc-bp-main-header]")
+            .querySelector(".active-business")
+            ?.classList.remove("active-business");
+          this.container
+            .querySelector("[data-bc-bp-main-header]")
+            .querySelector(".active-corporate")
+            ?.classList.remove("active-corporate");
           const state: IStateModel = event.state;
           console.log("qam set state in back", state);
           LocalStorageUtil.setCurrentState(state);
