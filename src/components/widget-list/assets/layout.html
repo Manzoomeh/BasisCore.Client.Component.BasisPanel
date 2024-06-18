@@ -13,7 +13,7 @@
       <!-- <div data-bc-btn-close>بستن</div> -->
     </div>
     <div data-bc-page-widget-search="">
-      <input />
+      <input data-bc-page-widget-search-input />
     </div>
     <section class="tabWrapper tabWrapperForWidgets">
       <div class="tabs">
@@ -37,8 +37,14 @@
     </div>
     <div data-bc-page-widget-disableList="" data-sys-text=""></div>
     <div data-bc-page-widget-dashboard-wrapper="" style="display: none" drop-zone></div>
-    <div data-bc-page-widget-save-setting="" data-sys-button="">
-      @widgetsSettingButton
+    <div data-bc-page-widget-btns-wrapper>
+      <div data-bc-page-widget-cancel-setting="">
+        @cancelBtn
+      </div>
+      <div data-bc-page-widget-save-setting="" data-sys-button="">
+        @widgetsSettingButton
+      </div>
+
     </div>
   </div>
 

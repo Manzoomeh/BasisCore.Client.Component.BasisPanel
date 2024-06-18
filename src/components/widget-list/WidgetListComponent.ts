@@ -1,8 +1,6 @@
 import desktopLayout from "./assets/layout.html";
-import dropAreaLayout from "./assets/drop-area-layout.html";
-import widgetItemLayout from "./assets/widget-item-layout.html";
+
 import "./assets/style.css";
-import IWidgetInfo from "../page-widget/widget/IWidgetInfo";
 import IPage from "../page/IPage";
 import { ISource, IUserDefineComponent } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
@@ -16,11 +14,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private readonly _widgetDialog: Element;
 
   private widgetList: IWidgetListItemInfo[];
+  private disabledWidgetList: IWidgetListItemInfo[] = [];
+  private disabledDashboardWidgetList: IWidgetListItemInfo[] = [];
   private sortable: Sortable;
   private isDragging: boolean = false;
   private currentResizeHandle: HTMLElement;
   private startX: number;
   private offsetTop: number;
+  private searchParam: string = ''
+  private tabIndex = 0
   private startY: number;
   private startWidth: number;
   private startHeight: number;
@@ -53,7 +55,19 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._widgetDialog = this.container.querySelector(
       "[data-bc-page-widget-list-dlg]"
     );
+    console.log(`this.container.querySelector('[data-bc-page-widget-search-input]')`, this.container.querySelector('[data-bc-page-widget-search-input]'))
+    this._widgetDialog.querySelector('[data-bc-page-widget-search-input]').addEventListener('input', (e) => {
 
+      this.searchParam = (e.target as HTMLInputElement).value
+      console.log('mozmoz', (e.target as HTMLInputElement).value)
+      if (this.tabIndex == 0) {
+
+        this.fillListUI()
+      } else {
+        this.fillDashbaordWidgetList()
+      }
+      console.log('this.searchParam', this.searchParam)
+    })
     this._page.container.classList.add("drope-zone-container");
 
     this._page.container
@@ -149,7 +163,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   //   "[data-bc-widget-drop-area]"
   // ) as HTMLElement;
   // let element = container.querySelector<HTMLElement>(
-  //   `[data-bc-widget-id='${widgetInfo.id}']`
+  //   `[data - bc - widget - id= '${widgetInfo.id}']`
   // );
   // if (!element) {
   //   const layout = widgetItemLayout
@@ -186,10 +200,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   private async fillWidgetListAsync(): Promise<void> {
-    const disableWidgets = document.querySelector(
-      "[data-bc-page-widget-disableList]"
-    );
-    disableWidgets.innerHTML = "";
+
 
     const url = HttpUtil.formatString(this.options.widgetListUrl, {
       rKey: this.options.rKey,
@@ -200,9 +211,17 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       Array<IWidgetListItemInfo>
     >(url, "GET", this.options.checkRkey);
     this.widgetList = widgetsList;
+    this.disabledWidgetList = widgetsList
+    this.fillListUI()
 
+  }
+  fillListUI() {
+    const disableWidgets = document.querySelector(
+      "[data-bc-page-widget-disableList]"
+    );
+    disableWidgets.innerHTML = "";
     try {
-      widgetsList.forEach((widget) => {
+      this.disabledWidgetList.filter(e => e.title.includes(this.searchParam)).forEach((widget) => {
         const widgetElement = document.createElement("div");
         const container = document.createElement("div");
 
@@ -214,8 +233,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           "src",
           widget.icon ? widget.icon : "asset/images/no_icon.png"
         );
-        container.appendChild(document.createTextNode(widget.title));
         container.appendChild(widgetIcon);
+        container.appendChild(document.createTextNode(widget.title));
         widgetElement.appendChild(container);
 
         widgetElement.addEventListener("dragstart", (e) => {
@@ -226,7 +245,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       });
     } catch { }
   }
-
   private displayWidgetList(e) {
     if (
       e.target.getAttribute("data-bc-page-widget-list-dlg-btn-add-active") ==
@@ -287,9 +305,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this.sortable.destroy();
   }
   enableDragDrop() {
-    this.widgetsContainer = document.querySelector(
-      "[data-bc-bp-group-container]"
-    ) as HTMLElement;
 
     this.sortable = new Sortable(
       [
@@ -322,12 +337,19 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           "data-bc-bp-group-container"
         )
       ) {
+        console.log('hhhhhhhhhh')
         if (clientX - x > event.source.offsetWidth / 4) {
-          event.source.style.marginRight = "";
-          event.source.style.marginLeft = "auto";
+          event.originalSource.classList.remove('floatLeft')
+
+          event.originalSource.classList.add('floatRight')
+          console.log('event.source', event.source)
         } else if (clientX - x < -event.source.offsetWidth / 4) {
-          event.source.style.marginRight = "auto";
-          event.source.style.marginLeft = "";
+          event.originalSource.classList.remove('floatRight')
+
+          event.originalSource.classList.add('floatLeft')
+
+          console.log('event.source', event.source)
+
         }
       }
     });
@@ -357,17 +379,19 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             (e) => String(e.id) === event.source.getAttribute("id")
           );
         }
-        event.source.setAttribute("gs-w", widgetData.w.toString());
-        event.source.setAttribute("gs-h", widgetData.h.toString());
+        event.source.setAttribute("gs-w", widgetData?.w?.toString() || '4');
+        event.source.setAttribute("gs-h", widgetData?.h?.toString() || '4');
         event.source.setAttribute("data-bc-bp-widget-container", "");
-
+        console.log(`display: flex!important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${widgetData?.h || 4 * this._page.cell
+          } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
+        )
         const parent = document.querySelector(
           "[data-bc-page-body]"
         ) as HTMLElement;
         event.source.setAttribute(
           "style",
-          `display: flex !important;border-radius:24px;outline: 2px solid #ccc;outline-offset: -9px;height:${widgetData.h * this._page.cell
-          }px;position:relative;background-color:transparent;justify-content:center;align-items:center;flex-direction:column`
+          `display: flex!important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${widgetData?.h || 4 * this._page.cell
+          } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
         );
         if (
           event.source.attributes.getNamedItem("data-bc-page-widget-dashboard")
@@ -375,7 +399,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         } else {
           event.source.children[0].setAttribute(
             "style",
-            `display:flex;justify-content:center;align-items:center;width:100%;height:100%`
+            `display: flex; justify - content: center; align - items: center; width: 100 %; height: 100 % `
           );
         }
       }
@@ -408,8 +432,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             (e) => String(e.id) === event.source.getAttribute("id")
           );
         }
-        event.originalSource.setAttribute("gs-w", widgetData.w.toString());
-        event.originalSource.setAttribute("gs-h", widgetData.h.toString());
+        this.disabledWidgetList = this.disabledWidgetList.filter(e => e.id != widgetData.id)
+        this.disabledDashboardWidgetList = this.disabledDashboardWidgetList.filter(e => e.id != widgetData.id)
+        event.originalSource.setAttribute("gs-w", widgetData?.w?.toString() || '4');
+        event.originalSource.setAttribute("gs-h", widgetData?.h?.toString() || '4');
         event.originalSource.setAttribute(
           "data-bc-bp-direction",
           this.direction
@@ -419,13 +445,13 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         const parent = document.querySelector(
           "[data-bc-page-body]"
         ) as HTMLElement;
-
+        console.log(' event.source.attributes.getNamedItem("style")?.value', event.source.attributes.getNamedItem("style")?.value)
         event.originalSource.setAttribute(
           "style",
           event.source.attributes.getNamedItem("style")?.value || ""
         );
-        event.originalSource.style.height = `${widgetData.h * this._page.cell
-          }px`;
+        // event.originalSource.style.height = `${widgetData?.h || 4 * this._page.cell
+        //   } px`;
 
         if (event.source.attributes.getNamedItem("pallete-widget-element")) {
           event.originalSource.children[0].setAttribute(
@@ -455,83 +481,91 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                 "data-bc-page-widget-dashboard"
               )
             ) {
-              const disableWidgets = document.querySelector(
-                "[data-bc-page-widget-disableList]"
-              );
-              const widgetElement = document.createElement("div");
-              const container = document.createElement("div");
-              const widgetIcon = document.createElement("img");
               const data = this.widgetList.find(
                 (e) =>
                   String(e.id) == (event.target as HTMLElement).parentElement.id
               );
+              this.disabledWidgetList.push(data)
+              this.fillListUI()
+              // const disableWidgets = document.querySelector(
+              //   "[data-bc-page-widget-disableList]"
+              // );
+              // const widgetElement = document.createElement("div");
+              // const container = document.createElement("div");
+              // const widgetIcon = document.createElement("img");
+              // const data = this.widgetList.find(
+              //   (e) =>
+              //     String(e.id) == (event.target as HTMLElement).parentElement.id
+              // );
 
-              widgetElement.setAttribute("draggable", "true");
-              widgetElement.setAttribute("id", String(data.id));
-              widgetElement.setAttribute("pallete-widget-element", "");
-              widgetIcon.setAttribute(
-                "src",
-                data.icon ? data.icon : "asset/images/no_icon.png"
-              );
-              container.appendChild(document.createTextNode(data.title));
-              container.appendChild(widgetIcon);
-              widgetElement.appendChild(container);
+              // widgetElement.setAttribute("draggable", "true");
+              // widgetElement.setAttribute("id", String(data.id));
+              // widgetElement.setAttribute("pallete-widget-element", "");
+              // widgetIcon.setAttribute(
+              //   "src",
+              //   data.icon ? data.icon : "asset/images/no_icon.png"
+              // );
+              // container.appendChild(document.createTextNode(data.title));
+              // container.appendChild(widgetIcon);
+              // widgetElement.appendChild(container);
 
-              widgetElement.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("text/plain", JSON.stringify(data));
-              });
+              // widgetElement.addEventListener("dragstart", (e) => {
+              //   e.dataTransfer.setData("text/plain", JSON.stringify(data));
+              // });
 
-              disableWidgets.appendChild(widgetElement);
+              // disableWidgets.appendChild(widgetElement);
             } else {
-              const disableWidgets = document.querySelector(
-                "[data-bc-page-widget-dashboard-wrapper]"
-              );
+              // const disableWidgets = document.querySelector(
+              //   "[data-bc-page-widget-dashboard-wrapper]"
+              // );
               const data = this.dashboardWidgetList.find(
                 (e) =>
                   String(e.id) == (event.target as HTMLElement).parentElement.id
               );
 
-              const widgetDiv = document.createElement("div");
-              const insideContainer = document.createElement("div");
-              insideContainer.setAttribute(
-                "data-bc-dashboard-widget-container",
-                ""
-              );
-              const closeDiv = document.createElement("span");
-              widgetDiv.setAttribute("data-bc-page-widget-dashboard", "");
-              widgetDiv.id = String(data.id);
-              widgetDiv.setAttribute("data-sys-text", "");
-              closeDiv.setAttribute("data-bc-btn-remove", "");
-              closeDiv.textContent = "X";
-              insideContainer.textContent = data.title;
-              const widgetIcon = document.createElement("img");
-              widgetIcon.setAttribute("src", "/asset/images/no_icon.png");
-              insideContainer.appendChild(widgetIcon);
-              insideContainer.appendChild(closeDiv);
-              widgetDiv.appendChild(insideContainer);
-              disableWidgets.appendChild(widgetDiv);
-              const removewidgetUrl = HttpUtil.formatString(
-                this.options.removeFromDashbaord,
-                {
-                  rKey: this.options.rKey,
-                }
-              );
-              widgetDiv.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("text/plain", JSON.stringify(data));
-              });
-              closeDiv.addEventListener("click", async (_) => {
-                await HttpUtil.checkRkeyFetchDataAsync(
-                  removewidgetUrl,
-                  "POST",
-                  this.options.checkRkey,
-                  {
-                    //@ts-ignore
-                    widgetid: data.widgetid,
-                  }
-                );
-                this.addingDashboardWidgets();
-              });
-              disableWidgets.appendChild(widgetDiv);
+              this.disabledDashboardWidgetList.push(data)
+              this.fillDashbaordWidgetList()
+              // const widgetDiv = document.createElement("div");
+              // const insideContainer = document.createElement("div");
+              // insideContainer.setAttribute(
+              //   "data-bc-dashboard-widget-container",
+              //   ""
+              // );
+              // const closeDiv = document.createElement("span");
+              // widgetDiv.setAttribute("data-bc-page-widget-dashboard", "");
+              // widgetDiv.id = String(data.id);
+              // widgetDiv.setAttribute("data-sys-text", "");
+              // closeDiv.setAttribute("data-bc-btn-remove", "");
+              // closeDiv.textContent = "X";
+              // insideContainer.textContent = data.title;
+              // const widgetIcon = document.createElement("img");
+              // widgetIcon.setAttribute("src", "/asset/images/no_icon.png");
+              // insideContainer.appendChild(widgetIcon);
+              // insideContainer.appendChild(closeDiv);
+              // widgetDiv.appendChild(insideContainer);
+              // disableWidgets.appendChild(widgetDiv);
+              // const removewidgetUrl = HttpUtil.formatString(
+              //   this.options.removeFromDashbaord,
+              //   {
+              //     rKey: this.options.rKey,
+              //   }
+              // );
+              // widgetDiv.addEventListener("dragstart", (e) => {
+              //   e.dataTransfer.setData("text/plain", JSON.stringify(data));
+              // });
+              // closeDiv.addEventListener("click", async (_) => {
+              //   await HttpUtil.checkRkeyFetchDataAsync(
+              //     removewidgetUrl,
+              //     "POST",
+              //     this.options.checkRkey,
+              //     {
+              //       //@ts-ignore
+              //       widgetid: data.widgetid,
+              //     }
+              //   );
+              //   this.addingDashboardWidgets();
+              // });
+              // disableWidgets.appendChild(widgetDiv);
             }
 
             (event.target as HTMLElement)
@@ -547,6 +581,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           increaseWidth.setAttribute("data-bc-add-width", "");
 
           increaseWidth.addEventListener("mouseenter", () => {
+            console.log('444')
             event.originalSource.draggable = false;
             this.disableDragDrop();
           });
@@ -559,16 +594,22 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             this.handleMouseDown(event)
           );
           increaseHeight.addEventListener("mouseenter", () => {
+            console.log('11111')
             event.originalSource.draggable = false;
             this.sortable.destroy();
           });
 
           increaseHeight.addEventListener("mouseleave", () => {
+            console.log('222')
+
             this.enableDragDrop();
           });
 
-          increaseHeight.addEventListener("mousedown", (event) =>
+          increaseHeight.addEventListener("mousedown", (event) => {
+            console.log('333')
+
             this.handleMouseDown(event)
+          }
           );
 
           document.addEventListener("mousemove", (ev) =>
@@ -578,7 +619,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         }
 
         event.originalSource.setAttribute("draggable", "true");
-        event.originalSource.setAttribute("class", "widgetDragClass");
+        event.originalSource.classList.add('widgetDragClass')
       }
       event.originalSource.setAttribute(
         "style",
@@ -608,7 +649,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
   handleMouseMove(ev) {
     if (!this.isDragging) return;
-
+    console.log('121212', this.type)
     ev.preventDefault();
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     let newWidth, newHeight;
@@ -638,19 +679,21 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         break;
       case "height":
         newHeight = this.startHeight + (ev.clientY - this.startY);
+        console.log('newHeight', newHeight, this.currentResizeHandle)
         if (
           newHeight - this.currentResizeHandle.offsetHeight >=
           this._page.cell
         ) {
           this.currentResizeHandle.style.height = `${this.currentResizeHandle.offsetHeight + this._page.cell
-            }px`;
+            } px`;
+          console.log('this.currentResizeHandle', this.currentResizeHandle)
         }
         if (
           newHeight - this.currentResizeHandle.offsetHeight <=
           -this._page.cell
         ) {
           this.currentResizeHandle.style.height = `${this.currentResizeHandle.offsetHeight - this._page.cell
-            }px`;
+            } px`;
         }
         break;
     }
@@ -672,6 +715,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this.startY = ev.clientY;
     this.startWidth = ev.target.parentElement.offsetWidth;
     this.startHeight = ev.target.parentElement.offsetHeight;
+    console.log('mousedown')
   };
 
   private showList() {
@@ -695,6 +739,31 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     widgetsContainer.style.display = "flex";
     widgetsContainer.style.flexWrap = "wrap";
     widgetsContainer.style.flexDirection = "row-reverse";
+    const allTags = document.querySelectorAll('[data-bc-bp-widget-container]')
+    const sortedTags = Array.from(allTags).sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+    const container = sortedTags[0].parentElement
+    container.innerHTML = ''
+    sortedTags.forEach(e => {
+      container.appendChild(e)
+    })
+    container.setAttribute('primaryContainer', '1')
+    const groups = document.querySelectorAll('[data-bc-bp-group-container]')
+    groups.forEach((parent) => {
+      if (!!!parent.getAttribute('primaryContainer')) {
+        // console.log('parent :>>', parent)
+        // const children = Array.from(parent.children);
+
+        // children.forEach(child => {
+        //   container.appendChild(child)
+        // });
+
+        parent.remove();
+      }
+
+    })
+
+    this.widgetsContainer = container
+
     widgets.forEach((e: HTMLElement) => {
       const increaseHeight = document.createElement("div");
       const increaseWidth = document.createElement("div");
@@ -728,7 +797,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       document.addEventListener("mousemove", (ev) => this.handleMouseMove(ev));
       document.addEventListener("mouseup", (_) => this.handleMouseUp());
       e.setAttribute("draggable", "true");
-      e.setAttribute("class", "widgetDragClass");
+      e.classList.add("widgetDragClass");
     });
     this.fillWidgetListAsync().then(() => {
       document
@@ -750,36 +819,29 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     this.enableDragDrop();
   }
-  public async addingDashboardWidgets(): Promise<void> {
-    console.log('heree')
-    const dashbaordBtn = this.container.querySelector(
-      ".tabWrapperForWidgets"
-    ) as HTMLElement;
-    dashbaordBtn.style.display = "flex";
+  fillDashbaordWidgetList() {
     const parent = this.container.querySelector(
       "[data-bc-page-widget-dashboard-wrapper]"
     ) as HTMLElement;
-    parent.innerHTML = "";
-    console.log('this.options', this.options, this._page)
-    const url = HttpUtil.formatString(
-      this.options.baseUrl[this._page.loaderParam.owner] + this.options.method.dashboardReservedWidgets,
-      {
-        rKey: this.options.rKey,
-        pid: this._page.loaderParam.pageId
-      }
-    );
+    // const tags = this.dashboardWidgetList.map(e => ({ id: e.id, title: e.title }))
+    // const tagsContainer = document.createElement('div')
+    // tags.map(e => {
+    //   const tag = document.createElement('div')
+    //   tag.innerText = e.title
+    //   tag.setAttribute('data-bc-widget-tag', '')
+    //   tag.id = String(e.id)
+    //   tagsContainer.appendChild(tag)
+    // })
     const removewidgetUrl = HttpUtil.formatString(
       this.options.removeFromDashbaord,
       {
         rKey: this.options.rKey,
       }
     );
-    console.log('11111')
-    const data = await HttpUtil.fetchStringAsync(url, "GET");
-    console.log('22222')
-
-    this.dashboardWidgetList = JSON.parse(data);
-    this.dashboardWidgetList?.forEach((widgetList) => {
+    parent.innerHTML = "";
+    // parent.appendChild(tagsContainer)
+    console.log('first', this.disabledDashboardWidgetList)
+    this.disabledDashboardWidgetList?.filter(e => e.title.includes(this.searchParam)).forEach((widgetList) => {
       const widgetDiv = document.createElement("div");
       const insideContainer = document.createElement("div");
       insideContainer.setAttribute("data-bc-dashboard-widget-container", "");
@@ -788,13 +850,14 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       widgetDiv.id = String(widgetList.id);
       widgetDiv.setAttribute("data-sys-text", "");
       closeDiv.setAttribute("data-bc-btn-remove", "");
-      closeDiv.innerHTML = `<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM8.96963 8.96965C9.26252 8.67676 9.73739 8.67676 10.0303 8.96965L12 10.9393L13.9696 8.96967C14.2625 8.67678 14.7374 8.67678 15.0303 8.96967C15.3232 9.26256 15.3232 9.73744 15.0303 10.0303L13.0606 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0303 15.0303C9.73742 15.3232 9.26254 15.3232 8.96965 15.0303C8.67676 14.7374 8.67676 14.2625 8.96965 13.9697L10.9393 12L8.96963 10.0303C8.67673 9.73742 8.67673 9.26254 8.96963 8.96965Z" fill="white"/>
-      </svg>`;
-      insideContainer.textContent = widgetList.title;
+      closeDiv.innerHTML = `<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns = "http://www.w3.org/2000/svg" >
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM8.96963 8.96965C9.26252 8.67676 9.73739 8.67676 10.0303 8.96965L12 10.9393L13.9696 8.96967C14.2625 8.67678 14.7374 8.67678 15.0303 8.96967C15.3232 9.26256 15.3232 9.73744 15.0303 10.0303L13.0606 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0303 15.0303C9.73742 15.3232 9.26254 15.3232 8.96965 15.0303C8.67676 14.7374 8.67676 14.2625 8.96965 13.9697L10.9393 12L8.96963 10.0303C8.67673 9.73742 8.67673 9.26254 8.96963 8.96965Z" fill="white" />
+        </svg>`;
       const widgetIcon = document.createElement("img");
       widgetIcon.setAttribute("src", "/asset/images/no_icon.png");
       insideContainer.appendChild(widgetIcon);
+      insideContainer.appendChild(document.createTextNode(widgetList.title));
+
       insideContainer.appendChild(closeDiv);
       widgetDiv.appendChild(insideContainer);
       parent.appendChild(widgetDiv);
@@ -814,6 +877,33 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.addingDashboardWidgets();
       });
     });
+  }
+  public async addingDashboardWidgets(): Promise<void> {
+    const parent = this.container.querySelector(
+      "[data-bc-page-widget-dashboard-wrapper]"
+    ) as HTMLElement;
+    const dashbaordBtn = this.container.querySelector(
+      ".tabWrapperForWidgets"
+    ) as HTMLElement;
+    dashbaordBtn.style.display = "flex";
+
+    const url = HttpUtil.formatString(
+      this.options.baseUrl[this._page.loaderParam.owner] + this.options.method.dashboardReservedWidgets,
+      {
+        rKey: this.options.rKey,
+        pid: this._page.loaderParam.pageId
+      }
+    );
+
+    const data = await HttpUtil.fetchStringAsync(url, "GET");
+    console.log('data : >>', data)
+    if (JSON.parse(data).length) {
+
+      JSON.parse(data).forEach(e => this.disabledDashboardWidgetList.push(...e.widgets))
+      this.dashboardWidgetList = this.disabledDashboardWidgetList
+      // this.categories = data
+    }
+
     const allWidget = document.querySelector(
       "[data-bc-page-widget-disableList]"
     ) as HTMLElement;
@@ -824,22 +914,25 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const activeElement = this.container.querySelector(
       ".tabAct"
     ) as HTMLElement;
-    console.log('hhhhhhh')
     dashboardWidgetBtn.addEventListener("click", (e) => {
+      this.tabIndex = 1
       parent.style.display = "flex";
       allWidget.style.display = "none";
-      console.log('moz', `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft - (e.target as HTMLElement).offsetLeft})`)
       activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft - (e.target as HTMLElement).offsetLeft}px)`;
       dashboardWidgetBtn.setAttribute("tab-button-status", "active");
       allWidgetBtn.removeAttribute("tab-button-status");
+      this.fillDashbaordWidgetList()
+
     });
     allWidgetBtn.addEventListener("click", (e) => {
+      this.tabIndex = 0
+
       parent.style.display = "none";
       allWidget.style.display = "flex";
       activeElement.style.transform = `translateX(0px)`;
       allWidgetBtn.setAttribute("tab-button-status", "active");
       dashboardWidgetBtn.removeAttribute("tab-button-status");
+      this.fillListUI()
     });
-    console.log('dash :>', dashboardWidgetBtn, allWidgetBtn)
   }
 }

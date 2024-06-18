@@ -135,12 +135,31 @@ div[data-bc-page-body] {
   transform: translateX(330px);
 }
 
+[data-bc-page-widget-cancel-setting] {
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: max-content;
+  height: 45px;
+  background-color: #fff;
+  z-index: 99;
+  /* margin-left: 0 !important; */
+  border: 1px solid #004b85;
+  color: #004b85;
+  display: block;
+  align-items: center;
+  justify-content: center;
+  line-height: 30px;
+}
+
 [data-bc-page-widget-save-setting] {
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
   box-sizing: border-box;
-  height: 40px;
+  width: max-content;
+  height: 45px;
   z-index: 99;
   /* margin-left: 0 !important; */
   background: #004b85;

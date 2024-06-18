@@ -1850,7 +1850,7 @@ body.darkmode {
     border-radius: 5px;
     display: flex;
     padding: 5px;
-    background-color: transparent;
+    background-color: transparent !important;
     width: -webkit-fill-available;
     position: relative;
     justify-content: space-between;
