@@ -37,7 +37,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
             .querySelector(".active-corporate")
             ?.classList.remove("active-corporate");
           const state: IStateModel = event.state;
-          console.log("qam set state in back", state);
+          //console.log("qam set state in back", state);
           LocalStorageUtil.setCurrentState(state);
           if (state.CorporateId) {
             this.owner.setSource(DefaultSource.SET_CORPORATE, state);

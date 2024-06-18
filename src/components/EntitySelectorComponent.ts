@@ -116,7 +116,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     }
   }
 
-  public async runAsync(source?: ISource) {
+  public async runAsync(source?: ISource): Promise<any> {
+    console.log("qam base", source?.id, source?.rows[0]);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
       this.profile = source.rows[0];
       if (this.ownerType == "corporate") {
@@ -178,6 +179,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-bp-main-header]")
       .querySelector<HTMLElement>("[data-bc-business-list]");
     this.entityList = await this.getEntitiesAsync();
+    console.log("qam fil", this.ownerType, this.entityList);
 
     if (this.deviceId == 1) {
       if (this.businessComponentFlag && this.entityList.length > 0) {
@@ -333,9 +335,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           this.firstLoginFromOtherWebSitesBusiness = true;
           await this.trySelectFromLocalStorageAsync();
         }
-        li.addEventListener("click", (e) => {
+        li.addEventListener("click", async (e) => {
           e.preventDefault();
           const id = parseInt(li.getAttribute("data-id"));
+          console.log("qam sel", id, this.ownerType, this.setSilent);
           const entity = this.entityList.find((x) => x.id == id);
           if (this.profile && entity) {
             if (!this.setSilent) {
@@ -343,9 +346,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
                 this.ownerType,
                 id
               );
-              this.setActiveAsync(id).then(async () =>
-                this.signalToDisplayPage(id, "default")
-              );
+              await this.setActiveAsync(id);
+              this.signalToDisplayPage(id, "default");
             }
           }
           this.setSilent = false;
@@ -383,6 +385,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           id: id,
         }
       );
+      console.log("qam set a", this.ownerType, id);
     }
     if (this.deviceId == 2) {
       this.element
@@ -573,7 +576,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     // activeMenus.forEach((e) => {
     //   e.removeAttribute("data-bc-menu-active");
     // });
-    console.log("qam signalToDisplayPage", id?.toString(), pageId);
+    //console.log("qam signalToDisplayPage", id?.toString(), pageId);
     this.owner.setSource(
       DefaultSource.SHOW_MENU,
       this.createMenuLoaderParam(id, pageId)

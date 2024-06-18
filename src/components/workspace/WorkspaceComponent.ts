@@ -20,7 +20,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   }
 
   public async runAsync(source?: ISource) {
-    console.log("qam page", source?.id, source?.rows[0]);
+    //console.log("qam page", source?.id, source?.rows[0]);
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
       let pageParam: IPageLoaderParam = source.rows[0] as IPageLoaderParam;
       await this.displayPageAsync(pageParam);

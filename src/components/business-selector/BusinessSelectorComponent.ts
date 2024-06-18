@@ -39,7 +39,8 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     ]);
   }
 
-  public async runAsync(source?: ISource): Promise<any> {
+  public override async runAsync(source?: ISource): Promise<any> {
+    console.log("qam bi", source?.id, source?.rows[0]);
     await super.runAsync(source);
     if (source?.id == DefaultSource.CORPORATE_SOURCE) {
       this.businessComponentFlag = true;

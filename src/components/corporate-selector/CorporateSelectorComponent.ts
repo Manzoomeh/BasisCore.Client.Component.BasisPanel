@@ -37,7 +37,8 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     }
   }
 
-  public async runAsync(source?: ISource): Promise<any> {
+  public override async runAsync(source?: ISource): Promise<any> {
+    console.log("qam co", source?.id, source?.rows[0]);
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
       await this.trySelectFromLocalStorageAsync();
