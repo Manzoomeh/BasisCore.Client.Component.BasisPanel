@@ -97,7 +97,7 @@ export default class MenuComponent
           categoryId.toString(),
           model.ModuleId,
           model.PageId,
-          null
+          model.Argument
         );
         this._isSilent = false;
         break;

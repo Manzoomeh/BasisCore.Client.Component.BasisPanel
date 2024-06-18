@@ -10,6 +10,7 @@ export default class LocalStorageUtil {
   public static ModuleId?: string;
   public static ModuleName?: string;
   public static Category?: MenuOwnerType;
+  public static Argument: any;
   public static Version: string = "1.0.0.0";
   static KEY: string = "__bc_panel_last_state__";
 
@@ -29,6 +30,7 @@ export default class LocalStorageUtil {
         LocalStorageUtil.PageId = routingQueryObject.pageId;
         LocalStorageUtil.ModuleId = routingQueryObject.moduleId;
         LocalStorageUtil.ModuleName = routingQueryObject.moduleName;
+        LocalStorageUtil.Argument = routingQueryObject.argument;
         switch (LocalStorageUtil.Category) {
           case "profile": {
             LocalStorageUtil.CorporateId = null;
@@ -58,6 +60,7 @@ export default class LocalStorageUtil {
               LocalStorageUtil.PageId = obj.PageId ?? "default";
               LocalStorageUtil.ModuleId = obj.ModuleId ?? null;
               LocalStorageUtil.ModuleName = obj.ModuleName ?? null;
+              LocalStorageUtil.Argument = obj.Argument;
             } else {
               localStorage.removeItem(LocalStorageUtil.KEY);
               console.log(
@@ -109,6 +112,7 @@ export default class LocalStorageUtil {
       ModuleId: LocalStorageUtil.ModuleId,
       ModuleName: LocalStorageUtil.ModuleName,
       Version: LocalStorageUtil.Version,
+      Argument: LocalStorageUtil.Argument,
     };
   }
 
@@ -120,6 +124,7 @@ export default class LocalStorageUtil {
     LocalStorageUtil.Category = state.Category;
     LocalStorageUtil.ModuleId = state.ModuleId;
     LocalStorageUtil.ModuleName = state.ModuleName;
+    LocalStorageUtil.Argument = state.Argument;
     LocalStorageUtil.save();
   }
 
@@ -137,12 +142,14 @@ export default class LocalStorageUtil {
     moduleName: string,
     moduleId: string,
     pageId: string,
-    category: MenuOwnerType
+    category: MenuOwnerType,
+    argument: any
   ) {
     LocalStorageUtil.PageId = pageId;
     LocalStorageUtil.Category = category;
     LocalStorageUtil.ModuleId = moduleId;
     LocalStorageUtil.ModuleName = moduleName;
+    LocalStorageUtil.Argument = argument;
     LocalStorageUtil.save();
   }
 }
@@ -177,4 +184,5 @@ export interface IStateModel {
   ModuleId?: string;
   ModuleName?: string;
   Version?: string;
+  Argument?: any;
 }

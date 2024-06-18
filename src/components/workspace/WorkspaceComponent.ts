@@ -53,7 +53,8 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
           pageParam.module,
           pageParam.moduleId,
           pageParam.pageId,
-          pageParam.owner
+          pageParam.owner,
+          pageParam.arguments
         );
         const currentState = LocalStorageUtil.getLastState();
         const pageName = pageParam.owner;

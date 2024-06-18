@@ -49,4 +49,5 @@ export interface IRoutingQueryString {
   moduleId: string;
   moduleName: string;
   pageId: string;
+  argument: any;
 }
