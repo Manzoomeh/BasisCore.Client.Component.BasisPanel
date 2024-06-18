@@ -10,6 +10,8 @@ export default class LocalStorageUtil {
   public static ModuleId?: string;
   public static ModuleName?: string;
   public static Category?: MenuOwnerType;
+  public static Version: string = "1.0.0.0";
+  static KEY: string = "__bc_panel_last_state__";
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
@@ -45,16 +47,24 @@ export default class LocalStorageUtil {
           }
         }
       } else {
-        const str = localStorage.getItem("__bc_panel_last_state__");
+        const str = localStorage.getItem(LocalStorageUtil.KEY);
         if (str) {
           try {
             const obj: IStateModel = JSON.parse(str);
-            LocalStorageUtil.CorporateId = obj.CorporateId ?? null;
-            LocalStorageUtil.BusinessId = obj.BusinessId ?? null;
-            LocalStorageUtil.Category = obj.Category ?? "profile";
-            LocalStorageUtil.PageId = obj.PageId ?? "default";
-            LocalStorageUtil.ModuleId = obj.ModuleId ?? null;
-            LocalStorageUtil.ModuleName = obj.ModuleName ?? null;
+            if (obj.Version === LocalStorageUtil.Version) {
+              LocalStorageUtil.CorporateId = obj.CorporateId ?? null;
+              LocalStorageUtil.BusinessId = obj.BusinessId ?? null;
+              LocalStorageUtil.Category = obj.Category ?? "profile";
+              LocalStorageUtil.PageId = obj.PageId ?? "default";
+              LocalStorageUtil.ModuleId = obj.ModuleId ?? null;
+              LocalStorageUtil.ModuleName = obj.ModuleName ?? null;
+            } else {
+              localStorage.removeItem(LocalStorageUtil.KEY);
+              console.log(
+                "Old version of basis panel setting detect in local storage and removed.",
+                obj
+              );
+            }
           } catch (ex) {
             console.error("error in  load local storage data", ex);
           }
@@ -84,7 +94,7 @@ export default class LocalStorageUtil {
 
   private static save(): void {
     localStorage.setItem(
-      "__bc_panel_last_state__",
+      LocalStorageUtil.KEY,
       JSON.stringify(LocalStorageUtil.getLastState())
     );
   }
@@ -98,6 +108,7 @@ export default class LocalStorageUtil {
       Category: LocalStorageUtil.Category,
       ModuleId: LocalStorageUtil.ModuleId,
       ModuleName: LocalStorageUtil.ModuleName,
+      Version: LocalStorageUtil.Version,
     };
   }
 
@@ -165,4 +176,5 @@ export interface IStateModel {
   Category?: MenuOwnerType;
   ModuleId?: string;
   ModuleName?: string;
+  Version?: string;
 }
