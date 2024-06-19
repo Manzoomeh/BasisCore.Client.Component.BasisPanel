@@ -10,8 +10,7 @@ import PageGroupComponent from "../page-group/PageGroupComponent";
 
 export default abstract class PageComponent
   extends BasisPanelChildComponent
-  implements IPage
-{
+  implements IPage {
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
@@ -134,13 +133,12 @@ export default abstract class PageComponent
     const otherHeight = headerHeight + menuHeight + footerHeight;
 
     if (this.cell * maxHeight > windowHeight - otherHeight) {
-      (pageBody as HTMLElement).style.height = `${this.cell * maxHeight}px`;
-      pageBodyGroup.style.height = `${this.cell * maxHeight}px`;
+      (pageBody as HTMLElement).style.minHeight = `${this.cell * maxHeight}px`;
+      pageBodyGroup.style.minHeight = `${this.cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.height = `${
-        windowHeight - otherHeight
-      }px`;
-      pageBodyGroup.style.height = `${windowHeight - otherHeight}px`;
+      (pageBody as HTMLElement).style.minHeight = `${windowHeight - otherHeight
+        }px`;
+      pageBodyGroup.style.minHeight = `${windowHeight - otherHeight}px`;
     }
 
     if (this.deviceId == 1) {

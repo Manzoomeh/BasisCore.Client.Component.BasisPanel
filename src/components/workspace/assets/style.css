@@ -247,7 +247,7 @@ div[data-bc-page-body] {
 }
 
 [data-bc-section-header-line] {
-  width: -webkit-fill-available;
+  width: 100%;
 }
 
 [data-bc-page-widget-search] input {

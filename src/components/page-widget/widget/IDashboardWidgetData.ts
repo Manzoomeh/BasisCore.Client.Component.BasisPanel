@@ -1,6 +1,8 @@
 export default interface IDashboardWidgetData {
 
-    "title": string,
-    "widgetid": number
+    title: string,
+    widgetid: number
+    moduleid?: number;
+    icon?: string;
 
 }

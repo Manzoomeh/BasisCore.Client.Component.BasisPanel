@@ -37,12 +37,13 @@
         "connection.web.demo": "/server/dbsource/demo",
         'connection.websocket.simple': "wss://websocket.basiscore.net",
         "basispanel.option": {
-          rKey: "539DCBD5-798F-4535-B528-DE606A294D77",
+          rKey: "5D5D70A7-74BB-4076-A299-5230D3636002",
           avatar: "https://basiserp.ir",
           logo: "https://basispanel.ir",
-          widgetListUrl: "https://basiserp.ir/asset/js/widgets.js",
+          widgetListUrl: "https://service.basiscore.com/service/${rKey}/reservedwidgets/${pid}",
           addWidgetUrl: "https://basiserp.ir/asset/js/widgets.js",
           addtoDashboard: "/${rKey}/addtodashboardreservedwidgets",
+          removeFromDashbaord: "/server/trust/${rKey}/removetempwidget",
           tempwidgets: "https://basiserp.ir/user/${rKey}/tempwidgets",
           baseUrl: {
             profile: "https://users.basiscore.com/trust",
@@ -70,7 +71,7 @@
             dashboardReservedWidgets: "/${rKey}/dashboardreservedwidgets/${pid}",
 
             sidebarMenu: "/${rKey}/fa/desktop/sidebarMenu/${pageId}",
-            saveWidgets: "/${rKey}/fa/desktop/widget/${widgetId}",
+            saveWidgets: "/${rkey}/pagecustomize/${pid}",
             reservedWidget: "/${rKey}/fa/desktop/widget/${widgetId}",
             errorMessages: "/${rKey}/errorMessages",
           },
