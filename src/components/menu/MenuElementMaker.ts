@@ -167,6 +167,7 @@ export default class MenuElementMaker {
           });
 
           outerUl.style.transform = `scaleY(1)`;
+          outerUl.setAttribute("data-bc-ul-level-open", "1");
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
         } else {
