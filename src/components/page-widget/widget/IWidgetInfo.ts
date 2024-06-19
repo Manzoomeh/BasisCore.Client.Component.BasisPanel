@@ -11,4 +11,6 @@ export default interface IWidgetInfo {
   url: string;
   sidebar: boolean;
   addToDashboard?: boolean;
+  icon?: string;
+
 }

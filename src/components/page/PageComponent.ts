@@ -10,12 +10,12 @@ import PageGroupComponent from "../page-group/PageGroupComponent";
 
 export default abstract class PageComponent
   extends BasisPanelChildComponent
-  implements IPage
-{
+  implements IPage {
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
-  private hasSidebar :boolean = false
+  private hasSidebar: boolean = false;
+  public cell: number;
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
@@ -23,19 +23,24 @@ export default abstract class PageComponent
   public _groupsAdded: boolean = false;
   readonly _groups: Map<string, PageGroupComponent> = new Map();
 
-  constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
+  constructor(
+    owner: IUserDefineComponent,
+    desktopLayout: string,
+    mobileLayout: string,
+    dataAttr: string
+  ) {
     super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("page", this);
     this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
       "[data-bc-widget-drop-area-container]"
     );
   }
-  
+
   public async initializeAsync(): Promise<void> {
     this.loaderParam = JSON.parse(
       await this.owner.getAttributeValueAsync("params")
     );
-    
+
     const url = HttpUtil.formatString(
       `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
       this.loaderParam
@@ -62,12 +67,12 @@ export default abstract class PageComponent
     try {
       const pageBody = this.container.querySelector('[data-bc-page-body=""]');
       const groupElement = document.createElement("basis");
-      var optionsName = this.owner.storeAsGlobal(groupInfo.options);
+      const optionsName = this.owner.storeAsGlobal(groupInfo.options);
       groupElement.setAttribute("core", "component.basispanel.pageGroup");
       groupElement.setAttribute("run", "atclient");
       groupElement.setAttribute("name", groupInfo.groupName);
       groupElement.setAttribute("options", optionsName);
-     
+
       pageBody.appendChild(groupElement);
       const components = await this.owner.processNodesAsync([groupElement]);
       const groupContainer =
@@ -81,32 +86,39 @@ export default abstract class PageComponent
   }
 
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
-    
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
-      groupInfo.widgets.forEach((widgetParam) => { 
-        if(widgetParam.container == "sidebar"){
-          this.hasSidebar = true
+      groupInfo.widgets.forEach((widgetParam) => {
+        if (widgetParam.container == "sidebar") {
+          this.hasSidebar = true;
         }
-      })
+      });
     }
     for (var i = 0; i < pageInfo.groups.length; i++) {
       const groupInfo = pageInfo.groups[i];
       const group = await this.addGroupAsync(groupInfo);
       const widgetParamList = groupInfo.widgets.map((widgetInfo) => {
         widgets.push(widgetInfo.y + widgetInfo.h);
-      
-        return { ...widgetInfo, ...{ page: this.loaderParam } , "sidebar":this.hasSidebar};
+
+        return {
+          ...widgetInfo,
+          ...{ page: this.loaderParam },
+          sidebar: this.hasSidebar,
+        };
       });
-    
+
       group.addWidgetAsync(...widgetParamList);
     }
-    const currentPageBody = this.container.querySelector('[data-bc-page-body=""]');
-    const pageBodyGroup = currentPageBody.querySelector("[data-bc-bp-group-container]") as HTMLElement
+    const currentPageBody = this.container.querySelector(
+      '[data-bc-page-body=""]'
+    );
+    const pageBodyGroup = currentPageBody.querySelector(
+      "[data-bc-bp-group-container]"
+    ) as HTMLElement;
     const windowHeight = window.innerHeight;
-    const cell = (pageBody as HTMLElement).offsetWidth / 12;
+    this.cell = (pageBody as HTMLElement).offsetWidth / 12;
     const maxHeight = Math.max(...widgets);
 
     const headerHeight = (
@@ -115,31 +127,34 @@ export default abstract class PageComponent
     const menuHeight = (
       document.querySelector("[data-bc-bp-menu-container]") as HTMLElement
     ).offsetHeight;
-    const footerHeight = (
-      document.querySelector("[data-bc-bp-footer-container]") as HTMLElement
-    )?.offsetHeight ?? 0;
+    const footerHeight =
+      (document.querySelector("[data-bc-bp-footer-container]") as HTMLElement)
+        ?.offsetHeight ?? 0;
     const otherHeight = headerHeight + menuHeight + footerHeight;
 
-    if (cell * maxHeight > windowHeight - otherHeight) {
-      (pageBody as HTMLElement).style.height = `${cell * maxHeight}px`;
-      pageBodyGroup.style.height = `${cell * maxHeight}px`;
+    if (this.cell * maxHeight > windowHeight - otherHeight) {
+      (pageBody as HTMLElement).style.minHeight = `${this.cell * maxHeight}px`;
+      pageBodyGroup.style.minHeight = `${this.cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.height = `${
-        windowHeight - otherHeight
-      }px`;
-      pageBodyGroup.style.height = `${
-        windowHeight - otherHeight
-      }px`;
+      (pageBody as HTMLElement).style.minHeight = `${windowHeight - otherHeight
+        }px`;
+      pageBodyGroup.style.minHeight = `${windowHeight - otherHeight}px`;
     }
 
     if (this.deviceId == 1) {
       // for fix menu after scroll (after load page content and determining the height that)
-      const bodyHeight = (this.container.closest("[data-bc-bp-main-container]") as HTMLElement).offsetHeight;
+      const bodyHeight = (
+        this.container.closest("[data-bc-bp-main-container]") as HTMLElement
+      ).offsetHeight;
       if (bodyHeight - windowHeight > 200) {
-        const menu = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-menu-container]");
-        const themeContainer = this.container.closest("[data-bc-bp-main-container]").querySelector("[data-bc-bp-theme-container]");
-        var sticky = (menu as HTMLElement).offsetTop;
-        window.onscroll = function() {
+        const menu = this.container
+          .closest("[data-bc-bp-main-container]")
+          .querySelector("[data-bc-bp-menu-container]");
+        const themeContainer = this.container
+          .closest("[data-bc-bp-main-container]")
+          .querySelector("[data-bc-bp-theme-container]");
+        const sticky = (menu as HTMLElement).offsetTop;
+        window.onscroll = function () {
           if (window.pageYOffset >= sticky) {
             menu.setAttribute("data-bc-bp-sticky", "");
             themeContainer.setAttribute("data-bc-bp-sticky", "");

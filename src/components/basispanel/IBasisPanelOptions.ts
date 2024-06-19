@@ -10,22 +10,25 @@ export default interface IBasisPanelOptions {
   baseUrl: IPanelPartUrlOptions;
   themeUrl: IUrlTheme;
   dataUrl: IUrlCollectionOption;
-  widgetListUrl: string;
   addWidgetUrl: string;
   method: IPanelPartMethodOptions;
+  dashboardCustomizeMethod: IPanelPartDashboardOptions;
   checkRkey: ICheckRkeyOptions;
   culture: ICultureOptions;
   logout: ILogoutOptions;
   cart: ICartOptions;
   store: IStoreOptions;
   notification: INotificationOptions;
-  addtoDashboard: string;
-  removeFromDashbaord: string;
-  tempwidgets: string;
   serviceLink?: string;
   businessLink?: string;
+  urlPrefix?: string;
 }
+interface IPanelPartDashboardOptions {
+  removeDashboardReservedWidgets: string;
+  addtoDashboardReservedWidget: string;
+  dashboardReservedWidgets: string;
 
+}
 interface IUrlCollectionOption {
   profile: string;
   corporate: string;
@@ -48,7 +51,10 @@ interface IPanelPartMethodOptions {
   userNoName: string;
   menu: string;
   page: string;
+  pageCustomize: string;
   sidebarMenu: string;
+  reservedWidgets: string;
+
   widget: string;
   errorMessages: string;
 }
@@ -89,5 +95,5 @@ export interface ILabels {
   widgetsSettingButton: string;
   storeTitle: string;
   lightModeTitle: string;
-  darkModeTitle: string;
+  darkModeTitle: string; widgetsHeaderTitle: string
 }

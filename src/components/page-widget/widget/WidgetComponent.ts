@@ -16,24 +16,61 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    let topPosition = 0
-    const hasSidebar = this.owner.node.getAttribute("has-sidebar") 
-    if(hasSidebar== "true" && this.options.culture.deviceId == 2){
-      topPosition = 50
+    let topPosition = 0;
+    const hasSidebar = this.owner.node.getAttribute("has-sidebar");
+    if (hasSidebar == "true" && this.options.culture.deviceId == 2) {
+      topPosition = 50;
     }
+
+    this.container.setAttribute("data-bc-bp-widget-container-drag", "");
+    this.container.setAttribute("id", String(this.param.id));
+    const closeBtn = this.container.querySelector(
+      "[data-bc-widget-btn-close]"
+    ) as HTMLElement;
+    closeBtn.setAttribute("style", "display:none !important;z-index:10");
+
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const disableWidgets = document.querySelector(
+        "[data-bc-page-widget-disableList]"
+      );
+      try {
+        this.removeAsync();
+        const widgetElement = document.createElement("div");
+        const container = document.createElement("div");
+
+        const widgetIcon = document.createElement("img");
+        widgetElement.setAttribute("draggable", "true");
+        widgetElement.setAttribute("id", String(this.param.id));
+        widgetElement.setAttribute("pallete-widget-element", "");
+        widgetIcon.setAttribute(
+          "src",
+          this.param.icon ? this.param.icon : "asset/images/no_icon.png"
+        );
+        container.appendChild(document.createTextNode(this.param.title));
+        container.appendChild(widgetIcon);
+        widgetElement.appendChild(container);
+
+        widgetElement.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", JSON.stringify(this.param));
+        });
+
+        disableWidgets.appendChild(widgetElement);
+      } catch (e) {
+        console.log("error :>> ", e);
+      }
+    });
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     const cell = parent.offsetWidth / 12;
-
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
-    (this.container as HTMLElement).style.top = `${
-      this.param.y * cell + (parent.clientTop + topPosition)
-    }px`;
-   
-    
+    (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
+      }px`;
+
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
     // if (this.deviceId == 2) {
@@ -49,13 +86,12 @@ export default class WidgetComponent extends PageWidgetComponent {
     //   span.textContent = `${this.param.id.toString()}`;
     //   li.appendChild(span);
     //   this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
-    // }    
+    // }
 
     this.title = this.param.title;
 
     const url = HttpUtil.formatString(
-      `${this.param.url ?? this.param.page.ownerUrl}${
-        this.options.method.widget
+      `${this.param.url ?? this.param.page.ownerUrl}${this.options.method.widget
       }`,
       { rKey: this.options.rKey, widgetId: this.param.id }
     );
@@ -116,16 +152,20 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   private async removeAsync(): Promise<void> {
-    await this.owner.disposeAsync();
+    try {
+      await this.owner.disposeAsync();
+    } catch (e) {
+      console.log("error :>> ", e);
+    }
     this.container.remove();
-    this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
+    // this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
   }
 
   private async addToDashboard(): Promise<void> {
     const widgetTitle = this.owner.dc.resolve<any>("widget");
     const widgetId = this.param.id;
     const apiInputs = { widgetid: widgetId, title: widgetTitle.title };
-    const url = HttpUtil.formatString(this.options.addtoDashboard, {
+    const url = HttpUtil.formatString(this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget, {
       rKey: this.options.rKey,
     });
     await HttpUtil.fetchStringAsync(url, "POST", apiInputs);

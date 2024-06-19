@@ -674,9 +674,7 @@ tbody [data-sys-td] {
   opacity: 0 !important;
 }
 
-[data-sys-tab-container] {
-  background-color: #f2f6f9 !important;
-}
+
 
 [data-sys-tab-active] {
   background-color: var(--dark_blue) !important;
