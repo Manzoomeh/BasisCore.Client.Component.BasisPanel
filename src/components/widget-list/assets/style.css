@@ -58,8 +58,8 @@
 }
 
 [data-bc-remove-widget] {
-    left: 5%;
-    top: calc(-100% + 45px);
+    left: 20px;
+    top: calc(-100% + 35px);
     height: 24px;
     width: 24px;
     margin-right: 100%;
@@ -90,6 +90,29 @@
     top: 5px;
     margin-right: 100%;
     border-radius: 50%;
+    position: absolute;
+    background-color: #7fa9ff;
+}
+
+[pallete-widget-element] [data-bc-add-height-top] {
+    left: 50%;
+    cursor: n-resize;
+    height: 6px;
+    width: 6px;
+    top: 5px;
+    margin-right: 100%;
+    border-radius: 50%;
+    position: absolute;
+    background-color: #7fa9ff;
+}
+
+[pallete-widget-element] [data-bc-add-width-right] {
+    right: 5px !important;
+    height: 6px !important;
+    cursor: e-resize;
+    width: 6px !important;
+    bottom: 50% !important;
+    border-radius: 50% !important;
     position: absolute;
     background-color: #7fa9ff;
 }
