@@ -16,10 +16,12 @@ export default class LocalStorageUtil {
 
   private static _hasPageToShow: boolean = false;
   private static _hasMenuToActive: boolean = false;
+  public static checkRkeyResult: Promise<ICheckRkeyResult>
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
-    const result = await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
+    this.checkRkeyResult = HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
+    const result = await this.checkRkeyResult
     if (result.checked) {
       LocalStorageUtil._currentUserId = result.userid;
       const str = localStorage.getItem("__bc_panel_last_state__");
