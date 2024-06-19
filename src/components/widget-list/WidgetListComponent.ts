@@ -315,323 +315,328 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this._page.addingPageGroupsAsync(this._page.info);
   }
   disableDragDrop() {
-    this.sortable.destroy();
+    if (!this.isDragging) {
+
+      this.sortable.destroy();
+    }
   }
   enableDragDrop() {
+    if (!this.isDragging) {
 
-    this.sortable = new Sortable(
-      [
-        this.widgetsContainer,
-        document.querySelector(
-          "[data-bc-page-widget-disablelist]"
-        ) as HTMLElement,
-        document.querySelector(
-          "[data-bc-page-widget-dashboard-wrapper]"
-        ) as HTMLElement,
-      ],
-      {
-        draggable:
-          "[pallete-widget-element],[data-bc-bp-widget-container],[data-bc-page-widget-dashboard]",
-      }
-    );
-
-    let x;
-    this.sortable.on("drag:start", (event) => {
-      this.isDragging = true
-      x = event.sensorEvent.clientX;
-    });
-    this.sortable.on("drag:move", (event) => {
-      const { clientX, clientY } = event.sensorEvent;
-
-      if (
-        event.source
-          .closest("[drop-zone]")
-          .attributes.getNamedItem("data-bc-bp-group-container") &&
-        event.sourceContainer.attributes.getNamedItem(
-          "data-bc-bp-group-container"
-        )
-      ) {
-        console.log('hhhhhhhhhh')
-        if (clientX - x > event.source.offsetWidth / 4) {
-          event.originalSource.classList.remove('floatLeft')
-
-          event.originalSource.classList.add('floatRight')
-          console.log('event.source', event.source)
-        } else if (clientX - x < -event.source.offsetWidth / 4) {
-          event.originalSource.classList.remove('floatRight')
-
-          event.originalSource.classList.add('floatLeft')
-
-          console.log('event.source', event.source)
-
+      this.sortable = new Sortable(
+        [
+          this.widgetsContainer,
+          document.querySelector(
+            "[data-bc-page-widget-disablelist]"
+          ) as HTMLElement,
+          document.querySelector(
+            "[data-bc-page-widget-dashboard-wrapper]"
+          ) as HTMLElement,
+        ],
+        {
+          draggable:
+            "[pallete-widget-element],[data-bc-bp-widget-container],[data-bc-page-widget-dashboard]",
         }
-      }
-    });
-
-    this.sortable.on("drag:over:container", (event) => {
-      if (
-        event.overContainer.attributes.getNamedItem(
-          "data-bc-page-widget-disablelist"
-        ) &&
-        event.source.attributes.getNamedItem("pallete-widget-element")
-      ) {
-        event.source.setAttribute("style", "");
-      }
-
-      if (
-        event.overContainer.attributes.getNamedItem(
-          "data-bc-bp-group-container"
-        ) &&
-        (event.source.attributes.getNamedItem("pallete-widget-element") ||
-          event.source.attributes.getNamedItem("data-bc-page-widget-dashboard"))
-      ) {
-        let widgetData: any = this.widgetList.find(
-          (e) => String(e.id) === event.source.getAttribute("id")
-        );
-        if (!widgetData) {
-          widgetData = this.dashboardWidgetList.find(
-            (e) => String(e.widgetid) === event.source.getAttribute("id")
-          );
-        }
-        event.source.setAttribute("gs-w", widgetData?.w?.toString() || '4');
-        event.source.setAttribute("gs-h", widgetData?.h?.toString() || '4');
-        event.source.setAttribute("data-bc-bp-widget-container", "");
-        console.log(`display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 4) * this._page.cell
-          } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
-        )
-        const parent = document.querySelector(
-          "[data-bc-page-body]"
-        ) as HTMLElement;
-        event.source.setAttribute(
-          "style",
-          `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 4) * this._page.cell
-          } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
-        );
-        if (
-          event.source.attributes.getNamedItem("data-bc-page-widget-dashboard")
-        ) {
-        } else {
-          event.source.children[0].setAttribute(
-            "style",
-            `display: flex; justify-content: center; align-items: center; width: 100%; height: 100% `
-          );
-        }
-      }
-    });
-    this.sortable.on("drag:stop", (event) => {
-      this.isDragging = false
-
-      window.removeEventListener("handleMouseMove", () => { });
-      if (
-        event.sourceContainer.attributes.getNamedItem(
-          "data-bc-bp-group-container"
-        ) &&
-        !event.source
-          .closest("[drop-zone]")
-          .attributes.getNamedItem("data-bc-bp-group-container")
-      ) {
-        event.cancel();
-        return;
-      }
-      if (
-        event.source
-          .closest("[drop-zone]")
-          .attributes.getNamedItem("data-bc-bp-group-container") &&
-        (event.source.attributes.getNamedItem("pallete-widget-element") ||
-          event.source.attributes.getNamedItem("data-bc-page-widget-dashboard"))
-      ) {
-        let widgetData: any = this.widgetList.find(
-          (e) => String(e.id) === event.source.getAttribute("id")
-        );
-        if (!widgetData) {
-          widgetData = this.disabledDashboardWidgetList.find(
-            (e) => String(e.widgetid) === event.source.getAttribute("id") && String(e.moduleid) === event.source.getAttribute("moduleid")
-          );
-        }
-        console.log('widgetData', widgetData)
-        this.disabledWidgetList = this.disabledWidgetList.filter(e => e.id != widgetData.id)
-        console.log(' this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
-        this.disabledDashboardWidgetList = this.disabledDashboardWidgetList.filter(e => e.widgetid != widgetData.id && e.moduleid != widgetData.moduleid)
-        console.log(' this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
-
-        event.originalSource.setAttribute("gs-w", widgetData?.w?.toString() || '4');
-        event.originalSource.setAttribute("gs-h", widgetData?.h?.toString() || '4');
-        event.originalSource.setAttribute(
-          "data-bc-bp-direction",
-          this.direction
-        );
-        event.originalSource.querySelector("[data-bc-btn-remove]")?.remove();
-        event.originalSource.setAttribute("data-bc-bp-widget-container", "");
-        const parent = document.querySelector(
-          "[data-bc-page-body]"
-        ) as HTMLElement;
-        console.log(' event.source.attributes.getNamedItem("style")?.value', event.source.attributes.getNamedItem("style")?.value)
-        event.originalSource.setAttribute(
-          "style",
-          event.source.attributes.getNamedItem("style")?.value || ""
-        );
-        // event.originalSource.style.height = `${
-        widgetData?.h || 4 * this._page.cell
-        //   } px`;
-
-        if (event.source.attributes.getNamedItem("pallete-widget-element")) {
-          event.originalSource.children[0].setAttribute(
-            "style",
-            event.source.children[0].attributes.getNamedItem("style")?.value
-          );
-        }
-        if (!event.originalSource.querySelector("[data-bc-add-height]")) {
-          const increaseHeight = document.createElement("div");
-          const increaseHeightTop = document.createElement("div");
-          const removeBtn = document.createElement("div");
-          removeBtn.innerText = "x";
-          removeBtn.setAttribute("data-bc-remove-widget", "");
-          removeBtn.addEventListener("mouseenter", () => {
-            event.originalSource.draggable = false;
-            this.disableDragDrop();
-          });
-          removeBtn.addEventListener("mouseleave", () => {
-            this.enableDragDrop();
-          });
-          removeBtn.addEventListener("mousedown", (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            if (
-              !(
-                event.target as HTMLElement
-              ).parentElement.attributes.getNamedItem(
-                "data-bc-page-widget-dashboard"
-              )
-            ) {
-              const data = this.widgetList.find(
-                (e) =>
-                  String(e.id) == (event.target as HTMLElement).parentElement.id
-              );
-              this.disabledWidgetList.push(data)
-              this.fillListUI()
-
-            } else {
-
-              const data = this.dashboardWidgetList.find(
-                (e) =>
-                  String(e.widgetid) == (event.target as HTMLElement).parentElement.id && String(e.moduleid) == (event.target as HTMLElement).parentElement.getAttribute('moduleid')
-              );
-
-              this.disabledDashboardWidgetList.push(data)
-              console.log('this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
-              this.fillDashboardWidgetList()
-
-            }
-
-            (event.target as HTMLElement)
-              .closest("[data-bc-bp-widget-container]")
-              .remove();
-            this.enableDragDrop();
-          });
-          event.originalSource.appendChild(removeBtn);
-
-          event.originalSource.appendChild(increaseHeight);
-          event.originalSource.appendChild(increaseHeightTop);
-          const increaseWidth = document.createElement("div");
-          const increaseWidthRight = document.createElement("div");
-          event.originalSource.appendChild(increaseWidth);
-          event.originalSource.appendChild(increaseWidthRight);
-          increaseHeight.setAttribute("data-bc-add-height", "");
-          increaseHeightTop.setAttribute("data-bc-add-height-top", "");
-          increaseWidth.setAttribute("data-bc-add-width", "");
-          increaseWidthRight.setAttribute("data-bc-add-width-Right", "");
-
-          increaseWidth.addEventListener("mouseenter", () => {
-            event.originalSource.draggable = false;
-            this.disableDragDrop();
-          });
-
-          increaseWidth.addEventListener("mouseleave", () => {
-            this.enableDragDrop();
-          });
-
-          increaseWidth.addEventListener("mousedown", (event) =>
-            this.handleMouseDown(event)
-          );
-          increaseWidthRight.addEventListener("mouseenter", () => {
-            event.originalSource.draggable = false;
-
-            this.disableDragDrop();
-          });
-
-          increaseWidthRight.addEventListener("mouseleave", () => {
-            this.enableDragDrop();
-          });
-
-          increaseWidthRight.addEventListener("mousedown", (event) =>
-            this.handleMouseDown(event)
-          );
-          increaseHeight.addEventListener("mouseenter", () => {
-            event.originalSource.draggable = false;
-            this.sortable.destroy();
-          });
-
-          increaseHeight.addEventListener("mouseleave", () => {
-
-            this.enableDragDrop();
-          });
-
-          increaseHeight.addEventListener("mousedown", (event) => {
-
-            this.handleMouseDown(event)
-          }
-
-          );
-          increaseHeightTop.addEventListener("mouseenter", () => {
-            event.originalSource.draggable = false;
-            this.sortable.destroy();
-          });
-
-          increaseHeightTop.addEventListener("mouseleave", () => {
-
-            this.enableDragDrop();
-          });
-
-          increaseHeightTop.addEventListener("mousedown", (event) => {
-
-            this.handleMouseDown(event)
-          }
-
-          );
-          document.addEventListener("mousemove", (ev) =>
-            this.handleMouseMove(ev)
-          );
-          document.addEventListener("mouseup", (_) => this.handleMouseUp());
-        }
-
-        event.originalSource.setAttribute("draggable", "true");
-        event.originalSource.classList.add('widgetDragClass')
-      }
-      event.originalSource.setAttribute(
-        "style",
-        event.source.attributes.getNamedItem("style")?.value
       );
 
-      if (
-        event.source
-          .closest("[drop-zone]")
-          .attributes.getNamedItem("data-bc-page-widget-disablelist") &&
-        !event.source.attributes.getNamedItem("pallete-widget-element")
-      ) {
-        event.cancel();
-      }
-      if (
-        event.source
-          .closest("[drop-zone]")
-          .attributes.getNamedItem("data-bc-page-widget-disablelist") &&
-        event.source.attributes.getNamedItem("pallete-widget-element")
-      ) {
-        event.originalSource.setAttribute("style", "");
-        event.originalSource.children[0].setAttribute("style", "");
-        event.originalSource.lastChild.remove();
-        event.originalSource.removeAttribute("data-bc-bp-widget-container");
-      }
-    });
+      let x;
+      this.sortable.on("drag:start", (event) => {
+        this.isDragging = true
+        x = event.sensorEvent.clientX;
+      });
+      this.sortable.on("drag:move", (event) => {
+        const { clientX, clientY } = event.sensorEvent;
+
+        if (
+          event.source
+            .closest("[drop-zone]")
+            .attributes.getNamedItem("data-bc-bp-group-container") &&
+          event.sourceContainer.attributes.getNamedItem(
+            "data-bc-bp-group-container"
+          )
+        ) {
+          console.log('hhhhhhhhhh')
+          if (clientX - x > event.source.offsetWidth / 4) {
+            event.originalSource.classList.remove('floatLeft')
+
+            event.originalSource.classList.add('floatRight')
+            console.log('event.source', event.source)
+          } else if (clientX - x < -event.source.offsetWidth / 4) {
+            event.originalSource.classList.remove('floatRight')
+
+            event.originalSource.classList.add('floatLeft')
+
+            console.log('event.source', event.source)
+
+          }
+        }
+      });
+
+      this.sortable.on("drag:over:container", (event) => {
+        if (
+          event.overContainer.attributes.getNamedItem(
+            "data-bc-page-widget-disablelist"
+          ) &&
+          event.source.attributes.getNamedItem("pallete-widget-element")
+        ) {
+          event.source.setAttribute("style", "");
+        }
+
+        if (
+          event.overContainer.attributes.getNamedItem(
+            "data-bc-bp-group-container"
+          ) &&
+          (event.source.attributes.getNamedItem("pallete-widget-element") ||
+            event.source.attributes.getNamedItem("data-bc-page-widget-dashboard"))
+        ) {
+          let widgetData: any = this.widgetList.find(
+            (e) => String(e.id) === event.source.getAttribute("id")
+          );
+          if (!widgetData) {
+            widgetData = this.dashboardWidgetList.find(
+              (e) => String(e.widgetid) === event.source.getAttribute("id")
+            );
+          }
+          event.source.setAttribute("gs-w", widgetData?.w?.toString() || '4');
+          event.source.setAttribute("gs-h", widgetData?.h?.toString() || '4');
+          event.source.setAttribute("data-bc-bp-widget-container", "");
+          console.log(`display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 4) * this._page.cell
+            } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
+          )
+          const parent = document.querySelector(
+            "[data-bc-page-body]"
+          ) as HTMLElement;
+          event.source.setAttribute(
+            "style",
+            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 4) * this._page.cell
+            } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
+          );
+          if (
+            event.source.attributes.getNamedItem("data-bc-page-widget-dashboard")
+          ) {
+          } else {
+            event.source.children[0].setAttribute(
+              "style",
+              `display: flex; justify-content: center; align-items: center; width: 100%; height: 100% `
+            );
+          }
+        }
+      });
+      this.sortable.on("drag:stop", (event) => {
+        this.isDragging = false
+
+        window.removeEventListener("handleMouseMove", () => { });
+        if (
+          event.sourceContainer.attributes.getNamedItem(
+            "data-bc-bp-group-container"
+          ) &&
+          !event.source
+            .closest("[drop-zone]")
+            .attributes.getNamedItem("data-bc-bp-group-container")
+        ) {
+          event.cancel();
+          return;
+        }
+        if (
+          event.source
+            .closest("[drop-zone]")
+            .attributes.getNamedItem("data-bc-bp-group-container") &&
+          (event.source.attributes.getNamedItem("pallete-widget-element") ||
+            event.source.attributes.getNamedItem("data-bc-page-widget-dashboard"))
+        ) {
+          let widgetData: any = this.widgetList.find(
+            (e) => String(e.id) === event.source.getAttribute("id")
+          );
+          if (!widgetData) {
+            widgetData = this.disabledDashboardWidgetList.find(
+              (e) => String(e.widgetid) === event.source.getAttribute("id") && String(e.moduleid) === event.source.getAttribute("moduleid")
+            );
+          }
+          console.log('widgetData', widgetData)
+          this.disabledWidgetList = this.disabledWidgetList.filter(e => e.id != widgetData.id)
+          console.log(' this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
+          this.disabledDashboardWidgetList = this.disabledDashboardWidgetList.filter(e => e.widgetid != widgetData.id && e.moduleid != widgetData.moduleid)
+          console.log(' this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
+
+          event.originalSource.setAttribute("gs-w", widgetData?.w?.toString() || '4');
+          event.originalSource.setAttribute("gs-h", widgetData?.h?.toString() || '4');
+          event.originalSource.setAttribute(
+            "data-bc-bp-direction",
+            this.direction
+          );
+          event.originalSource.querySelector("[data-bc-btn-remove]")?.remove();
+          event.originalSource.setAttribute("data-bc-bp-widget-container", "");
+          const parent = document.querySelector(
+            "[data-bc-page-body]"
+          ) as HTMLElement;
+          console.log(' event.source.attributes.getNamedItem("style")?.value', event.source.attributes.getNamedItem("style")?.value)
+          event.originalSource.setAttribute(
+            "style",
+            event.source.attributes.getNamedItem("style")?.value || ""
+          );
+          // event.originalSource.style.height = `${
+          widgetData?.h || 4 * this._page.cell
+          //   } px`;
+
+          if (event.source.attributes.getNamedItem("pallete-widget-element")) {
+            event.originalSource.children[0].setAttribute(
+              "style",
+              event.source.children[0].attributes.getNamedItem("style")?.value
+            );
+          }
+          if (!event.originalSource.querySelector("[data-bc-add-height]")) {
+            const increaseHeight = document.createElement("div");
+            const increaseHeightTop = document.createElement("div");
+            const removeBtn = document.createElement("div");
+            removeBtn.innerText = "x";
+            removeBtn.setAttribute("data-bc-remove-widget", "");
+            removeBtn.addEventListener("mouseenter", () => {
+              event.originalSource.draggable = false;
+              this.disableDragDrop();
+            });
+            removeBtn.addEventListener("mouseleave", () => {
+              this.enableDragDrop();
+            });
+            removeBtn.addEventListener("mousedown", (event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              if (
+                !(
+                  event.target as HTMLElement
+                ).parentElement.attributes.getNamedItem(
+                  "data-bc-page-widget-dashboard"
+                )
+              ) {
+                const data = this.widgetList.find(
+                  (e) =>
+                    String(e.id) == (event.target as HTMLElement).parentElement.id
+                );
+                this.disabledWidgetList.push(data)
+                this.fillListUI()
+
+              } else {
+
+                const data = this.dashboardWidgetList.find(
+                  (e) =>
+                    String(e.widgetid) == (event.target as HTMLElement).parentElement.id && String(e.moduleid) == (event.target as HTMLElement).parentElement.getAttribute('moduleid')
+                );
+
+                this.disabledDashboardWidgetList.push(data)
+                console.log('this.disabledDashboardWidgetList', this.disabledDashboardWidgetList)
+                this.fillDashboardWidgetList()
+
+              }
+
+              (event.target as HTMLElement)
+                .closest("[data-bc-bp-widget-container]")
+                .remove();
+              this.enableDragDrop();
+            });
+            event.originalSource.appendChild(removeBtn);
+
+            event.originalSource.appendChild(increaseHeight);
+            event.originalSource.appendChild(increaseHeightTop);
+            const increaseWidth = document.createElement("div");
+            const increaseWidthRight = document.createElement("div");
+            event.originalSource.appendChild(increaseWidth);
+            event.originalSource.appendChild(increaseWidthRight);
+            increaseHeight.setAttribute("data-bc-add-height", "");
+            increaseHeightTop.setAttribute("data-bc-add-height-top", "");
+            increaseWidth.setAttribute("data-bc-add-width", "");
+            increaseWidthRight.setAttribute("data-bc-add-width-Right", "");
+
+            increaseWidth.addEventListener("mouseenter", () => {
+              event.originalSource.draggable = false;
+              this.disableDragDrop();
+            });
+
+            increaseWidth.addEventListener("mouseleave", () => {
+              this.enableDragDrop();
+            });
+
+            increaseWidth.addEventListener("mousedown", (event) =>
+              this.handleMouseDown(event)
+            );
+            increaseWidthRight.addEventListener("mouseenter", () => {
+              event.originalSource.draggable = false;
+
+              this.disableDragDrop();
+            });
+
+            increaseWidthRight.addEventListener("mouseleave", () => {
+              this.enableDragDrop();
+            });
+
+            increaseWidthRight.addEventListener("mousedown", (event) =>
+              this.handleMouseDown(event)
+            );
+            increaseHeight.addEventListener("mouseenter", () => {
+              event.originalSource.draggable = false;
+              this.sortable.destroy();
+            });
+
+            increaseHeight.addEventListener("mouseleave", () => {
+
+              this.enableDragDrop();
+            });
+
+            increaseHeight.addEventListener("mousedown", (event) => {
+
+              this.handleMouseDown(event)
+            }
+
+            );
+            increaseHeightTop.addEventListener("mouseenter", () => {
+              event.originalSource.draggable = false;
+              this.sortable.destroy();
+            });
+
+            increaseHeightTop.addEventListener("mouseleave", () => {
+
+              this.enableDragDrop();
+            });
+
+            increaseHeightTop.addEventListener("mousedown", (event) => {
+
+              this.handleMouseDown(event)
+            }
+
+            );
+            document.addEventListener("mousemove", (ev) =>
+              this.handleMouseMove(ev)
+            );
+            document.addEventListener("mouseup", (_) => this.handleMouseUp());
+          }
+
+          event.originalSource.setAttribute("draggable", "true");
+          event.originalSource.classList.add('widgetDragClass')
+        }
+        event.originalSource.setAttribute(
+          "style",
+          event.source.attributes.getNamedItem("style")?.value
+        );
+
+        if (
+          event.source
+            .closest("[drop-zone]")
+            .attributes.getNamedItem("data-bc-page-widget-disablelist") &&
+          !event.source.attributes.getNamedItem("pallete-widget-element")
+        ) {
+          event.cancel();
+        }
+        if (
+          event.source
+            .closest("[drop-zone]")
+            .attributes.getNamedItem("data-bc-page-widget-disablelist") &&
+          event.source.attributes.getNamedItem("pallete-widget-element")
+        ) {
+          event.originalSource.setAttribute("style", "");
+          event.originalSource.children[0].setAttribute("style", "");
+          event.originalSource.lastChild.remove();
+          event.originalSource.removeAttribute("data-bc-bp-widget-container");
+        }
+      });
+    }
   }
   handleMouseMove(ev) {
     if (!this.isDragging) return;
