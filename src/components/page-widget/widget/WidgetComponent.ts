@@ -9,6 +9,7 @@ import { ISource } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
 import PageWidgetComponent from "../PageWidgetComponent";
 import { sidebar } from "../../../ComponentLoader";
+import LocalStorageUtil from "../../../LocalStorageUtil";
 
 export default class WidgetComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
@@ -89,12 +90,12 @@ export default class WidgetComponent extends PageWidgetComponent {
     // }
 
     this.title = this.param.title;
-
     const url = HttpUtil.formatString(
       `${this.param.url ?? this.param.page.ownerUrl}${this.options.method.widget
       }`,
       { rKey: this.options.rKey, widgetId: this.param.id }
     );
+    console.log('first :>>', this.param, this.options, url)
 
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
@@ -125,10 +126,12 @@ export default class WidgetComponent extends PageWidgetComponent {
           this.container
             .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
             .forEach((btn) => {
+              console.log('btn', btn)
               const currentAddToDashboardBtn = btn as HTMLElement;
               currentAddToDashboardBtn.style.display = "inline-block";
               btn.addEventListener("click", (e) => {
                 e.preventDefault();
+                console.log('moz')
                 this.addToDashboard();
               });
             });
@@ -162,10 +165,14 @@ export default class WidgetComponent extends PageWidgetComponent {
   }
 
   private async addToDashboard(): Promise<void> {
+    console.log('hhh')
+    console.log('this.param', this.param)
     const widgetTitle = this.owner.dc.resolve<any>("widget");
     const widgetId = this.param.id;
-    const apiInputs = { widgetid: widgetId, title: widgetTitle.title };
-    const url = HttpUtil.formatString(this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget, {
+    const mid = JSON.parse(localStorage.getItem('__bc_panel_last_state__')).m.info.mid
+    const apiInputs = { widgetid: widgetId, title: widgetTitle.title, moduleid: mid || this.param.moduleid };
+    console.log('apiInputs', apiInputs)
+    const url = HttpUtil.formatString((this.param.url ?? this.param.page.ownerUrl) + this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget, {
       rKey: this.options.rKey,
     });
     await HttpUtil.fetchStringAsync(url, "POST", apiInputs);

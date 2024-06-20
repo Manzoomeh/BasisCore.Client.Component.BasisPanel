@@ -4,12 +4,13 @@ import IWidgetParam from "./widget/IWidgetParam";
 
 export default abstract class PageWidgetComponent
   extends BasisPanelChildComponent
-  implements IWidget
-{
+  implements IWidget {
   protected readonly param: IWidgetParam;
   constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
     super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("widget", this);
+    console.log('thisss', this, this.owner)
+    console.log('this.owner.node', this.owner.node)
     this.param = eval(this.owner.node.getAttribute("options"));
   }
 

@@ -113,20 +113,25 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private async saveWidgets(): Promise<void> {
     const widgets = document.querySelectorAll("[data-bc-bp-widget-container]");
     const data = { data: [] };
+    const pageBody = document.querySelector('[data-bc-page-body=""]');
+    const prevCell = ((pageBody as HTMLElement).offsetWidth + 300) / 12;
+    const cell = (pageBody as HTMLElement).offsetWidth / 12;
     widgets.forEach((e: HTMLElement) => {
+
       const widgetData = {};
       widgetData["widgetid"] = e.getAttribute("id");
-      widgetData["y"] = Math.floor(e.offsetTop / this._page.cell);
-      widgetData["x"] = Math.floor(e.offsetLeft / this._page.cell);
-      widgetData["h"] = Math.floor(e.offsetHeight / this._page.cell);
-      widgetData["w"] = Math.floor(e.offsetWidth / this._page.cell);
+
+      widgetData["y"] = Math.floor(e.offsetTop / prevCell)
+      widgetData["x"] = Math.floor(e.offsetLeft / cell)
+      widgetData["h"] = Math.floor(e.offsetHeight / prevCell)
+      widgetData["w"] = Math.floor(e.offsetWidth / cell) + 1
       console.log('first', this._page)
       widgetData["moduleid"] = Number(e.getAttribute("moduleid")) || 1
       data.data.push(widgetData);
     });
-    const url = HttpUtil.formatString(this.options.method.pageCustomize, {
+    const url = HttpUtil.formatString((this._page.loaderParam.ownerUrl + this.options.method.pageCustomize), {
       rkey: this.options.rKey,
-      pid: this._page.loaderParam.pageId,
+      pageId: this._page.loaderParam.pageId,
     });
     let res = await fetch(url, {
       method: "POST",
@@ -149,9 +154,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       this._page.widgetDropAreaContainer.querySelectorAll("[data-bc-widget-id]")
     ).map((x) => x.getAttribute("data-bc-widget-id"));
     if (addedWidgetList.length > 0) {
-      const url = HttpUtil.formatString(this.options.method.reservedWidgets, {
+      const url = HttpUtil.formatString((this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets), {
         rKey: this.options.rKey,
-        pid: this._page.loaderParam.pageId,
+        pageId: this._page.loaderParam.pageId,
       });
 
       const _ = await HttpUtil.checkRkeyFetchDataAsync(
@@ -205,9 +210,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private async fillWidgetListAsync(): Promise<void> {
 
 
-    const url = HttpUtil.formatString(this.options.method.reservedWidgets, {
+    const url = HttpUtil.formatString((this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets), {
       rKey: this.options.rKey,
-      pid: this._page.loaderParam.pageId,
+      pageId: this._page.loaderParam.pageId,
     });
 
     const widgetsList = await HttpUtil.checkRkeyFetchDataAsync<
@@ -817,6 +822,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     this.widgetsContainer = container
 
+
     widgets.forEach((e: HTMLElement) => {
       const increaseHeight = document.createElement("div");
       const increaseWidth = document.createElement("div");
@@ -954,8 +960,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     parent.querySelectorAll('[data-bc-page-widget-dashboard]').forEach(e => {
       e.remove()
     })
-    const removewidgetUrl = HttpUtil.formatString(
-      this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
+    const removewidgetUrl = HttpUtil.formatString((this._page.loaderParam.ownerUrl +
+      this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets),
       {
         rKey: this.options.rKey,
       }
@@ -1020,11 +1026,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     ) as HTMLElement;
     dashboardBtn.style.display = "flex";
 
-    const url = HttpUtil.formatString(
-      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+    const url = HttpUtil.formatString((this._page.loaderParam.ownerUrl +
+      this.options.dashboardCustomizeMethod.dashboardReservedWidgets),
       {
         rKey: this.options.rKey,
-        pid: this._page.loaderParam.pageId
+        pageId: this._page.loaderParam.pageId
       }
     );
     try {
