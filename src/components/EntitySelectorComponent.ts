@@ -583,10 +583,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async getCurrentService() {
-    const url = HttpUtil.formatString(this.options.checkRkey.url, {
-      rKey: this.options.rKey,
-    });
-    const result = await HttpUtil.fetchDataAsync(url, "GET");
+
+    const result = await LocalStorageUtil.checkRkeyResult
     return result;
   }
   protected selectItem(li: HTMLElement, freeze: boolean = false) {
