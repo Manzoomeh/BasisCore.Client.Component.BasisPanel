@@ -22,6 +22,7 @@ export default interface IBasisPanelOptions {
   serviceLink?: string;
   businessLink?: string;
   urlPrefix?: string;
+  lid?: string;
 }
 interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;

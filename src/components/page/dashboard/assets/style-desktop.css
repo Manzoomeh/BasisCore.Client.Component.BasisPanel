@@ -88,8 +88,8 @@
     color: #fff;
     cursor: pointer;
     position: absolute;
-    top: -5px;
-    /* left: -5px; */
+    top: 18px;
+    left: 19px !important;
     font-size: 10px;
     line-height: 22px;
     text-align: center;

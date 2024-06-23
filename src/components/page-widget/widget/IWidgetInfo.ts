@@ -13,5 +13,6 @@ export default interface IWidgetInfo {
   moduleid: number
   addToDashboard?: boolean;
   icon?: string;
+  isPrimary?: boolean
 
 }

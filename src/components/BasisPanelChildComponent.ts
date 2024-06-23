@@ -30,7 +30,7 @@ export default abstract class BasisPanelChildComponent
           businessSearchPlaceholder: "جستجوی کسب‌و‌کار ...",
           schedulerNoTask: "در انتظار کار جدید",
           schedulerCountTask: "مورد آپلود",
-          addToDashboardTooltip: "افزودن به داشبورد",
+          addToDashboardTooltip: "افزودن به میز کار",
           dragAndDropMessage: "ویجت‌ها را بکشید و رها کنید",
           widgetsTitle: "ویجت‌ها",
           widgetsTab: "ویجت‌ها",

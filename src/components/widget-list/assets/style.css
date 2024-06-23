@@ -25,6 +25,14 @@
     margin-left: auto;
 }
 
+.floatTop {
+    margin-bottom: auto;
+}
+
+.floatBottom {
+    margin-top: auto;
+}
+
 [data-bc-page-widget-btns-wrapper] {
     display: flex;
     justify-content: start;
@@ -57,25 +65,33 @@
     padding: 2px 10px;
 }
 
+[data-bc-dragged-element] {
+    width: 200px !important;
+    height: 140px !important;
+}
+
 [data-bc-remove-widget] {
-    left: 20px;
-    top: calc(-100% + 35px);
-    height: 24px;
-    width: 24px;
-    margin-right: 100%;
+    left: 10px;
+    top: 10px;
+    height: 25px;
+    width: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    position: relative;
+    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
     background-color: #eb5757;
 }
 
 [data-bc-page-widget-dashboard] [data-bc-add-height] {
     left: 50%;
     cursor: n-resize;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     bottom: 5px;
     border-radius: 50%;
     position: absolute;
@@ -85,8 +101,8 @@
 [data-bc-page-widget-dashboard] [data-bc-add-height-top] {
     left: 50%;
     cursor: n-resize;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     top: 5px;
     margin-right: 100%;
     border-radius: 50%;
@@ -97,8 +113,8 @@
 [pallete-widget-element] [data-bc-add-height-top] {
     left: 50%;
     cursor: n-resize;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     top: 5px;
     margin-right: 100%;
     border-radius: 50%;
@@ -108,9 +124,9 @@
 
 [pallete-widget-element] [data-bc-add-width-right] {
     right: 5px !important;
-    height: 6px !important;
+    height: 8px !important;
     cursor: e-resize;
-    width: 6px !important;
+    width: 8px !important;
     bottom: 50% !important;
     border-radius: 50% !important;
     position: absolute;
@@ -120,8 +136,8 @@
 [data-bc-add-height-top] {
     left: 50%;
     cursor: n-resize;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     z-index: 10;
     top: 4px;
     margin-right: 100%;
@@ -133,9 +149,9 @@
 [data-bc-add-height] {
     left: 50%;
     cursor: n-resize;
-    height: 6px;
-    width: 6px;
-    bottom: 15px;
+    height: 8px;
+    width: 8px;
+    bottom: 26px;
     margin-right: 100%;
     border-radius: 50%;
     position: relative;
@@ -145,8 +161,8 @@
 [data-bc-add-width] {
     left: 4px;
     cursor: e-resize;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     bottom: 50%;
     margin-right: 100%;
     border-radius: 50%;
@@ -157,8 +173,8 @@
 [data-bc-add-width-right] {
     cursor: e-resize;
     right: -3px;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     bottom: 50%;
     margin-left: 100%;
     border-radius: 50%;
@@ -168,9 +184,9 @@
 
 [data-bc-page-widget-dashboard] [data-bc-add-width] {
     left: 5px !important;
-    height: 6px !important;
+    height: 8px !important;
     cursor: e-resize;
-    width: 6px !important;
+    width: 8px !important;
     bottom: 50% !important;
     border-radius: 50% !important;
     position: absolute;
@@ -179,9 +195,9 @@
 
 [data-bc-page-widget-dashboard] [data-bc-add-width-right] {
     right: 5px !important;
-    height: 6px !important;
+    height: 8px !important;
     cursor: e-resize;
-    width: 6px !important;
+    width: 8px !important;
     bottom: 50% !important;
     border-radius: 50% !important;
     position: absolute;
@@ -208,9 +224,9 @@
 
 [pallete-widget-element] [data-bc-add-height] {
     left: 50%;
-    height: 6px;
+    height: 8px;
     cursor: n-resize;
-    width: 6px;
+    width: 8px;
     bottom: -8px;
     /* margin-bottom: 50%; */
     margin-right: 100%;
@@ -222,8 +238,8 @@
 
 [pallete-widget-element] [data-bc-add-width] {
     left: 1px;
-    height: 6px;
-    width: 6px;
+    height: 8px;
+    width: 8px;
     cursor: e-resize;
     bottom: 50%;
     /* margin-bottom: 50%; */

@@ -51,6 +51,7 @@ export default abstract class PageComponent
       "GET",
       this.options.checkRkey
     );
+    console.log('this.info', this.info)
   }
 
   public async runAsync(source?: ISource) {
