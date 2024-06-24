@@ -140,6 +140,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const allWidgets = [];
     const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
     this._page.info.groups.map((g) => g.widgets.map((w) => allWidgets.push(w)));
+    console.log('this._page', this._page)
     widgets.forEach((e: HTMLElement) => {
       const widgetData: any = {};
       widgetData["widgetid"] = e.getAttribute("id");
@@ -152,7 +153,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       widgetData["w"] = Math.floor(e.offsetWidth / cell) + 1;
       widgetData["moduleid"] =
         allWidgets.find((l) => l.id == e.getAttribute("id"))?.moduleid ||
-        e.getAttribute("moduleid");
+        e.getAttribute("moduleid") || JSON.parse(localStorage.getItem('__bc_panel_last_state__'))?.m?.info?.mid
       if (
         !data.data.find(
           (w) =>
@@ -204,7 +205,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         "[data-bc-page-widget-list-dlg-btn-add]"
       );
       const page = this.owner.dc.resolve("page") as any;
-      // await page.initializeAsync();
+      await page.initializeAsync();
       btn.setAttribute("data-icon-left", "");
       btn.removeAttribute("data-icon-right");
       btn.setAttribute("data-bc-page-widget-list-dlg-btn-add-active", "1");

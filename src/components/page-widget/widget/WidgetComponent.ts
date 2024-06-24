@@ -11,6 +11,7 @@ import IPage from "../../page/IPage";
 import NotificationMessageComponent from "../../notificationMessage/NotificationMessageComponent";
 import WidgetListComponent from "../../widget-list/WidgetListComponent";
 import MenuComponent from "../../menu/MenuComponent";
+import PageComponent from "../../page/PageComponent";
 
 export default class WidgetComponent extends PageWidgetComponent {
   pageLoader: MenuComponent;
@@ -75,8 +76,12 @@ export default class WidgetComponent extends PageWidgetComponent {
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
+    const page = this.owner.dc.resolve<PageComponent>('page')
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
-    const cell = parent.offsetWidth / 12;
+    let cell
+    if (page.widgetCell == null) { page.widgetCell = parent.offsetWidth / 12; cell = parent.offsetWidth / 12 } else {
+      cell = page.widgetCell
+    }
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
     console.log(
       "this. :>> ",

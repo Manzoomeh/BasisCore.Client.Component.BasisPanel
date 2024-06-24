@@ -16,6 +16,7 @@ export default abstract class PageComponent
   public readonly widgetDropAreaContainer: HTMLElement;
   private hasSidebar: boolean = false;
   public cell: number;
+  public widgetCell: number = null;
   public get arguments(): any {
     return this.loaderParam.arguments;
   }
