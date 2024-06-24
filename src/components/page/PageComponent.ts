@@ -155,8 +155,9 @@ export default abstract class PageComponent
         const themeContainer = this.container
           .closest("[data-bc-bp-main-container]")
           .querySelector("[data-bc-bp-theme-container]");
-        const sticky = (menu as HTMLElement).offsetTop;
+        const sticky = (menu as HTMLElement).offsetTop == 0 ? 80 : (menu as HTMLElement).offsetTop;
         window.onscroll = function () {
+          console.log('firrst', window.pageYOffset, sticky)
           if (window.pageYOffset >= sticky) {
             menu.setAttribute("data-bc-bp-sticky", "");
             themeContainer.setAttribute("data-bc-bp-sticky", "");

@@ -393,6 +393,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       .querySelector('[data-bc-bp-group-container="d1"]')
       .remove();
     this._page.addingPageGroupsAsync(this._page.info);
+    this.disableDragDrop()
   }
   disableDragDrop() {
     this.sortable.destroy();
@@ -422,7 +423,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.isDragging = true;
         x = event.sensorEvent.clientX;
         y = event.sensorEvent.clientY;
-        event.source.style.zIndex = "1000";
+        event.source.style.zIndex = "10";
         event.source.setAttribute("data-bc-dragged-element", "");
       });
       this.sortable.on("drag:move", (event) => {
@@ -614,7 +615,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           this.disabledDashboardWidgetList =
             this.disabledDashboardWidgetList.filter((e) => {
-              return Number(e.widgetid) != Number(widgetData.widgetid);
+              return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
             });
 
           event.originalSource.setAttribute(
