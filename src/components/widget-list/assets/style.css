@@ -217,6 +217,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   justify-content: center;
 }
 
@@ -373,6 +374,12 @@
   background: var(--white);
   position: relative;
   margin-bottom: 15px;
+}
+
+[data-bc-page-widget-list-dlg] [pallete-widget-element] img {
+  padding-top: 5px;
+  width: 120px;
+  height: 70px;
 }
 
 [data-bc-page-widget-list-dlg] [data-bc-page-widget-dashboard] img {
