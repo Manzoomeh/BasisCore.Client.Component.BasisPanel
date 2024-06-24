@@ -571,6 +571,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             )
           )
         ) {
+          console.log('event', event)
           event.originalSource.setAttribute(
             "gs-w",
             event.source.getAttribute("gs-w")
@@ -609,7 +610,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             this.disabledDashboardWidgetList.filter((e) => {
               return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
             });
-
+          console.log('event', event, event.originalSource)
           event.originalSource.setAttribute(
             "gs-w",
             widgetData?.w?.toString() || "3"
@@ -934,15 +935,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     if (this.currentResizeHandle) {
       const pageBody = document.querySelector('[data-bc-page-body=""]');
-      const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
+      const sidebar: HTMLElement = document.querySelector("[data-bc-bp-sidebar-container]");
 
-      let cell = (pageBody as HTMLElement).offsetWidth / 12;
+      let cell = sidebar ? (document.querySelector('[primarycontainer]') as HTMLElement).offsetWidth / 12 : (pageBody as HTMLElement).offsetWidth / 12;
 
       switch (this.type) {
         case "width":
         case "widthRight":
           const width = this.currentResizeHandle.offsetWidth;
-
+          console.log('first', cell, width, Math.floor(width / cell) > 12, Math.floor(width / cell) > 12 ? '12' : String(Math.floor(width / cell)))
           this.currentResizeHandle.setAttribute(
             "gs-w",
             // sidebar
@@ -951,7 +952,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             //     ? String(12 - Number(sidebar.getAttribute("gs-w")))
             //     : String(Math.floor(width / cell) + 1)
             //   : String(Math.floor(width / cell) + 1)
-            String(Math.floor(width / cell) + 1)
+
+            Math.floor(width / cell) > 12 ? '12' : sidebar ? String(Math.ceil(width / cell)) : String(Math.floor(width / cell) + 1)
+
           );
           this.currentResizeHandle.style.width = null;
           break;
@@ -1061,7 +1064,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const increaseWidth = document.createElement("div");
       const increaseHeightTop = document.createElement("div");
       const increaseWidthRight = document.createElement("div");
-
+      if (sidebar) {
+        e.setAttribute('gs-w', String(Number(e.getAttribute('gs-w')) + 2))
+      }
       increaseHeight.setAttribute("data-bc-add-height", "");
       increaseWidth.setAttribute("data-bc-add-width", "");
       increaseHeightTop.setAttribute("data-bc-add-height-top", "");
