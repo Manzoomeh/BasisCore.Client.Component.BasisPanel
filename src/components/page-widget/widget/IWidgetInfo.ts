@@ -10,5 +10,9 @@ export default interface IWidgetInfo {
   h: number;
   url: string;
   sidebar: boolean;
+  moduleid: number
   addToDashboard?: boolean;
+  icon?: string;
+  isPrimary?: boolean
+
 }

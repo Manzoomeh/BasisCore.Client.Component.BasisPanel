@@ -1,0 +1,620 @@
+.bs-icons {
+    width: 15px;
+    height: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 15px;
+    background-size: contain;
+}
+
+.bs-icons-no-margin {
+    width: 15px;
+    height: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    display: inline-block;
+    cursor: pointer;
+    background-size: contain;
+
+}
+
+.left-bs-icons {
+    width: 15px;
+    height: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 15px;
+    background-size: contain;
+}
+
+.right-bs-icons {
+    width: 15px;
+    height: 15px;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 15px;
+    background-size: contain;
+}
+
+.more-background-image {
+    background-image: url(/asset/images/More.png);
+    height: 17px !important;
+}
+
+.light-plus-background {
+    background-image: url(/asset/images/plusIcon.svg);
+
+}
+
+.check-icon-background {
+    background-image: url(/asset/images/checkIcon.svg);
+
+}
+
+.crossMark-icon-background {
+    background-image: url(/asset/images/crossMark.svg);
+
+}
+
+.redcrossMark-icon-background {
+    background-image: url(/asset/images/redcrossmark.svg);
+    width: 10px !important;
+    height: 10px !important;
+
+}
+
+.trashIcon-background-icon {
+    /* background-image: url(/asset/images/trashIcon.svg); */
+    background-image: url(/asset/images/newTrashIcon.svg);
+
+}
+
+.activeNote-background-icon {
+    background-image: url(/asset/images/activeNote.svg);
+
+}
+
+.disableNote-background-icon {
+    background-image: url(/asset/images/disablesNote.svg);
+
+}
+
+.pencil-icon-background {
+    background-image: url(/asset/images/pencillIcon.svg);
+
+}
+
+.doneTask-icon-background {
+    background-image: url(/asset/images/doneTaskIcon.svg);
+
+}
+
+.Exclamation-mark-background {
+    background-image: url(/asset/images/Exclamation-mark.svg);
+
+}
+
+.bell-blue-icon-background {
+    background-image: url(/asset/images/bell-blue-icon.svg);
+
+}
+
+.cloud-blue-icon-background {
+    background-image: url(/asset/images/cloud-blue.png);
+
+}
+
+
+.eye-icon-background {
+    background-image: url(/asset/images/eyeIcon.svg);
+
+}
+
+.close-icon-background {
+    background-image: url(/asset/images/closeICon.svg);
+
+}
+
+.close-icon-background {
+    background-image: url(/asset/images/closeICon.svg);
+
+}
+
+.close-icon-red-background {
+    background-image: url(/asset/images/closeredicon.svg);
+    width: 10px;
+    height: 10px;
+
+}
+
+.shareIcone-background {
+    background-image: url(/asset/images/shareIcon.svg);
+
+}
+
+.download-icon-background {
+    background-image: url(/asset/images/downloadIcon.svg);
+
+}
+
+.circle-check-icon-background {
+    background-image: url(/asset/images/circleCheck.svg);
+
+}
+
+.dark-small-plus-background {
+    background-image: url(/asset/images/darkSmallPlus.svg);
+
+}
+
+.arrow-down-icon-background {
+    background-image: url(/asset/images/arrow-down.png);
+
+}
+
+.setting-icon-background {
+    background-image: url(/asset/images/settingIcon.svg);
+
+
+}
+
+.plus-blue-background {
+    background-image: url(/asset/images/plusblue.svg);
+    width: 12px;
+    height: 12px;
+
+}
+
+.refresh-icon-background {
+    background-image: url(/asset/images/refreshIcon.svg);
+
+}
+
+.refresh-blud-icon-background {
+    background-image: url(/asset/images/refreshblueIcon.svg);
+
+}
+
+.left_arrow {
+
+    background-image: url(/asset/images/jahanGostar_arrow.svg);
+
+}
+
+.bluePlusIconSvg-background {
+    background-image: url(/asset/images/bluePlusIconSvg.svg);
+}
+
+.blue-alert-background {
+    /* background-image: url(/asset/images/alert-blue.png); */
+    background-image: url(/asset/images/Exclamation-mark.svg);
+
+}
+
+.addtodashboard-background {
+    background-image: url(/asset/images/addtodashboard.svg) !important;
+    background-size: initial !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+
+}
+
+.close-icon-background {
+    background-image: url(/asset/images/close-icon.png);
+    background-repeat: no-repeat;
+}
+
+.header-basket-background {
+    background-image: url(/asset/images/header-basket.svg);
+    width: 20px;
+
+}
+
+.corporate-blue-background {
+    background-image: url(/asset/images/corporate-blue.svg);
+
+}
+
+.business-blue-background {
+    background-image: url(/asset/images/business-blue.svg);
+}
+
+.lock-blue-background {
+    background-image: url(/asset/images/lock.svg);
+    width: 12px !important;
+}
+
+.exit-red-background {
+    background-image: url(/asset/images/exit-red.svg);
+}
+
+.delete-widget-background {
+    background-image: url(/asset/images/delete-widget.svg) !important;
+    background-size: initial !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+}
+
+
+
+.tree-gray-plus-background {
+    background-image: url(/asset/images/tree-gray-plus.png);
+    width: 12px !important;
+
+}
+
+.tree-gray-edit-background {
+    background-image: url(/asset/images/tree-gray-edit.svg);
+
+}
+
+.tree-gray-optimize-background {
+    background-image: url(/asset/images/tree-gray-optimize.png);
+
+}
+
+.balance-background {
+    background-image: url(/asset/images/balance.png);
+}
+
+.search-background {
+    background-image: url(/asset/images/accounting-search.png);
+}
+
+.excel-background {
+    background-image: url(/asset/images/accounting-excel.png);
+}
+
+.print-background {
+    background-image: url(/asset/images/accounting-print.png);
+}
+
+.attachment-blue-background {
+    background-image: url(/asset/images/attachmentblueicon.svg);
+}
+
+.label-icon-background {
+    background-image: url(/asset/images/lableicon.svg);
+}
+
+.backtolist-icon-background {
+    background-image: url(/asset/images/backtolisticon.svg);
+}
+
+.reply-icon-background {
+    background-image: url(/asset/images/replyicon.svg);
+    transform: rotateY(180deg);
+}
+
+.replytoall-icon-background {
+    background-image: url(/asset/images/replytoallicon.svg);
+    transform: rotateY(180deg);
+}
+
+.replytoall-icon-background-disabled {
+    background-image: url(/asset/images/replytoallicondisabled.svg);
+    transform: rotateY(180deg);
+}
+
+.forward-icon-background {
+    background-image: url(/asset/images/forwardicon.svg);
+    transform: rotateY(180deg);
+}
+
+.upload-icon-background {
+    background-image: url(/asset/images/uploadicon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px !important;
+}
+
+.upload-header-background {
+    background-image: url(/asset/images/upload_header.svg);
+    width: 20px !important;
+
+}
+
+.letter-icon-background {
+    background-image: url(/asset/images/letterIcon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.gmail-icon-background {
+    background-image: url(/asset/images/gmailIcon.svg);
+}
+
+.files-images-icon-background {
+    background-image: url(/asset/images/files-images-icon.svg);
+}
+
+.cloud-icon-background {
+    background-image: url(/asset/images/cloud-icon.svg);
+}
+
+.products-bag-icon-background {
+    background-image: url(/asset/images/products-bag.svg);
+}
+
+.products-inventory-icon-background {
+    background-image: url(/asset/images/products-inventory.svg);
+}
+
+.gallery-icon-background {
+    background-image: url(/asset/images/galleryIcon.svg);
+}
+
+.product-icon-background {
+    background-image: url(/asset/images/productIcon.svg);
+}
+
+.website-icon-background {
+    background-image: url(/asset/images/websiteIcon.svg);
+    width: 20px !important;
+}
+
+.close-tree-icon-background {
+    background-image: url(/asset/images/closeTreeIcon.svg);
+    width: 18px !important;
+}
+
+.expand-tree-icon-background {
+    background-image: url(/asset/images/expandAllIcon.svg);
+    width: 20px !important;
+}
+
+.usersGroup-icon-background {
+    background-image: url(/asset/images/UsersGroup.svg);
+    width: 20px !important;
+}
+
+.filled-close-tree-icon-background {
+    background-image: url(/asset/images/filledClosedTreeIcon.svg);
+    width: 18px !important;
+}
+
+.filled-open-tree-icon-background {
+    background-image: url(/asset/images/filledOpenTreeIcon.svg);
+    width: 20px !important;
+}
+
+.list-icon-background {
+    background-image: url(/asset/images/ChecklistIcon.svg);
+    /* width: 22px !important; */
+    vertical-align: middle;
+}
+
+.blue-pencil-icon-background {
+    background-image: url(/asset/images/bluePencilIcon.svg);
+}
+
+.wrench-icon-background {
+    background-image: url(/asset/images/wrenchIcon.svg);
+}
+
+.archive-icon-background {
+    background-image: url(/asset/images/arciveIcon.svg);
+}
+
+.filled-check-icon-background {
+    background-image: url(/asset/images/filledCheckIcon.svg);
+    width: 18px !important;
+}
+
+.filled-eye-icon-background {
+    /* background-image: url(/asset/images/filledEyeIcon.svg);  */
+    background-image: url(/asset/images/eyeIcon.svg);
+}
+
+.answer-icon-background {
+    background-image: url(/asset/images/answerIcon.svg);
+}
+
+.sticker-icon-background {
+    background-image: url(/asset/images/stickerIcon.svg);
+    /* width: 17px !important; */
+}
+
+.ticket-forward-icon-background {
+    background-image: url(/asset/images/forwardIcon.svg);
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.ticket-reply-icon-background {
+    background-image: url(/asset/images/ticketReplyIcon.svg);
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.ticket-replyToAll-icon-background {
+    background-image: url(/asset/images/ticketReplyToAll.svg);
+    width: 30px !important;
+    height: 30px !important;
+    transform: scaleX(-1);
+}
+
+.disable-plus-icon-background {
+    background-image: url(/asset/images/disableBluePlus.svg);
+}
+
+.filled-star-icon-background {
+    background-image: url(/asset/images/filledStarIcon.svg);
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.star-icon-background {
+    background-image: url(/asset/images/starIcon.svg);
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.blue-star-icon-background {
+    background-image: url(/asset/images/blueStarIcon.svg);
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.gray-star-icon-background {
+    background-image: url(/asset/images/grayStarIcon.svg);
+    width: 15px !important;
+    height: 15px !important;
+}
+
+.mail-download-icon-background {
+    background-image: url(/asset/images/downloadIcons.svg);
+    width: 17px !important;
+    height: 18px !important;
+}
+
+.link-icon-background {
+    background-image: url(/asset/images/LinkIcon.svg);
+}
+
+.unfilled-pencil-icon-background {
+    background-image: url(/asset/images/pencillIcon.svg);
+}
+
+.green-checkmark-icon-background {
+    background-image: url(/asset/images/greenCheckIcon.svg);
+    width: 22px !important;
+}
+
+.redFino-icon-background {
+    background-image: url(/asset/images/RedFinoIcon.svg);
+    width: 14px !important;
+}
+
+.mobile-icon-background {
+    background-image: url(/asset/images/mobilIcon.svg);
+}
+
+.fino-star-icon-background {
+    background-image: url(/asset/images/finoStarIcon.svg);
+    width: 18px !important;
+}
+
+.fino-filled-star-icon-background {
+    background-image: url(/asset/images/finoFilledStar.svg);
+    width: 18px !important;
+}
+
+.gray-icon-background {
+    background-image: url(/asset/images/grayPlusIcon.svg);
+}
+
+.filled-search-icon-background {
+    background-image: url(/asset/images/Magnifer.svg);
+}
+
+/* css */
+.red-exclamation-mark-background {
+    background-image: url(/asset/images/red-exclamation-mark-bg.svg);
+}
+
+.report-icon-background {
+    background-image: url(/asset/images/report-icon.svg);
+}
+
+/* taskmanager */
+.backlog-icon-background {
+    background-image: url(/asset/images/backlog.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.project-setting-icon-background {
+    background-image: url(/asset/images/project-setting.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.deletd-issues-icon-background {
+    background-image: url(/asset/images/deleted-issues.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.finished-sprint-icon-background {
+    background-image: url(/asset/images/finished-sprint.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.remove-from-dailynote-background {
+    background-image: url(/asset/images/deactiveNote.svg);
+    width: 14px;
+    height: 15px;
+}
+
+.vosul-icon-background {
+    background-image: url(/asset/images/vosul.svg);
+    width: 17px;
+    height: 15px;
+}
+
+.vagozar-icon-background {
+    background-image: url(/asset/images/vagozar.svg);
+    width: 14px;
+    height: 15px;
+}
+
+.kharj-icon-background {
+    background-image: url(/asset/images/kharj.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.esterdad-icon-background {
+    background-image: url(/asset/images/esterdad.svg);
+    width: 15px;
+    height: 15px;
+}
+
+.operation-remove-icon-background {
+    background-image: url(/asset/images/operationRemove.svg);
+    width: 14px;
+    height: 15px;
+}
+
+.ebtal-icon-background {
+    background-image: url(/asset/images/ebtal.svg);
+    width: 14px;
+    height: 15px;
+}
+
+.vosul-mostaghim-icon-background {
+    background-image: url(/asset/images/vosulMostaqim.svg);
+    width: 14px;
+    height: 15px;
+}
+
+.gray-archieve-icon-background {
+    background-image: url(/asset/images/archieve.png);
+    width: 19px;
+    height: 15px;
+}
+
+
+.textfile-zip-background {
+    background-image: url(/asset/images/zip_vector.svg);
+    width: 19px;
+    height: 15px;
+}
+
+.text_file-background {
+    background-image: url(/asset/images/text_file.svg);
+    width: 19px;
+    height: 15px;
+}

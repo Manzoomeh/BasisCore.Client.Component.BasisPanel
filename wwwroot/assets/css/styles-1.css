@@ -1,10 +1,9 @@
-
 @font-face {
     font-family: 'IRANSansWeb';
     src: url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).eot");
-    src: url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).eot") format("embedded-opentype"), 
-    url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).woff") format("woff"), 
-    url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).ttf") format("truetype")
+    src: url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).eot") format("embedded-opentype"),
+        url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).woff") format("woff"),
+        url("https://cdn.basiscore.net/_fonts/IRANSansWeb(FaNum).ttf") format("truetype")
 }
 
 * {
@@ -57,10 +56,13 @@
     --purple: #512DA8;
     --ruby: #C2185B;
 
-    --theme10: #1f2933;     /*main background*/
-    --theme11: #323f4b;     /*widget background*/
+    --theme10: #1f2933;
+    /*main background*/
+    --theme11: #323f4b;
+    /*widget background*/
     --theme12: #3e4c59;
-    --theme13: #52606d;     /*table th*/
+    --theme13: #52606d;
+    /*table th*/
     --theme14: #616e7c;
     --theme15: #7b8794;
     --theme16: #9aa5b1;
@@ -100,7 +102,11 @@ a {
     color: inherit;
 }
 
-html , body{height: 100%;}
+html,
+body {
+    height: 100%;
+}
+
 body.darkmode {
     color: var(--vlight_gray);
 }
@@ -672,6 +678,7 @@ body.darkmode {
     margin: 0 auto;
     fill: var(--dark_gray);
 }
+
 /*******************************************************/
 /*******************************************************/
 /*********************modal styles**********************/
@@ -770,8 +777,12 @@ body.darkmode {
     padding-bottom: 10px;
 }
 
-.modal-rtl{direction: rtl; text-align: right;}
-.modal-buttons  button {
+.modal-rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.modal-buttons button {
     display: inline-block;
     font-size: 14px;
     font-weight: 400;
@@ -796,48 +807,57 @@ body.darkmode {
     border: 0;
     background-image: none;
 }
+
 .modal-buttons {
-    width:100% ;
+    width: 100%;
     padding: 15px;
     padding-top: 0;
     float: none !important;
     min-height: 43px !important;
 }
+
 .modal-buttons button {
     text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
     text-shadow: none;
 }
+
 .modal-buttons button.remove .btn_icon {
     border-left: 1px solid #e67266;
 }
+
 .form_table_btn .btn_icon {
     position: relative;
     float: right;
     border-left: 1px solid #8cdc93;
-	padding: 0 5px;
-	display: flex;
-	align-items: center;
-	height: 100%;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
+
 .form_table_btn .btn_icon i {
     color: #fff;
 }
+
 .modal-buttons button.remove .btn_title {
     border-right: 1px solid #e67266 !important;
 }
+
 .modal-buttons button.remove {
     background-color: #e74c3c !important;
 }
+
 .form_table_btn .btn_title {
     position: relative;
     border-right: 1px solid #59ab60;
     padding: 0 10px;
-	display: flex;
-	align-items: center;
-	height: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
+
 .form_table_btn {
     cursor: pointer;
     background: #57bd60 !important;
@@ -855,7 +875,7 @@ body.darkmode {
     width: 12px;
     position: relative;
     display: block;
-	margin-top: 7px;
+    margin-top: 7px;
 }
 
 .basisPanelCheckBox input[type="checkbox"] {
@@ -865,9 +885,11 @@ body.darkmode {
     right: 0;
     margin-left: -20px;
 }
+
 .basisPanelCheckBox label {
     position: relative;
 }
+
 .basisPanelCheckBox label:before {
     content: '';
     position: absolute;
@@ -878,14 +900,15 @@ body.darkmode {
     transition: transform ease-in-out 0.25s;
     will-change: transform;
     border-radius: 3px;
-	z-index: 9;
+    z-index: 9;
     border: 2px solid #4d576e;
-	background: #fff;
+    background: #fff;
 }
+
 .basisPanelCheckBox label:after {
-  content: '';
+    content: '';
     display: block;
-	z-index: 9;
+    z-index: 9;
     width: 8px;
     height: 3px;
     border-bottom: 2px solid #fff;
@@ -898,12 +921,13 @@ body.darkmode {
     top: 4px;
     right: 3px;
 }
-.basisPanelCheckBox input[type="checkbox"]:checked ~ label::before {
-	background: #4d576e;
+
+.basisPanelCheckBox input[type="checkbox"]:checked~label::before {
+    background: #4d576e;
 
 }
 
-.basisPanelCheckBox input[type="checkbox"]:checked ~ label::after {
+.basisPanelCheckBox input[type="checkbox"]:checked~label::after {
     -webkit-transform: rotate(-45deg) scale(1);
     transform: rotate(-45deg) scale(1);
 }
@@ -915,15 +939,18 @@ body.darkmode {
     cursor: pointer;
 
 }
+
 .basisPanelCheckBox label span {
     position: absolute;
     top: 50%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
 }
-.basisPanelCheckBox input[type="checkbox"]:focus + label::before {
+
+.basisPanelCheckBox input[type="checkbox"]:focus+label::before {
     outline: 0;
 }
+
 /*******************************************************/
 /*******************************************************/
 /*********************tooltip styles**********************/
@@ -949,15 +976,20 @@ body.darkmode {
     -moz-border-radius: 5px;
     -moz-border-radius-topleft: 0;
     border-radius: 5px;
-        border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
     border-top-left-radius: 0;
     font-size: 12px;
 }
-.has-tooltip{position: relative;}
+
+.has-tooltip {
+    position: relative;
+}
+
 .has-tooltip:hover .tooltip {
     opacity: 1;
     visibility: visible;
 }
+
 .tooltip:after {
     content: '';
     width: 0;
@@ -1029,6 +1061,7 @@ body.darkmode {
 [data-bc-grid-type2] .listItems {
     direction: rtl;
 }
+
 /***** tree *****/
 .treeBox .actionOnAll {
     border-bottom: 1px solid var(--light_gray);
@@ -1359,12 +1392,17 @@ body.darkmode {
 }
 
 [data-bc-grid] table[data-bc-table] .iconsOperations .iconItem {
-    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
-    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
-    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
     display: -moz-flex;
-    display: -webkit-flex; /* NEW - Chrome */
-    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
     -webkit-flex-direction: row;
     flex-direction: row;
     -webkit-align-items: center;
@@ -1418,6 +1456,7 @@ body.darkmode {
     text-align: center;
     color: #D0D0D0;
 }
+
 /************************* just for external modules - delete after edit them *************************/
 /***** common styles for button and icons in grid component *****/
 [data-bc-grid] table[data-bc-table] .icons a {
@@ -1465,9 +1504,11 @@ body.darkmode {
     display: flex;
     align-items: center;
 }
-[data-bc-card] div[data-bc-card-data]{
+
+[data-bc-card] div[data-bc-card-data] {
     padding-right: 10px;
 }
+
 [data-bc-card] div[data-bc-card-data] .iconsOperations .icon svg {
     vertical-align: middle;
 }
@@ -1497,12 +1538,17 @@ body.darkmode {
 }
 
 [data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem {
-    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
-    display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
-    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;
+    /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
     display: -moz-flex;
-    display: -webkit-flex; /* NEW - Chrome */
-    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    display: -webkit-flex;
+    /* NEW - Chrome */
+    display: flex;
+    /* NEW, Spec - Opera 12.1, Firefox 20+ */
     -webkit-flex-direction: row;
     flex-direction: row;
     -webkit-align-items: center;
@@ -1527,58 +1573,83 @@ body.darkmode {
 [data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem span {
     font-size: 12px;
 }
-[data-bc-card] div[data-bc-card-data] [data-bc-card-titleText]{
+
+[data-bc-card] div[data-bc-card-data] [data-bc-card-titleText] {
     color: #767676;
 }
-[data-bc-card] div[data-bc-card-data] [data-bc-card-info]{
+
+[data-bc-card] div[data-bc-card-data] [data-bc-card-info] {
     color: rgba(0, 0, 0, 0.3)
 }
 
 [data-bc-card] div[data-bc-card-data] .iconsOperations .iconItem svg {
     vertical-align: middle;
 }
-[data-bc-card] div[data-bc-card-data] [data-bc-card-title]{
-    display: flex; flex-direction: column;
-    margin-right: 5px;margin-left: 5px;
+
+[data-bc-card] div[data-bc-card-data] [data-bc-card-title] {
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+    margin-left: 5px;
 }
-[data-bc-card]{
+
+[data-bc-card] {
     border: 1px solid #D0D0D0;
     border-radius: 5px;
     height: 80px;
     background: #fff;
 }
-[data-bc-card-data]{
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  [data-bc-card] div[data-bc-card-data] [data-bc-card-text]{
-      display: flex; align-items: center; margin-right: 10px;
-  }
-  [data-bc-grid] [data-bc-grid-modes] div{
-    width: 36px; height: 36px; border-radius: 5px; margin-left: 5px; border: none;
+
+[data-bc-card-data] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-[data-bc-grid] [data-bc-grid-modes] div{
+
+[data-bc-card] div[data-bc-card-data] [data-bc-card-text] {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+[data-bc-grid] [data-bc-grid-modes] div {
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
+    margin-left: 5px;
+    border: none;
+}
+
+[data-bc-grid] [data-bc-grid-modes] div {
     background: rgba(0, 75, 133, 0.2);
     transition: all ease-in-out 0.25s;
 }
-[data-bc-grid] [data-bc-grid-modes] div[data-bc-grid-active-mode]{
-    background: #004B85; cursor: default;
+
+[data-bc-grid] [data-bc-grid-modes] div[data-bc-grid-active-mode] {
+    background: #004B85;
+    cursor: default;
 }
-[data-bc-grid] [data-bc-grid-modes] svg{
+
+[data-bc-grid] [data-bc-grid-modes] svg {
     fill: #fff;
 }
-[data-bc-grid] [data-bc-grid-modes] div:hover{
+
+[data-bc-grid] [data-bc-grid-modes] div:hover {
     background: #004B85;
 }
-[data-sys-btn-info]{
+
+[data-sys-btn-info] {
     padding: 10px 10px;
     border-radius: 5px;
     direction: rtl;
-    width:  fit-content;
+    width: fit-content;
 
-  }
-[data-bc-page-header]{
+}
+
+[data-bc-page-header] {
     height: 1px !important;
 }
+
 /**************Tab***************/
 .tabWrapper {
     overflow: hidden;
@@ -1587,19 +1658,22 @@ body.darkmode {
 }
 
 .tabWrapper .tabs {
-    border-radius: 5px 5px 0 0;
-    position: relative;
-    margin-bottom: 15px;
+    border-radius: 5px 5px 0 0 !important;
+    position: relative !important;
+    margin-bottom: 15px !important;
     /* padding: 0 20px; */
+    width: 100% !important;
 }
 
-.tabWrapper .tabContainer {
-    /* border: 1px solid #efefef; */
-    background-color: rgba(0, 75, 133, 0.05);
+.tabWrapper .tabWrapper {
     border-radius: 5px;
+    background-color: transparent !important;
+    display: flex;
     padding: 5px;
-    width: max-content;
+    width: -webkit-fill-available;
     position: relative;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .tabWrapper .tabButton {
@@ -1625,14 +1699,14 @@ body.darkmode {
 }
 
 .tabWrapper .tabButton[tab-button-status="active"] {
-    color: #fff;
+    color: #004B85;
 }
 
-.tabWrapper .tabActive {
+.tabWrapper .tabAct {
     position: absolute;
     bottom: 5px;
     display: flex;
-    height: 35px;
+    height: 1px;
     width: 100px;
     background-color: #004B85;
     z-index: 1;
