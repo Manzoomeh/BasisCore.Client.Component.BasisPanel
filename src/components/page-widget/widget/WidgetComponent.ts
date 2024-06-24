@@ -86,9 +86,8 @@ export default class WidgetComponent extends PageWidgetComponent {
       parent.clientTop,
       topPosition
     );
-    (this.container as HTMLElement).style.top = `${
-      this.param.y * cell + (parent.clientTop + topPosition)
-    }px`;
+    (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
+      }px`;
 
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
@@ -206,7 +205,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     };
     const url = HttpUtil.formatString(
       this.options.baseUrl[this.pageLoader.current.param.owner] +
-        this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
+      this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
       {
         rKey: this.options.rKey,
       }

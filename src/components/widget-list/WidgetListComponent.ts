@@ -204,12 +204,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         "[data-bc-page-widget-list-dlg-btn-add]"
       );
       const page = this.owner.dc.resolve("page") as any;
-      await page.initializeAsync();
-      page.owner.setSource("refresh", true);
+      // await page.initializeAsync();
       btn.setAttribute("data-icon-left", "");
       btn.removeAttribute("data-icon-right");
       btn.setAttribute("data-bc-page-widget-list-dlg-btn-add-active", "1");
       this.hideList();
+
+      page.owner.setSource("refresh", true);
+
+
     }
   }
   private async sendSelectedWidgetToServerAsync(): Promise<void> {
@@ -271,7 +274,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     return Promise.resolve();
   }
 
-  public runAsync(source?: ISource) {}
+  public runAsync(source?: ISource) { }
 
   private async fillWidgetListAsync(): Promise<void> {
     const url = HttpUtil.formatString(
@@ -331,7 +334,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           disableWidgets.appendChild(widgetElement);
         });
-    } catch {}
+    } catch { }
   }
   private displayWidgetList(e) {
     if (
@@ -520,8 +523,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           ) as HTMLElement;
           event.source.setAttribute(
             "style",
-            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${
-              (widgetData?.h || 3) * this._page.cell
+            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 3) * this._page.cell
             } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
           );
           if (
@@ -537,11 +539,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           }
         }
       });
-      this.sortable.on("drag:over", (ev) => {});
+      this.sortable.on("drag:over", (ev) => { });
       this.sortable.on("drag:stop", (event) => {
         this.isDragging = false;
 
-        window.removeEventListener("handleMouseMove", () => {});
+        window.removeEventListener("handleMouseMove", () => { });
         if (
           !event.source
             .closest("[drop-zone]")
@@ -688,11 +690,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                 const data = this.dashboardWidgetList.find(
                   (e) =>
                     String(e.widgetid) ==
-                      (event.target as HTMLElement).parentElement.id &&
+                    (event.target as HTMLElement).parentElement.id &&
                     String(e.moduleid) ==
-                      (event.target as HTMLElement).parentElement.getAttribute(
-                        "moduleid"
-                      )
+                    (event.target as HTMLElement).parentElement.getAttribute(
+                      "moduleid"
+                    )
                 );
 
                 this.disabledDashboardWidgetList.push(data);
@@ -965,9 +967,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "gs-h",
             String(Math.floor(height / this._page.cell) + 1)
           );
-          this.currentResizeHandle.style.height = `${
-            (Math.floor(height / this._page.cell) + 1) * this._page.cell
-          }px`;
+          this.currentResizeHandle.style.height = `${(Math.floor(height / this._page.cell) + 1) * this._page.cell
+            }px`;
           break;
       }
     }
@@ -1165,9 +1166,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     if (sidebar) {
       widgetContainer.setAttribute(
         "style",
-        `width:calc(100% - 330px);display: flex;justify-content: end;padding-start:${
-          Number(sidebar.getAttribute("gs-w")) *
-          ((this._page.cell * 12 - 330) / 12)
+        `width:calc(100% - 330px);display: flex;justify-content: end;padding-start:${Number(sidebar.getAttribute("gs-w")) *
+        ((this._page.cell * 12 - 330) / 12)
         }px;min-height:${height}px`
       );
     } else {
@@ -1235,7 +1235,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });
     const removewidgetUrl = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-        this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
+      this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
       {
         rKey: this.options.rKey,
       }
@@ -1243,22 +1243,22 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const widgets =
       this.selectedTag != "0"
         ? this.tags
-            .find((i) => i.moduleid == Number(this.selectedTag))
-            .widgets.filter((j) =>
-              this.disabledDashboardWidgetList.find(
-                (k) =>
-                  k.moduleid == Number(this.selectedTag) &&
-                  k.widgetid == j.widgetid
-              )
+          .find((i) => i.moduleid == Number(this.selectedTag))
+          .widgets.filter((j) =>
+            this.disabledDashboardWidgetList.find(
+              (k) =>
+                k.moduleid == Number(this.selectedTag) &&
+                k.widgetid == j.widgetid
             )
-            .map((i) => ({
-              widgetid: i.widgetid,
-              title: i.title,
-              icon: i.icon,
-              moduleid: this.tags.find(
-                (i) => i.moduleid == Number(this.selectedTag)
-              ).moduleid,
-            }))
+          )
+          .map((i) => ({
+            widgetid: i.widgetid,
+            title: i.title,
+            icon: i.icon,
+            moduleid: this.tags.find(
+              (i) => i.moduleid == Number(this.selectedTag)
+            ).moduleid,
+          }))
         : this.disabledDashboardWidgetList;
     widgets
       ?.filter((e) => e.title.includes(this.searchParam))
@@ -1365,7 +1365,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const url = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-        this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
       {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
@@ -1398,10 +1398,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.tabIndex = 1;
         parent.style.display = "flex";
         allWidget.style.display = "none";
-        activeElement.style.transform = `translateX(-${
-          (allWidgetBtn as HTMLElement).offsetLeft -
+        activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft -
           (e.target as HTMLElement).offsetLeft
-        }px)`;
+          }px)`;
         dashboardWidgetBtn.setAttribute("tab-button-status", "active");
         allWidgetBtn.removeAttribute("tab-button-status");
         this.fillDashboardWidgetList();
@@ -1416,6 +1415,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         dashboardWidgetBtn.removeAttribute("tab-button-status");
         this.fillListUI();
       });
-    } catch {}
+    } catch { }
   }
 }
