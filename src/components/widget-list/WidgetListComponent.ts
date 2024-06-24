@@ -846,6 +846,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
   handleMouseMove(ev) {
     if (!this.isDragging || !this.currentResizeHandle) return;
+
     ev.preventDefault();
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
     let newWidth, newHeight;
@@ -952,6 +953,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
   handleMouseUp() {
     // document.removeEventListener("mousemove", (ev) => this.handleMouseMove(ev));
+    document.body.style.cursor = "default";
 
     if (this.currentResizeHandle) {
       const pageBody = document.querySelector('[data-bc-page-body=""]');
@@ -997,14 +999,19 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     }
   }
   handleMouseDown = (ev) => {
+    ev.preventDefault();
     if (ev.srcElement.attributes["data-bc-add-height"]) {
       this.type = "height";
+      document.body.style.cursor = "row-resize";
     } else if (ev.srcElement.attributes["data-bc-add-height-top"]) {
       this.type = "heightTop";
+      document.body.style.cursor = "row-resize";
     } else if (ev.srcElement.attributes["data-bc-add-width"]) {
       this.type = "width";
+      document.body.style.cursor = "col-resize";
     } else {
       this.type = "widthRight";
+      document.body.style.cursor = "col-resize";
     }
     this.isDragging = true;
     this.currentResizeHandle = ev.target.parentElement;
