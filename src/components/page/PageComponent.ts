@@ -52,7 +52,6 @@ export default abstract class PageComponent
       "GET",
       this.options.checkRkey
     );
-    console.log('this.info', this.info)
   }
 
   public async runAsync(source?: ISource) {
@@ -157,7 +156,6 @@ export default abstract class PageComponent
           .querySelector("[data-bc-bp-theme-container]");
         const sticky = (menu as HTMLElement).offsetTop == 0 ? 80 : (menu as HTMLElement).offsetTop;
         window.onscroll = function () {
-          console.log('firrst', window.pageYOffset, sticky)
           if (window.pageYOffset >= sticky) {
             menu.setAttribute("data-bc-bp-sticky", "");
             themeContainer.setAttribute("data-bc-bp-sticky", "");

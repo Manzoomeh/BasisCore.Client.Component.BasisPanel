@@ -83,14 +83,7 @@ export default class WidgetComponent extends PageWidgetComponent {
       cell = page.widgetCell
     }
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
-    console.log(
-      "this. :>> ",
-      this.title,
-      this.param.y,
-      cell,
-      parent.clientTop,
-      topPosition
-    );
+
     (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
       }px`;
 

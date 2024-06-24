@@ -101,7 +101,6 @@ export default class HttpUtil {
   ): string {
     const paraNameList = [...Object.getOwnPropertyNames(params)];
     const formatter = new Function(...paraNameList, `return \`${string}\``);
-    console.log('params', params)
     return formatter(...paraNameList.map((x) => Reflect.get(params, x)));
   }
 }
