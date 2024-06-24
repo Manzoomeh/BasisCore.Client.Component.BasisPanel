@@ -952,7 +952,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             //     ? String(12 - Number(sidebar.getAttribute("gs-w")))
             //     : String(Math.floor(width / cell) + 1)
             //   : String(Math.floor(width / cell) + 1)
+
             Math.floor(width / cell) > 12 ? '12' : sidebar ? String(Math.ceil(width / cell)) : String(Math.floor(width / cell) + 1)
+
           );
           this.currentResizeHandle.style.width = null;
           break;
