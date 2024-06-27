@@ -2383,7 +2383,7 @@ body.darkmode {
 }
 
 .check-label>input[type="checkbox"]:checked+*::before {
-    content: "âœ“";
+    content: "✓";
     color: white;
     text-align: center;
     vertical-align: middle;
