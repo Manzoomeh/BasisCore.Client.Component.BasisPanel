@@ -21,6 +21,7 @@ export default class MenuElementMaker {
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
   private moduleMapper: Map<string, IModuleInfo>;
+  public menuItemLookup: Map<string, HTMLElement>;
 
   constructor(
     rKey: string,
@@ -38,6 +39,7 @@ export default class MenuElementMaker {
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
     this.moduleMapper = moduleMapper;
+    this.menuItemLookup = new Map<string, HTMLElement>()
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -45,14 +47,14 @@ export default class MenuElementMaker {
 
     const pageLookup = new Map<string, IMenuLoaderParam>();
     this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
-    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes));
+    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes), this.menuItemLookup);
   }
 
   private createMenu(
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>, li?: HTMLElement
   ) {
     items.forEach((node) => {
       if ((node as IMenuExternalItemInfo).url) {
@@ -116,8 +118,8 @@ export default class MenuElementMaker {
 
     innerUl.setAttribute("data-bc-bp-submenu", "");
     outerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
-    this.createMenu(outerUl, node.nodes, menuParam, pageLookup);
+    this.createMenu(innerUl, node.nodes, menuParam, pageLookup, li);
+    this.createMenu(outerUl, node.nodes, menuParam, pageLookup, li);
     li.appendChild(content);
     li.appendChild(innerUl);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(outerUl);
@@ -147,14 +149,14 @@ export default class MenuElementMaker {
       const liBoundingRect = document
         .querySelector("[data-bc-menu]")
         .getBoundingClientRect();
-      outerUl.style.top = `${liBoundingRect.y + liBoundingRect.height + window.pageYOffset
+      outerUl.style.top = `${liBoundingRect.y + liBoundingRect.height
         }px`;
       li.addEventListener("click", function (e) {
         const parentBoundingRect = (
           e.target as HTMLElement
         ).getBoundingClientRect();
 
-        outerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
+        outerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height
           }px`;
         outerUl.style.left = `${parentBoundingRect.x - parentBoundingRect.width / 2
           }px`;
@@ -194,6 +196,7 @@ export default class MenuElementMaker {
     }
     const li = document.createElement("li");
     const content = document.createElement("a");
+    this.menuItemLookup.set(node.pid + '-' + node.mid, li)
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.setAttribute("data-bc-mid", node.mid?.toString());
@@ -269,7 +272,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
       }
     });
     return li;
@@ -358,7 +361,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
       }
     });
 

@@ -15,8 +15,7 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
-  implements IPageLoader
-{
+  implements IPageLoader {
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   private current: MenuElement;
@@ -97,7 +96,12 @@ export default class MenuComponent
             const content = this.ul.querySelector(
               `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
             );
-            const li = content?.closest("li");
+            let li
+            this.current.menuItemLookup.forEach((e, k) => {
+              if (k == pid) {
+                li = e
+              }
+            }), pid, this.current.pageLookup.get(pid)
             const parent = content?.closest("[data-bc-bp-submenu]");
             if (parent) {
               parent
@@ -122,7 +126,14 @@ export default class MenuComponent
     const content = this.ul.querySelector(
       `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid]`
     );
-    const li = content?.closest("li");
+
+    let li
+    this.current.menuItemLookup.forEach((v, k) => {
+      if (pageId == k) {
+        li = v
+      }
+    })
+
     const parent = content?.closest("[data-bc-bp-submenu]");
     if (parent) {
       parent
