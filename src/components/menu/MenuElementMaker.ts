@@ -113,15 +113,11 @@ export default class MenuElementMaker {
     const content = document.createElement("a");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
-    const innerUl = document.createElement("ul");
     const outerUl = document.createElement("ul");
 
-    innerUl.setAttribute("data-bc-bp-submenu", "");
     outerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup, li);
     this.createMenu(outerUl, node.nodes, menuParam, pageLookup, li);
     li.appendChild(content);
-    li.appendChild(innerUl);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(outerUl);
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {
@@ -160,7 +156,7 @@ export default class MenuElementMaker {
           }px`;
         outerUl.style.left = `${parentBoundingRect.x - parentBoundingRect.width / 2
           }px`;
-        if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
+        if (outerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
             (e as HTMLElement).style.transform = ` scaleY(0)`;
@@ -170,12 +166,9 @@ export default class MenuElementMaker {
 
           outerUl.style.transform = `scaleY(1)`;
           outerUl.setAttribute("data-bc-ul-level-open", "1");
-          innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
         } else {
-          innerUl.style.transform = ` scaleY(0)`;
-          innerUl.removeAttribute("data-bc-ul-level-open");
-          innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
+          outerUl.previousElementSibling.removeAttribute("data-bc-level-open");
           outerUl.style.transform = ` scaleY(0)`;
         }
       });
