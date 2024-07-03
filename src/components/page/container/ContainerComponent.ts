@@ -13,31 +13,13 @@ export default class ContainerComponent extends PageComponent {
     return PageType.Dashboard;
   }
 
-  public async initializeAsync(): Promise<void> {
-    this.loaderParam = JSON.parse(
-      await this.owner.getAttributeValueAsync("params")
-    );
-    const url = HttpUtil.formatString(
-      `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
-      this.loaderParam
-    );
-    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
-      url,
-      "GET",
-      this.options.checkRkey
-    );
 
-    // const wrapper = this.container;
-    // this.container.querySelector("[data-bc-page-widgets-list]")?.addEventListener("click", function (e) {
-    //   wrapper.querySelector("[data-bc-page-widgets-list-toggle]").classList.toggle('active');
-    // });
-  }
   public async addingDashboardWidgets(): Promise<void> {
-   
+
 
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
-  
+
   }
   public async runAsync(source?: ISource) {
     this.addingDashboardWidgets();

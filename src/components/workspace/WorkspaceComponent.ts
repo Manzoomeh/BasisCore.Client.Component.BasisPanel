@@ -42,7 +42,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
           `${pageParam.ownerUrl}${pageParam.pageMethod}`,
           pageParam
         );
-
         this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
           url,
           "GET",

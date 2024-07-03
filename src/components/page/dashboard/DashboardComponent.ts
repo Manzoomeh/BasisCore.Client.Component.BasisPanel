@@ -20,24 +20,7 @@ export default class DashboardComponent extends PageComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    this.loaderParam = JSON.parse(
-      await this.owner.getAttributeValueAsync("params")
-    );
-    const workspace = this.owner.dc.resolve<WorkspaceComponent>('workspace')
-
-    this.info = workspace.info
-    if (!this.info) {
-      const url = HttpUtil.formatString(
-        `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
-        this.loaderParam
-      );
-      this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
-        url,
-        "GET",
-        this.options.checkRkey
-      );
-
-    }
+    super.initializeAsync()
 
     const body = this.container.querySelector("[data-bc-page-body]");
     const nodes = Array.from(this.container.childNodes);
