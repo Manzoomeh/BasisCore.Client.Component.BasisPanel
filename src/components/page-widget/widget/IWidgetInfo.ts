@@ -1,4 +1,4 @@
-export type ContainerTypes = "widget" | "sidebar" | "fullPageWidget";
+export type ContainerTypes = "widget" | "sidebar" | "fullPageWidget" | "apiWidget";
 export default interface IWidgetInfo {
   id: number;
   name: string;

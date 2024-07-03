@@ -14,6 +14,18 @@
                 "widgets": [
                     {
                         "id": "userWidget1.html",
+                        "title": "ویجت api",
+                        "name": "userWidget1",
+                        "container": "apiWidget",
+                        "url": "http://localhost:8080/server/corporate/apiwidget",
+                        "addToDashboard": false,
+                        "x": 0,
+                        "y": 18,
+                        "w": 12,
+                        "h": 4
+                    },
+                    {
+                        "id": "userWidget1.html",
                         "title": "ویجت داشبورد",
                         "name": "userWidget1",
                         "container": "widget",
@@ -35,9 +47,6 @@
                         "h": 2,
                         "url": "server/external"
                     },
-
-
-
                     {
                         "id": "userWidget1.html",
                         "title": "ویجت داشبورد",
@@ -82,12 +91,6 @@
                         "w": 10,
                         "h": 2
                     }
-
-
-
-
-
-                    
                 ]
             }
         ]
@@ -268,5 +271,4 @@
             }
         ]
     }
-   
 }

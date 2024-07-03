@@ -8,6 +8,7 @@ import PageComponent from "./components/page/PageComponent";
 import WidgetComponent from "./components/page-widget/widget/WidgetComponent";
 import SidebarComponent from "./components/page-widget/sidebar/SidebarComponent";
 import FullPageWidgetComponent from "./components/page-widget/full-page-widget/FullPageWidgetComponent";
+
 import WorkspaceComponent from "./components/workspace/WorkspaceComponent";
 import NotificationComponent from "./components/notification/NotificationComponent";
 import NotificationMessageComponent from "./components/notificationMessage/NotificationMessageComponent";
@@ -20,6 +21,7 @@ import ContainerComponent from "./components/page/container/ContainerComponent";
 import ThemeComponent from "./components/theme/ThemeComponent";
 import PageGroupComponent from "./components/page-group/PageGroupComponent";
 import WidgetListComponent from "./components/widget-list/WidgetListComponent";
+import ApiWidgetComponent from "./components/page-widget/api-widget/ApiWidgetComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -30,6 +32,7 @@ const footer = FooterComponent;
 const menu = MenuComponent;
 const page = PageComponent;
 const widget = WidgetComponent;
+const apiWidget = ApiWidgetComponent;
 const sidebar = SidebarComponent;
 const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
@@ -53,7 +56,7 @@ export {
   footer,
   menu,
   page,
-  widget,
+  widget, apiWidget,
   message,
   sidebar,
   fullPageWidget,
