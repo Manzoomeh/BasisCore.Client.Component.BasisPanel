@@ -87,22 +87,6 @@ export default class ApiWidgetComponent extends PageWidgetComponent {
         (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
             }px`;
 
-        // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
-
-        // if (this.deviceId == 2) {
-        //   const uniqueName = `widget${this.param.id.toString()}`;
-        //   this.container.setAttribute("id", uniqueName);
-        //   const li = document.createElement("li");
-        //   li.setAttribute("data-bc-page-widgets-list-move-ico", "");
-        //   li.setAttribute("data-widget", uniqueName);
-        //   li.addEventListener("click", function (e) {
-        //     document.getElementById(uniqueName).scrollIntoView(true);
-        //   });
-        //   const span = document.createElement("span");
-        //   span.textContent = `${this.param.id.toString()}`;
-        //   li.appendChild(span);
-        //   this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
-        // }
 
         this.title = this.param.title;
         const baseUrl = this.pageLoader.moduleMapper
@@ -127,14 +111,7 @@ export default class ApiWidgetComponent extends PageWidgetComponent {
                 const nodes = Array.from(newContent.childNodes);
                 range.insertNode(newContent);
                 this.owner.processNodesAsync(nodes);
-                // this.container
-                //   .querySelectorAll("[data-bc-widget-btn-close]")
-                //   .forEach((btn) =>
-                //     btn.addEventListener("click", (e) => {
-                //       e.preventDefault();
-                //       this.removeAsync();
-                //     })
-                //   );
+
                 const page = this.owner.dc.resolve<IPage>("page");
 
                 if (
@@ -169,12 +146,7 @@ export default class ApiWidgetComponent extends PageWidgetComponent {
                 reject(e);
             }
         });
-        // const taskOptions: ITaskOptions = {
-        //   container: container,
-        //   task: processTask,
-        //   notify: false,
-        // };
-        // this.owner.dc.resolve<IScheduler>("scheduler").startTask(taskOptions);
+
     }
 
     public runAsync(source?: ISource) {
@@ -188,7 +160,6 @@ export default class ApiWidgetComponent extends PageWidgetComponent {
             console.log("error :>> ", e);
         }
         this.container.remove();
-        // this.owner.setSource(DefaultSource.WIDGET_CLOSED, this.param);
     }
 
     private async addToDashboard(): Promise<void> {
