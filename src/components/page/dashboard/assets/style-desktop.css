@@ -83,13 +83,11 @@
 [data-bc-btn-remove] {
     width: 20px;
     height: 20px;
-    border-radius: 50%;
-    background: #EB5757;
     color: #fff;
     cursor: pointer;
     position: absolute;
-    top: -5px;
-    /* left: -5px; */
+    top: 18px;
+    left: 19px !important;
     font-size: 10px;
     line-height: 22px;
     text-align: center;

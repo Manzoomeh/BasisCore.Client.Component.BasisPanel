@@ -1,42 +1,48 @@
-<div data-bc-page-widget-list-dlg >
-    <!-- <span data-bc-page-widget-list-dlg-btn-close data-bc-btn-close></span> -->
-    <div data-bc-page-widget-list="" data-sys-submenu-parent="" data-sys-text="">
-        <div data-bc-page-widget-setting="">
-            <div data-bc-widgetbox-title="" >@widgetsTitle</div>
-            <div data-bc-page-widget-save-setting="" data-sys-button="">@widgetsSettingButton</div>
-            <!-- <div data-bc-btn-close>بستن</div> -->
-        </div>
-        <section class="tabWrapper tabWrapperForWidgets">
-            <div class="tabs">
-                <div class="tabContainer" data-sys-tab-container="">
-                  <div
-                    class="tabButton"
-                    tab-button-status="active"
-                    bc-triggers="click"
-                    name="changeOrder.mid"
-                    data-bc-init=""
-                    data-all-widget="">
-                    @widgetsTab
-                  </div><div
-                    class="tabButton"
-                    tab-button-status=""
-                    bc-triggers="click"
-                    name="changeOrder.mid"
-                    data-bc-init=""
-                    data-dashboard-widgets=""
-                  >
-                    @dashboardWidgetsTab
-                  </div>
-                
-                  <span class="tabActive" data-sys-tab-active=""></span>
-                </div>
-              </div>
-        </section>
-      
-        <div data-bc-page-widget-disableList="" data-sys-text="">
-        </div>
-        <div data-bc-page-widget-dashboard-wrapper="" style="display: none;">
-       
-        </div>
+<div data-bc-page-widget-list-dlg>
+  <!-- <span data-bc-page-widget-list-dlg-btn-close data-bc-btn-close></span> -->
+  <div data-bc-page-widget-list="" data-sys-submenu-parent="" data-sys-text="">
+    <div data-bc-page-widget-setting="">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M16.0516 5.15156L18.8516 7.95156L16.0516 10.7516L13.2516 7.95156L16.0516 5.15156ZM8.35156 5.65156V9.65156H4.35156V5.65156H8.35156ZM18.3516 15.6516V19.6516H14.3516V15.6516H18.3516ZM16.0516 2.35156L10.3516 7.95156L16.0516 13.6516H12.3516V21.6516H20.3516V13.6516H16.0516L21.6516 7.95156L16.0516 2.35156ZM10.3516 3.65156H2.35156V11.6516H10.3516V3.65156ZM8.35156 15.6516V19.6516H4.35156V15.6516H8.35156ZM10.3516 13.6516H2.35156V21.6516H10.3516V13.6516Z"
+          fill="#004B85" />
+      </svg>
+
+      <div data-bc-widgetbox-title="">@widgetsTitle</div>
+
+      <!-- <div data-bc-btn-close>بستن</div> -->
     </div>
+    <div data-bc-page-widget-search="">
+      <input data-bc-page-widget-search-input />
+    </div>
+    <section class="tabWrapper tabWrapperForWidgets">
+      <div class="tabs">
+        <div class="tabWrapper" data-sys-tab-container="">
+          <div class="tabBtn" tab-button-status="active" bc-triggers="click" name="changeOrder.mid" data-bc-init=""
+            data-all-widget="">
+            @widgetsTab
+          </div>
+          <div class="tabBtn" tab-button-status="" bc-triggers="click" name="changeOrder.mid" data-bc-init=""
+            data-dashboard-widgets="">
+            @dashboardWidgetsTab
+          </div>
+
+          <span class="tabAct" data-sys-tab-active=""></span>
+        </div>
+      </div>
+    </section>
+
+    <div data-bc-page-widget-disableList="" data-sys-text=""></div>
+    <div data-bc-page-widget-dashboard-wrapper="" style="display: none" drop-zone></div>
+    <div data-bc-page-widget-btns-wrapper>
+      <div data-bc-page-widget-cancel-setting="">
+        @cancelBtn
+      </div>
+      <div data-bc-page-widget-save-setting="" data-sys-button="">
+        @widgetsSettingButton
+      </div>
+
+    </div>
+  </div>
+
 </div>

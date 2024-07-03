@@ -15,12 +15,11 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
-  implements IPageLoader
-{
+  implements IPageLoader {
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
-  private current: MenuElement;
-  private moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>> = new Map<
+  public current: MenuElement;
+  public moduleMapper: Map<MenuOwnerType, Map<string, IModuleInfo>> = new Map<
     MenuOwnerType,
     Map<string, IModuleInfo>
   >();

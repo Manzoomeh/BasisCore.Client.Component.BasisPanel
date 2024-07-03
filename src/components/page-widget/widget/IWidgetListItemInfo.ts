@@ -1,6 +1,8 @@
 export default interface IWidgetListItemInfo {
-  id: number;
+  widgetid: number;
   name: string;
   title: string;
-  icon : string
+  icon: string
+  w: number;
+  h: number;
 }

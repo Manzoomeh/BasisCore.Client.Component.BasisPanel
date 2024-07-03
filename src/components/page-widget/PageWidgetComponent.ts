@@ -7,7 +7,12 @@ export default abstract class PageWidgetComponent
   implements IWidget
 {
   protected readonly param: IWidgetParam;
-  constructor(owner: IUserDefineComponent, desktopLayout: string, mobileLayout: string, dataAttr: string) {
+  constructor(
+    owner: IUserDefineComponent,
+    desktopLayout: string,
+    mobileLayout: string,
+    dataAttr: string
+  ) {
     super(owner, desktopLayout, mobileLayout, dataAttr);
     this.owner.dc.registerInstance("widget", this);
     this.param = eval(this.owner.node.getAttribute("options"));
@@ -20,7 +25,9 @@ export default abstract class PageWidgetComponent
   }
 
   set title(value: string) {
-    const widgetTitle = this.container.querySelector("[data-bc-widget-header] > [data-bc-widget-title]");
+    const widgetTitle = this.container.querySelector(
+      "[data-bc-widget-header] > [data-bc-widget-title]"
+    );
     if (widgetTitle) {
       widgetTitle.innerHTML = value;
     }
@@ -32,7 +39,9 @@ export default abstract class PageWidgetComponent
 
   public addNodeToHeader(node: Node): void {
     this.container
-      .querySelector("[data-bc-widget-header] > [data-bc-widget-external-buttons]")
+      .querySelector(
+        "[data-bc-widget-header] > [data-bc-widget-external-buttons]"
+      )
       .appendChild(node);
   }
 

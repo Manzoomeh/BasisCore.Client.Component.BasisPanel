@@ -7,6 +7,13 @@
   box-sizing: border-box;
 }
 
+[pallete-widget-element] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 [data-bc-bp-d1-header-left-items] {
   /* float: left; */
   height: 48px;
@@ -16,17 +23,17 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-left-items] {
   float: left;
-  border-right: 0.5px solid #D0D0D0;
+  border-right: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-left-items] {
   float: left;
-  border-right: 0.5px solid #D0D0D0;
+  border-right: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-d1-logo] {
   /* float: left; */
-  margin-top: 8px;
+  margin-top: 4px;
   /* margin-left: 15px; */
 }
 
@@ -42,12 +49,12 @@
 
 [data-bc-bp-d1-logo] a {
   display: block;
-  width: 140px;
+  width: 146px;
   height: 32px;
-  background-image: url('basispanel_light.jpg');
+  background-image: url("basispanel-logo.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 [data-bc-bp-d1-header-items] {
@@ -60,11 +67,11 @@
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-header-items] {
   float: right;
   padding: 7.5px 0 7.5px 15px;
-  border-left: 0.5px solid #D0D0D0;
+  border-left: 0.5px solid #d0d0d0;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-header-items] {
   float: right;
   padding: 7.5px 0 7.5px 15px;
-  border-left: 0.5px solid #D0D0D0;
+  border-left: 0.5px solid #d0d0d0;
 }
