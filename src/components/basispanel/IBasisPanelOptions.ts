@@ -28,6 +28,8 @@ interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;
   addtoDashboardReservedWidget: string;
   dashboardReservedWidgets: string;
+  externalReservedWidgets: string;
+
 
 }
 interface IUrlCollectionOption {
@@ -93,6 +95,8 @@ export interface ILabels {
   widgetsTitle: string;
   widgetsTab: string;
   dashboardWidgetsTab: string;
+  addExternalWidget: string;
+  externalWidgetsTab
   widgetsSettingButton: string;
   storeTitle: string;
   lightModeTitle: string;

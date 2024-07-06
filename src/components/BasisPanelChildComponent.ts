@@ -34,7 +34,8 @@ export default abstract class BasisPanelChildComponent
           dragAndDropMessage: "ویجت‌ها را بکشید و رها کنید",
           widgetsTitle: "ویجت‌ها",
           widgetsTab: "ویجت‌ها",
-          dashboardWidgetsTab: "ویجت‌ های میزکار",
+          externalWidgetsTab: "ویجت‌ های خارجی",
+          dashboardWidgetsTab: "ویجت‌ های میزکار", addExternalWidget: 'افزودن ویجت خارجی',
           widgetsSettingButton: "ثبت",
           storeTitle: "فروشگاه",
           lightModeTitle: "روز",
@@ -118,6 +119,7 @@ export default abstract class BasisPanelChildComponent
         .replace("@widgetsTab", this.labels.widgetsTab)
         .replace("@widgetsHeaderTitle", this.labels.widgetsHeaderTitle)
         .replace("@dashboardWidgetsTab", this.labels.dashboardWidgetsTab)
+        .replace("@externalWidgetsTab", this.labels.externalWidgetsTab)
         .replace("@widgetsSettingButton", this.labels.widgetsSettingButton)
         .replace("@storeTitle", this.labels.storeTitle)
         .replace("@lightModeTitle", this.labels.lightModeTitle)

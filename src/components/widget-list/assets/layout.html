@@ -19,21 +19,25 @@
       <div class="tabs">
         <div class="tabWrapper" data-sys-tab-container="">
           <div class="tabBtn" tab-button-status="active" bc-triggers="click" name="changeOrder.mid" data-bc-init=""
-            data-all-widget="">
+            data-all-widgets="">
             @widgetsTab
           </div>
           <div class="tabBtn" tab-button-status="" bc-triggers="click" name="changeOrder.mid" data-bc-init=""
             data-dashboard-widgets="">
             @dashboardWidgetsTab
           </div>
-
+          <div class="tabBtn" tab-button-status="" bc-triggers="click" name="changeOrder.mid" data-bc-init=""
+            data-external-widgets="">
+            @externalWidgetsTab
+          </div>
           <span class="tabAct" data-sys-tab-active=""></span>
         </div>
       </div>
     </section>
 
-    <div data-bc-page-widget-disableList="" data-sys-text=""></div>
-    <div data-bc-page-widget-dashboard-wrapper="" style="display: none" drop-zone></div>
+    <div data-bc-page-widget-disableList="" data-sys-text="" drop-zone></div>
+    <div data-bc-page-dashboard-widget-wrapper="" style="display: none" drop-zone></div>
+    <div data-bc-page-external-widget-wrapper="" style="display: none" drop-zone></div>
     <div data-bc-page-widget-btns-wrapper>
       <div data-bc-page-widget-cancel-setting="">
         @cancelBtn

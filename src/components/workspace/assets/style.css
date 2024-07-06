@@ -205,6 +205,25 @@ div[data-bc-page-body] {
     flex-direction: column;
 }
 
+[data-bc-page-external-widget-wrapper] {
+    flex-wrap: wrap;
+
+}
+
+[data-bc-page-external-widget-wrapper] [external-widget-element] {
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 99;
+    width: 140px;
+    height: 115px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 [data-bc-page-widget-search] {
     padding-block: 10px;
     display: flex;

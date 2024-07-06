@@ -24,6 +24,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
   private widgetList: IWidgetListItemInfo[];
   public disabledWidgetList: IWidgetListItemInfo[] = [];
+  public externalWidgetList: IWidgetListItemInfo[] = [];
+
   public disabledDashboardWidgetList: IDashboardWidgetData[] = [];
   private sortable: Sortable = null;
   private isDragging: boolean = false;
@@ -79,11 +81,27 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       .querySelector("[data-bc-page-widget-search-input]")
       .addEventListener("input", (e) => {
         this.searchParam = (e.target as HTMLInputElement).value;
+        switch (this.tabIndex) {
+          case 0:
+            this.fillListUI();
+            break
+          case 1:
+            const parent = this.container.querySelector(
+              "[data-bc-page-dashboard-widget-wrapper]"
+            ) as HTMLElement;
+            parent.querySelectorAll("[data-bc-section-header]").forEach((i) => {
+              i.remove();
+            });
+            this.fillDashboardWidgets();
+            break
+          case 2:
+            this.fillExternalWidgetsUI()
+        }
         if (this.tabIndex == 0) {
           this.fillListUI();
         } else {
           const parent = this.container.querySelector(
-            "[data-bc-page-widget-dashboard-wrapper]"
+            "[data-bc-page-dashboard-widget-wrapper]"
           ) as HTMLElement;
           parent.querySelectorAll("[data-bc-section-header]").forEach((i) => {
             i.remove();
@@ -131,6 +149,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       e.preventDefault()
     );
   }
+
   private async saveWidgets(): Promise<void> {
     const widgets = document.querySelectorAll("[data-bc-bp-widget-container]");
     const data = { data: [] };
@@ -216,29 +235,29 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     }
   }
-  private async sendSelectedWidgetToServerAsync(): Promise<void> {
-    const addedWidgetList = Array.from(
-      this._page.widgetDropAreaContainer.querySelectorAll("[data-bc-widget-id]")
-    ).map((x) => x.getAttribute("data-bc-widget-id"));
-    if (addedWidgetList.length > 0) {
-      const url = HttpUtil.formatString(
-        this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets,
-        {
-          rKey: this.options.rKey,
-          pageId: this._page.loaderParam.pageId,
-        }
-      );
+  // private async sendSelectedWidgetToServerAsync(): Promise<void> {
+  //   const addedWidgetList = Array.from(
+  //     this._page.widgetDropAreaContainer.querySelectorAll("[data-bc-widget-id]")
+  //   ).map((x) => x.getAttribute("data-bc-widget-id"));
+  //   if (addedWidgetList.length > 0) {
+  //     const url = HttpUtil.formatString(
+  //       this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets,
+  //       {
+  //         rKey: this.options.rKey,
+  //         pageId: this._page.loaderParam.pageId,
+  //       }
+  //     );
 
-      const _ = await HttpUtil.checkRkeyFetchDataAsync(
-        url,
-        "POST",
-        this.options.checkRkey,
-        {
-          widgetId: addedWidgetList,
-        }
-      );
-    }
-  }
+  //     const _ = await HttpUtil.checkRkeyFetchDataAsync(
+  //       url,
+  //       "POST",
+  //       this.options.checkRkey,
+  //       {
+  //         widgetId: addedWidgetList,
+  //       }
+  //     );
+  //   }
+  // }
 
   // public tryAddingWidget(widgetInfo: IWidgetListItemInfo) {
   // const container = this._page.widgetDropAreaContainer.querySelector(
@@ -293,6 +312,71 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this.disabledWidgetList = widgetsList;
     this.fillListUI();
   }
+  private fillExternalWidgetsUI() {
+    const addButton = document.createElement('div')
+    addButton.setAttribute('data-sys-button', '')
+    addButton.setAttribute('data-bc-add-external-widget', '')
+    addButton.innerHTML = this.labels.addExternalWidget
+    addButton.addEventListener('click', () => {
+
+    })
+    const externalWidgetsWrapper = document.querySelector('[data-bc-page-external-widget-wrapper]')
+    externalWidgetsWrapper.innerHTML = ''
+
+    externalWidgetsWrapper.appendChild(addButton)
+    this.externalWidgetList
+      .filter((e) => e.title.includes(this.searchParam))
+      .forEach((widget) => {
+        const widgetElement = document.createElement("div");
+        const container = document.createElement("div");
+
+        const widgetIcon = document.createElement("img");
+        widgetElement.setAttribute("draggable", "true");
+        widgetElement.setAttribute("id", String(widget.widgetid));
+        widgetElement.setAttribute("external-widget-element", "");
+        widgetIcon.setAttribute(
+          "src",
+          widget.icon
+            ? widget.icon
+            : `data:image/svg+xml,%3Csvg%20width%3D%22116%22%20height%3D%2270%22%20viewBox%3D%220%200%20116%2070%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3Cmask%20id%3D%22mask0_12273_103335%22%20style%3D%22mask-type%3Aalpha%22%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22116%22%20height%3D%2270%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3C%2Fmask%3E%0A%3Cg%20mask%3D%22url%28%23mask0_12273_103335%29%22%3E%0A%3Cpath%20d%3D%22M112.749%2026.3801L121.932%2040.721L107.591%2049.9042L98.4076%2035.5633L112.749%2026.3801ZM79.9424%2021.3886L76.2583%2038.1915L59.4553%2034.5074L63.1394%2017.7045L79.9424%2021.3886ZM112.739%2072.6062L109.055%2089.4091L92.2524%2085.725L95.9365%2068.9221L112.739%2072.6062ZM115.327%2014.618L86.2255%2032.8923L104.92%2062.0863L89.3771%2058.6786L82.0089%2092.2844L115.615%2099.6526L122.983%2066.0468L104.92%2062.0863L133.694%2043.2999L115.327%2014.618ZM90.1859%2014.8292L56.58%207.46096L49.2118%2041.0668L82.8177%2048.435L90.1859%2014.8292ZM70.7321%2063.3959L67.048%2080.1989L50.2451%2076.5148L53.9292%2059.7118L70.7321%2063.3959ZM80.9756%2056.8365L47.3698%2049.4683L40.0016%2083.0742L73.6074%2090.4424L80.9756%2056.8365Z%22%20fill%3D%22%23004B85%22%20fill-opacity%3D%220.15%22%2F%3E%0A%3Cpath%20d%3D%22M61.7%2027.8L64.5%2030.6L61.7%2033.4L58.9%2030.6L61.7%2027.8ZM54%2028.3V32.3H50V28.3H54ZM64%2038.3V42.3H60V38.3H64ZM61.7%2025L56%2030.6L61.7%2036.3H58V44.3H66V36.3H61.7L67.3%2030.6L61.7%2025ZM56%2026.3H48V34.3H56V26.3ZM54%2038.3V42.3H50V38.3H54ZM56%2036.3H48V44.3H56V36.3Z%22%20fill%3D%22%23004B85%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A
+`
+        );
+        container.appendChild(widgetIcon);
+        container.appendChild(document.createTextNode(widget.title));
+        widgetElement.appendChild(container);
+
+        widgetElement.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", JSON.stringify(widget));
+        });
+
+        externalWidgetsWrapper.appendChild(widgetElement);
+      });
+  }
+  private async fillExternalWidgetsAsync(): Promise<void> {
+    const externalWidgets = document.querySelector(
+      "[data-bc-page-external-widget-wrapper]"
+    );
+    externalWidgets.innerHTML = "";
+
+    const url = HttpUtil.formatString(
+      this._page.loaderParam.ownerUrl +
+      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+      {
+        rKey: this.options.rKey,
+        pageId: this._page.loaderParam.pageId,
+      }
+    );
+    console.log('url', url)
+    try {
+      const data = await HttpUtil.fetchStringAsync(url, "GET");
+      if (JSON.parse(data).length) {
+        this.externalWidgetList = JSON.parse(data)
+      }
+      this.fillExternalWidgetsUI()
+    } catch (error) {
+
+    }
+  }
   fillListUI() {
     const disableWidgets = document.querySelector(
       "[data-bc-page-widget-disableList]"
@@ -313,16 +397,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "src",
             widget.icon
               ? widget.icon
-              : `data:image/svg+xml;utf8,<svg width="116" height="70" viewBox="0 0 116 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="116" height="70" rx="5" fill="#E4E7F4"/>
-<mask id="mask0_12273_103335" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="116" height="70">
-<rect width="116" height="70" rx="5" fill="#E4E7F4"/>
-</mask>
-<g mask="url(#mask0_12273_103335)">
-<path d="M112.749 26.3801L121.932 40.721L107.591 49.9042L98.4076 35.5633L112.749 26.3801ZM79.9424 21.3886L76.2583 38.1915L59.4553 34.5074L63.1394 17.7045L79.9424 21.3886ZM112.739 72.6062L109.055 89.4091L92.2524 85.725L95.9365 68.9221L112.739 72.6062ZM115.327 14.618L86.2255 32.8923L104.92 62.0863L89.3771 58.6786L82.0089 92.2844L115.615 99.6526L122.983 66.0468L104.92 62.0863L133.694 43.2999L115.327 14.618ZM90.1859 14.8292L56.58 7.46096L49.2118 41.0668L82.8177 48.435L90.1859 14.8292ZM70.7321 63.3959L67.048 80.1989L50.2451 76.5148L53.9292 59.7118L70.7321 63.3959ZM80.9756 56.8365L47.3698 49.4683L40.0016 83.0742L73.6074 90.4424L80.9756 56.8365Z" fill="#004B85" fill-opacity="0.15"/>
-<path d="M61.7 27.8L64.5 30.6L61.7 33.4L58.9 30.6L61.7 27.8ZM54 28.3V32.3H50V28.3H54ZM64 38.3V42.3H60V38.3H64ZM61.7 25L56 30.6L61.7 36.3H58V44.3H66V36.3H61.7L67.3 30.6L61.7 25ZM56 26.3H48V34.3H56V26.3ZM54 38.3V42.3H50V38.3H54ZM56 36.3H48V44.3H56V36.3Z" fill="#004B85"/>
-</g>
-</svg>
+              : `data:image/svg+xml,%3Csvg%20width%3D%22116%22%20height%3D%2270%22%20viewBox%3D%220%200%20116%2070%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3Cmask%20id%3D%22mask0_12273_103335%22%20style%3D%22mask-type%3Aalpha%22%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22116%22%20height%3D%2270%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3C%2Fmask%3E%0A%3Cg%20mask%3D%22url%28%23mask0_12273_103335%29%22%3E%0A%3Cpath%20d%3D%22M112.749%2026.3801L121.932%2040.721L107.591%2049.9042L98.4076%2035.5633L112.749%2026.3801ZM79.9424%2021.3886L76.2583%2038.1915L59.4553%2034.5074L63.1394%2017.7045L79.9424%2021.3886ZM112.739%2072.6062L109.055%2089.4091L92.2524%2085.725L95.9365%2068.9221L112.739%2072.6062ZM115.327%2014.618L86.2255%2032.8923L104.92%2062.0863L89.3771%2058.6786L82.0089%2092.2844L115.615%2099.6526L122.983%2066.0468L104.92%2062.0863L133.694%2043.2999L115.327%2014.618ZM90.1859%2014.8292L56.58%207.46096L49.2118%2041.0668L82.8177%2048.435L90.1859%2014.8292ZM70.7321%2063.3959L67.048%2080.1989L50.2451%2076.5148L53.9292%2059.7118L70.7321%2063.3959ZM80.9756%2056.8365L47.3698%2049.4683L40.0016%2083.0742L73.6074%2090.4424L80.9756%2056.8365Z%22%20fill%3D%22%23004B85%22%20fill-opacity%3D%220.15%22%2F%3E%0A%3Cpath%20d%3D%22M61.7%2027.8L64.5%2030.6L61.7%2033.4L58.9%2030.6L61.7%2027.8ZM54%2028.3V32.3H50V28.3H54ZM64%2038.3V42.3H60V38.3H64ZM61.7%2025L56%2030.6L61.7%2036.3H58V44.3H66V36.3H61.7L67.3%2030.6L61.7%2025ZM56%2026.3H48V34.3H56V26.3ZM54%2038.3V42.3H50V38.3H54ZM56%2036.3H48V44.3H56V36.3Z%22%20fill%3D%22%23004B85%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A
 `
           );
           container.appendChild(widgetIcon);
@@ -369,12 +444,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.removeEventListener("mouseleave", this.onMouseLeave);
     });
 
-    this.fillWidgetListAsync().then(() => {
-      this._page.widgetDropAreaContainer.setAttribute(
-        "data-bc-display-none",
-        ""
-      );
-    });
+
+    this._page.widgetDropAreaContainer.setAttribute(
+      "data-bc-display-none",
+      ""
+    );
+
     const widgetBox: HTMLElement = this.container.querySelector<HTMLElement>(
       "[data-bc-page-widget-list]"
     );
@@ -409,12 +484,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "[data-bc-page-widget-disablelist]"
           ) as HTMLElement,
           document.querySelector(
-            "[data-bc-page-widget-dashboard-wrapper]"
+            "[data-bc-page-dashboard-widget-wrapper]"
           ) as HTMLElement,
         ],
         {
           draggable:
-            "[pallete-widget-element],[data-bc-bp-widget-container],[data-bc-page-widget-dashboard]",
+            "[pallete-widget-element],[data-bc-bp-widget-container],[data-bc-page-widget-dashboard],[external-widget-element]",
         }
       );
 
@@ -552,7 +627,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             .attributes.getNamedItem("data-bc-bp-group-container") &&
           event.source
             .closest("[drop-zone]")
-            .attributes.getNamedItem("data-bc-page-widget-dashboard-wrapper")
+            .attributes.getNamedItem("data-bc-page-dashboard-widget-wrapper")
         ) {
           event.cancel();
           this.fillDashboardWidgetList();
@@ -1006,7 +1081,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this.startHeight = ev.target.parentElement.offsetHeight;
   };
 
-  private showList() {
+  private async showList() {
     document.querySelectorAll("[data-bc-widget-btn-close]").forEach((el) => {
       el.addEventListener("mouseenter", this.onMouseEnter);
       el.addEventListener("mouseleave", this.onMouseLeave);
@@ -1147,6 +1222,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       e.setAttribute("draggable", "true");
       e.classList.add("widgetDragClass");
     });
+    await this.fillExternalWidgetsAsync()
     this.fillWidgetListAsync().then(() => {
       document
         .querySelector("[data-bc-page-widget-disablelist]")
@@ -1191,7 +1267,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         .setAttribute("data-bc-widget-tag-selected", "");
     }
     const parent = this.container.querySelector(
-      "[data-bc-page-widget-dashboard-wrapper]"
+      "[data-bc-page-dashboard-widget-wrapper]"
     ) as HTMLElement;
 
     parent.querySelectorAll("[data-bc-section-header]").forEach((i) => {
@@ -1202,7 +1278,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
   fillDashboardWidgetList() {
     const parent = this.container.querySelector(
-      "[data-bc-page-widget-dashboard-wrapper]"
+      "[data-bc-page-dashboard-widget-wrapper]"
     ) as HTMLElement;
 
     const tagsContainer = document.createElement("div");
@@ -1228,9 +1304,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     parent.appendChild(tagsContainer);
     this.fillDashboardWidgets();
   }
+
+
   fillDashboardWidgets() {
     const parent = this.container.querySelector(
-      "[data-bc-page-widget-dashboard-wrapper]"
+      "[data-bc-page-dashboard-widget-wrapper]"
     ) as HTMLElement;
     parent.querySelectorAll("[data-bc-page-widget-dashboard]").forEach((e) => {
       e.remove();
@@ -1348,17 +1426,32 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             this.options.checkRkey,
             {
               //@ts-ignore
-              widgetid: widgetList.widgetid,
+              widgetid: widgetList.widgetid, moduleid: widgetList.moduleid
             }
           );
-          this.addingDashboardWidgets();
+          const widgetData = this.disabledDashboardWidgetList.find(
+            (e) =>
+              e.widgetid == widgetList.widgetid &&
+              e.moduleid == widgetList.moduleid
+          );
+
+          this.disabledWidgetList = this.disabledWidgetList.filter(
+            (e) => e.widgetid != widgetData.widgetid
+          );
+
+          this.disabledDashboardWidgetList =
+            this.disabledDashboardWidgetList.filter((e) => {
+              return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
+            });
+
+          this.fillDashboardWidgetList();
           this.enableDragDrop();
         });
       });
   }
   public async addingDashboardWidgets(): Promise<void> {
     const parent = this.container.querySelector(
-      "[data-bc-page-widget-dashboard-wrapper]"
+      "[data-bc-page-dashboard-widget-wrapper]"
     ) as HTMLElement;
     const dashboardBtn = this.container.querySelector(
       ".tabWrapperForWidgets"
@@ -1389,7 +1482,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const allWidget = document.querySelector<HTMLElement>(
         "[data-bc-page-widget-disableList]"
       );
-      const allWidgetBtn = this.container.querySelector("[data-all-widget]");
+      const externalWidgetsWrapper = document.querySelector<HTMLElement>('[data-bc-page-external-widget-wrapper]')
+      const allWidgetBtn = this.container.querySelector("[data-all-widgets]");
+      const ExternalWidgetBtn = this.container.querySelector("[data-external-widgets]");
       const dashboardWidgetBtn = this.container.querySelector(
         "[data-dashboard-widgets]"
       );
@@ -1399,23 +1494,40 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       dashboardWidgetBtn.addEventListener("click", (e) => {
         this.tabIndex = 1;
         parent.style.display = "flex";
+        externalWidgetsWrapper.style.display = "none";
         allWidget.style.display = "none";
-        activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft -
-          (e.target as HTMLElement).offsetLeft
+        console.log('(allWidget as HTMLElement).offsetWidth', (allWidgetBtn as HTMLElement).offsetWidth)
+        activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetWidth
           }px)`;
         dashboardWidgetBtn.setAttribute("tab-button-status", "active");
         allWidgetBtn.removeAttribute("tab-button-status");
+        ExternalWidgetBtn.removeAttribute("tab-button-status");
+
         this.fillDashboardWidgetList();
       });
       allWidgetBtn.addEventListener("click", (e) => {
         this.tabIndex = 0;
+        externalWidgetsWrapper.style.display = "none";
 
         parent.style.display = "none";
         allWidget.style.display = "flex";
         activeElement.style.transform = `translateX(0px)`;
         allWidgetBtn.setAttribute("tab-button-status", "active");
         dashboardWidgetBtn.removeAttribute("tab-button-status");
+        ExternalWidgetBtn.removeAttribute("tab-button-status");
         this.fillListUI();
+      });
+      ExternalWidgetBtn.addEventListener("click", (e) => {
+        console.log('ExternalWidgetBtn as HTMLElement).offsetLeft ', (ExternalWidgetBtn as HTMLElement).offsetLeft)
+        this.tabIndex = 2;
+        externalWidgetsWrapper.style.display = "flex";
+        activeElement.style.transform = `translateX(-${((allWidgetBtn as HTMLElement).offsetWidth + (dashboardWidgetBtn as HTMLElement).offsetWidth)}px)`;
+        parent.style.display = "none";
+        allWidget.style.display = "none";
+        externalWidgetsWrapper.setAttribute("tab-button-status", "active");
+        dashboardWidgetBtn.removeAttribute("tab-button-status");
+        allWidgetBtn.removeAttribute("tab-button-status");
+        this.fillExternalWidgetsUI();
       });
     } catch { }
   }

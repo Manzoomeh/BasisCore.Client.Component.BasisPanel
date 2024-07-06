@@ -2089,12 +2089,13 @@ body.darkmode {
 .tabWrapper .tabBtn {
     color: #030229;
     background: transparent;
-    font-size: 14px;
+    font-size: 10px;
     height: 35px;
     position: relative;
     z-index: 2;
     padding: 0;
     margin: 0;
+    font-weight: 600;
     width: 100px;
     text-transform: uppercase;
     /* font-weight: bold; */

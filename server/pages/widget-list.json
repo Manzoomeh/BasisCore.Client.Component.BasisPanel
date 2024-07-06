@@ -1,6 +1,7 @@
 {
     "default": {
         "container": "dashboard",
+        "customizable": true,
         "queryString": "?mid=20",
         "groups": [
             {
@@ -35,9 +36,6 @@
                         "h": 2,
                         "url": "server/external"
                     },
-
-
-
                     {
                         "id": "userWidget1.html",
                         "title": "ویجت داشبورد",
@@ -82,12 +80,6 @@
                         "w": 10,
                         "h": 2
                     }
-
-
-
-
-
-                    
                 ]
             }
         ]
@@ -268,5 +260,4 @@
             }
         ]
     }
-   
 }

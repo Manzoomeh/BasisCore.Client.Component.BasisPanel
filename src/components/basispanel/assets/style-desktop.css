@@ -14,6 +14,13 @@
   flex-direction: column;
 }
 
+[external-widget-element] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 [data-bc-bp-d1-header-left-items] {
   /* float: left; */
   height: 48px;
