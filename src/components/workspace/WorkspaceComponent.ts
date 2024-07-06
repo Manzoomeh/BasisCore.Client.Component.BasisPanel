@@ -1,4 +1,4 @@
-import { ISource, IUserDefineComponent } from "basiscore";
+import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
@@ -9,8 +9,12 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 import IPageInfo from "../page/IPageInfo";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
+  public info: IPageInfo;
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, layout, "data-bc-bp-workspace-container");
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("workspace", this);
   }
 
   public initializeAsync(): Promise<void> {
@@ -38,13 +42,12 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
           `${pageParam.ownerUrl}${pageParam.pageMethod}`,
           pageParam
         );
-
-        let info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
+        this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
           url,
           "GET",
           this.options.checkRkey
         );
-        this.pageType = info?.container;
+        this.pageType = this.info?.container;
 
         await this.displayPageAsync(pageParam);
       }
