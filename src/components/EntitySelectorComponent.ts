@@ -187,8 +187,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   filterItems(input, list) {
+    console.log('list :>>', list)
     let filterList = list.filter(function (e) {
-      return e.title.toLowerCase().includes(input.toLowerCase());
+      return e.title.toLowerCase().includes(input.toLowerCase()) || e.id == input;
     });
     return filterList;
   }
