@@ -42,12 +42,14 @@
   z-index: 9;
   scrollbar-width: thin;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: auto;
   direction: rtl;
   border-top: 0.5px solid #e1e1e1;
   border-bottom: 0.5px solid #e1e1e1;
   min-height: 62px;
 }
+
+
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-menu] {
   direction: rtl;
