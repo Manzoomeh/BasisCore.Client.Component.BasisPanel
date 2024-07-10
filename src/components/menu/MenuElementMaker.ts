@@ -151,7 +151,7 @@ export default class MenuElementMaker {
 
         innerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
           }px`;
-        innerUl.style.left = `${parentBoundingRect.x - parentBoundingRect.width / 2
+        innerUl.style.left = `${parentBoundingRect.x - (innerUl.offsetWidth - parentBoundingRect.width)
           }px`;
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
