@@ -126,8 +126,11 @@ export default class MenuElementMaker {
           // Collapse Existing Expanded menuItemHasChildren
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
-            e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
-            e.classList.remove("active");
+            if (e != li) {
+
+              e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+              e.classList.remove("active");
+            }
           });
           // Expand New menuItemHasChildren
           li.classList.add("active");
@@ -142,17 +145,17 @@ export default class MenuElementMaker {
       const liBoundingRect = document
         .querySelector("[data-bc-menu]")
         .getBoundingClientRect();
-      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height + window.pageYOffset
+      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height
         }px`;
       li.addEventListener("click", function (e) {
         const parentBoundingRect = (
           e.target as HTMLElement
         ).getBoundingClientRect();
-
-        innerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + window.pageYOffset
+        innerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + (!document.querySelector('[data-bc-bp-sticky]') ? window.pageYOffset : 0)
           }px`;
         innerUl.style.left = `${parentBoundingRect.x - (innerUl.offsetWidth - parentBoundingRect.width)
           }px`;
+
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
@@ -161,9 +164,9 @@ export default class MenuElementMaker {
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
 
-          innerUl.style.transform = `scaleY(1)`;
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
+          innerUl.style.transform = `scaleY(1)`;
         } else {
           innerUl.style.transform = ` scaleY(0)`;
           innerUl.removeAttribute("data-bc-ul-level-open");
