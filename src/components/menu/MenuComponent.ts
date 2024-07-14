@@ -70,16 +70,28 @@ export default class MenuComponent
           document
             .querySelectorAll("[data-bc-ul-level-open]")
             .forEach((el: HTMLElement) => {
-              el.style.transform = ` scaleY(0)`;
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
               el.removeAttribute("data-bc-ul-level-open");
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });
         });
+        window.addEventListener('resize', () => {
+          document
+            .querySelectorAll("[data-bc-ul-level-open]")
+            .forEach((el: HTMLElement) => {
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
+              el.removeAttribute("data-bc-ul-level-open");
+              el.previousElementSibling.removeAttribute("data-bc-level-open");
+            });
+        })
         this.ul.addEventListener("scroll", () => {
           document
             .querySelectorAll("[data-bc-ul-level-open]")
             .forEach((el: HTMLElement) => {
-              el.style.transform = ` scaleY(0)`;
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
               el.removeAttribute("data-bc-ul-level-open");
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });

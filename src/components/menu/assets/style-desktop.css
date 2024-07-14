@@ -115,16 +115,14 @@
 [data-bc-bp-submenu] {
   padding: 0;
   position: absolute;
-  z-index: 9999;
-  /* right: 0; */
+  z-index: 999;
   top: 61px;
   width: 230px;
-  height: auto;
+  max-height: 0px;
   background: #fff;
   overflow: hidden;
   transform-origin: top;
-  transform: scaleY(0);
-  transition: all 0.3s ease-in-out;
+  transition: top 0.001s, left 0.001s, max-height 0.5s ease-in-out;
   box-shadow: 0px 5px 10px rgba(0, 75, 133, 0.1);
 }
 
@@ -135,6 +133,11 @@
 [data-bc-bp-direction="leftToRight"][data-bc-bp-submenu] {
   left: 0;
 } */
+[data-bc-bp-submenu][data-bc-ul-level-open="1"] {
+  z-index: 9999;
+  transition: top 0.001s, left 0.001s, max-height 0.5s ease-in-out;
+
+}
 
 [data-bc-bp-menu-wrapper] [data-bc-bp-submenu] li {
   border-bottom: 0.7px solid #d0d0d0 !important;

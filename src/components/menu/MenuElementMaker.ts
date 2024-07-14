@@ -159,16 +159,17 @@ export default class MenuElementMaker {
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
-            (e as HTMLElement).style.transform = ` scaleY(0)`;
+            (e as HTMLElement).style.maxHeight = `0px`;
             e.removeAttribute("data-bc-ul-level-open");
             e.previousElementSibling.removeAttribute("data-bc-level-open");
           });
 
           innerUl.setAttribute("data-bc-ul-level-open", "1");
           content.setAttribute("data-bc-level-open", "");
-          innerUl.style.transform = `scaleY(1)`;
+          innerUl.style.maxHeight = `500px`;
+          innerUl.style.opacity = `1`;
         } else {
-          innerUl.style.transform = ` scaleY(0)`;
+          innerUl.style.maxHeight = `0px`;
           innerUl.removeAttribute("data-bc-ul-level-open");
           innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
         }
