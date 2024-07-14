@@ -21,6 +21,7 @@ export default class MenuElementMaker {
   private checkRkeyOption: ICheckRkeyOptions;
   private deviceId: number;
   private moduleMapper: Map<string, IModuleInfo>;
+  public menuItemLookup: Map<string, HTMLElement[]>;
 
   constructor(
     rKey: string,
@@ -38,6 +39,8 @@ export default class MenuElementMaker {
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
     this.moduleMapper = moduleMapper;
+    this.menuItemLookup = new Map<string, HTMLElement[]>()
+
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -45,14 +48,14 @@ export default class MenuElementMaker {
 
     const pageLookup = new Map<string, IMenuLoaderParam>();
     this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
-    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes));
+    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes), this.menuItemLookup);
   }
 
   private createMenu(
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>, li?: HTMLElement
   ) {
     items.forEach((node) => {
       if ((node as IMenuExternalItemInfo).url) {
@@ -63,7 +66,7 @@ export default class MenuElementMaker {
       }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
-          this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup)
+          this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup, li)
         );
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
@@ -113,7 +116,7 @@ export default class MenuElementMaker {
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup);
+    this.createMenu(innerUl, node.nodes, menuParam, pageLookup, li);
     li.appendChild(content);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
     if (deviceId == 2) {
@@ -181,7 +184,7 @@ export default class MenuElementMaker {
   private createPageMenuItem(
     node: IMenuPageInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
+    pageLookup: Map<string, IMenuLoaderParam>, parentLi: HTMLElement
   ): HTMLLIElement {
     if (!this.moduleMapper.has(node.mid)) {
       this.moduleMapper.set(node.mid, {
@@ -191,6 +194,8 @@ export default class MenuElementMaker {
     }
     const li = document.createElement("li");
     const content = document.createElement("a");
+    this.menuItemLookup.set(node.pid + '-' + node.mid, [li as HTMLElement, parentLi as HTMLElement])
+
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.setAttribute("data-bc-mid", node.mid?.toString());
@@ -207,11 +212,14 @@ export default class MenuElementMaker {
       });
 
       const parent = content.closest("[data-bc-bp-submenu]");
-      if (parent) {
-        parent
-          .closest("li")
-          .querySelector("[data-bc-level]")
-          .setAttribute("data-bc-menu-active", "");
+      console.log('li,parent', li, parent)
+
+      if (parentLi) {
+        // parent
+        //   .closest("li")
+        //   .querySelector("[data-bc-level]")
+        //   .setAttribute("data-bc-menu-active", "");
+        parentLi.setAttribute("data-bc-menu-active", "");
         li.setAttribute("data-bc-menu-active", "");
       } else {
         li.setAttribute("data-bc-menu-active", "");
@@ -262,7 +270,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
       }
     });
     return li;
@@ -351,7 +359,7 @@ export default class MenuElementMaker {
       this.checkRkeyOption
     ).then((menu) => {
       if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup);
+        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
       }
     });
 
