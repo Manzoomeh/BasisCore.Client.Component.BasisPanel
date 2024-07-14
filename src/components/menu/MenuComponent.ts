@@ -70,16 +70,28 @@ export default class MenuComponent
           document
             .querySelectorAll("[data-bc-ul-level-open]")
             .forEach((el: HTMLElement) => {
-              el.style.transform = ` scaleY(0)`;
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
               el.removeAttribute("data-bc-ul-level-open");
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });
         });
+        window.addEventListener('resize', () => {
+          document
+            .querySelectorAll("[data-bc-ul-level-open]")
+            .forEach((el: HTMLElement) => {
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
+              el.removeAttribute("data-bc-ul-level-open");
+              el.previousElementSibling.removeAttribute("data-bc-level-open");
+            });
+        })
         this.ul.addEventListener("scroll", () => {
           document
             .querySelectorAll("[data-bc-ul-level-open]")
             .forEach((el: HTMLElement) => {
-              el.style.transform = ` scaleY(0)`;
+              el.style.maxHeight = `0px`;
+              el.style.opacity = `0`;
               el.removeAttribute("data-bc-ul-level-open");
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });
@@ -96,16 +108,13 @@ export default class MenuComponent
             const content = this.ul.querySelector(
               `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
             );
-            const li = content?.closest("li");
-            const parent = content?.closest("[data-bc-bp-submenu]");
+            let [li, parent] = this.current.menuItemLookup.get(pid + '-' + mid)
+            li?.setAttribute("data-bc-menu-active", "");
+
             if (parent) {
               parent
-                .closest("li")
-                .querySelector("[data-bc-level]")
+
                 .setAttribute("data-bc-menu-active", "");
-              li?.setAttribute("data-bc-menu-active", "");
-            } else {
-              li?.setAttribute("data-bc-menu-active", "");
             }
           }
         }
@@ -121,16 +130,11 @@ export default class MenuComponent
     const content = this.ul.querySelector(
       `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid]`
     );
-    const li = content?.closest("li");
-    const parent = content?.closest("[data-bc-bp-submenu]");
+    let [li, parent] = this.current.menuItemLookup.get(pageId + '-' + moduleId)
+    li?.setAttribute("data-bc-menu-active", "");
+
     if (parent) {
-      parent
-        .closest("li")
-        .querySelector("[data-bc-level]")
-        .setAttribute("data-bc-menu-active", "");
-      li?.setAttribute("data-bc-menu-active", "");
-    } else {
-      li?.setAttribute("data-bc-menu-active", "");
+      parent.setAttribute("data-bc-menu-active", "");
     }
   }
 
