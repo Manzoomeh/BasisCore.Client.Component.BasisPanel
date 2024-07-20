@@ -34,13 +34,15 @@ export default class DashboardComponent extends PageComponent {
     // });
   }
   public addBannerToPage(group: IPageGroupInfo) {
+    console.log('group', group)
     const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
     this.info.groups.forEach((g) => {
       g.widgets.forEach((w) => {
         w.y = w.y + maxY;
       });
     });
-    this.info.groups[0].widgets.push(group.widgets[0]);
+    this.info.groups.push(group)
+    // this.info.groups[0].widgets.push(group.widgets[0]);
   }
   public async runAsync(source?: ISource) {
     if (!this._groupsAdded) {
@@ -71,7 +73,7 @@ export default class DashboardComponent extends PageComponent {
                 rkey: this.options.rKey,
                 group: res.groups[0],
               });
-              this.addBannerToPage(res.groups);
+              this.addBannerToPage(res.groups[0]);
             }
           }
         } else {
@@ -87,11 +89,11 @@ export default class DashboardComponent extends PageComponent {
             rkey: this.options.rKey,
             group: res.groups[0],
           });
-          this.addBannerToPage(res.groups);
+          this.addBannerToPage(res.groups[0]);
         }
       }
       console.log("this.infos :>> ", this.info);
-      // await this.addingPageGroupsAsync(this.info);
+      await this.addingPageGroupsAsync(this.info);
       this._groupsAdded = true;
     }
     return true;
