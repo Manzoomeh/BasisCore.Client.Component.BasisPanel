@@ -107,8 +107,35 @@ const businessList = [
   },
 ];
 router.get("/:rKey/list", function (req, res) {
-  const business = businessList.filter((x) => x.ownerid == active.corporate);
-  res.json(business);
+  // const business = businessList.filter((x) => x.ownerid == active.corporate);
+  res.json(businessList);
+});
+router.get("/:rKey/banner", function (req, res) {
+  // const business = businessList.filter((x) => x.ownerid == active.corporate);
+  res.json({
+    container: "container",
+    eventID: 123,
+    title: "",
+    groups: [
+      {
+        groupname: "banners",
+        options: {},
+        widgets: [
+          {
+            id: "businessWidget1.html",
+            title: "بنر",
+            name: "banner",
+            isPrimary: true,
+            x: 0,
+            y: 0,
+            w: 10,
+            h: 9,
+            container: "widget",
+          },
+        ],
+      },
+    ],
+  });
 });
 
 router.get("/:rKey/menu", function (req, res) {

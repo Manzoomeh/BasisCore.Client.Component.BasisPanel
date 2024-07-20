@@ -11,6 +11,7 @@ export default interface IBasisPanelOptions {
   themeUrl: IUrlTheme;
   dataUrl: IUrlCollectionOption;
   addWidgetUrl: string;
+  bannerUrl: string;
   method: IPanelPartMethodOptions;
   dashboardCustomizeMethod: IPanelPartDashboardOptions;
   checkRkey: ICheckRkeyOptions;
@@ -28,7 +29,6 @@ interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;
   addtoDashboardReservedWidget: string;
   dashboardReservedWidgets: string;
-
 }
 interface IUrlCollectionOption {
   profile: string;
@@ -96,5 +96,6 @@ export interface ILabels {
   widgetsSettingButton: string;
   storeTitle: string;
   lightModeTitle: string;
-  darkModeTitle: string; widgetsHeaderTitle: string
+  darkModeTitle: string;
+  widgetsHeaderTitle: string;
 }

@@ -13,13 +13,9 @@ export default class ContainerComponent extends PageComponent {
     return PageType.Dashboard;
   }
 
-
   public async addingDashboardWidgets(): Promise<void> {
-
-
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);
-
   }
   public async runAsync(source?: ISource) {
     this.addingDashboardWidgets();
