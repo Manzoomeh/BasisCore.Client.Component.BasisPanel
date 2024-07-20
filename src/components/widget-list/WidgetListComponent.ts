@@ -140,7 +140,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const allWidgets = [];
     const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
     this._page.info.groups.map((g) => g.widgets.map((w) => allWidgets.push(w)));
-    console.log('this._page', this._page)
     widgets.forEach((e: HTMLElement) => {
       const widgetData: any = {};
       widgetData["widgetid"] = e.getAttribute("id");
@@ -153,7 +152,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       widgetData["w"] = Math.floor(e.offsetWidth / cell) + 1;
       widgetData["moduleid"] =
         allWidgets.find((l) => l.id == e.getAttribute("id"))?.moduleid ||
-        e.getAttribute("moduleid") || JSON.parse(localStorage.getItem('__bc_panel_last_state__'))?.m?.info?.mid
+        e.getAttribute("moduleid") ||
+        JSON.parse(localStorage.getItem("__bc_panel_last_state__"))?.m?.info
+          ?.mid;
       if (
         !data.data.find(
           (w) =>
@@ -212,8 +213,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       this.hideList();
 
       page.owner.setSource("refresh", true);
-
-
     }
   }
   private async sendSelectedWidgetToServerAsync(): Promise<void> {
@@ -275,7 +274,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     return Promise.resolve();
   }
 
-  public runAsync(source?: ISource) { }
+  public runAsync(source?: ISource) {}
 
   private async fillWidgetListAsync(): Promise<void> {
     const url = HttpUtil.formatString(
@@ -327,7 +326,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           disableWidgets.appendChild(widgetElement);
         });
-    } catch { }
+    } catch {}
   }
   private displayWidgetList(e) {
     if (
@@ -361,12 +360,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.removeEventListener("mouseleave", this.onMouseLeave);
     });
 
-    this.fillWidgetListAsync().then(() => {
-      this._page.widgetDropAreaContainer.setAttribute(
-        "data-bc-display-none",
-        ""
-      );
-    });
     const widgetBox: HTMLElement = this.container.querySelector<HTMLElement>(
       "[data-bc-page-widget-list]"
     );
@@ -385,7 +378,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       .querySelector('[data-bc-bp-group-container="d1"]')
       .remove();
     this._page.addingPageGroupsAsync(this._page.info);
-    this.disableDragDrop()
+    this.disableDragDrop();
   }
   disableDragDrop() {
     this.sortable.destroy();
@@ -517,7 +510,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           ) as HTMLElement;
           event.source.setAttribute(
             "style",
-            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 3) * this._page.cell
+            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${
+              (widgetData?.h || 3) * this._page.cell
             } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
           );
           if (
@@ -533,11 +527,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           }
         }
       });
-      this.sortable.on("drag:over", (ev) => { });
+      this.sortable.on("drag:over", (ev) => {});
       this.sortable.on("drag:stop", (event) => {
         this.isDragging = false;
 
-        window.removeEventListener("handleMouseMove", () => { });
+        window.removeEventListener("handleMouseMove", () => {});
         if (
           !event.source
             .closest("[drop-zone]")
@@ -571,7 +565,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             )
           )
         ) {
-          console.log('event', event)
           event.originalSource.setAttribute(
             "gs-w",
             event.source.getAttribute("gs-w")
@@ -608,9 +601,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           this.disabledDashboardWidgetList =
             this.disabledDashboardWidgetList.filter((e) => {
-              return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
+              return (
+                Number(e.widgetid) != Number(widgetData.widgetid) ||
+                Number(e.moduleid) != Number(widgetData.moduleid)
+              );
             });
-          console.log('event', event, event.originalSource)
           event.originalSource.setAttribute(
             "gs-w",
             widgetData?.w?.toString() || "3"
@@ -685,11 +680,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                 const data = this.dashboardWidgetList.find(
                   (e) =>
                     String(e.widgetid) ==
-                    (event.target as HTMLElement).parentElement.id &&
+                      (event.target as HTMLElement).parentElement.id &&
                     String(e.moduleid) ==
-                    (event.target as HTMLElement).parentElement.getAttribute(
-                      "moduleid"
-                    )
+                      (event.target as HTMLElement).parentElement.getAttribute(
+                        "moduleid"
+                      )
                 );
 
                 this.disabledDashboardWidgetList.push(data);
@@ -935,15 +930,20 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     if (this.currentResizeHandle) {
       const pageBody = document.querySelector('[data-bc-page-body=""]');
-      const sidebar: HTMLElement = document.querySelector("[data-bc-bp-sidebar-container]");
+      const sidebar: HTMLElement = document.querySelector(
+        "[data-bc-bp-sidebar-container]"
+      );
 
-      let cell = sidebar ? (document.querySelector('[primarycontainer]') as HTMLElement).offsetWidth / 12 : (pageBody as HTMLElement).offsetWidth / 12;
+      let cell = sidebar
+        ? (document.querySelector("[primarycontainer]") as HTMLElement)
+            .offsetWidth / 12
+        : (pageBody as HTMLElement).offsetWidth / 12;
 
       switch (this.type) {
         case "width":
         case "widthRight":
           const width = this.currentResizeHandle.offsetWidth;
-          console.log('first', cell, width, Math.floor(width / cell) > 12, Math.floor(width / cell) > 12 ? '12' : String(Math.floor(width / cell)))
+
           this.currentResizeHandle.setAttribute(
             "gs-w",
             // sidebar
@@ -953,8 +953,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             //     : String(Math.floor(width / cell) + 1)
             //   : String(Math.floor(width / cell) + 1)
 
-            Math.floor(width / cell) > 12 ? '12' : sidebar ? String(Math.ceil(width / cell)) : String(Math.floor(width / cell) + 1)
-
+            Math.floor(width / cell) > 12
+              ? "12"
+              : sidebar
+              ? String(Math.ceil(width / cell))
+              : String(Math.floor(width / cell) + 1)
           );
           this.currentResizeHandle.style.width = null;
           break;
@@ -965,8 +968,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "gs-h",
             String(Math.floor(height / this._page.cell) + 1)
           );
-          this.currentResizeHandle.style.height = `${(Math.floor(height / this._page.cell) + 1) * this._page.cell
-            }px`;
+          this.currentResizeHandle.style.height = `${
+            (Math.floor(height / this._page.cell) + 1) * this._page.cell
+          }px`;
           break;
       }
     }
@@ -1008,10 +1012,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.addEventListener("mouseleave", this.onMouseLeave);
       el.setAttribute("style", "");
     });
-    document.querySelectorAll('[data-bc-widget-btn-add-dashboard]').forEach(el => {
-      el.addEventListener("mouseenter", this.onMouseEnter);
-      el.addEventListener("mouseleave", this.onMouseLeave);
-    })
+    document
+      .querySelectorAll("[data-bc-widget-btn-add-dashboard]")
+      .forEach((el) => {
+        el.addEventListener("mouseenter", this.onMouseEnter);
+        el.addEventListener("mouseleave", this.onMouseLeave);
+      });
     const dashboardBtn = this.container.querySelector(
       ".tabWrapperForWidgets"
     ) as HTMLElement;
@@ -1033,9 +1039,12 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     );
     const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
 
-    const sortedTags = Array.from(allTags).sort(
-      (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
-    );
+    const sortedTags = Array.from(allTags).sort((a, b) => {
+      if (a.getBoundingClientRect().top == b.getBoundingClientRect().top) {
+        return a.getBoundingClientRect().left - b.getBoundingClientRect().left;
+      }
+      return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+    });
     const container = sortedTags[0].parentElement;
     container.innerHTML = "";
     sortedTags.forEach((e) => {
@@ -1046,13 +1055,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const groups = document.querySelectorAll("[data-bc-bp-group-container]");
     groups.forEach((parent) => {
       if (!!!parent.getAttribute("primaryContainer")) {
-        // console.log('parent :>>', parent)
-        // const children = Array.from(parent.children);
-
-        // children.forEach(child => {
-        //   container.appendChild(child)
-        // });
-
         parent.remove();
       }
     });
@@ -1065,7 +1067,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const increaseHeightTop = document.createElement("div");
       const increaseWidthRight = document.createElement("div");
       if (sidebar) {
-        e.setAttribute('gs-w', String(Number(e.getAttribute('gs-w')) + 2))
+        e.setAttribute("gs-w", String(Number(e.getAttribute("gs-w")) + 2));
       }
       increaseHeight.setAttribute("data-bc-add-height", "");
       increaseWidth.setAttribute("data-bc-add-width", "");
@@ -1168,11 +1170,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const height = widgetContainer.offsetHeight;
     if (sidebar) {
-      console.log('widgetContainer', widgetContainer)
       widgetContainer.setAttribute(
         "style",
-        `width:calc(100% - 330px);display: flex;justify-content: end;padding-inline-start:${Number(sidebar.getAttribute("gs-w")) *
-        ((this._page.cell * 12 - 330) / 12)
+        `width:calc(100% - 330px);display: flex;justify-content: end;padding-inline-start:${
+          Number(sidebar.getAttribute("gs-w")) *
+          ((this._page.cell * 12 - 330) / 12)
         }px;min-height:${height}px`
       );
     } else {
@@ -1240,7 +1242,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });
     const removewidgetUrl = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-      this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
+        this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
       {
         rKey: this.options.rKey,
       }
@@ -1248,22 +1250,22 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const widgets =
       this.selectedTag != "0"
         ? this.tags
-          .find((i) => i.moduleid == Number(this.selectedTag))
-          .widgets.filter((j) =>
-            this.disabledDashboardWidgetList.find(
-              (k) =>
-                k.moduleid == Number(this.selectedTag) &&
-                k.widgetid == j.widgetid
+            .find((i) => i.moduleid == Number(this.selectedTag))
+            .widgets.filter((j) =>
+              this.disabledDashboardWidgetList.find(
+                (k) =>
+                  k.moduleid == Number(this.selectedTag) &&
+                  k.widgetid == j.widgetid
+              )
             )
-          )
-          .map((i) => ({
-            widgetid: i.widgetid,
-            title: i.title,
-            icon: i.icon,
-            moduleid: this.tags.find(
-              (i) => i.moduleid == Number(this.selectedTag)
-            ).moduleid,
-          }))
+            .map((i) => ({
+              widgetid: i.widgetid,
+              title: i.title,
+              icon: i.icon,
+              moduleid: this.tags.find(
+                (i) => i.moduleid == Number(this.selectedTag)
+              ).moduleid,
+            }))
         : this.disabledDashboardWidgetList;
     widgets
       ?.filter((e) => e.title.includes(this.searchParam))
@@ -1370,7 +1372,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const url = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+        this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
       {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
@@ -1403,9 +1405,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.tabIndex = 1;
         parent.style.display = "flex";
         allWidget.style.display = "none";
-        activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft -
+        activeElement.style.transform = `translateX(-${
+          (allWidgetBtn as HTMLElement).offsetLeft -
           (e.target as HTMLElement).offsetLeft
-          }px)`;
+        }px)`;
         dashboardWidgetBtn.setAttribute("tab-button-status", "active");
         allWidgetBtn.removeAttribute("tab-button-status");
         this.fillDashboardWidgetList();
@@ -1420,6 +1423,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         dashboardWidgetBtn.removeAttribute("tab-button-status");
         this.fillListUI();
       });
-    } catch { }
+    } catch {}
   }
 }
