@@ -11,8 +11,7 @@ import WorkspaceComponent from "../workspace/WorkspaceComponent";
 
 export default abstract class PageComponent
   extends BasisPanelChildComponent
-  implements IPage
-{
+  implements IPage {
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
@@ -94,7 +93,6 @@ export default abstract class PageComponent
   }
 
   public async addingPageGroupsAsync(pageInfo: IPageInfo): Promise<void> {
-    console.log("here");
     const widgets: Array<number> = [];
     const pageBody = this.container.querySelector('[data-bc-page-body=""]');
     for (var i = 0; i < pageInfo.groups.length; i++) {
@@ -145,9 +143,8 @@ export default abstract class PageComponent
       (pageBody as HTMLElement).style.minHeight = `${this.cell * maxHeight}px`;
       pageBodyGroup.style.minHeight = `${this.cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.minHeight = `${
-        windowHeight - otherHeight
-      }px`;
+      (pageBody as HTMLElement).style.minHeight = `${windowHeight - otherHeight
+        }px`;
       pageBodyGroup.style.minHeight = `${windowHeight - otherHeight}px`;
     }
 

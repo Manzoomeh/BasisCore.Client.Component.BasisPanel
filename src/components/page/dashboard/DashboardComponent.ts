@@ -25,7 +25,6 @@ export default class DashboardComponent extends PageComponent {
     super.initializeAsync();
     const body = this.container.querySelector("[data-bc-page-body]");
     const nodes = Array.from(this.container.childNodes);
-    console.log("nodes :>> ", nodes);
     this.owner.processNodesAsync(nodes);
 
     // const wrapper = this.container;
@@ -34,7 +33,6 @@ export default class DashboardComponent extends PageComponent {
     // });
   }
   public addBannerToPage(group: IPageGroupInfo) {
-    console.log('group', group)
     const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
     this.info.groups.forEach((g) => {
       g.widgets.forEach((w) => {
@@ -42,7 +40,6 @@ export default class DashboardComponent extends PageComponent {
       });
     });
     this.info.groups.push(group)
-    // this.info.groups[0].widgets.push(group.widgets[0]);
   }
   public async runAsync(source?: ISource) {
     if (!this._groupsAdded) {
@@ -53,8 +50,8 @@ export default class DashboardComponent extends PageComponent {
       if (level == "business") {
         if (this._banner) {
           if (this.options.rKey == this._banner.rkey) {
-            if (this._banner.isOpen) {
-              console.log("this.info2 :>> ", this.info);
+            console.log('this._banner.closedWidgets', this._banner.closedWidgets)
+            if (this._banner.group.widgets.find(e => !this._banner.closedWidgets.includes(e.id))) {
               this.addBannerToPage(this._banner.group);
             }
           } else {
@@ -64,15 +61,14 @@ export default class DashboardComponent extends PageComponent {
             );
             const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
             if (res.eventID == this._banner.eventID) {
-              if (this._banner.isOpen) {
+              if (this._banner.group.widgets.find(e => !this._banner.closedWidgets.includes(e.id))) {
                 this.addBannerToPage(this._banner.group);
               }
             } else {
-              LocalStorageUtil.setLastBanner({
-                eventID: res.eventID,
-                rkey: this.options.rKey,
-                group: res.groups[0],
-              });
+              LocalStorageUtil.setLastBanner(this.options.rKey,
+                res.eventID,
+                res.groups[0]
+              );
               this.addBannerToPage(res.groups[0]);
             }
           }
@@ -82,17 +78,14 @@ export default class DashboardComponent extends PageComponent {
             { rKey: this.options.rKey }
           );
           const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
-          console.log("res :>> ", res);
 
-          LocalStorageUtil.setLastBanner({
-            eventID: res.eventID,
-            rkey: this.options.rKey,
-            group: res.groups[0],
-          });
+          LocalStorageUtil.setLastBanner(this.options.rKey, res.eventID,
+
+            res.groups[0],
+          );
           this.addBannerToPage(res.groups[0]);
         }
       }
-      console.log("this.infos :>> ", this.info);
       await this.addingPageGroupsAsync(this.info);
       this._groupsAdded = true;
     }

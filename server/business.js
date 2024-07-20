@@ -122,14 +122,14 @@ router.get("/:rKey/banner", function (req, res) {
         options: {},
         widgets: [
           {
-            id: "businessWidget1.html",
+            id: "businessWidget2.html",
             title: "بنر",
             name: "banner",
             isPrimary: true,
             x: 0,
             y: 0,
-            w: 10,
-            h: 9,
+            w: 12,
+            h: 4, isBanner: true,
             container: "widget",
           },
         ],

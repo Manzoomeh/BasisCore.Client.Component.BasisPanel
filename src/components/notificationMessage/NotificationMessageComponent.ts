@@ -10,8 +10,7 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
-  implements INotifiationMessage
-{
+  implements INotifiationMessage {
   public messageQueue = [];
   public defaultMessages;
   private messageActionCases = {
@@ -85,7 +84,7 @@ export default class NotificationMessageComponent
                 cached.values[i.id]["messages"][e.lid] = e.message;
               });
             }
-          } catch (e) {}
+          } catch (e) { }
         });
       }
       cachedObject["/"] = cached;
@@ -127,7 +126,7 @@ export default class NotificationMessageComponent
                 cached.values[i.id]["messages"][e.lid] = e.message;
               });
             }
-          } catch (e) {}
+          } catch (e) { }
         });
         cachedObject["/"] = cached;
         localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -176,7 +175,7 @@ export default class NotificationMessageComponent
                   cached.values[i.id]["messages"][e.lid] = e.message;
                 });
               }
-            } catch (e) {}
+            } catch (e) { }
           });
           cachedObject["/"] = cached;
           localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -205,8 +204,8 @@ export default class NotificationMessageComponent
     const ownerUrl = currentPage.ownerUrl;
     const currentModule =
       this.options.baseUrl.business == currentPage.ownerUrl ||
-      this.options.baseUrl.corporate == currentPage.ownerUrl ||
-      this.options.baseUrl.profile == currentPage.ownerUrl
+        this.options.baseUrl.corporate == currentPage.ownerUrl ||
+        this.options.baseUrl.profile == currentPage.ownerUrl
         ? "/"
         : ownerUrl;
     const { Message, Errorid, Lid, Type, templateValue } =
@@ -263,7 +262,7 @@ export default class NotificationMessageComponent
                     cached.values[i.id]["messages"][e.lid] = e.message;
                   });
                 }
-              } catch (e) {}
+              } catch (e) { }
             });
             cachedObject[currentModule] = cached;
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -297,7 +296,9 @@ export default class NotificationMessageComponent
     }
 
     if (message) {
+      console.log('message', message, templateValue)
       const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
+        console.log('first', templateValue, Object.keys(templateValue).find((e) => e == value))
         if (
           templateValue &&
           Object.keys(templateValue).find((e) => e == value)
@@ -307,6 +308,7 @@ export default class NotificationMessageComponent
           return "";
         }
       });
+      console.log('newText', newText)
       this.messageActionCases.get(type)(newText);
     }
   }
@@ -438,8 +440,8 @@ export default class NotificationMessageComponent
     const ownerUrl = currentPage.ownerUrl;
     const currentModule =
       this.options.baseUrl.business == currentPage.ownerUrl ||
-      this.options.baseUrl.corporate == currentPage.ownerUrl ||
-      this.options.baseUrl.profile == currentPage.ownerUrl
+        this.options.baseUrl.corporate == currentPage.ownerUrl ||
+        this.options.baseUrl.profile == currentPage.ownerUrl
         ? "/"
         : ownerUrl;
     try {
@@ -494,7 +496,7 @@ export default class NotificationMessageComponent
                   cached.values[i.id]["messages"][e.lid] = e.message;
                 });
               }
-            } catch (e) {}
+            } catch (e) { }
           });
           cachedObject[currentModule] = cached;
           localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -537,6 +539,7 @@ export default class NotificationMessageComponent
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
+    console.log('{ Errorid, Lid, Type, Message, templateValue }', { Errorid, Lid, Type, Message, templateValue })
     this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue });
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {

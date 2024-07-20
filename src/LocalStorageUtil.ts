@@ -133,9 +133,14 @@ export default class LocalStorageUtil {
   public static getLastBanner() {
     return LocalStorageUtil._lastBanner;
   }
-  public static setLastBanner({ rkey, eventID, group }) {
+  public static setClosedBanners(widgetId: number) {
+    this._lastBanner.closedWidgets.push(widgetId)
+    localStorage.setItem("banner", JSON.stringify(this._lastBanner));
+
+  }
+  public static setLastBanner(rkey: string, eventID: string, group, closedWidgets?) {
     this._lastBanner = {
-      isOpen: true,
+      closedWidgets: closedWidgets || [],
       eventID: eventID,
       rkey,
       group,
@@ -197,6 +202,6 @@ interface ICurrentMenu {
 interface IBannerInfo {
   rkey: string;
   eventID: string;
-  isOpen: boolean;
+  closedWidgets: number[];
   group: IPageGroupInfo;
 }
