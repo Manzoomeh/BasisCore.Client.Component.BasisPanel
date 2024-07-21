@@ -1,28 +1,30 @@
 {
-    "default": {
-        "groups": [
-            {
-                "groupName": "group1",
-                "options": {
-                    "repositories": {
-                        "bc.grid": "/assets/js/basiscore.grid.component.js"
-                    },
-                    "settings": {}
-                },
-                "widgets": [
-                    {
-                        "id": "corporateWidget1.html",
-                        "title": "ویجت داشبورد",
-                        "name": "corporateWidget1",
-                        "container": "widget",
-                        "x": 0,
-                        "y": 0,
-                        "w": 12,
-                        "h": 2
-                    }
-                ],
-                "deactiveWidgets": []
-            }
-        ]
-    }
+  "default": {
+    "container": "dashboard",
+
+    "groups": [
+      {
+        "groupName": "group1",
+        "options": {
+          "repositories": {
+            "bc.grid": "/assets/js/basiscore.grid.component.js"
+          },
+          "settings": {}
+        },
+        "widgets": [
+          {
+            "id": "corporateWidget1.html",
+            "title": "ویجت داشبورد",
+            "name": "corporateWidget1",
+            "container": "widget",
+            "x": 0,
+            "y": 0,
+            "w": 12,
+            "h": 2
+          }
+        ],
+        "deactiveWidgets": []
+      }
+    ]
+  }
 }

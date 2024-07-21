@@ -296,7 +296,9 @@ export default class NotificationMessageComponent
     }
 
     if (message) {
+      console.log('message', message, templateValue)
       const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
+        console.log('first', templateValue, Object.keys(templateValue).find((e) => e == value))
         if (
           templateValue &&
           Object.keys(templateValue).find((e) => e == value)
@@ -307,6 +309,7 @@ export default class NotificationMessageComponent
         }
       });
       this.messageActionCases.get(type)(newText, time);
+
     }
   }
   showInfoMessage(message: string, time?: number) {
@@ -587,6 +590,7 @@ export default class NotificationMessageComponent
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
     this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue, time });
+
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();

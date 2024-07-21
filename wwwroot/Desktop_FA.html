@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="assets/css/LineIcons.css" rel="stylesheet" />
+    <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
+    <!-- <link href="assets/css/styles-1.css" rel="stylesheet" /> -->
+    <link
+      href="http://localhost:8080/asset/css/styles-1.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://basispanel.ir/asset/css/icons.css?v=12"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+      body {
+        background: var(--light_blue);
+        font-size: 14px;
+        color: var(--vdark_gray);
+        font-weight: normal;
+        overflow-x: hidden;
+        direction: rtl;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <title></title>
-  <link href="assets/css/LineIcons.css" rel="stylesheet" />
-  <link href="assets/css/simple-line-icons.css" rel="stylesheet" />
-  <!-- <link href="assets/css/styles-1.css" rel="stylesheet" /> -->
-  <link href="http://localhost:8080/asset/css/styles-1.css" rel="stylesheet" />
-  <link href="https://basispanel.ir/asset/css/icons.css?v=12" rel="stylesheet" type="text/css" />
-  <style>
-    body {
-      background: var(--light_blue);
-      font-size: 14px;
-      color: var(--vdark_gray);
-      font-weight: normal;
-      overflow-x: hidden;
-      direction: rtl;
-    }
+      .tabWrapper .tabBtn {
+        text-transform: unset;
+      }
+    </style>
+  </head>
 
-    .tabWrapper .tabBtn {
-      text-transform: unset;
-    }
-  </style>
-</head>
-
-<body data-sys-container="">
-  <Basis core="component.basispanel.panel" run="atclient"></Basis>
-  <div class="clr"></div>
+  <body data-sys-container="">
+    <Basis core="component.basispanel.panel" run="atclient"></Basis>
+    <div class="clr"></div>
 
     <script>
       const host = {
@@ -39,6 +45,7 @@
             avatar: "https://trust-login.com",
             logo: "https://basispanel.ir",
             addWidgetUrl: "/server/widget-list/${rKey}/${pageId}",
+            bannerUrl: "/${rKey}/banner",
             baseUrl: {
               profile: "/server/trust",
               corporate: "/server/corporate",
@@ -57,11 +64,13 @@
               defaultTheme: "/server/trust/${rKey}/visualmode",
             },
             dashboardCustomizeMethod: {
-              dashboardReservedWidgets: "/${rKey}/dashboardreservedwidgets/${pageId}",
-              addtoDashboardReservedWidget: "/server/trust/${rKey}/addtodashboard",
+              dashboardReservedWidgets:
+                "/${rKey}/dashboardreservedwidgets/${pageId}",
+              addtoDashboardReservedWidget:
+                "/server/trust/${rKey}/addtodashboard",
 
-              removeDashboardReservedWidgets: "/server/trust/${rKey}/removetempwidget",
-
+              removeDashboardReservedWidgets:
+                "/server/trust/${rKey}/removetempwidget",
             },
             method: {
               reservedWidgets: "/server/widget-list/${rKey}/${pageId}",
@@ -104,7 +113,7 @@
                 widgetsSettingButton: "ذخیره تغییرات",
                 storeTitle: "فروشگاه",
 
-                widgetsHeaderTitle: 'ابزار های پایه',
+                widgetsHeaderTitle: "ابزار های پایه",
                 lightModeTitle: "",
                 darkModeTitle: "",
               },
@@ -231,6 +240,5 @@
     <!-- <script src="basiscore.js"></script> -->
     <script src="/basiscore.js"></script>
     <script src="/alasql.min.js"></script>
-</body>
-
+  </body>
 </html>

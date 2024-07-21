@@ -3,4 +3,5 @@ import IWidgetInfo from "./IWidgetInfo";
 
 export default interface IWidgetParam extends IWidgetInfo {
   page: IPageLoaderParam;
+  isBanner?: boolean
 }
