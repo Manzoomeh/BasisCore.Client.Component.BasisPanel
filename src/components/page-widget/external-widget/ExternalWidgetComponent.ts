@@ -3,7 +3,7 @@ import { IUserDefineComponent } from "basiscore";
 import MenuComponent from "../../menu/MenuComponent";
 import WidgetComponent from "../widget/WidgetComponent";
 
-export default class ApiWidgetComponent extends WidgetComponent {
+export default class ExternalWidgetComponent extends WidgetComponent {
     pageLoader: MenuComponent;
     constructor(owner: IUserDefineComponent) {
         super(owner);
@@ -11,7 +11,6 @@ export default class ApiWidgetComponent extends WidgetComponent {
 
 
     public async loadContentAsync(): Promise<string> {
-
         const url = this.param.url
         return await HttpUtil.fetchStringAsync(url, "GET");
     }

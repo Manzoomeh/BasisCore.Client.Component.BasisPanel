@@ -21,7 +21,7 @@ import ContainerComponent from "./components/page/container/ContainerComponent";
 import ThemeComponent from "./components/theme/ThemeComponent";
 import PageGroupComponent from "./components/page-group/PageGroupComponent";
 import WidgetListComponent from "./components/widget-list/WidgetListComponent";
-import ApiWidgetComponent from "./components/page-widget/api-widget/ApiWidgetComponent";
+import ExternalWidgetComponent from "./components/page-widget/external-widget/ExternalWidgetComponent";
 
 const panel = BasisPanelComponent;
 const profile = ProfileComponent;
@@ -32,7 +32,7 @@ const footer = FooterComponent;
 const menu = MenuComponent;
 const page = PageComponent;
 const widget = WidgetComponent;
-const apiWidget = ApiWidgetComponent;
+const externalWidget = ExternalWidgetComponent
 const sidebar = SidebarComponent;
 const fullPageWidget = FullPageWidgetComponent;
 const notification = NotificationComponent;
@@ -56,7 +56,8 @@ export {
   footer,
   menu,
   page,
-  widget, apiWidget,
+  widget,
+  externalWidget,
   message,
   sidebar,
   fullPageWidget,
