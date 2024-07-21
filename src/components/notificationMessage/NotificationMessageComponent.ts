@@ -6,19 +6,17 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
-import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
-  implements INotifiationMessage
-{
+  implements INotifiationMessage {
   public messageQueue = [];
   public defaultMessages;
   private messageActionCases = {
-    1: (message) => this.showSuccessMessage(message),
-    2: (message) => this.showErrorMessage(message),
-    3: (message) => this.showInfoMessage(message),
-    4: (message) => this.showDefaultMessage(message),
+    1: (message: string, time?: number) => this.showSuccessMessage(message, time),
+    2: (message: string, time?: number) => this.showErrorMessage(message, time),
+    3: (message: string, time?: number) => this.showInfoMessage(message, time),
+    4: (message: string, time?: number) => this.showDefaultMessage(message, time),
     get: function (key) {
       return this.hasOwnProperty(key) ? this[key] : this[4];
     },
@@ -85,7 +83,7 @@ export default class NotificationMessageComponent
                 cached.values[i.id]["messages"][e.lid] = e.message;
               });
             }
-          } catch (e) {}
+          } catch (e) { }
         });
       }
       cachedObject["/"] = cached;
@@ -127,7 +125,7 @@ export default class NotificationMessageComponent
                 cached.values[i.id]["messages"][e.lid] = e.message;
               });
             }
-          } catch (e) {}
+          } catch (e) { }
         });
         cachedObject["/"] = cached;
         localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -176,7 +174,7 @@ export default class NotificationMessageComponent
                   cached.values[i.id]["messages"][e.lid] = e.message;
                 });
               }
-            } catch (e) {}
+            } catch (e) { }
           });
           cachedObject["/"] = cached;
           localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -198,6 +196,7 @@ export default class NotificationMessageComponent
     }
   }
   private async showMessage() {
+    document.querySelector('[data-bc-notification-custom-css]')?.remove()
     const currentPage = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     ).p;
@@ -205,11 +204,11 @@ export default class NotificationMessageComponent
     const ownerUrl = currentPage.ownerUrl;
     const currentModule =
       this.options.baseUrl.business == currentPage.ownerUrl ||
-      this.options.baseUrl.corporate == currentPage.ownerUrl ||
-      this.options.baseUrl.profile == currentPage.ownerUrl
+        this.options.baseUrl.corporate == currentPage.ownerUrl ||
+        this.options.baseUrl.profile == currentPage.ownerUrl
         ? "/"
         : ownerUrl;
-    const { Message, Errorid, Lid, Type, templateValue } =
+    const { Message, Errorid, Lid, Type, templateValue, time } =
       this.messageQueue.shift();
     let message = Message;
     let type = Type;
@@ -263,7 +262,7 @@ export default class NotificationMessageComponent
                     cached.values[i.id]["messages"][e.lid] = e.message;
                   });
                 }
-              } catch (e) {}
+              } catch (e) { }
             });
             cachedObject[currentModule] = cached;
             localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -302,15 +301,15 @@ export default class NotificationMessageComponent
           templateValue &&
           Object.keys(templateValue).find((e) => e == value)
         ) {
-          return templateValue[value];
+          return `<strong>${templateValue[value]}</strong>`;
         } else {
           return "";
         }
       });
-      this.messageActionCases.get(type)(newText);
+      this.messageActionCases.get(type)(newText, time);
     }
   }
-  showInfoMessage(message: string) {
+  showInfoMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
@@ -321,7 +320,20 @@ export default class NotificationMessageComponent
     </div>
 </div><div class="progress info-progress"></div>`;
     const progress = document.querySelector(".progress");
+    if (time) {
+      const customcss = document.createElement('style')
+      customcss.setAttribute('data-bc-notification-custom-css', '')
+      const css = `[data-bc-bp-direction="rightToLeft"] .activeNotification:before {
+        animation: progressLeft ${time}s linear forwards;
+        }
+        [data-bc-bp-direction="leftToRight"] .activeNotification:before {
+          animation: progressRight ${time}s linear forwards;
+          }`
+      customcss.innerHTML = css
+      document.head.appendChild(customcss)
+    }
     progress.classList.add("activeNotification");
+
     container.setAttribute("data-bc-message-info", "");
     container.setAttribute("data-sys-message-fade-in", "");
     setTimeout(() => {
@@ -335,9 +347,9 @@ export default class NotificationMessageComponent
           this.showMessage();
         }
       }, 500);
-    }, 3000);
+    }, time ? time * 1000 : 3000);
   }
-  showSuccessMessage(message: string) {
+  showSuccessMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
@@ -351,7 +363,31 @@ export default class NotificationMessageComponent
     </div>
 </div><div class="progress success-progress"></div>`;
     const progress = document.querySelector(".progress");
+    if (time) {
+      const customcss = document.createElement('style')
+      customcss.setAttribute('data-bc-notification-custom-css', '')
+      const css = `[data-bc-bp-direction="rightToLeft"] .activeNotification:before {
+        animation: progressLeft ${time}s linear forwards;
+        }
+        [data-bc-bp-direction="leftToRight"] .activeNotification:before {
+          animation: progressRight ${time}s linear forwards;
+          }`
+      customcss.innerHTML = css
+      document.head.appendChild(customcss)
+    }
     progress.classList.add("activeNotification");
+    if (time) {
+      const customcss = document.createElement('style')
+      customcss.setAttribute('data-bc-notification-custom-css', '')
+      const css = `[data-bc-bp-direction="rightToLeft"] .activeNotification:before {
+        animation: progressLeft ${time}s linear forwards;
+        }
+        [data-bc-bp-direction="leftToRight"] .activeNotification:before {
+          animation: progressRight ${time}s linear forwards;
+          }`
+      customcss.innerHTML = css
+      document.head.appendChild(customcss)
+    }
     container.setAttribute("data-bc-message-success", "");
     container.setAttribute("data-sys-message-fade-in", "");
     setTimeout(() => {
@@ -365,9 +401,9 @@ export default class NotificationMessageComponent
           this.showMessage();
         }
       }, 500);
-    }, 3000);
+    }, time ? time * 1000 : 3000);
   }
-  showErrorMessage(message: string) {
+  showErrorMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
@@ -396,9 +432,9 @@ export default class NotificationMessageComponent
           this.showMessage();
         }
       }, 500);
-    }, 3000);
+    }, time ? time * 1000 : 3000);
   }
-  showDefaultMessage(message: string) {
+  showDefaultMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
@@ -415,6 +451,18 @@ export default class NotificationMessageComponent
 </div><div class="progress default-progress"></div>
     `;
     const progress = document.querySelector(".progress");
+    if (time) {
+      const customcss = document.createElement('style')
+      customcss.setAttribute('data-bc-notification-custom-css', '')
+      const css = `[data-bc-bp-direction="rightToLeft"] .activeNotification:before {
+        animation: progressLeft ${time}s linear forwards;
+        }
+        [data-bc-bp-direction="leftToRight"] .activeNotification:before {
+          animation: progressRight ${time}s linear forwards;
+          }`
+      customcss.innerHTML = css
+      document.head.appendChild(customcss)
+    }
     progress.classList.add("activeNotification");
     container.setAttribute("data-bc-message-default", "");
     setTimeout(() => {
@@ -428,7 +476,7 @@ export default class NotificationMessageComponent
           this.showMessage();
         }
       }, 500);
-    }, 3000);
+    }, time ? time * 1000 : 3000);
   }
   public async getMessageTypeByErrorId(errorid: number) {
     const currentPage = JSON.parse(
@@ -438,8 +486,8 @@ export default class NotificationMessageComponent
     const ownerUrl = currentPage.ownerUrl;
     const currentModule =
       this.options.baseUrl.business == currentPage.ownerUrl ||
-      this.options.baseUrl.corporate == currentPage.ownerUrl ||
-      this.options.baseUrl.profile == currentPage.ownerUrl
+        this.options.baseUrl.corporate == currentPage.ownerUrl ||
+        this.options.baseUrl.profile == currentPage.ownerUrl
         ? "/"
         : ownerUrl;
     try {
@@ -494,7 +542,7 @@ export default class NotificationMessageComponent
                   cached.values[i.id]["messages"][e.lid] = e.message;
                 });
               }
-            } catch (e) {}
+            } catch (e) { }
           });
           cachedObject[currentModule] = cached;
           localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
@@ -532,12 +580,13 @@ export default class NotificationMessageComponent
     Lid: number,
     Type?: number,
     Message?: string,
-    templateValue?: string
+    templateValue?: string,
+    time?: number
   ) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
       this.container.querySelector(".NotificationMessageMethodMobile");
-    this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue });
+    this.messageQueue.push({ Errorid, Lid, Type, Message, templateValue, time });
 
     if (!container.hasAttribute("data-sys-message-fade-in")) {
       this.showMessage();

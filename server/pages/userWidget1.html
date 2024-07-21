@@ -24,10 +24,7 @@
   </div>
 
   <div style="width: 300px; margin-block: 10px">
-    <button
-      id="btn-ajax"
-      onclick="click_notification_with_all_parameters(this)"
-    >
+    <button id="btn-ajax" onclick="click_notification_with_all_parameters(this)">
       show notification with all parameters
     </button>
   </div>
@@ -43,10 +40,7 @@
     </button>
   </div>
   <div style="width: 300px; margin-block: 10px">
-    <button
-      id="btn-ajax"
-      onclick="click_notification_with_template_2parameters(this)"
-    >
+    <button id="btn-ajax" onclick="click_notification_with_template_2parameters(this)">
       show notification with template and 2 parameters
     </button>
   </div>
@@ -57,13 +51,7 @@
   </div>
 </div>
 <form id="file-form" action="#">
-  <input
-    class="file-input"
-    type="file"
-    id="file-form"
-    name="file"
-    multiple="multiple"
-  />
+  <input class="file-input" type="file" id="file-form" name="file" multiple="multiple" />
   <i class="fas fa-cloud-upload-alt"></i>
   <p>Browse File to Upload</p>
 </form>
@@ -75,11 +63,7 @@
 <Basis core="component.grid.grid" run="atclient" dataMemberName="book.list" options="demo_grid_options" optionsUrl="/server/dbsource/grid-options.js">
 </Basis>
 <basis core="callback" run="atclient" triggers="sample.data"></basis> -->
-<basis
-  core="component.basiscore.exposer"
-  run="atclient"
-  component="pagesList_component"
-></basis>
+<basis core="component.basiscore.exposer" run="atclient" component="pagesList_component"></basis>
 <!-- <script src="/server/dbsource/grid-options.js"></script> -->
 <!-- <script>
   const demo_grid_options = {
@@ -132,7 +116,7 @@
     const message = pagesList_component.owner.dc.resolve("message");
     message.NotificationMessageMethod(8, 1, null, null, {
       param1: "منظومه نگاران",
-    });
+    }, 10);
   }
   function click_notification_external() {
     const message = pagesList_component.owner.dc.resolve("message");
