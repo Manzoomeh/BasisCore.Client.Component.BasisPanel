@@ -19,7 +19,17 @@ export default class WidgetComponent extends PageWidgetComponent {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-widget-container");
     this.pageLoader = this.owner.dc.resolve<MenuComponent>("page_loader");
   }
-
+  public async loadContentAsync(): Promise<string> {
+    const baseUrl = this.pageLoader.moduleMapper
+      .get(this.pageLoader.current.param.owner)
+      //@ts-ignore
+      ?.get(Number(this.param.moduleid))?.ownerUrl;
+    const url = HttpUtil.formatString(
+      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
+      { rKey: this.options.rKey, widgetId: this.param.id }
+    );
+    return await HttpUtil.fetchStringAsync(url, "GET");
+  }
   public async initializeAsync(): Promise<void> {
     let topPosition = 0;
     const hasSidebar = this.owner.node.getAttribute("has-sidebar");
@@ -110,21 +120,13 @@ export default class WidgetComponent extends PageWidgetComponent {
     // }
 
     this.title = this.param.title;
-    const baseUrl = this.pageLoader.moduleMapper
-      .get(this.pageLoader.current.param.owner)
-      //@ts-ignore
-      ?.get(Number(this.param.moduleid))?.ownerUrl;
-    const url = HttpUtil.formatString(
-      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
-      { rKey: this.options.rKey, widgetId: this.param.id }
-    );
 
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        var content = await HttpUtil.fetchStringAsync(url, "GET");
+        var content = await this.loadContentAsync()
         const range = new Range();
         range.setStart(container, 0);
         range.setEnd(container, 0);

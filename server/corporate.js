@@ -101,6 +101,9 @@ router.get("/:rKey/page/:pageId", function (req, res) {
   );
   res.json(Reflect.get(JSON.parse(widgetList), req.params.pageId));
 });
+router.get("/externalWidget", function (req, res) {
+  res.send('<div>html loaded from api</div>')
+});
 
 router.get("/:rKey/widget/:widgetId", function (req, res) {
   const widgetList = fs.readFileSync(
