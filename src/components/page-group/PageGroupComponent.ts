@@ -10,7 +10,7 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
     super(owner, layout, layout, "data-bc-bp-group-container");
     this.Name = owner.node.getAttribute("name");
   }
-  
+
   public async initializeAsync(): Promise<void> {
     var optionsName = this.owner.node.getAttribute("options");
     const groupElement = this.container.querySelector("basis");
@@ -23,14 +23,14 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
     this._group = commandCollection.GetCommandListByCore("group")[0];
   }
 
-  public runAsync(_?: ISource) {}
+  public runAsync(_?: ISource) { }
 
   public async addWidgetAsync(
     ...widgetParamList: IWidgetParam[]
-    
+
   ): Promise<void> {
     const elementList = new Array<Node>();
-    widgetParamList.forEach((widgetParam) => { 
+    widgetParamList.forEach((widgetParam) => {
       const widgetElement = document.createElement("basis");
       widgetElement.setAttribute(
         "core",
@@ -45,7 +45,7 @@ export default class PageGroupComponent extends BasisPanelChildComponent {
       widgetElement.setAttribute("options", optionsName);
       this.container.appendChild(widgetElement);
       elementList.push(widgetElement);
-    }); 
+    });
     await this._group.processNodesAsync(elementList);
   }
 }
