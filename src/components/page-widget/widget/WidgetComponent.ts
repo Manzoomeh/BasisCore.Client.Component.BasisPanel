@@ -19,7 +19,17 @@ export default class WidgetComponent extends PageWidgetComponent {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-widget-container");
     this.pageLoader = this.owner.dc.resolve<MenuComponent>("page_loader");
   }
-
+  public async loadContentAsync(): Promise<string> {
+    const baseUrl = this.pageLoader.moduleMapper
+      .get(this.pageLoader.current.param.owner)
+      //@ts-ignore
+      ?.get(Number(this.param.moduleid))?.ownerUrl;
+    const url = HttpUtil.formatString(
+      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
+      { rKey: this.options.rKey, widgetId: this.param.id }
+    );
+    return await HttpUtil.fetchStringAsync(url, "GET");
+  }
   public async initializeAsync(): Promise<void> {
     let topPosition = 0;
     const hasSidebar = this.owner.node.getAttribute("has-sidebar");
@@ -55,6 +65,7 @@ export default class WidgetComponent extends PageWidgetComponent {
             w: this.param.w,
             h: this.param.h,
           });
+
           widgetList.fillListUI();
         } else {
           widgetList.disabledDashboardWidgetList.push({
@@ -76,16 +87,20 @@ export default class WidgetComponent extends PageWidgetComponent {
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
-    const page = this.owner.dc.resolve<PageComponent>('page')
+    const page = this.owner.dc.resolve<PageComponent>("page");
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
-    let cell
-    if (page.widgetCell == null) { page.widgetCell = parent.offsetWidth / 12; cell = parent.offsetWidth / 12 } else {
-      cell = page.widgetCell
+    let cell;
+    if (page.widgetCell == null) {
+      page.widgetCell = parent.offsetWidth / 12;
+      cell = parent.offsetWidth / 12;
+    } else {
+      cell = page.widgetCell;
     }
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
 
-    (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
-      }px`;
+    (this.container as HTMLElement).style.top = `${
+      this.param.y * cell + (parent.clientTop + topPosition)
+    }px`;
 
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
@@ -105,21 +120,13 @@ export default class WidgetComponent extends PageWidgetComponent {
     // }
 
     this.title = this.param.title;
-    const baseUrl = this.pageLoader.moduleMapper
-      .get(this.pageLoader.current.param.owner)
-      //@ts-ignore
-      ?.get(Number(this.param.moduleid))?.ownerUrl;
-    const url = HttpUtil.formatString(
-      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
-      { rKey: this.options.rKey, widgetId: this.param.id }
-    );
 
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        var content = await HttpUtil.fetchStringAsync(url, "GET");
+        var content = await this.loadContentAsync()
         const range = new Range();
         range.setStart(container, 0);
         range.setEnd(container, 0);
@@ -203,7 +210,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     };
     const url = HttpUtil.formatString(
       this.options.baseUrl[this.pageLoader.current.param.owner] +
-      this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
+        this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
       {
         rKey: this.options.rKey,
       }
