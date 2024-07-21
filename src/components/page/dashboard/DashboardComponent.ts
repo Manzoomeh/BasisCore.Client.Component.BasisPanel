@@ -8,6 +8,7 @@ import { IUserDefineComponent, ISource } from "basiscore";
 import HttpUtil from "../../../HttpUtil";
 import IPageInfo from "../IPageInfo";
 import { PageType } from "../PageType";
+import WorkspaceComponent from "../../workspace/WorkspaceComponent";
 
 export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;
@@ -19,19 +20,8 @@ export default class DashboardComponent extends PageComponent {
   }
 
   public async initializeAsync(): Promise<void> {
-    this.loaderParam = JSON.parse(
-      await this.owner.getAttributeValueAsync("params")
-    );
-    const url = HttpUtil.formatString(
-      `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
-      this.loaderParam
-    );
+    super.initializeAsync()
 
-    this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
-      url,
-      "GET",
-      this.options.checkRkey
-    );
     const body = this.container.querySelector("[data-bc-page-body]");
     const nodes = Array.from(this.container.childNodes);
     this.owner.processNodesAsync(nodes);

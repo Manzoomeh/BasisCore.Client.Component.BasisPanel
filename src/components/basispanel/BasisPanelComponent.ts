@@ -113,7 +113,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
         openMenu.forEach((x) => {
           const openMenu = x as HTMLElement;
-          openMenu.style.transform = ` scaleY(0)`;
+          openMenu.style.maxHeight = ` 0px`;
           openMenu.previousElementSibling.removeAttribute("data-bc-level-open");
           openMenu.removeAttribute("data-bc-ul-level-open");
         });

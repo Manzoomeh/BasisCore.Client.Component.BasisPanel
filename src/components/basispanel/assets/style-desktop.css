@@ -33,7 +33,7 @@
 
 [data-bc-bp-d1-logo] {
   /* float: left; */
-  margin-top: 8px;
+  margin-top: 4px;
   /* margin-left: 15px; */
 }
 
@@ -49,12 +49,12 @@
 
 [data-bc-bp-d1-logo] a {
   display: block;
-  width: 140px;
+  width: 146px;
   height: 32px;
-  background-image: url("basispanel_light.jpg");
+  background-image: url("basispanel-logo.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 [data-bc-bp-d1-header-items] {

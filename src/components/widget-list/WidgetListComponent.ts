@@ -313,16 +313,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "src",
             widget.icon
               ? widget.icon
-              : `data:image/svg+xml;utf8,<svg width="116" height="70" viewBox="0 0 116 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="116" height="70" rx="5" fill="#E4E7F4"/>
-<mask id="mask0_12273_103335" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="116" height="70">
-<rect width="116" height="70" rx="5" fill="#E4E7F4"/>
-</mask>
-<g mask="url(#mask0_12273_103335)">
-<path d="M112.749 26.3801L121.932 40.721L107.591 49.9042L98.4076 35.5633L112.749 26.3801ZM79.9424 21.3886L76.2583 38.1915L59.4553 34.5074L63.1394 17.7045L79.9424 21.3886ZM112.739 72.6062L109.055 89.4091L92.2524 85.725L95.9365 68.9221L112.739 72.6062ZM115.327 14.618L86.2255 32.8923L104.92 62.0863L89.3771 58.6786L82.0089 92.2844L115.615 99.6526L122.983 66.0468L104.92 62.0863L133.694 43.2999L115.327 14.618ZM90.1859 14.8292L56.58 7.46096L49.2118 41.0668L82.8177 48.435L90.1859 14.8292ZM70.7321 63.3959L67.048 80.1989L50.2451 76.5148L53.9292 59.7118L70.7321 63.3959ZM80.9756 56.8365L47.3698 49.4683L40.0016 83.0742L73.6074 90.4424L80.9756 56.8365Z" fill="#004B85" fill-opacity="0.15"/>
-<path d="M61.7 27.8L64.5 30.6L61.7 33.4L58.9 30.6L61.7 27.8ZM54 28.3V32.3H50V28.3H54ZM64 38.3V42.3H60V38.3H64ZM61.7 25L56 30.6L61.7 36.3H58V44.3H66V36.3H61.7L67.3 30.6L61.7 25ZM56 26.3H48V34.3H56V26.3ZM54 38.3V42.3H50V38.3H54ZM56 36.3H48V44.3H56V36.3Z" fill="#004B85"/>
-</g>
-</svg>
+              : `data:image/svg+xml,%3Csvg%20width%3D%22116%22%20height%3D%2270%22%20viewBox%3D%220%200%20116%2070%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3Cmask%20id%3D%22mask0_12273_103335%22%20style%3D%22mask-type%3Aalpha%22%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22116%22%20height%3D%2270%22%3E%0A%3Crect%20width%3D%22116%22%20height%3D%2270%22%20rx%3D%225%22%20fill%3D%22%23E4E7F4%22%2F%3E%0A%3C%2Fmask%3E%0A%3Cg%20mask%3D%22url%28%23mask0_12273_103335%29%22%3E%0A%3Cpath%20d%3D%22M112.749%2026.3801L121.932%2040.721L107.591%2049.9042L98.4076%2035.5633L112.749%2026.3801ZM79.9424%2021.3886L76.2583%2038.1915L59.4553%2034.5074L63.1394%2017.7045L79.9424%2021.3886ZM112.739%2072.6062L109.055%2089.4091L92.2524%2085.725L95.9365%2068.9221L112.739%2072.6062ZM115.327%2014.618L86.2255%2032.8923L104.92%2062.0863L89.3771%2058.6786L82.0089%2092.2844L115.615%2099.6526L122.983%2066.0468L104.92%2062.0863L133.694%2043.2999L115.327%2014.618ZM90.1859%2014.8292L56.58%207.46096L49.2118%2041.0668L82.8177%2048.435L90.1859%2014.8292ZM70.7321%2063.3959L67.048%2080.1989L50.2451%2076.5148L53.9292%2059.7118L70.7321%2063.3959ZM80.9756%2056.8365L47.3698%2049.4683L40.0016%2083.0742L73.6074%2090.4424L80.9756%2056.8365Z%22%20fill%3D%22%23004B85%22%20fill-opacity%3D%220.15%22%2F%3E%0A%3Cpath%20d%3D%22M61.7%2027.8L64.5%2030.6L61.7%2033.4L58.9%2030.6L61.7%2027.8ZM54%2028.3V32.3H50V28.3H54ZM64%2038.3V42.3H60V38.3H64ZM61.7%2025L56%2030.6L61.7%2036.3H58V44.3H66V36.3H61.7L67.3%2030.6L61.7%2025ZM56%2026.3H48V34.3H56V26.3ZM54%2038.3V42.3H50V38.3H54ZM56%2036.3H48V44.3H56V36.3Z%22%20fill%3D%22%23004B85%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A
+
 `
           );
           container.appendChild(widgetIcon);
@@ -579,6 +571,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             )
           )
         ) {
+          console.log('event', event)
           event.originalSource.setAttribute(
             "gs-w",
             event.source.getAttribute("gs-w")
@@ -617,7 +610,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             this.disabledDashboardWidgetList.filter((e) => {
               return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
             });
-
+          console.log('event', event, event.originalSource)
           event.originalSource.setAttribute(
             "gs-w",
             widgetData?.w?.toString() || "3"
@@ -942,23 +935,26 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     if (this.currentResizeHandle) {
       const pageBody = document.querySelector('[data-bc-page-body=""]');
-      const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
+      const sidebar: HTMLElement = document.querySelector("[data-bc-bp-sidebar-container]");
 
-      let cell = (pageBody as HTMLElement).offsetWidth / 12;
+      let cell = sidebar ? (document.querySelector('[primarycontainer]') as HTMLElement).offsetWidth / 12 : (pageBody as HTMLElement).offsetWidth / 12;
 
       switch (this.type) {
         case "width":
         case "widthRight":
           const width = this.currentResizeHandle.offsetWidth;
-
+          console.log('first', cell, width, Math.floor(width / cell) > 12, Math.floor(width / cell) > 12 ? '12' : String(Math.floor(width / cell)))
           this.currentResizeHandle.setAttribute(
             "gs-w",
-            sidebar
-              ? Math.floor(width / cell) + 1 >
-                12 - Number(sidebar.getAttribute("gs-w"))
-                ? String(12 - Number(sidebar.getAttribute("gs-w")))
-                : String(Math.floor(width / cell) + 1)
-              : String(Math.floor(width / cell) + 1)
+            // sidebar
+            //   ? Math.floor(width / cell) + 1 >
+            //     12 - Number(sidebar.getAttribute("gs-w"))
+            //     ? String(12 - Number(sidebar.getAttribute("gs-w")))
+            //     : String(Math.floor(width / cell) + 1)
+            //   : String(Math.floor(width / cell) + 1)
+
+            Math.floor(width / cell) > 12 ? '12' : sidebar ? String(Math.ceil(width / cell)) : String(Math.floor(width / cell) + 1)
+
           );
           this.currentResizeHandle.style.width = null;
           break;
@@ -1012,6 +1008,10 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       el.addEventListener("mouseleave", this.onMouseLeave);
       el.setAttribute("style", "");
     });
+    document.querySelectorAll('[data-bc-widget-btn-add-dashboard]').forEach(el => {
+      el.addEventListener("mouseenter", this.onMouseEnter);
+      el.addEventListener("mouseleave", this.onMouseLeave);
+    })
     const dashboardBtn = this.container.querySelector(
       ".tabWrapperForWidgets"
     ) as HTMLElement;
@@ -1064,7 +1064,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       const increaseWidth = document.createElement("div");
       const increaseHeightTop = document.createElement("div");
       const increaseWidthRight = document.createElement("div");
-
+      if (sidebar) {
+        e.setAttribute('gs-w', String(Number(e.getAttribute('gs-w')) + 2))
+      }
       increaseHeight.setAttribute("data-bc-add-height", "");
       increaseWidth.setAttribute("data-bc-add-width", "");
       increaseHeightTop.setAttribute("data-bc-add-height-top", "");
@@ -1166,16 +1168,17 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const height = widgetContainer.offsetHeight;
     if (sidebar) {
+      console.log('widgetContainer', widgetContainer)
       widgetContainer.setAttribute(
         "style",
-        `width:calc(100% - 330px);display: flex;justify-content: end;padding-start:${Number(sidebar.getAttribute("gs-w")) *
+        `width:calc(100% - 330px);display: flex;justify-content: end;padding-inline-start:${Number(sidebar.getAttribute("gs-w")) *
         ((this._page.cell * 12 - 330) / 12)
         }px;min-height:${height}px`
       );
     } else {
       widgetContainer.setAttribute(
         "style",
-        "width:calc(100% - 330px);min-height:${height}px"
+        `width:calc(100% - 330px);min-height:${height}px`
       );
     }
     this.enableDragDrop();
