@@ -37,19 +37,27 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     closeBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
-      e.preventDefault(); if (this.param.isBanner) {
-        LocalStorageUtil.setClosedBanners(this.param.id)
+      e.preventDefault();
+      if (this.param.isBanner) {
+        LocalStorageUtil.setClosedBanners(this.param.id);
         const page = this.owner.dc.resolve("page") as any;
 
         page.container
-          .querySelector('[data-bc-bp-group-container="d1"]')
-          .remove();
-        console.log('page.info.groups.forEach(g => g.widgets = g.widgets.filter(w => w.id != this.param.id))', page.info.groups.forEach(g => g.widgets = g.widgets.filter(w => w.id != this.param.id)))
-        page.addingPageGroupsAsync(page.info.groups.forEach(g => { g.widgets = g.widgets.filter(w => w.id != this.param.id) }));
-
+          .querySelectorAll('[data-bc-bp-group-container="d1"]')
+          .forEach((element) => {
+            element.remove();
+          });
+        page.initializeAsync();
+        page.info.groups.map((g, i) => {
+          page.info.groups[i].widgets = page.info.groups[i].widgets.filter(
+            (w) => {
+              return w.id != this.param.id;
+            }
+          );
+        });
+        page.groups = JSON.parse(JSON.stringify(page.info));
+        page.addingPageGroupsAsync(page.groups);
       } else {
-
-
         const disableWidgets = document.querySelector(
           "[data-bc-page-widget-disableList]"
         );
@@ -87,23 +95,26 @@ export default class WidgetComponent extends PageWidgetComponent {
       }
     });
     if (!this.param.isBanner) {
-
       closeBtn.setAttribute("style", "display:none !important");
     }
     this.container.setAttribute("gs-x", this.param.x.toString());
     this.container.setAttribute("gs-y", this.param.y.toString());
     this.container.setAttribute("gs-w", this.param.w.toString());
     this.container.setAttribute("gs-h", this.param.h.toString());
-    const page = this.owner.dc.resolve<PageComponent>('page')
+    const page = this.owner.dc.resolve<PageComponent>("page");
     const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
-    let cell
-    if (page.widgetCell == null) { page.widgetCell = parent.offsetWidth / 12; cell = parent.offsetWidth / 12 } else {
-      cell = page.widgetCell
+    let cell;
+    if (page.widgetCell == null) {
+      page.widgetCell = parent.offsetWidth / 12;
+      cell = parent.offsetWidth / 12;
+    } else {
+      cell = page.widgetCell;
     }
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
 
-    (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
-      }px`;
+    (this.container as HTMLElement).style.top = `${
+      this.param.y * cell + (parent.clientTop + topPosition)
+    }px`;
 
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
@@ -124,7 +135,7 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     this.title = this.param.title;
     const baseUrl = this.pageLoader.moduleMapper
-      .get(this.pageLoader.current.param.owner)
+      .get(this.pageLoader.current?.param.owner)
       //@ts-ignore
       ?.get(Number(this.param.moduleid))?.ownerUrl;
     const url = HttpUtil.formatString(
@@ -221,7 +232,7 @@ export default class WidgetComponent extends PageWidgetComponent {
     };
     const url = HttpUtil.formatString(
       this.options.baseUrl[this.pageLoader.current.param.owner] +
-      this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
+        this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
       {
         rKey: this.options.rKey,
       }
