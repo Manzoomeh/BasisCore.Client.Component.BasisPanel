@@ -37,6 +37,7 @@ export default abstract class PageComponent
     this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
       "[data-bc-widget-drop-area-container]"
     );
+    console.log("this :>> ", this);
   }
 
   public async initializeAsync(): Promise<void> {
