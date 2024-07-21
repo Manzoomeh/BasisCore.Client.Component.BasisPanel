@@ -25,6 +25,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private widgetList: IWidgetListItemInfo[];
   public disabledWidgetList: IWidgetListItemInfo[] = [];
   public externalWidgetList: IWidgetListItemInfo[] = [];
+  public disabledExternalWidgetList: IWidgetListItemInfo[] = [];
 
   public disabledDashboardWidgetList: IDashboardWidgetData[] = [];
   private sortable: Sortable = null;
@@ -57,6 +58,15 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("widgetList", this);
+    const modal = document.getElementById('addExternalWidget')
+    modal.querySelector('[data-save-external-widget-btn]')?.addEventListener('click', () => {
+      this.addExternalWidgetToDashboard()
+    })
+    modal.querySelectorAll('.modalBackground, .closeIcon').forEach(el => {
+      el.addEventListener('click', () => {
+        modal.style.display = 'none'
+      })
+    })
     this.onMouseEnter = (e) => {
       if (!this.isDragging) {
         (e.target as HTMLElement)
@@ -149,7 +159,39 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       e.preventDefault()
     );
   }
+  private async addExternalWidgetToDashboard(): Promise<void> {
+    const title = document.querySelector<HTMLInputElement>('[data-bc-title-input]').value
+    const widgetUrl = document.querySelector<HTMLInputElement>('[data-bc-url-input]').value
+    if (title && widgetUrl) {
 
+      const apiInputs = {
+        externalWidget: true,
+        title,
+        url: widgetUrl
+      };
+      const url = HttpUtil.formatString(
+        this.options.baseUrl[this.pageLoader.current.param.owner] +
+        this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
+        {
+          rKey: this.options.rKey,
+        }
+      );
+      try {
+        let res: any = await HttpUtil.fetchStringAsync(url, "POST", apiInputs);
+        res = JSON.parse(res);
+        const message =
+          this.owner.dc.resolve<NotificationMessageComponent>("message");
+        message.NotificationMessageMethod(
+          res.errorid,
+          Number(this.options.lid) || 1
+        );
+        document.getElementById('addExternalWidget').style.display = ''
+        this.fillExternalWidgetsAsync()
+
+      } catch (e) { }
+
+    }
+  }
   private async saveWidgets(): Promise<void> {
     const widgets = document.querySelectorAll("[data-bc-bp-widget-container]");
     const data = { data: [] };
@@ -159,7 +201,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const allWidgets = [];
     const sidebar = document.querySelector("[data-bc-bp-sidebar-container]");
     this._page.info.groups.map((g) => g.widgets.map((w) => allWidgets.push(w)));
-    console.log('this._page', this._page)
     widgets.forEach((e: HTMLElement) => {
       const widgetData: any = {};
       widgetData["widgetid"] = e.getAttribute("id");
@@ -295,7 +336,13 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   }
 
   public runAsync(source?: ISource) { }
-
+  public showAddExternalWidgetsModal() {
+    const modal = document.getElementById('addExternalWidget')
+    modal.style.display = 'block'
+    modal.querySelectorAll('input').forEach(el => {
+      el.value = ""
+    })
+  }
   private async fillWidgetListAsync(): Promise<void> {
     const url = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets,
@@ -318,13 +365,13 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     addButton.setAttribute('data-bc-add-external-widget', '')
     addButton.innerHTML = this.labels.addExternalWidget
     addButton.addEventListener('click', () => {
-
+      this.showAddExternalWidgetsModal()
     })
     const externalWidgetsWrapper = document.querySelector('[data-bc-page-external-widget-wrapper]')
     externalWidgetsWrapper.innerHTML = ''
 
     externalWidgetsWrapper.appendChild(addButton)
-    this.externalWidgetList
+    this.disabledExternalWidgetList
       .filter((e) => e.title.includes(this.searchParam))
       .forEach((widget) => {
         const widgetElement = document.createElement("div");
@@ -360,17 +407,17 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const url = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+      this.options.dashboardCustomizeMethod.externalReservedWidgets,
       {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
       }
     );
-    console.log('url', url)
     try {
       const data = await HttpUtil.fetchStringAsync(url, "GET");
       if (JSON.parse(data).length) {
         this.externalWidgetList = JSON.parse(data)
+        this.disabledExternalWidgetList = JSON.parse(data)
       }
       this.fillExternalWidgetsUI()
     } catch (error) {
@@ -485,7 +532,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           ) as HTMLElement,
           document.querySelector(
             "[data-bc-page-dashboard-widget-wrapper]"
-          ) as HTMLElement,
+          ) as HTMLElement, document.querySelector(
+            "[data-bc-page-external-widget-wrapper]"
+          ) as HTMLElement
         ],
         {
           draggable:
@@ -581,15 +630,29 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           (event.source.attributes.getNamedItem("pallete-widget-element") ||
             event.source.attributes.getNamedItem(
               "data-bc-page-widget-dashboard"
-            ))
+            ) || event.source.attributes.getNamedItem("external-widget-element"))
         ) {
-          let widgetData: any = this.widgetList.find(
-            (e) => String(e.widgetid) === event.source.getAttribute("id")
-          );
-          if (!widgetData) {
-            widgetData = this.dashboardWidgetList.find(
+          let widgetData: any
+          if (event.source.attributes.getNamedItem("pallete-widget-element")) {
+            widgetData = this.widgetList.find(
               (e) => String(e.widgetid) === event.source.getAttribute("id")
             );
+          }
+
+
+          if (event.source.attributes.getNamedItem(
+            "data-bc-page-widget-dashboard"
+          )) {
+            widgetData = this.disabledDashboardWidgetList.find(
+              (e) =>
+                String(e.widgetid) === event.source.getAttribute("id") &&
+                String(e.moduleid) === event.source.getAttribute("moduleid")
+            );
+          }
+          if (event.source.attributes.getNamedItem(
+            "external-widget-element"
+          )) {
+            widgetData = this.externalWidgetList.find(w => String(w.widgetid) == event.source.getAttribute("id"))
           }
           event.source.setAttribute("gs-w", widgetData?.w?.toString() || "3");
           event.source.setAttribute("gs-h", widgetData?.h?.toString() || "3");
@@ -616,7 +679,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           }
         }
       });
-      this.sortable.on("drag:over", (ev) => { });
       this.sortable.on("drag:stop", (event) => {
         this.isDragging = false;
 
@@ -651,6 +713,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             event.source.attributes.getNamedItem("pallete-widget-element") ||
             event.source.attributes.getNamedItem(
               "data-bc-page-widget-dashboard"
+            ) || event.source.attributes.getNamedItem(
+              "external-widget-element"
             )
           )
         ) {
@@ -670,28 +734,48 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           (event.source.attributes.getNamedItem("pallete-widget-element") ||
             event.source.attributes.getNamedItem(
               "data-bc-page-widget-dashboard"
+            ) ||
+            event.source.attributes.getNamedItem(
+              "external-widget-element"
             )) &&
           !event.sourceContainer.getAttribute("data-bc-bp-group-container")
         ) {
-          let widgetData: any = this.widgetList.find(
-            (e) => String(e.widgetid) === event.source.getAttribute("id")
-          );
-          if (!widgetData) {
+          let widgetData: any
+          if (event.source.attributes.getNamedItem("pallete-widget-element")) {
+            widgetData = this.widgetList.find(
+              (e) => String(e.widgetid) === event.source.getAttribute("id")
+            );
+            this.disabledWidgetList = this.disabledWidgetList.filter(
+              (e) => e.widgetid != widgetData.widgetid
+            );
+          }
+
+
+          if (event.source.attributes.getNamedItem(
+            "data-bc-page-widget-dashboard"
+          )) {
             widgetData = this.disabledDashboardWidgetList.find(
               (e) =>
                 String(e.widgetid) === event.source.getAttribute("id") &&
                 String(e.moduleid) === event.source.getAttribute("moduleid")
             );
+            this.disabledDashboardWidgetList =
+              this.disabledDashboardWidgetList.filter((e) => {
+                return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
+              });
+          }
+          if (event.source.attributes.getNamedItem(
+            "external-widget-element"
+          )) {
+            widgetData = this.externalWidgetList.find(w => String(w.widgetid) == event.source.getAttribute("id"))
+            this.disabledExternalWidgetList =
+              this.disabledExternalWidgetList.filter((e) => {
+                return Number(e.widgetid) != Number(widgetData.widgetid)
+              });
           }
 
-          this.disabledWidgetList = this.disabledWidgetList.filter(
-            (e) => e.widgetid != widgetData.widgetid
-          );
 
-          this.disabledDashboardWidgetList =
-            this.disabledDashboardWidgetList.filter((e) => {
-              return Number(e.widgetid) != Number(widgetData.widgetid) || Number(e.moduleid) != Number(widgetData.moduleid)
-            });
+
 
           event.originalSource.setAttribute(
             "gs-w",
@@ -749,21 +833,13 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
               event.stopPropagation();
               event.preventDefault();
               if (
-                !(
+                (
                   event.target as HTMLElement
                 ).parentElement.attributes.getNamedItem(
                   "data-bc-page-widget-dashboard"
                 )
               ) {
-                const data = this.widgetList.find(
-                  (e) =>
-                    String(e.widgetid) ==
-                    (event.target as HTMLElement).parentElement.id
-                );
-                this.disabledWidgetList.push(data);
 
-                this.fillListUI();
-              } else {
                 const data = this.dashboardWidgetList.find(
                   (e) =>
                     String(e.widgetid) ==
@@ -776,6 +852,33 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
                 this.disabledDashboardWidgetList.push(data);
                 this.fillDashboardWidgetList();
+              } else {
+                if ((
+                  event.target as HTMLElement
+                ).parentElement.attributes.getNamedItem(
+                  "pallete-widget-element"
+                )) {
+                  const data = this.widgetList.find(
+                    (e) =>
+                      String(e.widgetid) ==
+                      (event.target as HTMLElement).parentElement.id
+                  );
+                  this.disabledWidgetList.push(data);
+
+                  this.fillListUI();
+
+                } else {
+
+                  const data = this.externalWidgetList.find(
+                    (e) =>
+                      String(e.widgetid) ==
+                      (event.target as HTMLElement).parentElement.id
+                  );
+                  this.disabledExternalWidgetList.push(data);
+
+                  this.fillExternalWidgetsUI();
+
+                }
               }
 
               (event.target as HTMLElement)
@@ -1496,7 +1599,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         parent.style.display = "flex";
         externalWidgetsWrapper.style.display = "none";
         allWidget.style.display = "none";
-        console.log('(allWidget as HTMLElement).offsetWidth', (allWidgetBtn as HTMLElement).offsetWidth)
         activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetWidth
           }px)`;
         dashboardWidgetBtn.setAttribute("tab-button-status", "active");
@@ -1518,7 +1620,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.fillListUI();
       });
       ExternalWidgetBtn.addEventListener("click", (e) => {
-        console.log('ExternalWidgetBtn as HTMLElement).offsetLeft ', (ExternalWidgetBtn as HTMLElement).offsetLeft)
         this.tabIndex = 2;
         externalWidgetsWrapper.style.display = "flex";
         activeElement.style.transform = `translateX(-${((allWidgetBtn as HTMLElement).offsetWidth + (dashboardWidgetBtn as HTMLElement).offsetWidth)}px)`;

@@ -136,7 +136,47 @@ router.get("/:rKey/widget/:widgetId", function (req, res) {
   );
   res.send(widgetList);
 });
+router.get("/external-widget-list/:rKey/:pageId", function (req, res) {
 
+  res.send([
+    { "title": "test1", "widgetid": 10, "url": "test1" },
+    { "title": "test2", "widgetid": 20, "url": "test2" },
+
+  ]
+  );
+});
+router.get("/:rKey/dashboardreservedwidgets/:pageId", function (req, res) {
+
+  res.send([
+    {
+      "title": "basiscore",
+      "moduleid": 2,
+      "widgets": [
+        {
+          "title": "\u0645\u062f\u06cc\u0631\u06cc\u062a \u06a9\u0627\u0631\u0628\u0631\u0627\u0646",
+          "widgetid": 20
+        }
+      ]
+    }
+  ]
+  );
+});
+router.get("/widget-list/:rKey/:pageId", function (req, res) {
+
+  res.send([
+    {
+      "title": "basiscore",
+      "moduleid": 1,
+      "widgets": [
+        {
+          "title": "\u0645\u062f\u06cc\u0631\u06cc\u062a \u06a9\u0627\u0631\u0628\u0631\u0627\u0646",
+          "widgetid": 10
+        }
+      ]
+    }
+  ]
+  );
+});
 router.get("/getDmnToken", function (req, res) {
   const result = { dmnToken: "asdfgh" };
   res.json(result);

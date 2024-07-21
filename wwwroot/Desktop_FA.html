@@ -58,14 +58,14 @@
           },
           dashboardCustomizeMethod: {
             dashboardReservedWidgets: "/${rKey}/dashboardreservedwidgets/${pageId}",
-            externalReservedWidgets: "/server/widget-list/${rKey}/${pageId}",
-            addtoDashboardReservedWidget: "/server/trust/${rKey}/addtodashboard",
+            externalReservedWidgets: "/external-widget-list/${rKey}/${pageId}",
+            addtoDashboardReservedWidget: "/${rKey}/addtodashboard",
 
-            removeDashboardReservedWidgets: "/server/trust/${rKey}/removetempwidget",
+            removeDashboardReservedWidgets: "/${rKey}/removetempwidget",
 
           },
           method: {
-            reservedWidgets: "/server/widget-list/${rKey}/${pageId}",
+            reservedWidgets: "/widget-list/${rKey}/${pageId}",
             userImage: "/${rKey}/users/${profile.thumbnail}",
             userNoImage: "/asset/images/unknown-avatar.png",
             userNoName: "بدون نام",
@@ -102,13 +102,14 @@
               widgetsTitle: "ویجت‌ها",
               widgetsTab: "ویجت‌ها",
               dashboardWidgetsTab: "ویجت‌ های میزکار",
-              externalWidgetsTab: "ویجت‌ های شخصی", addExternalWidget: 'افزودن ویجت خارجی',
+              externalWidgetsTab: "ویجت‌ های خارجی", addExternalWidget: 'افزودن ویجت خارجی',
               widgetsSettingButton: "ذخیره تغییرات",
               storeTitle: "فروشگاه",
 
               widgetsHeaderTitle: 'ابزار های پایه',
               lightModeTitle: "",
               darkModeTitle: "",
+              name: "نام",
             },
 
             generalErrorMessages: "/server/messages/${rKey}/errorMessages",

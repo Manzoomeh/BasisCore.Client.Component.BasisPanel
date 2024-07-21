@@ -40,7 +40,8 @@ export default abstract class BasisPanelChildComponent
           storeTitle: "فروشگاه",
           lightModeTitle: "روز",
           darkModeTitle: "شب",
-          widgetsHeaderTitle: "ابزار های پایه"
+          widgetsHeaderTitle: "ابزار های پایه",
+          name: "نام"
         },
       };
     }
@@ -116,6 +117,8 @@ export default abstract class BasisPanelChildComponent
         .replace("@addToDashboardTooltip", this.labels.addToDashboardTooltip)
         // .replace("@dragAndDropMessage", this.labels.dragAndDropMessage)
         .replace("@widgetsTitle", this.labels.widgetsTitle)
+        .replace("@addExternalWidget", this.labels.addExternalWidget)
+        .replace("@name", this.labels.name)
         .replace("@widgetsTab", this.labels.widgetsTab)
         .replace("@widgetsHeaderTitle", this.labels.widgetsHeaderTitle)
         .replace("@dashboardWidgetsTab", this.labels.dashboardWidgetsTab)

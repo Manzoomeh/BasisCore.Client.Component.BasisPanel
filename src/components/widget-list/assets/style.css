@@ -298,22 +298,36 @@
   line-height: 30px;
 }
 
+[data-bc-input-row] span {
+  width: 150px;
+}
+
+#addExternalWidget {
+  display: none;
+}
+
+[data-bc-input-row] input {
+  width: 100%;
+  border-radius: 5px;
+  height: 35px;
+}
+
 [external-widget-element] [data-bc-add-height] {
   left: 50%;
   height: 8px;
   cursor: row-resize;
   width: 8px;
-  bottom: -8px;
+  bottom: 5px;
   /* margin-bottom: 50%; */
   margin-right: 100%;
   /* margin-block: auto; */
   border-radius: 50%;
-  position: relative;
+  position: absolute;
   background-color: #7fa9ff;
 }
 
 [external-widget-element] [data-bc-add-width] {
-  left: 1px;
+  left: 3px;
   height: 8px;
   width: 8px;
   cursor: col-resize;
@@ -322,7 +336,7 @@
   margin-right: 100%;
   /* margin-block: auto; */
   border-radius: 50%;
-  position: relative;
+  position: absolute;
   background-color: #7fa9ff;
 }
 
