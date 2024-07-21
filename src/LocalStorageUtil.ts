@@ -2,6 +2,8 @@ import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
 import { MenuOwnerType } from "./type-alias";
 import { IMenuPageInfo } from "./components/menu/IMenuInfo";
+import IPageInfo from "./components/page/IPageInfo";
+import { IPageGroupInfo } from "./components/page/IPageGroupInfo";
 
 export default class LocalStorageUtil {
   private static _lastBusiness: number;
@@ -13,18 +15,23 @@ export default class LocalStorageUtil {
   private static _currentCorporate: number;
   private static _currentPage: IPageLoaderParam;
   private static _currentUserId: number;
+  private static _lastBanner: IBannerInfo;
 
   private static _hasPageToShow: boolean = false;
   private static _hasMenuToActive: boolean = false;
-  public static checkRkeyResult: Promise<ICheckRkeyResult>
+  public static checkRkeyResult: Promise<ICheckRkeyResult>;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
-    this.checkRkeyResult = HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
-    const result = await this.checkRkeyResult
+    this.checkRkeyResult = HttpUtil.fetchDataAsync<ICheckRkeyResult>(
+      url,
+      "GET"
+    );
+    const result = await this.checkRkeyResult;
     if (result.checked) {
       LocalStorageUtil._currentUserId = result.userid;
       const str = localStorage.getItem("__bc_panel_last_state__");
+      this._lastBanner = JSON.parse(localStorage.getItem("banner"));
       if (str) {
         try {
           const obj = JSON.parse(str);
@@ -123,6 +130,24 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._hasPageToShow;
   }
 
+  public static getLastBanner() {
+    return LocalStorageUtil._lastBanner;
+  }
+  public static setClosedBanners(widgetId: number) {
+    this._lastBanner.closedWidgets.push(widgetId)
+    localStorage.setItem("banner", JSON.stringify(this._lastBanner));
+
+  }
+  public static setLastBanner(rkey: string, eventID: string, group, closedWidgets?) {
+    this._lastBanner = {
+      closedWidgets: closedWidgets || [],
+      eventID: eventID,
+      rkey,
+      group,
+    };
+    localStorage.setItem("banner", JSON.stringify(this._lastBanner));
+  }
+
   public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
     LocalStorageUtil._lastMenu = {
       ownerId: ownerId,
@@ -173,4 +198,10 @@ interface ICheckRkeyResult {
 interface ICurrentMenu {
   ownerId: string;
   info: IMenuPageInfo;
+}
+interface IBannerInfo {
+  rkey: string;
+  eventID: string;
+  closedWidgets: number[];
+  group: IPageGroupInfo;
 }
