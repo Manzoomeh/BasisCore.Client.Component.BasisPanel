@@ -212,7 +212,6 @@ export default class MenuElementMaker {
       });
 
       const parent = content.closest("[data-bc-bp-submenu]");
-      console.log('li,parent', li, parent)
 
       if (parentLi) {
         // parent

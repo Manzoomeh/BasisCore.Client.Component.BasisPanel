@@ -37,13 +37,17 @@ export default class DashboardComponent extends PageComponent {
   }
 
   public addBannerToPage(group: IPageGroupInfo) {
-    const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
-    this.groups.groups.forEach((g) => {
-      g.widgets.forEach((w) => {
-        w.y = w.y + maxY;
+    if (group && group.widgets?.length > 0) {
+
+
+      const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
+      this.groups.groups.forEach((g) => {
+        g.widgets.forEach((w) => {
+          w.y = w.y + maxY;
+        });
       });
-    });
-    this.groups.groups.push(group);
+      this.groups.groups.push(group);
+    }
   }
   showLastBanners() {
     if (
@@ -58,39 +62,46 @@ export default class DashboardComponent extends PageComponent {
     const last_state = JSON.parse(
       localStorage.getItem("__bc_panel_last_state__")
     );
-    const url = HttpUtil.formatString(
-      this.options.baseUrl.business + this.options.bannerUrl,
-      { rKey: this.options.rKey }
-    );
+
     const level = last_state?.p?.owner;
-    if (level == "corporate") {
-      if (this._banner) {
-        if (this.options.rKey == this._banner.rkey) {
-          this.showLastBanners();
-        } else {
-          const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
-          if (res.eventID == this._banner.eventID) {
+    if (level == "corporate" && this.options.bannerUrl) {
+      const url = HttpUtil.formatString(
+        this.options.baseUrl.business + this.options.bannerUrl,
+        { rKey: this.options.rKey }
+      );
+      try {
+
+
+        if (this._banner) {
+
+          if (this.options.rKey == this._banner.rkey) {
             this.showLastBanners();
           } else {
-            LocalStorageUtil.setLastBanner(
-              this.options.rKey,
-              res.eventID,
-              res.groups[0]
-            );
-            this.addBannerToPage(res.groups[0]);
+
+            const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
+            if (res.eventID == this._banner.eventID) {
+              this.showLastBanners();
+            } else {
+              LocalStorageUtil.setLastBanner(
+                this.options.rKey,
+                res.eventID,
+                res.groups[0]
+              );
+              this.addBannerToPage(res.groups[0]);
+            }
           }
+        } else {
+          const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
+
+          LocalStorageUtil.setLastBanner(
+            this.options.rKey,
+            res.eventID,
+
+            res.groups[0]
+          );
+          this.addBannerToPage(res.groups[0]);
         }
-      } else {
-        const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
-
-        LocalStorageUtil.setLastBanner(
-          this.options.rKey,
-          res.eventID,
-
-          res.groups[0]
-        );
-        this.addBannerToPage(res.groups[0]);
-      }
+      } catch { }
     }
   }
   public async runAsync(source?: ISource) {
