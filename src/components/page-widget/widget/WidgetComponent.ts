@@ -142,15 +142,8 @@ export default class WidgetComponent extends PageWidgetComponent {
     //   this.container.closest("[data-bc-bp-page-container]").querySelector("[data-bc-page-widgets-list-toggle]").appendChild(li);
     // }
 
-    this.title = this.param.title;
-    const baseUrl = this.pageLoader.moduleMapper
-      .get(this.pageLoader.current?.param.owner)
-      //@ts-ignore
-      ?.get(Number(this.param.moduleid))?.ownerUrl;
-    const url = HttpUtil.formatString(
-      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
-      { rKey: this.options.rKey, widgetId: this.param.id }
-    );
+    // this.title = this.param.title;
+
 
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
