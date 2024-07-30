@@ -58,6 +58,7 @@ interface IPanelPartMethodOptions {
 
   widget: string;
   errorMessages: string;
+  resetCustomizedDashboard?: string
 }
 
 export interface ICheckRkeyOptions {
@@ -98,4 +99,5 @@ export interface ILabels {
   lightModeTitle: string;
   darkModeTitle: string;
   widgetsHeaderTitle: string;
+  resetCustomizedDashboard: string
 }

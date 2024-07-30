@@ -40,6 +40,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
   private widgetsContainer: HTMLElement;
   private tags: IDashboardCategoryData[];
   private pageLoader: MenuComponent;
+  private messageComponent: NotificationMessageComponent
   private onMouseEnter: (e: Event) => void;
   private onMouseLeave: (e: Event) => void;
   public dashboardWidgetList: IDashboardWidgetData[];
@@ -51,7 +52,16 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       "data-bc-bp-widget-list-container"
     );
     this.pageLoader = this.owner.dc.resolve<MenuComponent>("page_loader");
+    this.messageComponent = this.owner.dc.resolve<NotificationMessageComponent>("message");
+    const hasResetButton = this.options.method.resetCustomizedDashboard
+    const resetButton = this.container.querySelector('[data-bc-reset-customize-button]')
 
+    if (hasResetButton) {
+      resetButton.addEventListener('click', () => this.onResetClick())
+
+    } else {
+      resetButton.remove()
+    }
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("widgetList", this);
@@ -131,6 +141,47 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       e.preventDefault()
     );
   }
+  private async onResetClick() {
+    const url = HttpUtil.formatString(
+      this._page.loaderParam.ownerUrl + this.options.method.resetCustomizedDashboard,
+
+      {
+        rkey: this.options.rKey,
+      }
+    );
+    const data = {
+      pageId: this._page.loaderParam.pageId, moduleId: JSON.parse(localStorage.getItem("__bc_panel_last_state__"))?.m?.info
+        ?.mid
+    }
+    try {
+      let res: any = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      res = await res.json();
+      if (res.errorid) {
+        this.messageComponent.NotificationMessageMethod(res.errorid, Number(this.options.lid) || 1)
+        const type = await this.messageComponent.getMessageTypeByErrorId(res.errorid)
+        if (type == '1') {
+          const btn = document.querySelector(
+            "[data-bc-page-widget-list-dlg-btn-add]"
+          );
+          const page = this.owner.dc.resolve("page") as any;
+          await page.initializeAsync();
+          btn.setAttribute("data-icon-left", "");
+          btn.removeAttribute("data-icon-right");
+          btn.setAttribute("data-bc-page-widget-list-dlg-btn-add-active", "1");
+          this.hideList();
+
+          page.owner.setSource("refresh", true);
+        }
+      }
+
+    } catch (error) {
+      console.log('error', error)
+    }
+
+  }
   private async saveWidgets(): Promise<void> {
     const widgets = document.querySelectorAll("[data-bc-bp-widget-container]");
     const data = { data: [] };
@@ -194,14 +245,14 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       body: JSON.stringify(data),
     });
     res = await res.json();
-    const message =
-      this.owner.dc.resolve<NotificationMessageComponent>("message");
 
-    message.NotificationMessageMethod(
+
+    this.messageComponent.NotificationMessageMethod(
       res.errorid,
       Number(this.options.lid) || 1
     );
-    if (res.errorid == "61") {
+    const type = await this.messageComponent.getMessageTypeByErrorId(res.errorid)
+    if (type == '1') {
       const btn = document.querySelector(
         "[data-bc-page-widget-list-dlg-btn-add]"
       );
@@ -274,7 +325,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     return Promise.resolve();
   }
 
-  public runAsync(source?: ISource) {}
+  public runAsync(source?: ISource) { }
 
   private async fillWidgetListAsync(): Promise<void> {
     const url = HttpUtil.formatString(
@@ -326,7 +377,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
           disableWidgets.appendChild(widgetElement);
         });
-    } catch {}
+    } catch { }
   }
   private displayWidgetList(e) {
     if (
@@ -510,8 +561,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           ) as HTMLElement;
           event.source.setAttribute(
             "style",
-            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${
-              (widgetData?.h || 3) * this._page.cell
+            `display: flex !important; border-radius: 24px; outline: 2px solid #ccc; outline-offset: -9px; height:${(widgetData?.h || 3) * this._page.cell
             } px; position: relative; background-color: transparent; justify-content: center; align-items: center; flex-direction: column`
           );
           if (
@@ -527,11 +577,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
           }
         }
       });
-      this.sortable.on("drag:over", (ev) => {});
+      this.sortable.on("drag:over", (ev) => { });
       this.sortable.on("drag:stop", (event) => {
         this.isDragging = false;
 
-        window.removeEventListener("handleMouseMove", () => {});
+        window.removeEventListener("handleMouseMove", () => { });
         if (
           !event.source
             .closest("[drop-zone]")
@@ -680,11 +730,11 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
                 const data = this.dashboardWidgetList.find(
                   (e) =>
                     String(e.widgetid) ==
-                      (event.target as HTMLElement).parentElement.id &&
+                    (event.target as HTMLElement).parentElement.id &&
                     String(e.moduleid) ==
-                      (event.target as HTMLElement).parentElement.getAttribute(
-                        "moduleid"
-                      )
+                    (event.target as HTMLElement).parentElement.getAttribute(
+                      "moduleid"
+                    )
                 );
 
                 this.disabledDashboardWidgetList.push(data);
@@ -936,7 +986,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
       let cell = sidebar
         ? (document.querySelector("[primarycontainer]") as HTMLElement)
-            .offsetWidth / 12
+          .offsetWidth / 12
         : (pageBody as HTMLElement).offsetWidth / 12;
 
       switch (this.type) {
@@ -956,8 +1006,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             Math.floor(width / cell) > 12
               ? "12"
               : sidebar
-              ? String(Math.ceil(width / cell))
-              : String(Math.floor(width / cell) + 1)
+                ? String(Math.ceil(width / cell))
+                : String(Math.floor(width / cell) + 1)
           );
           this.currentResizeHandle.style.width = null;
           break;
@@ -968,9 +1018,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
             "gs-h",
             String(Math.floor(height / this._page.cell) + 1)
           );
-          this.currentResizeHandle.style.height = `${
-            (Math.floor(height / this._page.cell) + 1) * this._page.cell
-          }px`;
+          this.currentResizeHandle.style.height = `${(Math.floor(height / this._page.cell) + 1) * this._page.cell
+            }px`;
           break;
       }
     }
@@ -1172,9 +1221,8 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     if (sidebar) {
       widgetContainer.setAttribute(
         "style",
-        `width:calc(100% - 330px);display: flex;justify-content: end;padding-inline-start:${
-          Number(sidebar.getAttribute("gs-w")) *
-          ((this._page.cell * 12 - 330) / 12)
+        `width:calc(100% - 330px);display: flex;justify-content: end;padding-inline-start:${Number(sidebar.getAttribute("gs-w")) *
+        ((this._page.cell * 12 - 330) / 12)
         }px;min-height:${height}px`
       );
     } else {
@@ -1242,7 +1290,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     });
     const removewidgetUrl = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-        this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
+      this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
       {
         rKey: this.options.rKey,
       }
@@ -1250,22 +1298,22 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     const widgets =
       this.selectedTag != "0"
         ? this.tags
-            .find((i) => i.moduleid == Number(this.selectedTag))
-            .widgets.filter((j) =>
-              this.disabledDashboardWidgetList.find(
-                (k) =>
-                  k.moduleid == Number(this.selectedTag) &&
-                  k.widgetid == j.widgetid
-              )
+          .find((i) => i.moduleid == Number(this.selectedTag))
+          .widgets.filter((j) =>
+            this.disabledDashboardWidgetList.find(
+              (k) =>
+                k.moduleid == Number(this.selectedTag) &&
+                k.widgetid == j.widgetid
             )
-            .map((i) => ({
-              widgetid: i.widgetid,
-              title: i.title,
-              icon: i.icon,
-              moduleid: this.tags.find(
-                (i) => i.moduleid == Number(this.selectedTag)
-              ).moduleid,
-            }))
+          )
+          .map((i) => ({
+            widgetid: i.widgetid,
+            title: i.title,
+            icon: i.icon,
+            moduleid: this.tags.find(
+              (i) => i.moduleid == Number(this.selectedTag)
+            ).moduleid,
+          }))
         : this.disabledDashboardWidgetList;
     widgets
       ?.filter((e) => e.title.includes(this.searchParam))
@@ -1372,7 +1420,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
     const url = HttpUtil.formatString(
       this._page.loaderParam.ownerUrl +
-        this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
+      this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
       {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
@@ -1405,10 +1453,9 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         this.tabIndex = 1;
         parent.style.display = "flex";
         allWidget.style.display = "none";
-        activeElement.style.transform = `translateX(-${
-          (allWidgetBtn as HTMLElement).offsetLeft -
+        activeElement.style.transform = `translateX(-${(allWidgetBtn as HTMLElement).offsetLeft -
           (e.target as HTMLElement).offsetLeft
-        }px)`;
+          }px)`;
         dashboardWidgetBtn.setAttribute("tab-button-status", "active");
         allWidgetBtn.removeAttribute("tab-button-status");
         this.fillDashboardWidgetList();
@@ -1423,6 +1470,6 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
         dashboardWidgetBtn.removeAttribute("tab-button-status");
         this.fillListUI();
       });
-    } catch {}
+    } catch { }
   }
 }

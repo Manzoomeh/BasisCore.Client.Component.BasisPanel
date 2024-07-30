@@ -39,7 +39,8 @@ export default abstract class BasisPanelChildComponent
           storeTitle: "فروشگاه",
           lightModeTitle: "روز",
           darkModeTitle: "شب",
-          widgetsHeaderTitle: "ابزار های پایه"
+          widgetsHeaderTitle: "ابزار های پایه",
+          resetCustomizedDashboard: "حذف تنظیمات داشبورد"
         },
       };
     }
@@ -121,7 +122,9 @@ export default abstract class BasisPanelChildComponent
         .replace("@widgetsSettingButton", this.labels.widgetsSettingButton)
         .replace("@storeTitle", this.labels.storeTitle)
         .replace("@lightModeTitle", this.labels.lightModeTitle)
-        .replace("@darkModeTitle", this.labels.darkModeTitle);
+        .replace("@darkModeTitle", this.labels.darkModeTitle)
+        .replace("@resetCustomizedDashboard", this.labels.resetCustomizedDashboard);
+
 
       const range = new Range();
       range.setStart(this.container, 0);

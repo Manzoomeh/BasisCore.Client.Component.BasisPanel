@@ -329,6 +329,15 @@
   text-align: center;
 }
 
+[data-bc-reset-customize-button] {
+  width: 100%;
+  height: 45px;
+  margin-block: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
 [data-bc-bp-direction="rightToLeft"] [data-bc-widget-id] [data-bc-btn-remove] {
   left: -5px;
 }
