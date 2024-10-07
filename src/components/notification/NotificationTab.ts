@@ -1,7 +1,8 @@
-import { DefaultSource } from "../../type-alias";
+import { DefaultSource, MenuOwnerType } from "../../type-alias";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import contentLayout from "./assets/content-layout.html";
 import { INotificationProvider } from "./INotificationProvider";
+import { IUrlCollectionOption } from "../basispanel/IBasisPanelOptions";
 
 declare const $bc: any;
 export default class NotificationTab {
@@ -15,7 +16,7 @@ export default class NotificationTab {
   private alarm: HTMLElement;
   private content: HTMLElement;
 
-  constructor(owner: INotificationProvider, index: number) {
+  constructor(owner: INotificationProvider, index: number, baseUrls: IUrlCollectionOption) {
     this._owner = owner;
 
     this.notificationContainer = this._owner.container;
@@ -74,25 +75,28 @@ export default class NotificationTab {
       const str = localStorage.getItem("__bc_panel_last_state__");
       const obj = JSON.parse(str);
       let pageId = "0";
-      switch (obj.p.owner) {
-        case "profile":
-          pageId = "20";
-          break;
-        case "corporate":
-          pageId = "99";
-          break;
-        case "business":
-          pageId = "69";
-          break;
-        default:
-          pageId = "0";
+      let ownerUrl = "";
+      let owner:MenuOwnerType;
+      
+      if ((obj.b > 0) && (obj.p.owner == "external" || obj.p.owner == "business")) {
+        pageId = "69";
+        owner = "business";
+        ownerUrl = baseUrls.business;
+      } else if ((obj.c > 0) && (obj.p.owner == "external" || obj.p.owner == "corporate")) {
+        pageId = "99";
+        owner = "corporate";
+        ownerUrl = baseUrls.corporate;
+      } else if ((obj.i > 0) && (obj.p.owner == "external" || obj.p.owner == "profile")) {
+        pageId = "20";
+        owner = "profile";
+        ownerUrl = baseUrls.profile;
       }
 
       // load page
       const newParam: IPageLoaderParam = {
-        owner: obj.p.owner,
+        owner: owner,
         ownerId: "",
-        ownerUrl: obj.p.ownerUrl,
+        ownerUrl: ownerUrl,
         pageId: pageId,
         rKey: this.optionsRkey,
         pageMethod: obj.p.pageMethod,

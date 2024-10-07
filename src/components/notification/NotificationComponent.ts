@@ -77,7 +77,7 @@ export default class NotificationComponent
     // }
 
     this._provider = this.options.notification.providers.map(
-      (provider, index) => new NotificationProvider(this, provider, index)
+      (provider, index) => new NotificationProvider(this, provider, index, this.options.baseUrl)
     );
     const tasks = this._provider.map((x) => x.initializeAsync());
     await Promise.all(tasks);

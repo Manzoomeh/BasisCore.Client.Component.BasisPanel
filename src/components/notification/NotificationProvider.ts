@@ -5,6 +5,7 @@ import { INotificationProvider } from "./INotificationProvider";
 import { IDisposable, ISourceOptions } from "basiscore"; //"bclib/dist/bclib";
 //import ISourceOptions from "basiscore";
 import HttpUtil from "../../HttpUtil";
+import { IUrlCollectionOption } from "../basispanel/IBasisPanelOptions";
 //import ISource from "basiscore";
 
 export default class NotificationProvider implements INotificationProvider {
@@ -21,12 +22,13 @@ export default class NotificationProvider implements INotificationProvider {
   constructor(
     owner: INotificationComponent,
     options: INotificationProviderOptions,
-    index: number
+    index: number,
+    baseUrl: IUrlCollectionOption
   ) {
     this._owner = owner;
     this.options = options;
 
-    this.tab = new NotificationTab(this, index);
+    this.tab = new NotificationTab(this, index, baseUrl);
   }
 
   storeAsGlobal(

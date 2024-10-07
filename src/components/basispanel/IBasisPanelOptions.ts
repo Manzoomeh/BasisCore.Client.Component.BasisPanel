@@ -30,7 +30,7 @@ interface IPanelPartDashboardOptions {
   addtoDashboardReservedWidget: string;
   dashboardReservedWidgets: string;
 }
-interface IUrlCollectionOption {
+export interface IUrlCollectionOption {
   profile: string;
   corporate: string;
   business: string;
