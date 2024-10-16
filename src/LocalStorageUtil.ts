@@ -2,10 +2,10 @@ import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
 import { MenuOwnerType } from "./type-alias";
 import { IMenuPageInfo } from "./components/menu/IMenuInfo";
-import IPageInfo from "./components/page/IPageInfo";
 import { IPageGroupInfo } from "./components/page/IPageGroupInfo";
 
 export default class LocalStorageUtil {
+  static readonly CURRENT_VERSION: number = 1;
   private static _lastBusiness: number;
   private static _lastCorporate: number;
   private static _lastPage: IPageLoaderParam;
@@ -34,21 +34,23 @@ export default class LocalStorageUtil {
       this._lastBanner = JSON.parse(localStorage.getItem("banner"));
       if (str) {
         try {
-          const obj = JSON.parse(str);
-          if (obj.i && result.userid == obj.i) {
-            if (obj.b) {
-              LocalStorageUtil._lastBusiness = obj.b;
-            }
-            if (obj.c) {
-              LocalStorageUtil._lastCorporate = obj.c;
-            }
-            if (obj.p) {
-              LocalStorageUtil._lastPage = obj.p;
-              LocalStorageUtil._hasPageToShow = true;
-            }
-            if (obj.m) {
-              LocalStorageUtil._lastMenu = obj.m;
-              LocalStorageUtil._hasMenuToActive = true;
+          const obj: IStorageObject = JSON.parse(str);
+          if (obj.ver == LocalStorageUtil.CURRENT_VERSION) {
+            if (obj.i && result.userid == obj.i) {
+              if (obj.b) {
+                LocalStorageUtil._lastBusiness = obj.b;
+              }
+              if (obj.c) {
+                LocalStorageUtil._lastCorporate = obj.c;
+              }
+              if (obj.p) {
+                LocalStorageUtil._lastPage = obj.p;
+                LocalStorageUtil._hasPageToShow = true;
+              }
+              if (obj.m) {
+                LocalStorageUtil._lastMenu = obj.m;
+                LocalStorageUtil._hasMenuToActive = true;
+              }
             }
           }
         } catch (ex) {
@@ -78,7 +80,8 @@ export default class LocalStorageUtil {
   }
 
   private static save(): void {
-    var obj = {
+    const obj: IStorageObject = {
+      ver: LocalStorageUtil.CURRENT_VERSION,
       i: LocalStorageUtil._currentUserId,
       b: LocalStorageUtil._currentBusiness,
       c: LocalStorageUtil._currentCorporate,
@@ -89,7 +92,7 @@ export default class LocalStorageUtil {
   }
 
   public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
-    var retVal: number = null;
+    let retVal: number = null;
     if (ownerType == "business") {
       retVal = LocalStorageUtil._lastBusiness;
     } else if (ownerType == "corporate") {
@@ -134,11 +137,15 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._lastBanner;
   }
   public static setClosedBanners(widgetId: number) {
-    this._lastBanner.closedWidgets.push(widgetId)
+    this._lastBanner.closedWidgets.push(widgetId);
     localStorage.setItem("banner", JSON.stringify(this._lastBanner));
-
   }
-  public static setLastBanner(rkey: string, eventID: string, group, closedWidgets?) {
+  public static setLastBanner(
+    rkey: string,
+    eventID: string,
+    group,
+    closedWidgets?
+  ) {
     this._lastBanner = {
       closedWidgets: closedWidgets || [],
       eventID: eventID,
@@ -204,4 +211,13 @@ interface IBannerInfo {
   eventID: string;
   closedWidgets: number[];
   group: IPageGroupInfo;
+}
+
+interface IStorageObject {
+  ver: number;
+  i: number;
+  b: number;
+  c: number;
+  p: IPageLoaderParam;
+  m: ICurrentMenu;
 }
