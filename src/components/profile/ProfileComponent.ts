@@ -8,16 +8,26 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import { IUserDefineComponent, ISource } from "basiscore";
+import { IUserDefineComponent, ISource, IDependencyContainer } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import IProfileAccessor from "./IProfileAccessor";
 
-export default class ProfileComponent extends BasisPanelChildComponent {
+export default class ProfileComponent
+  extends BasisPanelChildComponent
+  implements IProfileAccessor
+{
   private profile: IProfileInfo;
 
+  public getCurrent(): IProfileInfo {
+    return this.profile;
+  }
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-profile-container");
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("ProfileAccessor", this);
   }
 
   public runAsync(source?: ISource): Promise<any> {

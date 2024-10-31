@@ -1,16 +1,16 @@
 import { ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
 import { DefaultSource, MenuOwnerType } from "../type-alias";
-import IProfileInfo from "./profile/IProfileInfo";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import IPageLoaderParam from "./menu/IPageLoaderParam";
 import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
+import IProfileAccessor from "./profile/IProfileAccessor";
 
 declare const $bc: any;
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
-  private profile: IProfileInfo;
+  protected profileAccessor: IProfileAccessor;
   private element: Element;
   private ownerType: MenuOwnerType;
   private entityList: Array<IEntityInfo>;
@@ -61,6 +61,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     }
   }
   public async initializeAsync(): Promise<void> {
+    this.profileAccessor = this.owner.dc
+      .resolve<DependencyContainer>("parent.dc")
+      .resolve<IProfileAccessor>("ProfileAccessor");
+
     const checkkrkeyInfo = await this.getCurrentService();
     this.currentOwnerid = checkkrkeyInfo["currentOwnerid"];
     this.currentDomianid = checkkrkeyInfo["currentDmnid"];
@@ -121,8 +125,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public async runAsync(source?: ISource) {
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
-        this.profile = source.rows[0];
-
         if (this.ownerType == "corporate") {
           const corporateList = await this.getEntitiesAsync();
 
@@ -419,7 +421,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
           const entity = this.entityList.find((x) => x.id == id);
           LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
-          if (this.profile) {
+          if (this.profileAccessor.getCurrent()) {
             if (entity) {
               await this.onItemSelectAsync(id);
             }
