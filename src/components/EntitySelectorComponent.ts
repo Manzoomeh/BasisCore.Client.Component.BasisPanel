@@ -50,10 +50,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
+    console.log("qam 1 00", id);
     if (id != 0) {
       LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
-      this.signalToDisplayMenu(id);
       this.setActive();
+      this.signalToDisplayMenu(id);
     }
   }
   public async initializeAsync(): Promise<void> {
@@ -401,7 +402,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
               id
             );
           }
-
+          console.log("qam 1 000");
           this.setActive();
           this.selectItem(li);
         });
@@ -431,7 +432,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   setActive() {
-    console.log("qam 1 2");
     if (this.deviceId == 2) {
       this.element
         .closest("[data-bc-bp-main-header]")

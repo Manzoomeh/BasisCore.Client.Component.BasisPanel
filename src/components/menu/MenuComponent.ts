@@ -116,17 +116,17 @@ export default class MenuComponent
           }
         }
       }
-      if (menuParam.pageId) {
-        const newParam: IPageLoaderParam = {
-          pageId: menuParam.pageId,
-          owner: menuParam.owner,
-          ownerId: menuParam.ownerId.toString(),
-          ownerUrl: menuParam.ownerUrl,
-          rKey: this.options.rKey,
-          pageMethod: this.options.method.page,
-        };
-        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-      }
+    }
+    if (menuParam.pageId) {
+      const newParam: IPageLoaderParam = {
+        pageId: menuParam.pageId,
+        owner: menuParam.owner,
+        ownerId: menuParam.ownerId.toString(),
+        ownerUrl: menuParam.ownerUrl,
+        rKey: this.options.rKey,
+        pageMethod: this.options.method.page,
+      };
+      this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
     }
   }
 

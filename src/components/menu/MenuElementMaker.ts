@@ -62,7 +62,7 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>,
     li?: HTMLElement
   ) {
-    items.forEach((node) => {
+    items?.forEach((node) => {
       if ((node as IMenuExternalItemInfo).url) {
         this.moduleMapper.set(node.mid, {
           owner: menuParam.owner,
@@ -233,10 +233,6 @@ export default class MenuElementMaker {
       const parent = content.closest("[data-bc-bp-submenu]");
 
       if (parentLi) {
-        // parent
-        //   .closest("li")
-        //   .querySelector("[data-bc-level]")
-        //   .setAttribute("data-bc-menu-active", "");
         parentLi.setAttribute("data-bc-menu-active", "");
         li.setAttribute("data-bc-menu-active", "");
       } else {
