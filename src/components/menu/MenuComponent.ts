@@ -52,6 +52,7 @@ export default class MenuComponent
         `data-bc-bp-menu-seperation`,
         source.rows[0].owner
       );
+      console.log("qam show menu msg", source.rows[0]);
       await this.loadDataAsync(source.rows[0]);
     }
   }
