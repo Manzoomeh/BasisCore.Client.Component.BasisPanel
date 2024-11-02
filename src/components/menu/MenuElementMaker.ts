@@ -39,8 +39,7 @@ export default class MenuElementMaker {
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
     this.moduleMapper = moduleMapper;
-    this.menuItemLookup = new Map<string, HTMLElement[]>()
-
+    this.menuItemLookup = new Map<string, HTMLElement[]>();
   }
 
   public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
@@ -48,14 +47,20 @@ export default class MenuElementMaker {
 
     const pageLookup = new Map<string, IMenuLoaderParam>();
     this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
-    return new MenuElement(menuParam, pageLookup, Array.from(tmpUL.childNodes), this.menuItemLookup);
+    return new MenuElement(
+      menuParam,
+      pageLookup,
+      Array.from(tmpUL.childNodes),
+      this.menuItemLookup
+    );
   }
 
   private createMenu(
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>, li?: HTMLElement
+    pageLookup: Map<string, IMenuLoaderParam>,
+    li?: HTMLElement
   ) {
     items.forEach((node) => {
       if ((node as IMenuExternalItemInfo).url) {
@@ -66,7 +71,12 @@ export default class MenuElementMaker {
       }
       if ((node as IMenuPageInfo).pid) {
         ul.appendChild(
-          this.createPageMenuItem(node as IMenuPageInfo, menuParam, pageLookup, li)
+          this.createPageMenuItem(
+            node as IMenuPageInfo,
+            menuParam,
+            pageLookup,
+            li
+          )
         );
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
@@ -130,7 +140,6 @@ export default class MenuElementMaker {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
           openMenu.forEach((e) => {
             if (e != li) {
-
               e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
               e.classList.remove("active");
             }
@@ -148,16 +157,22 @@ export default class MenuElementMaker {
       const liBoundingRect = document
         .querySelector("[data-bc-menu]")
         .getBoundingClientRect();
-      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height
-        }px`;
+      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
       li.addEventListener("click", function (e) {
         const parentBoundingRect = (
           e.target as HTMLElement
         ).getBoundingClientRect();
-        innerUl.style.top = `${parentBoundingRect.y + parentBoundingRect.height + (!document.querySelector('[data-bc-bp-sticky]') ? window.pageYOffset : 0)
-          }px`;
-        innerUl.style.left = `${parentBoundingRect.x - (innerUl.offsetWidth - parentBoundingRect.width)
-          }px`;
+        innerUl.style.top = `${
+          parentBoundingRect.y +
+          parentBoundingRect.height +
+          (!document.querySelector("[data-bc-bp-sticky]")
+            ? window.pageYOffset
+            : 0)
+        }px`;
+        innerUl.style.left = `${
+          parentBoundingRect.x -
+          (innerUl.offsetWidth - parentBoundingRect.width)
+        }px`;
 
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
@@ -184,7 +199,8 @@ export default class MenuElementMaker {
   private createPageMenuItem(
     node: IMenuPageInfo,
     menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>, parentLi: HTMLElement
+    pageLookup: Map<string, IMenuLoaderParam>,
+    parentLi: HTMLElement
   ): HTMLLIElement {
     if (!this.moduleMapper.has(node.mid)) {
       this.moduleMapper.set(node.mid, {
@@ -194,7 +210,10 @@ export default class MenuElementMaker {
     }
     const li = document.createElement("li");
     const content = document.createElement("a");
-    this.menuItemLookup.set(node.pid + '-' + node.mid, [li as HTMLElement, parentLi as HTMLElement])
+    this.menuItemLookup.set(node.pid + "-" + node.mid, [
+      li as HTMLElement,
+      parentLi as HTMLElement,
+    ]);
 
     content.setAttribute("data-sys-menu-link", "");
     content.setAttribute("data-bc-pid", node.pid.toString());
@@ -243,6 +262,7 @@ export default class MenuElementMaker {
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
+      pageId: null,
       ownerId: node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,
@@ -282,6 +302,7 @@ export default class MenuElementMaker {
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
       owner: "external",
+      pageId: null,
       ownerId: node.mid,
       ownerUrl: node.url,
       menuMethod: menuParam.menuMethod,

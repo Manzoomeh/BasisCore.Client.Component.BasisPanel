@@ -52,11 +52,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const id = parseInt(msgElId);
     if (id != 0) {
       LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
-      this.owner.setSource(
-        DefaultSource.SHOW_MENU,
-        this.createMenuLoaderParam(id)
-      );
-      this.signalToDisplayPage(id);
+      this.signalToDisplayMenu(id);
       this.setActive();
     }
   }
@@ -96,6 +92,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
     msgElClick?.addEventListener("click", async (e) => {
+      console.log("qam 1 1");
       this.selectService(msgElClick);
     });
 
@@ -115,9 +112,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const relatedElement = this.element.querySelector<HTMLElement>(
           `[data-id='${id}']`
         );
+        console.log(`qam ${this.ownerType}`, relatedElement.innerText);
         if (relatedElement) {
           relatedElement.click();
         }
+      } else {
+        console.log(`qam ${this.ownerType}`, "empty");
       }
     }
   }
@@ -190,7 +190,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   filterItems(input, list) {
     let filterList = list.filter(function (e) {
-      return e.title.toLowerCase().includes(input.toLowerCase()) || e.id == input;
+      return (
+        e.title.toLowerCase().includes(input.toLowerCase()) || e.id == input
+      );
     });
     return filterList;
   }
@@ -275,11 +277,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected async onItemSelectAsync(id: number) {
     await this.setActiveAsync(id);
-    this.owner.setSource(
-      DefaultSource.SHOW_MENU,
-      this.createMenuLoaderParam(id)
-    );
-    this.signalToDisplayPage(id);
+    this.signalToDisplayMenu(id);
   }
 
   entryListMaker(list) {
@@ -334,7 +332,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           lockIcon.addEventListener("click", async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            this.setActiveAsync(id);
+            await this.setActiveAsync(id);
             $bc.setSource(
               "basispanelcomponent_entityselectorcomponent.businessid",
               id
@@ -356,41 +354,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             li.appendChild(erpIcon);
           }
         }
-
-        //   if(id == this.currentOwnerid && this.ownerId != 30){
-        //     const entity = this.entityList.find((x) => x.id == id);
-        //     await this.setActiveAsync(id);
-        //     // LocalStorageUtil.setEntitySelectorCurrentValue("corporate", id);
-        //      this.owner.setSource(this.getSourceId(), entity ?? {});
-        //     //  this.signalToDisplayPage(id);
-        //     //  this.setActive();
-        //      this.selectItem(li);
-        //      const businessActive = this.container.querySelector(".active-business")
-        //      const serviceActive = this.container.querySelector(".active-corporate")
-        //      if(businessActive){
-        //       businessActive.classList.remove("active-business")
-        //      }
-        //      if(serviceActive){
-        //       serviceActive.classList.remove("active-corporate")
-        //      }
-
-        //   }
-
-        //   if(id == this.currentDomianid && this.domainId != 30){
-        //     const entity = this.entityList.find((x) => x.id == id);
-        //     await this.setActiveAsync(id);
-        //     this.owner.setSource(this.getSourceId(), entity ?? {});
-        //     this.selectItem(li);
-        //      const businessActive = this.container.querySelector(".active-business")
-        //      const serviceActive = this.container.querySelector(".active-corporate")
-        //      if(businessActive){
-        //       businessActive.classList.remove("active-business")
-        //      }
-        //      if(serviceActive){
-        //       serviceActive.classList.remove("active-corporate")
-        //      }
-
-        //  }
         if (
           id == this.currentOwnerid &&
           this.ownerId != 30 &&
@@ -442,22 +405,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           this.setActive();
           this.selectItem(li);
         });
-
-        // if(list?.length == 1 ){
-        //   await this.setActiveAsync(list[0].id);
-        //   LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, list[0].id);
-        //    this.owner.setSource(this.getSourceId(), list[0] ?? {});
-        //    this.setActive();
-        //    this.selectItem(li);
-        //    const businessActive = this.container.querySelector(".active-business")
-        //    const serviceActive = this.container.querySelector(".active-corporate")
-        //    if(businessActive){
-        //     businessActive.classList.remove("active-business")
-        //    }
-        //    if(serviceActive){
-        //     serviceActive.classList.remove("active-corporate")
-        //    }
-        // }
         this.element.appendChild(li);
       });
     }
@@ -484,6 +431,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   setActive() {
+    console.log("qam 1 2");
     if (this.deviceId == 2) {
       this.element
         .closest("[data-bc-bp-main-header]")
@@ -585,8 +533,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async getCurrentService() {
-
-    const result = await LocalStorageUtil.checkRkeyResult
+    const result = await LocalStorageUtil.checkRkeyResult;
     return result;
   }
   protected selectItem(li: HTMLElement, freeze: boolean = false) {
@@ -640,6 +587,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
     selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
     selectiveList.addEventListener("click", (e) => {
+      console.log("qam 1 0");
       this.selectService(selectiveList);
     });
 
@@ -658,9 +606,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.innerHTML = "";
   }
 
-  protected createMenuLoaderParam(id: Number): IMenuLoaderParam {
+  protected createMenuLoaderParam(
+    id: Number,
+    pageId: string
+  ): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
       owner: this.ownerType,
+      pageId: pageId,
       // ownerId: this.element.value,
       ownerId: id.toString(),
       ownerUrl: this.getOwnerUrl(),
@@ -670,21 +622,26 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     return menuParam;
   }
 
-  private async signalToDisplayPage(id: Number) {
+  private async signalToDisplayMenu(id: Number) {
+    console.log(`qam ${this.ownerType} send show menu`, id);
+    this.owner.setSource(
+      DefaultSource.SHOW_MENU,
+      this.createMenuLoaderParam(id, "default")
+    );
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
 
-    const newParam: IPageLoaderParam = {
-      pageId: "default",
-      owner: this.ownerType,
-      ownerId: id.toString(),
-      ownerUrl: this.getOwnerUrl(),
-      rKey: this.options.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    // const newParam: IPageLoaderParam = {
+    //   pageId: "default",
+    //   owner: this.ownerType,
+    //   ownerId: id.toString(),
+    //   ownerUrl: this.getOwnerUrl(),
+    //   rKey: this.options.rKey,
+    //   pageMethod: this.options.method.page,
+    // };
+    // this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }
 

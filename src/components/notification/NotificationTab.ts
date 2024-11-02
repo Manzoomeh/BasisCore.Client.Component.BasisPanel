@@ -16,7 +16,11 @@ export default class NotificationTab {
   private alarm: HTMLElement;
   private content: HTMLElement;
 
-  constructor(owner: INotificationProvider, index: number, baseUrls: IUrlCollectionOption) {
+  constructor(
+    owner: INotificationProvider,
+    index: number,
+    baseUrls: IUrlCollectionOption
+  ) {
     this._owner = owner;
 
     this.notificationContainer = this._owner.container;
@@ -30,10 +34,9 @@ export default class NotificationTab {
       "[data-bc-notification-alarm]"
     );
 
-
     // create contents
     const optionName = this._owner.storeAsGlobal(this.optionConfig); //`${this.optionsName}_option`;
-    
+
     let contentTemplate = (contentLayout as any)
       // .replaceAll("@dataMemberName", `notification.${this.optionsName}`)
       .replaceAll("@memberName", `${this.optionsName}`)
@@ -50,65 +53,82 @@ export default class NotificationTab {
     this._owner.processNodesAsync([this.content]);
 
     // event read button
-    this.contents.querySelector("[data-bc-notification-read-button]")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const listContainer = this.contents.querySelector("[data-bc-notification-tab-list]");
-      const listItems = listContainer.querySelectorAll("[data-bc-notification-items]");
-      const listItemsArray = [];
-      listItems.forEach(element => {
-        listItemsArray.push(element.getAttribute("data-bc-notification-id"));
+    this.contents
+      .querySelector("[data-bc-notification-read-button]")
+      ?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const listContainer = this.contents.querySelector(
+          "[data-bc-notification-tab-list]"
+        );
+        const listItems = listContainer.querySelectorAll(
+          "[data-bc-notification-items]"
+        );
+        const listItemsArray = [];
+        listItems.forEach((element) => {
+          listItemsArray.push(element.getAttribute("data-bc-notification-id"));
+        });
+        const listItemsString = listItemsArray.join(",");
+        this._owner.setSource("notification.websocket", {
+          type: "read",
+          usedforid: listItemsString,
+        });
       });
-      const listItemsString = listItemsArray.join(",");
-      this._owner.setSource("notification.websocket", {
-        type: "read",
-        usedforid: listItemsString
-      });
-    });
 
     // event view button
-    this.contents.querySelector("[data-bc-notification-view-button]")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    this.contents
+      .querySelector("[data-bc-notification-view-button]")
+      ?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
 
-      // read info from local storage
-      const str = localStorage.getItem("__bc_panel_last_state__");
-      const obj = JSON.parse(str);
-      let pageId = "0";
-      let ownerUrl = "";
-      let owner:MenuOwnerType;
-      
-      if ((obj.b > 0) && (obj.p.owner == "external" || obj.p.owner == "business")) {
-        pageId = "69";
-        owner = "business";
-        ownerUrl = baseUrls.business;
-      } else if ((obj.c > 0) && (obj.p.owner == "external" || obj.p.owner == "corporate")) {
-        pageId = "99";
-        owner = "corporate";
-        ownerUrl = baseUrls.corporate;
-      } else if ((obj.i > 0) && (obj.p.owner == "external" || obj.p.owner == "profile")) {
-        pageId = "20";
-        owner = "profile";
-        ownerUrl = baseUrls.profile;
-      }
+        // read info from local storage
+        const str = localStorage.getItem("__bc_panel_last_state__");
+        const obj = JSON.parse(str);
+        let pageId = "0";
+        let ownerUrl = "";
+        let owner: MenuOwnerType;
 
-      // load page
-      const newParam: IPageLoaderParam = {
-        owner: owner,
-        ownerId: "",
-        ownerUrl: ownerUrl,
-        pageId: pageId,
-        rKey: this.optionsRkey,
-        pageMethod: obj.p.pageMethod,
-      };
+        if (
+          obj.b > 0 &&
+          (obj.p.owner == "external" || obj.p.owner == "business")
+        ) {
+          pageId = "69";
+          owner = "business";
+          ownerUrl = baseUrls.business;
+        } else if (
+          obj.c > 0 &&
+          (obj.p.owner == "external" || obj.p.owner == "corporate")
+        ) {
+          pageId = "99";
+          owner = "corporate";
+          ownerUrl = baseUrls.corporate;
+        } else if (
+          obj.i > 0 &&
+          (obj.p.owner == "external" || obj.p.owner == "profile")
+        ) {
+          pageId = "20";
+          owner = "profile";
+          ownerUrl = baseUrls.profile;
+        }
 
-      $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+        // load page
+        const newParam: IPageLoaderParam = {
+          owner: owner,
+          ownerId: "",
+          ownerUrl: ownerUrl,
+          pageId: pageId,
+          rKey: this.optionsRkey,
+          pageMethod: obj.p.pageMethod,
+        };
 
-      const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-      activeMenus.forEach((e) => {
-        e.removeAttribute("data-bc-menu-active");
+        $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+
+        const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+        activeMenus.forEach((e) => {
+          e.removeAttribute("data-bc-menu-active");
+        });
       });
-    });
   }
 
   public refreshUI(data: Array<any>) {

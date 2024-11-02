@@ -59,6 +59,16 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     pageLoaderParam: IPageLoaderParam
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
+    console.log(`qam page`, this.pageType, pageLoaderParam);
+    // //    console.log(`${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${pageLoaderParam.owner ? `/${pageParam.module}` : ""}/${pageParam.pageId}`)
+
+    // history.pushState(
+    //   null,
+    //   "",
+    //   `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${
+    //     pageParam.module ? `/${pageParam.module}` : ""
+    //   }/${pageParam.pageId}`
+    // );
     const doc = this.owner.toNode(
       `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`
     );

@@ -15,7 +15,8 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
-  implements IPageLoader {
+  implements IPageLoader
+{
   readonly ul: HTMLUListElement;
   private cache: MenuCacheManager;
   public current: MenuElement;
@@ -63,6 +64,7 @@ export default class MenuComponent
     );
     if (this.current != newMenu) {
       this.current = newMenu;
+      console.log("qam load menu", this.current);
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
       if (this.deviceId == 1) {
@@ -76,7 +78,7 @@ export default class MenuComponent
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });
         });
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
           document
             .querySelectorAll("[data-bc-ul-level-open]")
             .forEach((el: HTMLElement) => {
@@ -85,7 +87,7 @@ export default class MenuComponent
               el.removeAttribute("data-bc-ul-level-open");
               el.previousElementSibling.removeAttribute("data-bc-level-open");
             });
-        })
+        });
         this.ul.addEventListener("scroll", () => {
           document
             .querySelectorAll("[data-bc-ul-level-open]")
@@ -105,19 +107,25 @@ export default class MenuComponent
             const pid = temp?.info?.pid.toString();
             const mid = temp?.info?.mid.toString();
             const ownerId = temp?.ownerId.toString();
-            const content = this.ul.querySelector(
-              `a[data-bc-pid="${pid}"][data-bc-mid="${mid}"][data-bc-ownerid="${ownerId}"]`
-            );
-            let [li, parent] = this.current.menuItemLookup.get(pid + '-' + mid)
+            let [li, parent] = this.current.menuItemLookup.get(pid + "-" + mid);
             li?.setAttribute("data-bc-menu-active", "");
 
             if (parent) {
-              parent
-
-                .setAttribute("data-bc-menu-active", "");
+              parent.setAttribute("data-bc-menu-active", "");
             }
           }
         }
+      }
+      if (menuParam.pageId) {
+        const newParam: IPageLoaderParam = {
+          pageId: menuParam.pageId,
+          owner: menuParam.owner,
+          ownerId: menuParam.ownerId.toString(),
+          ownerUrl: menuParam.ownerUrl,
+          rKey: this.options.rKey,
+          pageMethod: this.options.method.page,
+        };
+        this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       }
     }
   }
@@ -130,7 +138,7 @@ export default class MenuComponent
     const content = this.ul.querySelector(
       `a[data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"][data-bc-ownerid]`
     );
-    let [li, parent] = this.current.menuItemLookup.get(pageId + '-' + moduleId)
+    let [li, parent] = this.current.menuItemLookup.get(pageId + "-" + moduleId);
     li?.setAttribute("data-bc-menu-active", "");
 
     if (parent) {
@@ -151,6 +159,7 @@ export default class MenuComponent
       rKey: param.rKey,
       pageMethod: this.options.method.page,
     };
+    console.log(`qam menu select`, newParam);
     this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
