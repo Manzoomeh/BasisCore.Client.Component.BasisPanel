@@ -15,12 +15,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected entityList: Array<IEntityInfo>;
   private _isFirst = true;
   protected mustReload = true;
-  private currentOwnerid: number = 0;
-  private currentDomianid: number = 0;
-  private ownerId: number = 0;
-  private domainId: number = 0;
-  private firstLoginFromOtherWebSitesService = false;
-  private firstLoginFromOtherWebSitesBusiness = false;
+  // private currentOwnerid: number = 0;
+  // private currentDomianid: number = 0;
+  // private ownerId: number = 0;
+  // private domainId: number = 0;
+  // private firstLoginFromOtherWebSitesService = false;
+  // private firstLoginFromOtherWebSitesBusiness = false;
 
   public businessComponentFlag: boolean = false;
   constructor(
@@ -64,10 +64,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .resolve<IProfileAccessor>("ProfileAccessor");
 
     const checkkrkeyInfo = await this.getCurrentService();
-    this.currentOwnerid = checkkrkeyInfo["currentOwnerid"];
-    this.currentDomianid = checkkrkeyInfo["currentDmnid"];
-    this.domainId = checkkrkeyInfo["dmnid"];
-    this.ownerId = checkkrkeyInfo["ownerid"];
+    // this.currentOwnerid = checkkrkeyInfo["currentOwnerid"];
+    // this.currentDomianid = checkkrkeyInfo["currentDmnid"];
+    // this.domainId = checkkrkeyInfo["dmnid"];
+    // this.ownerId = checkkrkeyInfo["ownerid"];
     this.element = this.container.querySelector<Element>("[data-bc-main-list]");
     // const elClick = this.element.closest("[data-bc-main-list-container]").querySelector("[data-bc-main-list-click]");
     const elClicks = this.element
@@ -105,7 +105,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
     if (this._isFirst) {
       this._isFirst = false;
-      console.log("qam start", this.getLevel());
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
@@ -122,7 +121,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       } else {
         console.log(`qam ${this.ownerType}`, "empty");
       }
-      console.log("qam end", this.getLevel());
     }
   }
 
@@ -303,30 +301,30 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       li.innerHTML = `<div data-bc-main-title="">${item.title} (${item.id})</div>`;
       const id = parseInt(li.getAttribute("data-id"));
       this.initLIElement(li, item);
-      if (
-        id == this.currentOwnerid &&
-        this.ownerId != 30 &&
-        this.firstLoginFromOtherWebSitesService == false
-      ) {
-        const entity = this.entityList.find((x) => x.id == id);
-        this.ownerType = "corporate";
-        this.owner.setSource(this.getSourceId(), entity ?? {});
-        this.resetBusinessEntity();
-        this.selectItem(li);
-        this.firstLoginFromOtherWebSitesService = true;
-        this.trySelectFromLocalStorageAsync();
-      }
+      // if (
+      //   id == this.currentOwnerid &&
+      //   this.ownerId != 30 &&
+      //   this.firstLoginFromOtherWebSitesService == false
+      // ) {
+      //   const entity = this.entityList.find((x) => x.id == id);
+      //   this.ownerType = "corporate";
+      //   this.owner.setSource(this.getSourceId(), entity ?? {});
+      //   this.resetBusinessEntity();
+      //   this.selectItem(li);
+      //   this.firstLoginFromOtherWebSitesService = true;
+      //   this.trySelectFromLocalStorageAsync();
+      // }
 
-      if (
-        id == this.currentDomianid &&
-        this.domainId != 30 &&
-        this.firstLoginFromOtherWebSitesBusiness == false
-      ) {
-        // this.ownerType = "business";
-        this.selectItem(li);
-        this.firstLoginFromOtherWebSitesBusiness = true;
-        this.trySelectFromLocalStorageAsync();
-      }
+      // if (
+      //   id == this.currentDomianid &&
+      //   this.domainId != 30 &&
+      //   this.firstLoginFromOtherWebSitesBusiness == false
+      // ) {
+      //   // this.ownerType = "business";
+      //   this.selectItem(li);
+      //   this.firstLoginFromOtherWebSitesBusiness = true;
+      //   this.trySelectFromLocalStorageAsync();
+      // }
       li.addEventListener("click", async (e) => {
         e.preventDefault();
         const id = parseInt(li.getAttribute("data-id"));
@@ -350,7 +348,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             id
           );
         }
-        console.log("qam dropdown item click", this.getLevel());
+        console.log("qam dropdown item click", this.getLevel(), e);
         this.setActive();
         this.selectItem(li);
       });
@@ -499,6 +497,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     entityName.setAttribute("data-bc-main-name", "");
 
     if (!freeze) {
+      console.log("qam fill ", this.getLevel(), freeze, li.textContent);
       entityName.textContent = li.textContent;
     } else {
       const switchInput = document.createElement("input");
@@ -520,6 +519,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       entityName.appendChild(switchLabel);
       const title = document.createTextNode(li.textContent);
       entityName.appendChild(title);
+      console.log("qam fill ", this.getLevel(), freeze, li.textContent);
     }
 
     containerMsgElement.parentNode.insertBefore(
