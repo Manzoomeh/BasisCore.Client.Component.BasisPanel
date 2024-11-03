@@ -1,4 +1,4 @@
-import { DefaultSource, MenuOwnerType } from "../../type-alias";
+import { DefaultSource, MenuOwnerType, PanelLevels } from "../../type-alias";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
 import contentLayout from "./assets/content-layout.html";
 import { INotificationProvider } from "./INotificationProvider";
@@ -88,6 +88,7 @@ export default class NotificationTab {
         let pageId = "0";
         let ownerUrl = "";
         let owner: MenuOwnerType;
+        let level: PanelLevels = obj.p.level;
 
         if (
           obj.b > 0 &&
@@ -95,6 +96,7 @@ export default class NotificationTab {
         ) {
           pageId = "69";
           owner = "business";
+          level = "business";
           ownerUrl = baseUrls.business;
         } else if (
           obj.c > 0 &&
@@ -102,6 +104,7 @@ export default class NotificationTab {
         ) {
           pageId = "99";
           owner = "corporate";
+          level = "corporate";
           ownerUrl = baseUrls.corporate;
         } else if (
           obj.i > 0 &&
@@ -109,11 +112,13 @@ export default class NotificationTab {
         ) {
           pageId = "20";
           owner = "profile";
+          level = "profile";
           ownerUrl = baseUrls.profile;
         }
 
         // load page
         const newParam: IPageLoaderParam = {
+          level: level,
           owner: owner,
           ownerId: "",
           ownerUrl: ownerUrl,

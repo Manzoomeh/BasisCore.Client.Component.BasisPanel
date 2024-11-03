@@ -25,7 +25,7 @@ export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
 export type PanelLevels = "corporate" | "business" | "profile";
 
 export interface ILoaderParam {
-  //level: PanelLevels;
+  level: PanelLevels;
   owner: MenuOwnerType;
   ownerId: string;
   ownerUrl: string;

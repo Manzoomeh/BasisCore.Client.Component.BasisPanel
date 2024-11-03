@@ -10,7 +10,6 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import { IUserDefineComponent, ISource, IDependencyContainer } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
-import IPageLoaderParam from "../menu/IPageLoaderParam";
 import LocalStorageUtil from "../../LocalStorageUtil";
 import IProfileAccessor from "./IProfileAccessor";
 
@@ -19,6 +18,7 @@ export default class ProfileComponent
   implements IProfileAccessor
 {
   private profile: IProfileInfo;
+  private isFirst: boolean = true;
 
   public getCurrent(): IProfileInfo {
     return this.profile;
@@ -102,12 +102,22 @@ export default class ProfileComponent
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     //This methode must call if no local storage setting exists
-    this.signalToDisplayMenu();
+    console.log(
+      "qam loadDataAsync",
+      LocalStorageUtil.getCurrentPage(),
+      this.isFirst,
+      !this.isFirst || LocalStorageUtil.currentLevel === "profile"
+    );
+    if (!this.isFirst || LocalStorageUtil.currentLevel === "profile") {
+      this.signalToDisplayMenu();
+    }
+    this.isFirst = false;
   }
 
   private signalToDisplayMenu() {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
+        level: "profile",
         owner: "profile",
         pageId: "default",
         ownerId: "",

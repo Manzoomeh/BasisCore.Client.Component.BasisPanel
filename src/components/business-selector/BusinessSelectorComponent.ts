@@ -1,5 +1,5 @@
 import { ISource, IUserDefineComponent } from "basiscore";
-import { DefaultSource } from "../../type-alias";
+import { DefaultSource, PanelLevels } from "../../type-alias";
 import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
   IEntityInfo,
@@ -30,6 +30,10 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
 
   protected getSourceId(): string {
     return DefaultSource.BUSINESS_SOURCE;
+  }
+
+  protected getLevel(): PanelLevels {
+    return "business";
   }
 
   public async initializeAsync(): Promise<void> {

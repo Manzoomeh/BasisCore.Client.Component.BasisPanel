@@ -1,5 +1,5 @@
 import { ISource, IUserDefineComponent } from "basiscore";
-import { DefaultSource } from "../../type-alias";
+import { DefaultSource, PanelLevels } from "../../type-alias";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
@@ -30,6 +30,10 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     return this.options.dataUrl.corporate;
   }
 
+  protected getLevel(): PanelLevels {
+    return "corporate";
+  }
+
   protected async fillComboAsync() {
     if (!this.dataLoaded) {
       await super.fillComboAsync();
@@ -40,7 +44,7 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
   public async runAsync(source?: ISource): Promise<any> {
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
-      this.trySelectFromLocalStorageAsync();
+      await this.trySelectFromLocalStorageAsync();
     }
   }
 

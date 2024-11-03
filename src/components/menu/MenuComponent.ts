@@ -5,7 +5,12 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import { DefaultSource, IModuleInfo, MenuOwnerType } from "../../type-alias";
+import {
+  DefaultSource,
+  IModuleInfo,
+  MenuOwnerType,
+  PanelLevels,
+} from "../../type-alias";
 import MenuCacheManager from "./MenuCacheManager";
 import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
@@ -120,6 +125,7 @@ export default class MenuComponent
     }
     if (menuParam.pageId) {
       const newParam: IPageLoaderParam = {
+        level: menuParam.level,
         pageId: menuParam.pageId,
         owner: menuParam.owner,
         ownerId: menuParam.ownerId.toString(),
@@ -153,6 +159,7 @@ export default class MenuComponent
     target: EventTarget
   ) {
     const newParam: IPageLoaderParam = {
+      level: param.level,
       pageId: pageId,
       owner: param.owner,
       ownerId: param.ownerId,
@@ -165,16 +172,18 @@ export default class MenuComponent
   }
 
   public async tryLoadPageEx(
-    owner: MenuOwnerType,
+    level: PanelLevels,
+    //owner: MenuOwnerType,
     moduleId: string,
     pageId: string,
     args?: any
   ): Promise<boolean> {
-    const ownerInfo = this.moduleMapper.get(owner);
+    const ownerInfo = this.moduleMapper.get(level); //this.moduleMapper.get(owner);
     if (ownerInfo) {
       const moduleInfo = ownerInfo.get(moduleId);
       if (moduleInfo) {
         const newParam: IPageLoaderParam = {
+          level: level,
           pageId: pageId,
           owner: moduleInfo.owner,
           ownerId: moduleId,
@@ -195,6 +204,7 @@ export default class MenuComponent
     if (source) {
       const param = source.rows[0] as IPageLoaderParam;
       const newParam: IPageLoaderParam = {
+        level: param.level,
         pageId: pageId,
         owner: param.owner,
         ownerId: param.ownerId,

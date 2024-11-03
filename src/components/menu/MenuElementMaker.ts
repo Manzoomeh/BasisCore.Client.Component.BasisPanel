@@ -257,6 +257,7 @@ export default class MenuElementMaker {
     pageLookup: Map<string, IMenuLoaderParam>
   ): HTMLElement {
     const newMenuParam: IMenuLoaderParam = {
+      level: menuParam.level,
       owner: "external",
       pageId: null,
       ownerId: node.mid,
@@ -297,6 +298,7 @@ export default class MenuElementMaker {
     deviceId: number
   ): HTMLLIElement {
     const newMenuParam: IMenuLoaderParam = {
+      level: menuParam.level,
       owner: "external",
       pageId: null,
       ownerId: node.mid,

@@ -1,6 +1,6 @@
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
-import { MenuOwnerType } from "./type-alias";
+import { MenuOwnerType, PanelLevels } from "./type-alias";
 import { IMenuPageInfo } from "./components/menu/IMenuInfo";
 import { IPageGroupInfo } from "./components/page/IPageGroupInfo";
 
@@ -110,6 +110,9 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._lastPage;
   }
 
+  public static get currentLevel(): PanelLevels {
+    return LocalStorageUtil.getCurrentPage()?.level ?? "profile";
+  }
   public static mustLoadPage(owner: MenuOwnerType) {
     let load = false;
     if (LocalStorageUtil._lastBusiness) {

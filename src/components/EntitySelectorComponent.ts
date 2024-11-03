@@ -1,6 +1,6 @@
 import { ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
-import { DefaultSource, MenuOwnerType } from "../type-alias";
+import { DefaultSource, MenuOwnerType, PanelLevels } from "../type-alias";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import { DependencyContainer } from "tsyringe";
@@ -46,6 +46,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected abstract getOwnerUrl(): string;
 
   protected abstract getSourceId(): string;
+  protected abstract getLevel(): PanelLevels;
   protected abstract initLIElement(li: HTMLLIElement, data: IEntityInfo): void;
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
@@ -104,6 +105,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
     if (this._isFirst) {
       this._isFirst = false;
+      console.log("qam start", this.getLevel());
       if (this.mustReload) {
         this.mustReload = false;
         await this.fillComboAsync();
@@ -120,6 +122,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       } else {
         console.log(`qam ${this.ownerType}`, "empty");
       }
+      console.log("qam end", this.getLevel());
     }
   }
 
@@ -276,9 +279,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.parentNode.insertBefore(searchWrapper, this.element);
   }
 
-  protected async onItemSelectAsync(id: number) {
+  protected async onItemSelectAsync(id: number, fromUI: boolean) {
+    console.log("qam ssss", this.getLevel());
     await this.setActiveAsync(id);
-    this.signalToDisplayMenu(id);
+    if (fromUI || LocalStorageUtil.currentLevel == this.getLevel()) {
+      this.signalToDisplayMenu(id);
+    }
   }
 
   protected entryListMaker(list: IEntityInfo[]) {
@@ -329,7 +335,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
         if (this.profileAccessor.getCurrent()) {
           if (entity) {
-            await this.onItemSelectAsync(id);
+            await this.onItemSelectAsync(id, e.isTrusted);
           }
         }
 
@@ -344,7 +350,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             id
           );
         }
-        console.log("qam dropdown item click");
+        console.log("qam dropdown item click", this.getLevel());
         this.setActive();
         this.selectItem(li);
       });
@@ -552,6 +558,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     pageId: string
   ): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
+      level: this.getLevel(),
       owner: this.ownerType,
       pageId: pageId,
       // ownerId: this.element.value,
@@ -564,7 +571,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async signalToDisplayMenu(id: Number) {
-    console.log(`qam ${this.ownerType} send show menu`, id);
+    console.log(
+      `qam ${this.ownerType} send show menu`,
+      id,
+      this._isFirst,
+      LocalStorageUtil.currentLevel,
+      this.getLevel(),
+      LocalStorageUtil.currentLevel == this.getLevel()
+    );
     this.owner.setSource(
       DefaultSource.SHOW_MENU,
       this.createMenuLoaderParam(id, "default")
