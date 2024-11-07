@@ -1,4 +1,4 @@
-import { ISource, IUserDefineComponent } from "basiscore";
+import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource, PanelLevels } from "../../type-alias";
 import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
@@ -9,7 +9,7 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   protected currentCorporate: ICorporateInfo;
@@ -20,7 +20,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     this.cache = new Map<number, Array<IEntityInfo>>();
   }
 
-  protected getOwnerUrl(): string {
+  protected getLevelUrl(): string {
     return this.options.baseUrl.business;
   }
 

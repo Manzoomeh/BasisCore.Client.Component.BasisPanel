@@ -1,11 +1,88 @@
 import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
-import { MenuOwnerType, PanelLevels } from "./type-alias";
+import { PageId, PanelLevels } from "./type-alias";
 import { IMenuPageInfo } from "./components/menu/IMenuInfo";
 import { IPageGroupInfo } from "./components/page/IPageGroupInfo";
 
 export default class LocalStorageUtil {
-  static readonly CURRENT_VERSION: number = 1;
+  static readonly CURRENT_VERSION: number = 2;
+  private static _level: PanelLevels = "profile";
+  private static _pageId: PageId = "default";
+  private static _businessId?: number;
+  private static _corporateId?: number;
+  private static _moduleId?: number;
+  private static _pageArguments?: any;
+  private static _pageDashboard?: boolean;
+
+  public static get level() {
+    return LocalStorageUtil._level;
+  }
+  public static get businessId() {
+    return LocalStorageUtil._businessId;
+  }
+  public static get corporateId() {
+    return LocalStorageUtil._corporateId;
+  }
+  public static get moduleId() {
+    return LocalStorageUtil._moduleId;
+  }
+  public static get pageId() {
+    return LocalStorageUtil._pageId;
+  }
+
+  public static setLevel(level: PanelLevels, ownerId: number) {
+    LocalStorageUtil._level = level;
+    switch (level) {
+      case "profile": {
+        LocalStorageUtil._businessId = null;
+        LocalStorageUtil._corporateId = null;
+        break;
+      }
+      case "corporate": {
+        LocalStorageUtil._corporateId = ownerId;
+        LocalStorageUtil._businessId = null;
+        break;
+      }
+      case "business": {
+        LocalStorageUtil._businessId = ownerId;
+        break;
+      }
+    }
+    LocalStorageUtil.save();
+  }
+
+  public static getLevelValue(level: PanelLevels): number | null {
+    let retVal: number = null;
+    switch (level) {
+      case "profile": {
+        retVal = 1;
+        break;
+      }
+      case "corporate": {
+        retVal = LocalStorageUtil.corporateId;
+        break;
+      }
+      case "business": {
+        retVal = LocalStorageUtil._businessId;
+        break;
+      }
+    }
+    return retVal;
+  }
+
+  public static setPage(
+    moduleId: number,
+    pageId: PageId,
+    dashboard: boolean,
+    args: any
+  ) {
+    LocalStorageUtil._pageId = pageId;
+    LocalStorageUtil._moduleId = moduleId;
+    LocalStorageUtil._pageDashboard = dashboard;
+    LocalStorageUtil._pageArguments = args;
+    LocalStorageUtil.save();
+  }
+
   private static _lastBusiness: number;
   private static _lastCorporate: number;
   private static _lastPage: IPageLoaderParam;
@@ -37,6 +114,14 @@ export default class LocalStorageUtil {
           const obj: IStorageObject = JSON.parse(str);
           if (obj.ver == LocalStorageUtil.CURRENT_VERSION) {
             if (obj.i && result.userid == obj.i) {
+              LocalStorageUtil._level = obj.level ?? "profile";
+              LocalStorageUtil._corporateId = obj.corporateId;
+              LocalStorageUtil._businessId = obj.businessId;
+              LocalStorageUtil._moduleId = obj.moduleId;
+              LocalStorageUtil._pageId = obj.pageId ?? "default";
+              LocalStorageUtil._pageArguments = obj.pageArguments;
+              LocalStorageUtil._pageDashboard = obj.pageDashboard;
+
               if (obj.b) {
                 LocalStorageUtil._lastBusiness = obj.b;
               }
@@ -60,24 +145,24 @@ export default class LocalStorageUtil {
     }
   }
 
-  public static resetCurrentUserId() {
-    LocalStorageUtil._currentBusiness = null;
-    LocalStorageUtil._currentCorporate = null;
-    LocalStorageUtil.save();
-  }
+  // public static resetCurrentUserId() {
+  //   LocalStorageUtil._currentBusiness = null;
+  //   LocalStorageUtil._currentCorporate = null;
+  //   LocalStorageUtil.save();
+  // }
 
-  public static setEntitySelectorCurrentValue(
-    ownerType: MenuOwnerType,
-    value: number
-  ) {
-    if (ownerType == "business") {
-      LocalStorageUtil._currentBusiness = value;
-    } else if (ownerType == "corporate") {
-      LocalStorageUtil._currentCorporate = value;
-      LocalStorageUtil._currentBusiness = null;
-    }
-    LocalStorageUtil.save();
-  }
+  // public static setEntitySelectorCurrentValue(
+  //   ownerType: MenuOwnerType,
+  //   value: number
+  // ) {
+  //   if (ownerType == "business") {
+  //     LocalStorageUtil._currentBusiness = value;
+  //   } else if (ownerType == "corporate") {
+  //     LocalStorageUtil._currentCorporate = value;
+  //     LocalStorageUtil._currentBusiness = null;
+  //   }
+  //   LocalStorageUtil.save();
+  // }
 
   private static save(): void {
     const obj: IStorageObject = {
@@ -87,54 +172,62 @@ export default class LocalStorageUtil {
       c: LocalStorageUtil._currentCorporate,
       p: LocalStorageUtil._currentPage,
       m: LocalStorageUtil._lastMenu,
+      level: LocalStorageUtil._level,
+      corporateId: LocalStorageUtil._corporateId,
+      businessId: LocalStorageUtil._businessId,
+      moduleId: LocalStorageUtil._moduleId,
+      pageId: LocalStorageUtil._pageId,
+      pageArguments: LocalStorageUtil._pageArguments,
+      pageDashboard: LocalStorageUtil._pageDashboard,
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
 
-  public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
-    let retVal: number = null;
-    if (ownerType == "business") {
-      retVal = LocalStorageUtil._lastBusiness;
-    } else if (ownerType == "corporate") {
-      retVal = LocalStorageUtil._lastCorporate;
-    }
-    return retVal;
-  }
+  // public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
+  //   let retVal: number = null;
+  //   if (ownerType == "business") {
+  //     retVal = LocalStorageUtil._lastBusiness;
+  //   } else if (ownerType == "corporate") {
+  //     retVal = LocalStorageUtil._lastCorporate;
+  //   }
+  //   return retVal;
+  // }
 
-  public static setCurrentPage(page: IPageLoaderParam) {
-    LocalStorageUtil._currentPage = page;
-    LocalStorageUtil.save();
-  }
+  // public static setCurrentPage(page: IPageLoaderParam) {
+  //   LocalStorageUtil._currentPage = page;
+  //   LocalStorageUtil.save();
+  // }
 
   public static getCurrentPage(): IPageLoaderParam {
-    return LocalStorageUtil._lastPage;
+    return null; // LocalStorageUtil._lastPage;
   }
 
-  public static get currentLevel(): PanelLevels {
-    return LocalStorageUtil.getCurrentPage()?.level ?? "profile";
-  }
-  public static mustLoadPage(owner: MenuOwnerType) {
-    let load = false;
-    if (LocalStorageUtil._lastBusiness) {
-      if (owner == "business") {
-        load = true;
-      }
-    } else if (LocalStorageUtil._lastCorporate) {
-      if (owner == "corporate") {
-        load = true;
-      }
-    } else if (owner == "profile") {
-      load = true;
-    }
-    if (load) {
-      LocalStorageUtil._hasPageToShow = false;
-    }
-    return load;
-  }
+  // public static get currentLevel(): PanelLevels {
+  //   return LocalStorageUtil.getCurrentPage()?.level ?? "profile";
+  // }
 
-  public static hasPageToShow() {
-    return LocalStorageUtil._hasPageToShow;
-  }
+  // public static mustLoadPage(owner: MenuOwnerType) {
+  //   let load = false;
+  //   if (LocalStorageUtil._lastBusiness) {
+  //     if (owner == "business") {
+  //       load = true;
+  //     }
+  //   } else if (LocalStorageUtil._lastCorporate) {
+  //     if (owner == "corporate") {
+  //       load = true;
+  //     }
+  //   } else if (owner == "profile") {
+  //     load = true;
+  //   }
+  //   if (load) {
+  //     LocalStorageUtil._hasPageToShow = false;
+  //   }
+  //   return load;
+  // }
+
+  // public static hasPageToShow() {
+  //   return LocalStorageUtil._hasPageToShow;
+  // }
 
   public static getLastBanner() {
     return LocalStorageUtil._lastBanner;
@@ -158,29 +251,29 @@ export default class LocalStorageUtil {
     localStorage.setItem("banner", JSON.stringify(this._lastBanner));
   }
 
-  public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
-    LocalStorageUtil._lastMenu = {
-      ownerId: ownerId,
-      info: menu,
-    };
-    LocalStorageUtil.save();
-  }
+  // public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
+  //   LocalStorageUtil._lastMenu = {
+  //     ownerId: ownerId,
+  //     info: menu,
+  //   };
+  //   LocalStorageUtil.save();
+  // }
 
   public static getCurrentMenu(): ICurrentMenu {
-    return LocalStorageUtil._lastMenu;
+    return null; // LocalStorageUtil._lastMenu;
   }
 
-  public static mustActiveMenuItem(owner: MenuOwnerType) {
+  public static mustActiveMenuItem(level: PanelLevels) {
     let load = false;
     if (LocalStorageUtil._lastBusiness) {
-      if (owner == "business") {
+      if (level == "business") {
         load = true;
       }
     } else if (LocalStorageUtil._lastCorporate) {
-      if (owner == "corporate") {
+      if (level == "corporate") {
         load = true;
       }
-    } else if (owner == "profile") {
+    } else if (level == "profile") {
       load = true;
     }
     if (load) {
@@ -190,7 +283,7 @@ export default class LocalStorageUtil {
   }
 
   public static hasMenuToActive() {
-    return LocalStorageUtil._hasMenuToActive;
+    return false; //LocalStorageUtil._hasMenuToActive;
   }
 }
 
@@ -223,4 +316,11 @@ interface IStorageObject {
   c: number;
   p: IPageLoaderParam;
   m: ICurrentMenu;
+  level: PanelLevels;
+  corporateId?: number;
+  businessId?: number;
+  moduleId?: number;
+  pageId: PageId;
+  pageArguments?: any;
+  pageDashboard?: boolean;
 }

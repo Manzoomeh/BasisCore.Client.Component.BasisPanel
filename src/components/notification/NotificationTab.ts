@@ -3,8 +3,9 @@ import IPageLoaderParam from "../menu/IPageLoaderParam";
 import contentLayout from "./assets/content-layout.html";
 import { INotificationProvider } from "./INotificationProvider";
 import { IUrlCollectionOption } from "../basispanel/IBasisPanelOptions";
+import { BCWrapperFactory } from "basiscore";
 
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 export default class NotificationTab {
   readonly _owner: INotificationProvider;
 
@@ -85,7 +86,8 @@ export default class NotificationTab {
         // read info from local storage
         const str = localStorage.getItem("__bc_panel_last_state__");
         const obj = JSON.parse(str);
-        let pageId = "0";
+        let pageId = 0;
+        let ownerId = 0;
         let ownerUrl = "";
         let owner: MenuOwnerType;
         let level: PanelLevels = obj.p.level;
@@ -94,7 +96,7 @@ export default class NotificationTab {
           obj.b > 0 &&
           (obj.p.owner == "external" || obj.p.owner == "business")
         ) {
-          pageId = "69";
+          pageId = 69;
           owner = "business";
           level = "business";
           ownerUrl = baseUrls.business;
@@ -102,7 +104,7 @@ export default class NotificationTab {
           obj.c > 0 &&
           (obj.p.owner == "external" || obj.p.owner == "corporate")
         ) {
-          pageId = "99";
+          pageId = 99;
           owner = "corporate";
           level = "corporate";
           ownerUrl = baseUrls.corporate;
@@ -110,7 +112,7 @@ export default class NotificationTab {
           obj.i > 0 &&
           (obj.p.owner == "external" || obj.p.owner == "profile")
         ) {
-          pageId = "20";
+          pageId = 20;
           owner = "profile";
           level = "profile";
           ownerUrl = baseUrls.profile;
@@ -119,12 +121,13 @@ export default class NotificationTab {
         // load page
         const newParam: IPageLoaderParam = {
           level: level,
-          owner: owner,
-          ownerId: "",
-          ownerUrl: ownerUrl,
+          levelId: ownerId,
+          //owner: owner,
+          //ownerId: "",
+          moduleUrl: ownerUrl,
           pageId: pageId,
           rKey: this.optionsRkey,
-          pageMethod: obj.p.pageMethod,
+          //pageMethod: obj.p.pageMethod,
         };
 
         $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);

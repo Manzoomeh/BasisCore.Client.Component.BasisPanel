@@ -23,20 +23,34 @@ export interface IDictionary<TValue> {
 
 export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
 export type PanelLevels = "corporate" | "business" | "profile";
+export type PageId = number | "default";
 
 export interface ILoaderParam {
   level: PanelLevels;
-  owner: MenuOwnerType;
-  ownerId: string;
+  //owner: MenuOwnerType;
+  ownerId: number;
   ownerUrl: string;
-  rKey: string;
+  //rKey: string;
 }
 
 export interface IResponseCheckRkey {
   checked: boolean;
 }
 
+// export interface IModuleInfo {
+//   owner: MenuOwnerType;
+//   ownerUrl: string;
+// }
 export interface IModuleInfo {
-  owner: MenuOwnerType;
-  ownerUrl: string;
+  name: string;
+  url: string;
+  title: string;
 }
+
+export type menuItemClickCallback = (
+  level: PanelLevels,
+  ownerId: number,
+  moduleId: number,
+  pageId: number,
+  target: EventTarget
+) => void;

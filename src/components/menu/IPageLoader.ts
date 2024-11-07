@@ -1,4 +1,5 @@
 import { MenuOwnerType } from "../../type-alias";
+import MenuCacheManager from "./MenuCacheManager";
 
 export default interface IPageLoader {
   tryLoadPage(pageId: string, args?: any): Promise<boolean>;

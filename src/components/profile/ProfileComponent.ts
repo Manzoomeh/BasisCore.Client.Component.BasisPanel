@@ -60,8 +60,9 @@ export default class ProfileComponent
       .querySelector("[data-bc-user-change-level]")
       .addEventListener("click", (e) => {
         e.preventDefault();
-        this.signalToDisplayMenu();
-        LocalStorageUtil.resetCurrentUserId();
+        this.signalToDisplayMenu(false);
+        //LocalStorageUtil.resetCurrentUserId();
+        LocalStorageUtil.setLevel("profile", 1);
         this.container.classList.add("active-user");
         this.container
           .closest("[data-bc-bp-main-header]")
@@ -104,26 +105,23 @@ export default class ProfileComponent
     //This methode must call if no local storage setting exists
     console.log(
       "qam loadDataAsync",
-      LocalStorageUtil.getCurrentPage(),
       this.isFirst,
-      !this.isFirst || LocalStorageUtil.currentLevel === "profile"
+      !this.isFirst || LocalStorageUtil.level === "profile"
     );
-    if (!this.isFirst || LocalStorageUtil.currentLevel === "profile") {
-      this.signalToDisplayMenu();
+    if (!this.isFirst || LocalStorageUtil.level === "profile") {
+      this.signalToDisplayMenu(true);
     }
     this.isFirst = false;
   }
 
-  private signalToDisplayMenu() {
+  private signalToDisplayMenu(loadPageFromLocalStorage: boolean) {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         level: "profile",
-        owner: "profile",
-        pageId: "default",
-        ownerId: "",
-        ownerUrl: this.options.baseUrl.profile,
-        rKey: this.options.rKey,
-        menuMethod: this.options.method.menu,
+        levelId: 1,
+        levelUrl: this.options.baseUrl.profile,
+        moduleId: 1,
+        pageId: loadPageFromLocalStorage ? LocalStorageUtil.pageId : "default",
       };
       console.log("qam show profile menu", menuInfo);
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);

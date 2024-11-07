@@ -1,4 +1,4 @@
-import { ILoaderParam } from "../../type-alias";
+import { ILoaderParam, PageId, PanelLevels } from "../../type-alias";
 
 export default interface IMenuInfo {
   nodes: Array<IMenuItemInfo>;
@@ -6,13 +6,13 @@ export default interface IMenuInfo {
 
 export interface IMenuItemInfo {
   title: string;
-  mid: string;
+  mid: number;
 }
 
 export interface IMenuExternalItemInfo extends IMenuItemInfo {
   multi: boolean;
+  name: string;
   url: string;
-  mid: string;
 }
 
 export interface IMenuLevelInfo extends IMenuItemInfo {
@@ -20,10 +20,13 @@ export interface IMenuLevelInfo extends IMenuItemInfo {
 }
 
 export interface IMenuPageInfo extends IMenuItemInfo {
-  pid: string;
+  pid: number;
 }
 
-export interface IMenuLoaderParam extends ILoaderParam {
-  menuMethod: string;
-  pageId: string;
+export interface IMenuLoaderParam {
+  level: PanelLevels;
+  levelId: number;
+  levelUrl: string;
+  moduleId?: number;
+  pageId?: PageId;
 }

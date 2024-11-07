@@ -4,7 +4,7 @@ import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
-import { IUserDefineComponent, ISource } from "basiscore";
+import { IUserDefineComponent, ISource, BCWrapperFactory } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
@@ -14,7 +14,7 @@ import IMenuInfo, {
 import IPageLoaderParam from "../../menu/IPageLoaderParam";
 import PageWidgetComponent from "../PageWidgetComponent";
 
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 
 export default class SidebarComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
@@ -73,7 +73,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     );
 
     const url = HttpUtil.formatString(
-      `${this.param.page.ownerUrl}${this.options.method.sidebarMenu}`,
+      `${this.param.page.moduleUrl}${this.options.method.sidebarMenu}`,
       { rKey: this.param.page.rKey, pageId: this.param.page.pageId }
     );
 
@@ -136,7 +136,7 @@ export default class SidebarComponent extends PageWidgetComponent {
   private createPageSidebarItem(node: IMenuPageInfo): HTMLElement {
     const div = document.createElement("div");
     div.setAttribute("data-bc-sidebar-items", "");
-    if (parseInt(node.pid) === parseInt(this.param.page.pageId)) {
+    if (node.pid === this.param.page.pageId) {
       div.setAttribute("data-bc-sidebar-active", "");
       div.setAttribute("data-sys-inherit", "");
     }
@@ -153,17 +153,16 @@ export default class SidebarComponent extends PageWidgetComponent {
   }
 
   private async onSidebarItemClick(
-    pageId: string,
+    pageId: number,
     target: EventTarget,
     args?: any
   ) {
     const newParam: Partial<IPageLoaderParam> = {
       pageId: pageId,
-      owner: this.param.page.owner,
-      ownerId: this.param.page.ownerId,
-      ownerUrl: this.param.page.ownerUrl,
+      //owner: this.param.page.owner,
+      levelId: this.param.page.levelId,
+      moduleUrl: this.param.page.moduleUrl,
       rKey: this.param.page.rKey,
-      pageMethod: this.param.page.pageMethod,
       arguments: args,
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);

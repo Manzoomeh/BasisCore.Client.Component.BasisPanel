@@ -1,4 +1,4 @@
-import { ISource, IUserDefineComponent } from "basiscore";
+import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
 import { DefaultSource, MenuOwnerType, PanelLevels } from "../type-alias";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
@@ -7,7 +7,7 @@ import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
 import IProfileAccessor from "./profile/IProfileAccessor";
 
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   protected profileAccessor: IProfileAccessor;
   protected element: Element;
@@ -43,7 +43,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected abstract getListUrl(): string;
 
-  protected abstract getOwnerUrl(): string;
+  protected abstract getLevelUrl(): string;
 
   protected abstract getSourceId(): string;
   protected abstract getLevel(): PanelLevels;
@@ -53,9 +53,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const id = parseInt(msgElId);
     console.log("qam select service", id);
     if (id != 0) {
-      LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
+      //LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
       this.setActive();
-      this.signalToDisplayMenu(id);
+      this.signalToDisplayMenu(id, false);
     }
   }
   public async initializeAsync(): Promise<void> {
@@ -109,7 +109,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.mustReload = false;
         await this.fillComboAsync();
       }
-      const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+      //const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
+      const id = LocalStorageUtil.getLevelValue(this.getLevel());
       if (id) {
         const relatedElement = this.element.querySelector<HTMLElement>(
           `[data-id='${id}']`
@@ -280,8 +281,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected async onItemSelectAsync(id: number, fromUI: boolean) {
     console.log("qam ssss", this.getLevel());
     await this.setActiveAsync(id);
-    if (fromUI || LocalStorageUtil.currentLevel == this.getLevel()) {
-      this.signalToDisplayMenu(id);
+    if (fromUI || LocalStorageUtil.level == this.getLevel()) {
+      this.signalToDisplayMenu(id, !fromUI);
     }
   }
 
@@ -330,7 +331,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const id = parseInt(li.getAttribute("data-id"));
 
         const entity = this.entityList.find((x) => x.id == id);
-        LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
+        //LocalStorageUtil.setLevel(this.getLevel(), id);
+        //LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
         if (this.profileAccessor.getCurrent()) {
           if (entity) {
             await this.onItemSelectAsync(id, e.isTrusted);
@@ -553,36 +555,36 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.innerHTML = "";
   }
 
-  protected createMenuLoaderParam(
-    id: Number,
-    pageId: string
-  ): IMenuLoaderParam {
+  protected createMenuLoaderParam(id: number): IMenuLoaderParam {
     const menuParam: IMenuLoaderParam = {
       level: this.getLevel(),
-      owner: this.ownerType,
-      pageId: pageId,
-      // ownerId: this.element.value,
-      ownerId: id.toString(),
-      ownerUrl: this.getOwnerUrl(),
-      rKey: this.options.rKey,
-      menuMethod: this.options.method.menu,
+      levelId: id,
+      levelUrl: this.getLevelUrl(),
     };
     return menuParam;
   }
 
-  private async signalToDisplayMenu(id: Number) {
+  private async signalToDisplayMenu(
+    id: number,
+    setPageDataFromLocalStorage: boolean
+  ) {
     console.log(
       `qam ${this.ownerType} send show menu`,
       id,
       this._isFirst,
-      LocalStorageUtil.currentLevel,
+      LocalStorageUtil.level,
       this.getLevel(),
-      LocalStorageUtil.currentLevel == this.getLevel()
+      LocalStorageUtil.level == this.getLevel()
     );
-    this.owner.setSource(
-      DefaultSource.SHOW_MENU,
-      this.createMenuLoaderParam(id, "default")
-    );
+    LocalStorageUtil.setLevel(this.getLevel(), id);
+    const menuParam = this.createMenuLoaderParam(id);
+    menuParam.pageId = setPageDataFromLocalStorage
+      ? LocalStorageUtil.pageId
+      : "default";
+    menuParam.moduleId = setPageDataFromLocalStorage
+      ? LocalStorageUtil.moduleId
+      : 1;
+    this.owner.setSource(DefaultSource.SHOW_MENU, menuParam);
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");

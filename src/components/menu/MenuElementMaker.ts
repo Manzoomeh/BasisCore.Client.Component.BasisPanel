@@ -4,129 +4,136 @@ import IMenuInfo, {
   IMenuPageInfo,
   IMenuExternalItemInfo,
   IMenuItemInfo,
-  IMenuLoaderParam,
 } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import { ICheckRkeyOptions } from "./../basispanel/IBasisPanelOptions";
-import LocalStorageUtil from "../../LocalStorageUtil";
-import { IModuleInfo } from "../../type-alias";
+import {
+  IModuleInfo,
+  menuItemClickCallback,
+  PanelLevels,
+} from "../../type-alias";
+import { BCWrapperFactory } from "basiscore";
 
 export default class MenuElementMaker {
-  readonly rKey: string;
-  readonly onMenuItemClick: (
-    pageId: string,
-    param: IMenuLoaderParam,
-    target: EventTarget
-  ) => void;
-  private checkRkeyOption: ICheckRkeyOptions;
-  private deviceId: number;
-  private moduleMapper: Map<string, IModuleInfo>;
-  public menuItemLookup: Map<string, HTMLElement[]>;
+  readonly onMenuItemClick: menuItemClickCallback;
+  private readonly checkRkeyOption: ICheckRkeyOptions;
+  private readonly deviceId: number;
+  private readonly modules: Map<number, IModuleInfo> = new Map<
+    number,
+    IModuleInfo
+  >();
+  private readonly rKey: string;
+  private readonly menuMethod: string;
+  private readonly level: PanelLevels;
+  private readonly levelId: number;
+  //public menuItemLookup: Map<string, HTMLElement[]>;
 
   constructor(
+    level: PanelLevels,
+    levelId: number,
     rKey: string,
-    moduleMapper: Map<string, IModuleInfo>,
-    onMenuItemClick: (
-      pageId: string,
-      param: IMenuLoaderParam,
-      target: EventTarget
-    ) => void,
+    menuMethod: string,
+    onMenuItemClick: menuItemClickCallback,
     checkRkey: ICheckRkeyOptions,
     deviceId: number
   ) {
+    this.level = level;
+    this.levelId = levelId;
     this.rKey = rKey;
+    this.menuMethod = menuMethod;
     this.onMenuItemClick = onMenuItemClick;
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
-    this.moduleMapper = moduleMapper;
-    this.menuItemLookup = new Map<string, HTMLElement[]>();
+    //this.menuItemLookup = new Map<string, HTMLElement[]>();
   }
 
-  public create(menuInfo: IMenuInfo, menuParam: IMenuLoaderParam): MenuElement {
+  public async createAsync(
+    menuInfo: IMenuInfo,
+    levelUrl: string
+  ): Promise<MenuElement> {
     const tmpUL = document.createElement("ul");
-
-    const pageLookup = new Map<string, IMenuLoaderParam>();
-    this.createMenu(tmpUL, menuInfo.nodes, menuParam, pageLookup);
+    await this.createMenuAsync(tmpUL, menuInfo.nodes, levelUrl);
     return new MenuElement(
-      menuParam,
-      pageLookup,
       Array.from(tmpUL.childNodes),
-      this.menuItemLookup
+      this.level,
+      this.modules
     );
   }
 
-  private createMenu(
+  private async createMenuAsync(
     ul: HTMLUListElement,
     items: Array<IMenuItemInfo>,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
+    moduleUrl: string,
     li?: HTMLElement
   ) {
-    items?.forEach((node) => {
+    const tasks = items?.map(async (node) => {
       if ((node as IMenuExternalItemInfo).url) {
-        this.moduleMapper.set(node.mid, {
-          owner: menuParam.owner,
-          ownerUrl: (node as IMenuExternalItemInfo).url,
+        this.modules.set(node.mid, {
+          name: (node as IMenuExternalItemInfo).name,
+          url: (node as IMenuExternalItemInfo).url,
+          title: (node as IMenuExternalItemInfo).title,
         });
       }
       if ((node as IMenuPageInfo).pid) {
-        ul.appendChild(
-          this.createPageMenuItem(
-            node as IMenuPageInfo,
-            menuParam,
-            pageLookup,
-            li
-          )
-        );
+        if (!this.modules.has(node.mid)) {
+          this.modules.set(node.mid, {
+            name: this.level,
+            title: this.level,
+            url: moduleUrl,
+          });
+        }
+        ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo, li));
       } else if ((node as IMenuLevelInfo).nodes) {
         ul.appendChild(
-          this.createLevelMenuItem(
+          await this.createLevelMenuItemAsync(
             node as IMenuLevelInfo,
-            menuParam,
-            pageLookup,
+            moduleUrl,
             this.deviceId
           )
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == true
+        (node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
-          this.createExternalMenuItem(
+          await this.createExternalMenuItem(
             node as IMenuExternalItemInfo,
-            menuParam,
-            pageLookup,
             this.deviceId
           )
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi == false
+        !(node as IMenuExternalItemInfo).multi
       ) {
         ul.appendChild(
-          this.createExternalMenuItemSingleItem(
-            node as IMenuExternalItemInfo,
-            menuParam,
-            pageLookup
+          await this.createExternalMenuItemSingleItemAsync(
+            node as IMenuExternalItemInfo
           )
         );
       }
     });
+    if (tasks) {
+      await Promise.all(tasks);
+    }
   }
 
-  private createLevelMenuItem(
+  private async createLevelMenuItemAsync(
     node: IMenuLevelInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
+    ownerUrl: string,
+    //pageLookup: Map<number, IMenuLoaderParam>,
     deviceId: number
-  ): HTMLLIElement {
+  ): Promise<HTMLLIElement> {
     const li = document.createElement("li");
     const content = document.createElement("a");
-    content.setAttribute("data-bc-level", "");
+    content.setAttribute("data-bc-level", this.level);
+    content.setAttribute("data-bc-level-id", this.levelId.toString());
+    content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
+    content.setAttribute("data-bc-menu-id", node.title);
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
-    this.createMenu(innerUl, node.nodes, menuParam, pageLookup, li);
+    innerUl.setAttribute("data-bc-related-menu-id", node.title);
+    await this.createMenuAsync(innerUl, node.nodes, ownerUrl, li);
     li.appendChild(content);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
     if (deviceId == 2) {
@@ -198,40 +205,33 @@ export default class MenuElementMaker {
 
   private createPageMenuItem(
     node: IMenuPageInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
     parentLi: HTMLElement
   ): HTMLLIElement {
-    if (!this.moduleMapper.has(node.mid)) {
-      this.moduleMapper.set(node.mid, {
-        owner: menuParam.owner,
-        ownerUrl: menuParam.ownerUrl,
-      });
-    }
     const li = document.createElement("li");
     const content = document.createElement("a");
-    this.menuItemLookup.set(node.pid + "-" + node.mid, [
-      li as HTMLElement,
-      parentLi as HTMLElement,
-    ]);
 
     content.setAttribute("data-sys-menu-link", "");
+    content.setAttribute("data-bc-level", this.level);
+    content.setAttribute("data-bc-level-id", this.levelId.toString());
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.setAttribute("data-bc-mid", node.mid?.toString());
-    content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
+    //content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
     content.appendChild(document.createTextNode(node.title));
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onMenuItemClick(node.pid, menuParam, e.target);
+      this.onMenuItemClick(
+        this.level,
+        this.levelId,
+        node.mid,
+        node.pid,
+        e.target
+      );
       document.body.classList.remove("scrolling");
 
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
         e.removeAttribute("data-bc-menu-active");
       });
-
-      const parent = content.closest("[data-bc-bp-submenu]");
-
       if (parentLi) {
         parentLi.setAttribute("data-bc-menu-active", "");
         li.setAttribute("data-bc-menu-active", "");
@@ -245,26 +245,22 @@ export default class MenuElementMaker {
         );
       }
 
-      LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
+      //LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
     });
-    pageLookup.set(node.pid, menuParam);
+    //pageLookup.set(node.pid, menuParam);
     li.appendChild(content);
     return li;
   }
-  private createExternalMenuItemSingleItem(
-    node: IMenuExternalItemInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>
-  ): HTMLElement {
-    const newMenuParam: IMenuLoaderParam = {
-      level: menuParam.level,
-      owner: "external",
-      pageId: null,
-      ownerId: node.mid,
-      ownerUrl: node.url,
-      menuMethod: menuParam.menuMethod,
-      rKey: menuParam.rKey,
-    };
+  private async createExternalMenuItemSingleItemAsync(
+    node: IMenuExternalItemInfo
+    //menuParam: IMenuLoaderParam
+    //pageLookup: Map<number, IMenuLoaderParam>
+  ): Promise<HTMLElement> {
+    // const newMenuParam: IMenuLoaderParam = {
+    //   level: menuParam.level,
+    //   ownerId: node.mid,
+    //   ownerUrl: node.url,
+    // };
     const li = document.createElement("li");
     const ul = document.createElement("ul");
     li.setAttribute("data-bc-bp-menu-external-title", "");
@@ -272,40 +268,26 @@ export default class MenuElementMaker {
     ul.setAttribute("data-bc-bp-menu-external-single-node", "");
 
     li.appendChild(ul);
-    const url = HttpUtil.formatString(
-      `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
-      {
-        rKey: this.rKey,
-        level: menuParam.owner,
-      }
-    );
+    const url = HttpUtil.formatString(`${node.url}${this.menuMethod}`, {
+      rKey: this.rKey,
+      level: this.level,
+    });
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    const menu = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption
-    ).then((menu) => {
-      if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
-      }
-    });
+    );
+    if (menu) {
+      await this.createMenuAsync(ul, menu.nodes, node.url, li);
+    }
+
     return li;
   }
-  private createExternalMenuItem(
+  private async createExternalMenuItem(
     node: IMenuExternalItemInfo,
-    menuParam: IMenuLoaderParam,
-    pageLookup: Map<string, IMenuLoaderParam>,
     deviceId: number
-  ): HTMLLIElement {
-    const newMenuParam: IMenuLoaderParam = {
-      level: menuParam.level,
-      owner: "external",
-      pageId: null,
-      ownerId: node.mid,
-      ownerUrl: node.url,
-      menuMethod: menuParam.menuMethod,
-      rKey: menuParam.rKey,
-    };
+  ): Promise<HTMLLIElement> {
     const li = document.createElement("li");
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
@@ -363,23 +345,19 @@ export default class MenuElementMaker {
         }
       });
     }
-    const url = HttpUtil.formatString(
-      `${newMenuParam.ownerUrl}${menuParam.menuMethod}`,
-      {
-        rKey: this.rKey,
-        level: menuParam.owner,
-      }
-    );
+    const url = HttpUtil.formatString(`${node.url}${this.menuMethod}`, {
+      rKey: this.rKey,
+      level: this.level,
+    });
 
-    HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
+    const menu = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",
       this.checkRkeyOption
-    ).then((menu) => {
-      if (menu) {
-        this.createMenu(ul, menu.nodes, newMenuParam, pageLookup, li);
-      }
-    });
+    );
+    if (menu) {
+      this.createMenuAsync(ul, menu.nodes, node.url, li);
+    }
 
     return li;
   }
