@@ -125,6 +125,7 @@ export default class MenuElementMaker {
   ): Promise<HTMLLIElement> {
     const li = document.createElement("li");
     const content = document.createElement("a");
+    content.setAttribute("data-bc-level-node", "");
     content.setAttribute("data-bc-level", this.level);
     content.setAttribute("data-bc-level-id", this.levelId.toString());
     content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());

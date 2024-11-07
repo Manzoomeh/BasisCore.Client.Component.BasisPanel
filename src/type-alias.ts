@@ -21,7 +21,6 @@ export interface IDictionary<TValue> {
   [Key: string]: TValue;
 }
 
-export type MenuOwnerType = "corporate" | "business" | "profile" | "external";
 export type PanelLevels = "corporate" | "business" | "profile";
 export type PageId = number | "default";
 

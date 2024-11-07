@@ -1,12 +1,16 @@
-import { MenuOwnerType } from "../../type-alias";
-import MenuCacheManager from "./MenuCacheManager";
-
+import { PageId, PanelLevels } from "../../type-alias";
 export default interface IPageLoader {
-  tryLoadPage(pageId: string, args?: any): Promise<boolean>;
+  tryLoadPage(
+    level: PanelLevels,
+    levelId: number | null,
+    moduleId: number,
+    pageId: PageId,
+    args?: any
+  ): Promise<boolean>;
   tryLoadPageEx(
-    owner: MenuOwnerType,
-    moduleId: string,
-    pageId: string,
+    level: PanelLevels,
+    moduleId: number,
+    pageId: PageId,
     args?: any
   ): Promise<boolean>;
 }

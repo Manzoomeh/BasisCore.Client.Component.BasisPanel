@@ -16,7 +16,6 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
-import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -131,7 +130,7 @@ export default class MenuComponent
       //   }
       // }
     }
-    this.tryLoadPageEx_(
+    this.tryLoadPage(
       menuParam.level,
       menuParam.levelId,
       menuParam.moduleId,
@@ -200,11 +199,11 @@ export default class MenuComponent
     target: EventTarget
   ) {
     //LocalStorageUtil.setCurrentMenu(moduleId, node);
-    this.tryLoadPageEx_(level, levelId, moduleId, pageId, null);
+    this.tryLoadPage(level, levelId, moduleId, pageId, null);
   }
-  public async tryLoadPageEx_(
+  public async tryLoadPage(
     level: PanelLevels,
-    levelId: number,
+    levelId: number | null,
     moduleId: number,
     pageId: PageId,
     args?: any
@@ -227,70 +226,12 @@ export default class MenuComponent
     return moduleInfo != null;
   }
 
-  // private async onMenuItemClick_(
-  //   pageId: string,
-  //   param: IMenuLoaderParam,
-  //   target: EventTarget
-  // ) {
-  //   const newParam: IPageLoaderParam = {
-  //     level: param.level,
-  //     pageId: pageId,
-  //     owner: param.owner,
-  //     ownerId: param.ownerId,
-  //     ownerUrl: param.ownerUrl,
-  //     rKey: this.options.rKey,
-  //     pageMethod: this.options.method.page,
-  //   };
-  //   console.log(`qam menu select`, newParam);
-  //   this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-  // }
-
-  public async tryLoadPageEx(
+  public tryLoadPageEx(
     level: PanelLevels,
-    //owner: MenuOwnerType,
-    moduleId: string,
-    pageId: string,
+    moduleId: number,
+    pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    // const ownerInfo = this.moduleMapper.get(level); //this.moduleMapper.get(owner);
-    // if (ownerInfo) {
-    //   const moduleInfo = ownerInfo.get(moduleId);
-    //   if (moduleInfo) {
-    //     const newParam: IPageLoaderParam = {
-    //       level: level,
-    //       pageId: pageId,
-    //       owner: moduleInfo.owner,
-    //       ownerId: moduleId,
-    //       ownerUrl: moduleInfo.ownerUrl,
-    //       rKey: this.options.rKey,
-    //       pageMethod: this.options.method.page,
-    //       arguments: args,
-    //     };
-    //     this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    //     this.setMenuUISelected(pageId, moduleId);
-    //   }
-    // }
-    // return ownerInfo != null;
-    return false;
-  }
-
-  public async tryLoadPage(pageId: string, args?: any): Promise<boolean> {
-    // const source = this.owner.tryToGetSource(DefaultSource.DISPLAY_PAGE);
-    // if (source) {
-    //   const param = source.rows[0] as IPageLoaderParam;
-    //   const newParam: IPageLoaderParam = {
-    //     level: param.level,
-    //     pageId: pageId,
-    //     owner: param.owner,
-    //     ownerId: param.ownerId,
-    //     ownerUrl: param.ownerUrl,
-    //     rKey: param.rKey,
-    //     pageMethod: param.pageMethod,
-    //     arguments: args,
-    //   };
-    //   this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
-    // }
-    // return source != null;
-    return false;
+    return this.tryLoadPage(level, null, moduleId, pageId, args);
   }
 }

@@ -308,7 +308,7 @@
   /* line-height: 24px !important; */
 }
 
-[data-bc-d2-menu] [data-bc-level]:after {
+[data-bc-d2-menu] [data-bc-level-node]:after {
   font-family: "LineIcons";
   content: "\ea58";
   position: absolute;

@@ -72,13 +72,15 @@ export default class MenuCacheManager {
 
   public getModuleInfo(
     level: PanelLevels,
-    levelId: number,
+    levelId: number | null,
     moduleId: number
   ): IModuleInfo | null {
     let retVal: IModuleInfo = null;
     const levelCache = this.cache.get(level);
     if (levelCache) {
-      const levelItemCache = levelCache.get(levelId);
+      const levelItemCache = levelId
+        ? levelCache.get(levelId)
+        : [...levelCache.values()].find((x) => x.modules.has(moduleId));
       if (levelItemCache) {
         retVal = levelItemCache.modules.get(moduleId);
       }
@@ -86,60 +88,3 @@ export default class MenuCacheManager {
     return retVal;
   }
 }
-
-// class MenuCacheItem {
-//   private cache = new Map<number, MenuElement>();
-//   private menuMaker: MenuElementMaker;
-//   private checkRkeyOption: ICheckRkeyOptions;
-//   constructor(
-//     //menuParam: IMenuLoaderParam,
-//     level: PanelLevels,
-//     ownerId: number,
-//     ownerUrl: string,
-//     rKey: string,
-//     menuMethod: string,
-//     moduleMapper: Map<number, IModuleInfo>,
-//     onMenuItemClick: (
-//       level: PanelLevels,
-//       moduleId: number,
-//       pageId: number,
-//       target: EventTarget
-//     ) => void,
-//     checkRkey: ICheckRkeyOptions,
-//     deviceId: number
-//   ) {
-//     this.menuMaker = new MenuElementMaker(
-//       level,
-//       rKey,
-//       menuMethod,
-//       moduleMapper,
-//       onMenuItemClick,
-//       checkRkey,
-//       deviceId
-//     );
-//     this.checkRkeyOption = checkRkey;
-//   }
-
-//   public async loadMenuAsync(
-//     ownerId: number,
-//     ownerUrl: string
-//   ): Promise<MenuElement> {
-//     let menu = this.cache.get(ownerId);
-//     if (!menu) {
-//       const url = HttpUtil.formatString(`${ownerUrl}${menuMethod}`, {
-//         rKey: rKey,
-//         level: level,
-//       });
-//       //const menuData = await HttpUtil.getDataAsync<IMenuInfo>(url);
-//       const menuData = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
-//         url,
-//         "GET",
-//         this.checkRkeyOption
-//       );
-//       console.log("qam menu data", menuData);
-//       menu = this.menuMaker.create(menuData, level, ownerId, ownerUrl);
-//       this.cache.set(ownerId, menu);
-//     }
-//     return menu;
-//   }
-// }

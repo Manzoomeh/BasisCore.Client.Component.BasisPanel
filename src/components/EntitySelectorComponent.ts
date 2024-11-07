@@ -1,6 +1,6 @@
 import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
-import { DefaultSource, MenuOwnerType, PanelLevels } from "../type-alias";
+import { DefaultSource, PanelLevels } from "../type-alias";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import { DependencyContainer } from "tsyringe";
@@ -11,7 +11,6 @@ declare const $bc: BCWrapperFactory;
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   protected profileAccessor: IProfileAccessor;
   protected element: Element;
-  private ownerType: MenuOwnerType;
   protected entityList: Array<IEntityInfo>;
   private _isFirst = true;
   protected mustReload = true;
@@ -27,18 +26,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     owner: IUserDefineComponent,
     desktopLayout: string,
     mobileLayout: string,
-    entityType: MenuOwnerType
+    level: PanelLevels
   ) {
-    super(
-      owner,
-      desktopLayout,
-      mobileLayout,
-      `data-bc-bp-${entityType}-container`
-    );
-    this.ownerType = entityType;
+    super(owner, desktopLayout, mobileLayout, `data-bc-bp-${level}-container`);
     this.owner.dc
       .resolve<DependencyContainer>("parent.dc")
-      .registerInstance(entityType, this);
+      .registerInstance(this.getLevel(), this);
   }
 
   protected abstract getListUrl(): string;
@@ -53,7 +46,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const id = parseInt(msgElId);
     console.log("qam select service", id);
     if (id != 0) {
-      //LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
       this.setActive();
       this.signalToDisplayMenu(id, false);
     }
@@ -109,18 +101,17 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.mustReload = false;
         await this.fillComboAsync();
       }
-      //const id = LocalStorageUtil.getEntitySelectorLastValue(this.ownerType);
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
       if (id) {
         const relatedElement = this.element.querySelector<HTMLElement>(
           `[data-id='${id}']`
         );
-        console.log(`qam ${this.ownerType} default`, id, relatedElement);
+        console.log(`qam ${this.getLevel()} default`, id, relatedElement);
         if (relatedElement) {
           relatedElement.click();
         }
       } else {
-        console.log(`qam ${this.ownerType}`, "empty");
+        console.log(`qam ${this.getLevel()}`, "empty");
       }
     }
   }
@@ -128,7 +119,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public async runAsync(source?: ISource) {
     switch (source?.id) {
       case DefaultSource.USER_INFO_SOURCE: {
-        if (this.ownerType == "corporate") {
+        if (this.getLevel() == "corporate") {
           const corporateList = await this.getEntitiesAsync();
 
           if (corporateList.length > 0) {
@@ -222,7 +213,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const searchInput = document.createElement("input");
     searchInput.setAttribute("type", "text");
     if (this.entityList?.length > 5) {
-      if (this.ownerType == "corporate") {
+      if (this.getLevel() == "corporate") {
         searchWrapper.setAttribute("data-bc-corporate-search", "");
         searchInput.setAttribute("data-bc-corporate-search-input", "");
         searchInput.setAttribute(
@@ -241,7 +232,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         } else {
           searchInput.setAttribute("data-sys-input-text", "");
         }
-      } else if (this.ownerType == "business") {
+      } else if (this.getLevel() == "business") {
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
         searchInput.setAttribute(
@@ -297,42 +288,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       }
 
       const li = document.createElement("li");
-      // const div = document.createElement("div");
       li.setAttribute("data-id", item.id.toString());
       li.innerHTML = `<div data-bc-main-title="">${item.title} (${item.id})</div>`;
       const id = parseInt(li.getAttribute("data-id"));
       this.initLIElement(li, item);
-      // if (
-      //   id == this.currentOwnerid &&
-      //   this.ownerId != 30 &&
-      //   this.firstLoginFromOtherWebSitesService == false
-      // ) {
-      //   const entity = this.entityList.find((x) => x.id == id);
-      //   this.ownerType = "corporate";
-      //   this.owner.setSource(this.getSourceId(), entity ?? {});
-      //   this.resetBusinessEntity();
-      //   this.selectItem(li);
-      //   this.firstLoginFromOtherWebSitesService = true;
-      //   this.trySelectFromLocalStorageAsync();
-      // }
-
-      // if (
-      //   id == this.currentDomianid &&
-      //   this.domainId != 30 &&
-      //   this.firstLoginFromOtherWebSitesBusiness == false
-      // ) {
-      //   // this.ownerType = "business";
-      //   this.selectItem(li);
-      //   this.firstLoginFromOtherWebSitesBusiness = true;
-      //   this.trySelectFromLocalStorageAsync();
-      // }
       li.addEventListener("click", async (e) => {
         e.preventDefault();
         const id = parseInt(li.getAttribute("data-id"));
 
         const entity = this.entityList.find((x) => x.id == id);
-        //LocalStorageUtil.setLevel(this.getLevel(), id);
-        //LocalStorageUtil.setEntitySelectorCurrentValue(this.ownerType, id);
         if (this.profileAccessor.getCurrent()) {
           if (entity) {
             await this.onItemSelectAsync(id, e.isTrusted);
@@ -340,11 +304,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         }
 
         this.owner.setSource(this.getSourceId(), entity ?? {});
-        if (this.ownerType == "corporate") {
+        if (this.getLevel() == "corporate") {
           // choose corporate
           this.resetBusinessEntity();
           this.resetNotification();
-        } else if (this.ownerType == "business") {
+        } else if (this.getLevel() == "business") {
           $bc.setSource(
             "basispanelcomponent_entityselectorcomponent.businessid",
             id
@@ -367,7 +331,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       "POST",
       this.options.checkRkey,
       {
-        type: this.ownerType,
+        type: this.getLevel(),
         id: id,
       }
     );
@@ -384,7 +348,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         .closest("[data-bc-bp-main-header]")
         .querySelector(".active-user")
         ?.classList.remove("active-user");
-      if (this.ownerType == "corporate") {
+      if (this.getLevel() == "corporate") {
         // choose corporate
         this.element
           .closest("[data-bc-bp-main-header]")
@@ -396,7 +360,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.element
           .closest("[data-bc-bp-header-levels-container]")
           .setAttribute("data-active", "corporate");
-      } else if (this.ownerType == "business") {
+      } else if (this.getLevel() == "business") {
         // choose business
         this.element
           .closest("[data-bc-bp-main-header]")
@@ -413,7 +377,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         .closest("[data-bc-bp-header-levels]")
         .classList.remove("active");
     } else {
-      if (this.ownerType == "corporate") {
+      if (this.getLevel() == "corporate") {
         // choose corporate
         this.element
           .closest("[data-bc-bp-main-header]")
@@ -422,7 +386,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         this.element
           .closest("[data-bc-main-list-container]")
           .classList.add("active-corporate");
-      } else if (this.ownerType == "business") {
+      } else if (this.getLevel() == "business") {
         // choose business
         this.element
           .closest("[data-bc-bp-main-header]")
@@ -436,7 +400,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   InitializeSetActive() {
-    if (this.ownerType == "corporate") {
+    if (this.getLevel() == "corporate") {
       // choose corporate
       this.element
         .closest("[data-bc-bp-main-header]")
@@ -445,7 +409,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       this.element
         .closest("[data-bc-main-list-container]")
         .classList.add("active-corporate");
-    } else if (this.ownerType == "business") {
+    } else if (this.getLevel() == "business") {
       // choose business
       this.element
         .closest("[data-bc-bp-main-header]")
@@ -569,7 +533,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     setPageDataFromLocalStorage: boolean
   ) {
     console.log(
-      `qam ${this.ownerType} send show menu`,
+      `qam ${this.getLevel()} send show menu`,
       id,
       this._isFirst,
       LocalStorageUtil.level,
@@ -589,16 +553,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
-
-    // const newParam: IPageLoaderParam = {
-    //   pageId: "default",
-    //   owner: this.ownerType,
-    //   ownerId: id.toString(),
-    //   ownerUrl: this.getOwnerUrl(),
-    //   rKey: this.options.rKey,
-    //   pageMethod: this.options.method.page,
-    // };
-    // this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 }
 
