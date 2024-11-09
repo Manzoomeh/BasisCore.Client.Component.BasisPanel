@@ -168,7 +168,7 @@ export default class MenuComponent
     //   this.menuContainer
     // );
 
-    menuItem?.setAttribute("data-bc-menu-active", "");
+    menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
       .closest("[data-bc-related-menu-id]")
       .getAttribute("data-bc-related-menu-id");
