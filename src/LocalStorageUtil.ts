@@ -8,6 +8,7 @@ export default class LocalStorageUtil {
   static readonly CURRENT_VERSION: number = 2;
   private static _level: PanelLevels = "profile";
   private static _pageId: PageId = "default";
+  private static _menuPageId?: PageId;
   private static _businessId?: number;
   private static _corporateId?: number;
   private static _moduleId?: number;
@@ -28,6 +29,9 @@ export default class LocalStorageUtil {
   }
   public static get pageId() {
     return LocalStorageUtil._pageId;
+  }
+  public static get menuPageId() {
+    return LocalStorageUtil._menuPageId;
   }
   public static get pageArguments() {
     return LocalStorageUtil._pageArguments;
@@ -88,6 +92,11 @@ export default class LocalStorageUtil {
     LocalStorageUtil.save();
   }
 
+  public static setMenuLastPage(pageId: PageId) {
+    LocalStorageUtil._menuPageId = pageId;
+    LocalStorageUtil.save();
+  }
+
   private static _lastBusiness: number;
   private static _lastCorporate: number;
   private static _lastPage: IPageLoaderParam;
@@ -126,21 +135,7 @@ export default class LocalStorageUtil {
               LocalStorageUtil._pageId = obj.pageId ?? "default";
               LocalStorageUtil._pageArguments = obj.pageArguments;
               LocalStorageUtil._pageDashboard = obj.pageDashboard;
-
-              if (obj.b) {
-                LocalStorageUtil._lastBusiness = obj.b;
-              }
-              if (obj.c) {
-                LocalStorageUtil._lastCorporate = obj.c;
-              }
-              if (obj.p) {
-                LocalStorageUtil._lastPage = obj.p;
-                LocalStorageUtil._hasPageToShow = true;
-              }
-              if (obj.m) {
-                LocalStorageUtil._lastMenu = obj.m;
-                LocalStorageUtil._hasMenuToActive = true;
-              }
+              LocalStorageUtil._menuPageId = obj.menuPageId;
             }
           }
         } catch (ex) {
@@ -173,15 +168,12 @@ export default class LocalStorageUtil {
     const obj: IStorageObject = {
       ver: LocalStorageUtil.CURRENT_VERSION,
       i: LocalStorageUtil._currentUserId,
-      b: LocalStorageUtil._currentBusiness,
-      c: LocalStorageUtil._currentCorporate,
-      p: LocalStorageUtil._currentPage,
-      m: LocalStorageUtil._lastMenu,
       level: LocalStorageUtil._level,
       corporateId: LocalStorageUtil._corporateId,
       businessId: LocalStorageUtil._businessId,
       moduleId: LocalStorageUtil._moduleId,
       pageId: LocalStorageUtil._pageId,
+      menuPageId: LocalStorageUtil._menuPageId,
       pageArguments: LocalStorageUtil._pageArguments,
       pageDashboard: LocalStorageUtil._pageDashboard,
     };
@@ -317,15 +309,12 @@ interface IBannerInfo {
 interface IStorageObject {
   ver: number;
   i: number;
-  b: number;
-  c: number;
-  p: IPageLoaderParam;
-  m: ICurrentMenu;
   level: PanelLevels;
   corporateId?: number;
   businessId?: number;
   moduleId?: number;
   pageId: PageId;
+  menuPageId: PageId;
   pageArguments?: any;
   pageDashboard?: boolean;
 }

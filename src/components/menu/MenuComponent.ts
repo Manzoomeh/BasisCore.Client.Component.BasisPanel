@@ -16,6 +16,7 @@ import { IMenuLoaderParam } from "./IMenuInfo";
 import MenuElement from "./MenuElement";
 import IPageLoaderParam from "./IPageLoaderParam";
 import IPageLoader from "./IPageLoader";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class MenuComponent
   extends BasisPanelChildComponent
@@ -152,18 +153,24 @@ export default class MenuComponent
     moduleId: number,
     pageId: PageId
   ) {
-    this.menuContainer
-      .querySelectorAll(`li[data-bc-menu-active]`)
-      .forEach((x) => x.removeAttribute("data-bc-menu-active"));
     // if (selectedItem) {
     //   selectedItem.removeAttribute("data-bc-menu-active");
     // }
-    const menuItem = this.menuContainer.querySelector(
+    let menuItem = this.menuContainer.querySelector(
       `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
     );
-    // console.log(
-    //   "qam menu 1",
-    //   menuItem,
+    if (menuItem) {
+      this.menuContainer
+        .querySelectorAll(`li[data-bc-menu-active]`)
+        .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+      LocalStorageUtil.setMenuLastPage(pageId);
+    } else {
+      pageId = LocalStorageUtil.menuPageId;
+      menuItem = this.menuContainer.querySelector(
+        `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
+      );
+    }
+    console.log("qam menu 1", menuItem);
     //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
     //   this.menuContainer
     // );
