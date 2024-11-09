@@ -44,7 +44,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
-    console.log("qam select service", id);
+    //console.log("qam select service", id);
     if (id != 0) {
       this.setActive();
       this.signalToDisplayMenu(id, false);
@@ -86,7 +86,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
     msgElClick?.addEventListener("click", async (e) => {
-      console.log("qam dropdown click");
+      //console.log("qam dropdown click");
       this.selectService(msgElClick);
     });
 
@@ -106,12 +106,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const relatedElement = this.element.querySelector<HTMLElement>(
           `[data-id='${id}']`
         );
-        console.log(`qam ${this.getLevel()} default`, id, relatedElement);
+        //console.log(`qam ${this.getLevel()} default`, id, relatedElement);
         if (relatedElement) {
           relatedElement.click();
         }
       } else {
-        console.log(`qam ${this.getLevel()}`, "empty");
+        //console.log(`qam ${this.getLevel()}`, "empty");
       }
     }
   }
@@ -270,7 +270,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async onItemSelectAsync(id: number, fromUI: boolean) {
-    console.log("qam ssss", this.getLevel());
+    //console.log("qam ssss", this.getLevel());
     await this.setActiveAsync(id);
     if (fromUI || LocalStorageUtil.level == this.getLevel()) {
       this.signalToDisplayMenu(id, !fromUI);
@@ -314,7 +314,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
             id
           );
         }
-        console.log("qam dropdown item click", this.getLevel(), e);
+        //console.log("qam dropdown item click", this.getLevel(), e);
         this.setActive();
         this.selectItem(li);
       });
@@ -463,7 +463,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     entityName.setAttribute("data-bc-main-name", "");
 
     if (!freeze) {
-      console.log("qam fill ", this.getLevel(), freeze, li.textContent);
+      // fill ", this.getLevel(), freeze, li.textContent);
       entityName.textContent = li.textContent;
     } else {
       const switchInput = document.createElement("input");
@@ -485,7 +485,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       entityName.appendChild(switchLabel);
       const title = document.createTextNode(li.textContent);
       entityName.appendChild(title);
-      console.log("qam fill ", this.getLevel(), freeze, li.textContent);
+      //console.log("qam fill ", this.getLevel(), freeze, li.textContent);
     }
 
     containerMsgElement.parentNode.insertBefore(
@@ -500,7 +500,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
     selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
     selectiveList.addEventListener("click", (e) => {
-      console.log("qam 1 0");
+      //console.log("qam 1 0");
       this.selectService(selectiveList);
     });
 
@@ -532,14 +532,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     id: number,
     setPageDataFromLocalStorage: boolean
   ) {
-    console.log(
-      `qam ${this.getLevel()} send show menu`,
-      id,
-      this._isFirst,
-      LocalStorageUtil.level,
-      this.getLevel(),
-      LocalStorageUtil.level == this.getLevel()
-    );
+    // console.log(
+    //   `qam ${this.getLevel()} send show menu`,
+    //   id,
+    //   this._isFirst,
+    //   LocalStorageUtil.level,
+    //   this.getLevel(),
+    //   LocalStorageUtil.level == this.getLevel()
+    // );
     LocalStorageUtil.setLevel(this.getLevel(), id);
     const menuParam = this.createMenuLoaderParam(id);
     menuParam.pageId = setPageDataFromLocalStorage
@@ -548,6 +548,9 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     menuParam.moduleId = setPageDataFromLocalStorage
       ? LocalStorageUtil.moduleId
       : 1;
+    menuParam.pageArg = setPageDataFromLocalStorage
+      ? LocalStorageUtil.pageArguments
+      : null;
     this.owner.setSource(DefaultSource.SHOW_MENU, menuParam);
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
     activeMenus.forEach((e) => {

@@ -118,6 +118,7 @@ export default class NotificationTab {
         const newParam: IPageLoaderParam = {
           level: level,
           levelId: ownerId,
+          moduleId: obj.p.moduleId,
           //owner: owner,
           //ownerId: "",
           moduleUrl: ownerUrl,

@@ -160,6 +160,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     const newParam: Partial<IPageLoaderParam> = {
       pageId: pageId,
       //owner: this.param.page.owner,
+      moduleId: this.param.page.moduleId,
       levelId: this.param.page.levelId,
       moduleUrl: this.param.page.moduleUrl,
       rKey: this.param.page.rKey,

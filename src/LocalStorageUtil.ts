@@ -29,7 +29,12 @@ export default class LocalStorageUtil {
   public static get pageId() {
     return LocalStorageUtil._pageId;
   }
-
+  public static get pageArguments() {
+    return LocalStorageUtil._pageArguments;
+  }
+  public static get pageDashboard() {
+    return LocalStorageUtil._pageDashboard;
+  }
   public static setLevel(level: PanelLevels, ownerId: number) {
     LocalStorageUtil._level = level;
     switch (level) {

@@ -29,4 +29,5 @@ export interface IMenuLoaderParam {
   levelUrl: string;
   moduleId?: number;
   pageId?: PageId;
+  pageArg?: any;
 }

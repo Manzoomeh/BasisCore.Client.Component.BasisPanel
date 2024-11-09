@@ -76,7 +76,6 @@ export default class MenuComponent
     );
     if (this.current != newMenu) {
       this.current = newMenu;
-      console.log("qam load menu", this.current);
       this.ul.innerHTML = "";
       this.ul.append(...this.current.nodes);
       if (this.deviceId == 1) {
@@ -134,7 +133,8 @@ export default class MenuComponent
       menuParam.level,
       menuParam.levelId,
       menuParam.moduleId,
-      menuParam.pageId
+      menuParam.pageId,
+      menuParam.pageArg
     );
     // const newParam: IPageLoaderParam = {
     //   level: menuParam.level,
@@ -161,23 +161,23 @@ export default class MenuComponent
     const menuItem = this.menuContainer.querySelector(
       `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
     );
-    console.log(
-      "qam menu 1",
-      menuItem,
-      `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
-      this.menuContainer
-    );
+    // console.log(
+    //   "qam menu 1",
+    //   menuItem,
+    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
+    //   this.menuContainer
+    // );
 
     menuItem?.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
       .closest("[data-bc-related-menu-id]")
       .getAttribute("data-bc-related-menu-id");
-    console.log(
-      "qam menu",
-      menuItem,
-      relatedMenuId,
-      `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-    );
+    // console.log(
+    //   "qam menu",
+    //   menuItem,
+    //   relatedMenuId,
+    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
+    // );
     this.menuContainer
       ?.querySelector(
         `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
@@ -209,16 +209,16 @@ export default class MenuComponent
     args?: any
   ): Promise<boolean> {
     const moduleInfo = this.cache.getModuleInfo(level, levelId, moduleId);
-
+    console.log("qam mod", moduleInfo, level, levelId, moduleId, this.cache);
     if (moduleInfo) {
       const newParam: IPageLoaderParam = {
         level: level,
         pageId: pageId,
-        levelId: moduleId,
+        levelId: levelId,
+        moduleId: moduleId,
         moduleUrl: moduleInfo.url,
         rKey: this.options.rKey,
         arguments: args,
-        //owner: "business", //moduleInfo.owner,
       };
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       this.setMenuUISelected(level, levelId, moduleId, pageId);
@@ -232,6 +232,7 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
+    console.log("qam loadex", level, moduleId, pageId, args);
     return this.tryLoadPage(level, null, moduleId, pageId, args);
   }
 }

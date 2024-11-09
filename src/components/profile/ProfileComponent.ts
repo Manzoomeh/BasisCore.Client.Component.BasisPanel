@@ -103,11 +103,11 @@ export default class ProfileComponent
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     //This methode must call if no local storage setting exists
-    console.log(
-      "qam loadDataAsync",
-      this.isFirst,
-      !this.isFirst || LocalStorageUtil.level === "profile"
-    );
+    // console.log(
+    //   "qam loadDataAsync",
+    //   this.isFirst,
+    //   !this.isFirst || LocalStorageUtil.level === "profile"
+    // );
     if (!this.isFirst || LocalStorageUtil.level === "profile") {
       this.signalToDisplayMenu(true);
     }
@@ -122,8 +122,11 @@ export default class ProfileComponent
         levelUrl: this.options.baseUrl.profile,
         moduleId: 1,
         pageId: loadPageFromLocalStorage ? LocalStorageUtil.pageId : "default",
+        pageArg: loadPageFromLocalStorage
+          ? LocalStorageUtil.pageArguments
+          : null,
       };
-      console.log("qam show profile menu", menuInfo);
+      //console.log("qam show profile menu", menuInfo);
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
