@@ -82,12 +82,12 @@
   border-bottom: 0.7px solid #004b85;
 }
 
-[data-bc-d1-menu] [data-bc-menu-active] {
+[data-bc-bp-d1-menu-wrapper] [data-bc-menu-active] {
   border-bottom: 0.7px solid #004b85 !important;
 }
 
-[data-bc-d1-menu] [data-bc-menu-active]>a {
-  color: #004b85;
+[data-bc-bp-d1-menu-wrapper] [data-bc-menu-active]>a {
+  color: #004b85 !important;
 }
 
 [data-bc-d1-menu]>ul>li:hover a,
