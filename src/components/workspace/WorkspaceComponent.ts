@@ -25,21 +25,27 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
   public async runAsync(source?: ISource) {
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
       let pageParam: IPageLoaderParam = source.rows[0] as IPageLoaderParam;
-      if (LocalStorageUtil.hasPageToShow()) {
-        if (LocalStorageUtil.mustLoadPage(pageParam.owner)) {
-          const temp = LocalStorageUtil.getCurrentPage();
-          if (temp) {
-            temp.rKey = this.options.rKey;
-            pageParam = temp;
-          }
-        } else {
-          pageParam = null;
-        }
-      }
+      // if (LocalStorageUtil.hasPageToShow()) {
+      //   if (LocalStorageUtil.mustLoadPage(pageParam.level)) {
+      //     const temp = LocalStorageUtil.getCurrentPage();
+      //     if (temp) {
+      //       //temp.rKey = this.options.rKey;
+      //       pageParam = temp;
+      //     }
+      //   } else {
+      //     pageParam = null;
+      //   }
+      // }
       if (pageParam) {
-        LocalStorageUtil.setCurrentPage(pageParam);
+        //LocalStorageUtil.setCurrentPage(pageParam);
+        LocalStorageUtil.setPage(
+          pageParam.moduleId,
+          pageParam.pageId,
+          pageParam.dashboard,
+          pageParam.arguments
+        );
         const url = HttpUtil.formatString(
-          `${pageParam.ownerUrl}${pageParam.pageMethod}`,
+          `${pageParam.moduleUrl}${this.options.method.page}`,
           pageParam
         );
         this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
@@ -59,7 +65,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     pageLoaderParam: IPageLoaderParam
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
-    console.log(`qam page`, this.pageType, pageLoaderParam);
+    //console.log(`qam page`, this.pageType, pageLoaderParam);
     // //    console.log(`${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${pageLoaderParam.owner ? `/${pageParam.module}` : ""}/${pageParam.pageId}`)
 
     // history.pushState(

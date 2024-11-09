@@ -1,11 +1,9 @@
 import layout from "./assets/layout.html";
 import "./assets/style.css";
 import HttpUtil from "../../../HttpUtil";
-import { IUserDefineComponent, ISource } from "basiscore";
-import ITaskOptions from "../../scheduler/ITaskOptions";
+import { IUserDefineComponent, ISource, BCWrapperFactory } from "basiscore";
 import PageWidgetComponent from "../PageWidgetComponent";
 
-declare const $bc: any;
 export default class FullPageWidgetComponent extends PageWidgetComponent {
   // set title(value: string) {
   //   this.container.querySelector(
@@ -49,7 +47,7 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
     // }
 
     const url = HttpUtil.formatString(
-      `${this.param.url ?? this.param.page.ownerUrl}${
+      `${this.param.url ?? this.param.page.moduleUrl}${
         this.options.method.widget
       }`,
       { rKey: this.options.rKey, widgetId: this.param.id }
@@ -82,12 +80,12 @@ export default class FullPageWidgetComponent extends PageWidgetComponent {
         reject(e);
       }
     });
-    const taskOptions: ITaskOptions = {
-      container: container,
-      task: processTask,
-      notify: false,
-    };
-    $bc?.basisPanel?.scheduler?.startTask(taskOptions);
+    // const taskOptions: ITaskOptions = {
+    //   container: container,
+    //   task: processTask,
+    //   notify: false,
+    // };
+    //$bc?.basisPanel?.scheduler?.startTask(taskOptions);
   }
 
   public runAsync(source?: ISource) {

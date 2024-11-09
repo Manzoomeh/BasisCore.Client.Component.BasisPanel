@@ -21,12 +21,16 @@ export default class WidgetComponent extends PageWidgetComponent {
     this.pageLoader = this.owner.dc.resolve<MenuComponent>("page_loader");
   }
   public async loadContentAsync(): Promise<string> {
-    const baseUrl = this.pageLoader.moduleMapper
-      .get(this.pageLoader.current.param.owner)
-      //@ts-ignore
-      ?.get(Number(this.param.moduleid))?.ownerUrl;
+    // const baseUrl = this.pageLoader.moduleMapper
+    //   .get(this.pageLoader.current.param.owner)
+    //   //@ts-ignore
+    //   ?.get(Number(this.param.moduleid))?.ownerUrl;
+    const baseUrl = this.pageLoader.current.modules.get(
+      this.param.moduleid
+    ).url;
+
     const url = HttpUtil.formatString(
-      `${baseUrl ?? this.param.page.ownerUrl}${this.options.method.widget}`,
+      `${baseUrl ?? this.param.page.moduleUrl}${this.options.method.widget}`,
       { rKey: this.options.rKey, widgetId: this.param.id }
     );
     return await HttpUtil.fetchStringAsync(url, "GET");
@@ -122,8 +126,9 @@ export default class WidgetComponent extends PageWidgetComponent {
     }
     (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
 
-    (this.container as HTMLElement).style.top = `${this.param.y * cell + (parent.clientTop + topPosition)
-      }px`;
+    (this.container as HTMLElement).style.top = `${
+      this.param.y * cell + (parent.clientTop + topPosition)
+    }px`;
 
     // (this.container as HTMLElement).style.left = `${this.param.x * cell}px`;
 
@@ -144,13 +149,12 @@ export default class WidgetComponent extends PageWidgetComponent {
 
     // this.title = this.param.title;
 
-
     const container = this.container.querySelector(
       "[data-bc-widget-body-container]"
     );
     const processTask = new Promise<void>(async (resolve, reject) => {
       try {
-        var content = await this.loadContentAsync()
+        var content = await this.loadContentAsync();
         const range = new Range();
         range.setStart(container, 0);
         range.setEnd(container, 0);
@@ -233,8 +237,8 @@ export default class WidgetComponent extends PageWidgetComponent {
       moduleid: mid || this.param.moduleid,
     };
     const url = HttpUtil.formatString(
-      this.options.baseUrl[this.pageLoader.current.param.owner] +
-      this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
+      this.options.baseUrl[this.pageLoader.current.level] +
+        this.options.dashboardCustomizeMethod.addtoDashboardReservedWidget,
       {
         rKey: this.options.rKey,
       }

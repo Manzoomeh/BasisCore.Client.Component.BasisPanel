@@ -182,7 +182,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       data.data.push(widgetData);
     }
     const url = HttpUtil.formatString(
-      this._page.loaderParam.ownerUrl + this.options.method.pageCustomize,
+      this._page.loaderParam.moduleUrl + this.options.method.pageCustomize,
 
       {
         rkey: this.options.rKey,
@@ -221,7 +221,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     ).map((x) => x.getAttribute("data-bc-widget-id"));
     if (addedWidgetList.length > 0) {
       const url = HttpUtil.formatString(
-        this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets,
+        this._page.loaderParam.moduleUrl + this.options.method.reservedWidgets,
         {
           rKey: this.options.rKey,
           pageId: this._page.loaderParam.pageId,
@@ -278,7 +278,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
   private async fillWidgetListAsync(): Promise<void> {
     const url = HttpUtil.formatString(
-      this._page.loaderParam.ownerUrl + this.options.method.reservedWidgets,
+      this._page.loaderParam.moduleUrl + this.options.method.reservedWidgets,
       {
         rKey: this.options.rKey,
         pageId: this._page.loaderParam.pageId,
@@ -1241,7 +1241,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       e.remove();
     });
     const removewidgetUrl = HttpUtil.formatString(
-      this._page.loaderParam.ownerUrl +
+      this._page.loaderParam.moduleUrl +
         this.options.dashboardCustomizeMethod.removeDashboardReservedWidgets,
       {
         rKey: this.options.rKey,
@@ -1371,7 +1371,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
     dashboardBtn.style.display = "flex";
 
     const url = HttpUtil.formatString(
-      this._page.loaderParam.ownerUrl +
+      this._page.loaderParam.moduleUrl +
         this.options.dashboardCustomizeMethod.dashboardReservedWidgets,
       {
         rKey: this.options.rKey,

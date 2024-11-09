@@ -60,8 +60,9 @@ export default class ProfileComponent
       .querySelector("[data-bc-user-change-level]")
       .addEventListener("click", (e) => {
         e.preventDefault();
-        this.signalToDisplayMenu();
-        LocalStorageUtil.resetCurrentUserId();
+        this.signalToDisplayMenu(false);
+        //LocalStorageUtil.resetCurrentUserId();
+        LocalStorageUtil.setLevel("profile", 1);
         this.container.classList.add("active-user");
         this.container
           .closest("[data-bc-bp-main-header]")
@@ -102,30 +103,30 @@ export default class ProfileComponent
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
     //This methode must call if no local storage setting exists
-    console.log(
-      "qam loadDataAsync",
-      LocalStorageUtil.getCurrentPage(),
-      this.isFirst,
-      !this.isFirst || LocalStorageUtil.currentLevel === "profile"
-    );
-    if (!this.isFirst || LocalStorageUtil.currentLevel === "profile") {
-      this.signalToDisplayMenu();
+    // console.log(
+    //   "qam loadDataAsync",
+    //   this.isFirst,
+    //   !this.isFirst || LocalStorageUtil.level === "profile"
+    // );
+    if (!this.isFirst || LocalStorageUtil.level === "profile") {
+      this.signalToDisplayMenu(true);
     }
     this.isFirst = false;
   }
 
-  private signalToDisplayMenu() {
+  private signalToDisplayMenu(loadPageFromLocalStorage: boolean) {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         level: "profile",
-        owner: "profile",
-        pageId: "default",
-        ownerId: "",
-        ownerUrl: this.options.baseUrl.profile,
-        rKey: this.options.rKey,
-        menuMethod: this.options.method.menu,
+        levelId: 1,
+        levelUrl: this.options.baseUrl.profile,
+        moduleId: 1,
+        pageId: loadPageFromLocalStorage ? LocalStorageUtil.pageId : "default",
+        pageArg: loadPageFromLocalStorage
+          ? LocalStorageUtil.pageArguments
+          : null,
       };
-      console.log("qam show profile menu", menuInfo);
+      //console.log("qam show profile menu", menuInfo);
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
