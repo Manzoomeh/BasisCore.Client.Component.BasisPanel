@@ -72,11 +72,13 @@ export default class MenuElementMaker {
           name: (node as IMenuExternalItemInfo).name,
           url: (node as IMenuExternalItemInfo).url,
           title: (node as IMenuExternalItemInfo).title,
+          levelId: this.levelId,
         });
       }
       if ((node as IMenuPageInfo).pid) {
         if (!this.modules.has(node.mid)) {
           this.modules.set(node.mid, {
+            levelId: this.levelId,
             name: this.level,
             title: this.level,
             url: moduleUrl,
