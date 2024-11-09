@@ -65,7 +65,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     pageLoaderParam: IPageLoaderParam
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
-    console.log(`qam page`, this.pageType, pageLoaderParam);
+    //console.log(`qam page`, this.pageType, pageLoaderParam);
     // //    console.log(`${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${pageLoaderParam.owner ? `/${pageParam.module}` : ""}/${pageParam.pageId}`)
 
     // history.pushState(

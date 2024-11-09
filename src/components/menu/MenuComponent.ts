@@ -208,9 +208,9 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    console.log("qam mod 1", arguments);
+    //console.log("qam mod 1", arguments);
     const moduleInfo = this.cache.getModuleInfo(level, levelId, moduleId);
-    console.log("qam mod", moduleInfo, level, levelId, moduleId, this.cache);
+    //console.log("qam mod", moduleInfo, level, levelId, moduleId, this.cache);
     if (moduleInfo) {
       const newParam: IPageLoaderParam = {
         level: level,
@@ -233,7 +233,7 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    console.log("qam loadex", arguments);
+    //console.log("qam loadex", arguments);
     return this.tryLoadPage(level, null, moduleId, pageId, args);
   }
 }
