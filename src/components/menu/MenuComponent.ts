@@ -62,7 +62,7 @@ export default class MenuComponent
     if (source?.id == DefaultSource.SHOW_MENU) {
       this.container.setAttribute(
         `data-bc-bp-menu-seperation`,
-        source.rows[0].owner
+        source.rows[0].level
       );
       console.log("qam show menu msg", source.rows[0]);
       await this.loadDataAsync(source.rows[0]);
