@@ -38,8 +38,6 @@ export default class DashboardComponent extends PageComponent {
 
   public addBannerToPage(group: IPageGroupInfo) {
     if (group && group.widgets?.length > 0) {
-
-
       const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
       this.groups.groups.forEach((g) => {
         g.widgets.forEach((w) => {
@@ -59,25 +57,17 @@ export default class DashboardComponent extends PageComponent {
     }
   }
   public async checkBanners() {
-    const last_state = JSON.parse(
-      localStorage.getItem("__bc_panel_last_state__")
-    );
-
-    const level = last_state?.p?.owner;
+    const level = LocalStorageUtil.level;
     if (level == "corporate" && this.options.bannerUrl) {
       const url = HttpUtil.formatString(
         this.options.baseUrl.business + this.options.bannerUrl,
         { rKey: this.options.rKey }
       );
       try {
-
-
         if (this._banner) {
-
           if (this.options.rKey == this._banner.rkey) {
             this.showLastBanners();
           } else {
-
             const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
             if (res.eventID == this._banner.eventID) {
               this.showLastBanners();
@@ -101,7 +91,7 @@ export default class DashboardComponent extends PageComponent {
           );
           this.addBannerToPage(res.groups[0]);
         }
-      } catch { }
+      } catch {}
     }
   }
   public async runAsync(source?: ISource) {

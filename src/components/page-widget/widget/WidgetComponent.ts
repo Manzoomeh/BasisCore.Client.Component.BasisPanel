@@ -229,8 +229,7 @@ export default class WidgetComponent extends PageWidgetComponent {
   private async addToDashboard(): Promise<void> {
     const widgetTitle = this.owner.dc.resolve<any>("widget");
     const widgetId = this.param.id;
-    const mid = JSON.parse(localStorage.getItem("__bc_panel_last_state__")).m
-      .info.mid;
+    const mid = LocalStorageUtil.moduleId;
     const apiInputs = {
       widgetid: widgetId,
       title: widgetTitle.title,
