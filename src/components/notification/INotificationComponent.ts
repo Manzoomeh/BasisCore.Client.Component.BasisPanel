@@ -1,9 +1,11 @@
 import { IDisposable, ISourceOptions } from "basiscore";
 import { SourceId } from "basiscore";
+import { DependencyContainer } from "tsyringe";
 
 export default interface INotificationComponent {
   rKey: string;
   container: Element;
+  dc: DependencyContainer;
   storeAsGlobal(
     data: any,
     name?: string,

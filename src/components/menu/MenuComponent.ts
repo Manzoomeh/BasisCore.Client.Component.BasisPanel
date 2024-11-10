@@ -228,6 +228,7 @@ export default class MenuComponent
         rKey: this.options.rKey,
         arguments: args,
       };
+      LocalStorageUtil.setPageUrl(moduleInfo.url);
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       this.setMenuUISelected(level, levelId, moduleId, pageId);
     }
