@@ -1,8 +1,12 @@
-import { ILoaderParam } from "../../type-alias";
+import { PageId, PanelLevels } from "../../type-alias";
 
-export default interface IPageLoaderParam extends ILoaderParam {
-  pageId: string;
-  pageMethod: string;
+export default interface IPageLoaderParam {
+  level: PanelLevels;
+  levelId: number;
+  moduleId: number;
+  moduleUrl: string;
+  rKey: string;
+  pageId: PageId;
   arguments?: any;
-  dashboard? : boolean;
+  dashboard?: boolean;
 }

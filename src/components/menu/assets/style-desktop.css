@@ -86,7 +86,7 @@
   border-bottom: 0.7px solid #004b85 !important;
 }
 
-[data-bc-bp-d1-menu-wrapper] [data-bc-menu-active]>a {
+[data-bc-bp-d1-menu-wrapper] [data-bc-menu-active] > a{
   color: #004b85 !important;
 }
 
@@ -213,7 +213,7 @@
   line-height: 24px !important;
 }
 
-[data-bc-d1-menu] [data-bc-level]:after {
+[data-bc-d1-menu] [data-bc-level-node]:after {
   font-family: "LineIcons";
   content: "\ea58";
   position: relative;

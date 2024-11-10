@@ -5,17 +5,21 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import desktopLayout from "./assets/layout-desktop.html";
 import mobileLayout from "./assets/layout-mobile.html";
-import { ISourceOptions, IUserDefineComponent, IDisposable } from "basiscore";
+import {
+  ISourceOptions,
+  IUserDefineComponent,
+  IDisposable,
+  BCWrapperFactory,
+} from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import LocalStorageUtil from "../../LocalStorageUtil";
 
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
   private runTask: Promise<IDisposable>;
 
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-main-container");
-    $bc.basisPanel = {};
     LocalStorageUtil.loadLastStateAsync(
       this.options.rKey,
       this.options.checkRkey.url
@@ -91,16 +95,16 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         currentElement.getAttribute("data-bc-bp-logout-title") === null &&
         currentElement.getAttribute("data-bc-bp-logout-modal") === null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-background") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-content") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-body") === null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-body-text") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-footer") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-buttons") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-bp-logout-modal-button") === null
       ) {
         document
@@ -123,13 +127,13 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
         currentElement.getAttribute("data-bc-corporate-icon-drop-down") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-corporate-search-input") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-corporate-drop-down-wrapper") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-corporate-drop-down-title") ===
-        null
+          null
       ) {
         document
           .querySelector("[data-bc-corporate-drop-down]")
@@ -140,10 +144,10 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
         currentElement.getAttribute("data-bc-business-icon-drop-down") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-business-search-input") === null &&
         currentElement.getAttribute("data-bc-business-drop-down-wrapper") ===
-        null &&
+          null &&
         currentElement.getAttribute("data-bc-business-drop-down-title") === null
       ) {
         document

@@ -4,7 +4,7 @@ import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
-import { IUserDefineComponent, ISource } from "basiscore";
+import { IUserDefineComponent, ISource, BCWrapperFactory } from "basiscore";
 import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
@@ -14,7 +14,7 @@ import IMenuInfo, {
 import IPageLoaderParam from "../../menu/IPageLoaderParam";
 import PageWidgetComponent from "../PageWidgetComponent";
 
-declare const $bc: any;
+declare const $bc: BCWrapperFactory;
 
 export default class SidebarComponent extends PageWidgetComponent {
   constructor(owner: IUserDefineComponent) {
@@ -28,10 +28,18 @@ export default class SidebarComponent extends PageWidgetComponent {
   public async initializeAsync(): Promise<void> {
     if (this.deviceId == 2) {
       // add Event Listeners
-      const openedSidebar = this.container.querySelector("[data-bc-bp-sidebar-opened]");
-      const closedSidebar = this.container.querySelector("[data-bc-bp-sidebar-closed]");
-      const navbarSidebar = this.container.querySelector("[data-bc-sidebar-container]");
-      const sidebarOverlay = this.container.querySelector("[data-bc-bp-d2-sidebar-overlay]");
+      const openedSidebar = this.container.querySelector(
+        "[data-bc-bp-sidebar-opened]"
+      );
+      const closedSidebar = this.container.querySelector(
+        "[data-bc-bp-sidebar-closed]"
+      );
+      const navbarSidebar = this.container.querySelector(
+        "[data-bc-sidebar-container]"
+      );
+      const sidebarOverlay = this.container.querySelector(
+        "[data-bc-bp-d2-sidebar-overlay]"
+      );
 
       openedSidebar.addEventListener("click", (e) => {
         this.toggleSidebar([navbarSidebar, sidebarOverlay]);
@@ -47,10 +55,12 @@ export default class SidebarComponent extends PageWidgetComponent {
       this.container.setAttribute("gs-y", this.param.y.toString());
       this.container.setAttribute("gs-w", this.param.w.toString());
       this.container.setAttribute("gs-h", this.param.h.toString());
-      
-      const parent = document.querySelector("[data-bc-page-body]") as HTMLElement;
+
+      const parent = document.querySelector(
+        "[data-bc-page-body]"
+      ) as HTMLElement;
       const cell = parent.offsetWidth / 12;
-  
+
       (this.container as HTMLElement).style.height = `${this.param.h * cell}px`;
       (this.container as HTMLElement).style.top = `${
         this.param.y * cell + parent.offsetTop
@@ -63,7 +73,7 @@ export default class SidebarComponent extends PageWidgetComponent {
     );
 
     const url = HttpUtil.formatString(
-      `${this.param.page.ownerUrl}${this.options.method.sidebarMenu}`,
+      `${this.param.page.moduleUrl}${this.options.method.sidebarMenu}`,
       { rKey: this.param.page.rKey, pageId: this.param.page.pageId }
     );
 
@@ -126,7 +136,7 @@ export default class SidebarComponent extends PageWidgetComponent {
   private createPageSidebarItem(node: IMenuPageInfo): HTMLElement {
     const div = document.createElement("div");
     div.setAttribute("data-bc-sidebar-items", "");
-    if (parseInt(node.pid) === parseInt(this.param.page.pageId)) {
+    if (node.pid === this.param.page.pageId) {
       div.setAttribute("data-bc-sidebar-active", "");
       div.setAttribute("data-sys-inherit", "");
     }
@@ -136,29 +146,33 @@ export default class SidebarComponent extends PageWidgetComponent {
     content.setAttribute("data-sys-text", "");
     content.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onSidebarItemClick(node.pid, e.target , this.param.page.arguments);
+      this.onSidebarItemClick(node.pid, e.target, this.param.page.arguments);
     });
     div.appendChild(content);
     return div;
   }
 
-  private async onSidebarItemClick(pageId: string, target: EventTarget, args?:any) {
-    const newParam: IPageLoaderParam = {
+  private async onSidebarItemClick(
+    pageId: number,
+    target: EventTarget,
+    args?: any
+  ) {
+    const newParam: Partial<IPageLoaderParam> = {
       pageId: pageId,
-      owner: this.param.page.owner,
-      ownerId: this.param.page.ownerId,
-      ownerUrl: this.param.page.ownerUrl,
+      //owner: this.param.page.owner,
+      moduleId: this.param.page.moduleId,
+      levelId: this.param.page.levelId,
+      moduleUrl: this.param.page.moduleUrl,
       rKey: this.param.page.rKey,
-      pageMethod: this.param.page.pageMethod,
-      arguments: args
+      arguments: args,
     };
     $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private toggleSidebar(elements: Array<Element>) {
     elements.forEach((el) => {
-      el.classList.toggle('active');
+      el.classList.toggle("active");
     });
-    document.body.classList.toggle('scrolling');
+    document.body.classList.toggle("scrolling");
   }
 }

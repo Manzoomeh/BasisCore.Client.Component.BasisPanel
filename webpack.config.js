@@ -61,6 +61,7 @@ module.exports = (env, options) => {
         server.app.use("/server/widget-list", widgetList);
       },
       open: true,
+      port: 8080,
     },
     mode: options.mode,
     optimization: {

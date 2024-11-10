@@ -11,7 +11,8 @@ import WorkspaceComponent from "../workspace/WorkspaceComponent";
 
 export default abstract class PageComponent
   extends BasisPanelChildComponent
-  implements IPage {
+  implements IPage
+{
   public loaderParam: IPageLoaderParam;
   public info: IPageInfo;
   public readonly widgetDropAreaContainer: HTMLElement;
@@ -48,7 +49,7 @@ export default abstract class PageComponent
     this.info = workspace.info;
     if (!this.info) {
       const url = HttpUtil.formatString(
-        `${this.loaderParam.ownerUrl}${this.loaderParam.pageMethod}`,
+        `${this.loaderParam.moduleUrl}${this.options.method.page}`,
         this.loaderParam
       );
       this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
@@ -142,8 +143,9 @@ export default abstract class PageComponent
       (pageBody as HTMLElement).style.minHeight = `${this.cell * maxHeight}px`;
       pageBodyGroup.style.minHeight = `${this.cell * maxHeight}px`;
     } else {
-      (pageBody as HTMLElement).style.minHeight = `${windowHeight - otherHeight
-        }px`;
+      (pageBody as HTMLElement).style.minHeight = `${
+        windowHeight - otherHeight
+      }px`;
       pageBodyGroup.style.minHeight = `${windowHeight - otherHeight}px`;
     }
 

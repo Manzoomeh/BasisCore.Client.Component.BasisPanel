@@ -8,16 +8,26 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import { IUserDefineComponent, ISource } from "basiscore";
+import { IUserDefineComponent, ISource, IDependencyContainer } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
-import IPageLoaderParam from "../menu/IPageLoaderParam";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import IProfileAccessor from "./IProfileAccessor";
 
-export default class ProfileComponent extends BasisPanelChildComponent {
+export default class ProfileComponent
+  extends BasisPanelChildComponent
+  implements IProfileAccessor
+{
   private profile: IProfileInfo;
+  private isFirst: boolean = true;
 
+  public getCurrent(): IProfileInfo {
+    return this.profile;
+  }
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-profile-container");
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("ProfileAccessor", this);
   }
 
   public runAsync(source?: ISource): Promise<any> {
@@ -33,43 +43,49 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     }
 
     this.container.classList.add("active-user");
-    this.container.querySelector("[data-bc-user-show-info]")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      const elStatus = this.container.querySelector("[data-bc-user-info]");
-      const status = elStatus.getAttribute("data-status");
-      if (status == "close") {
-        elStatus.setAttribute("data-status", "open");
-      } else {
-        elStatus.setAttribute("data-status", "close");
-      }
-    });
+    this.container
+      .querySelector("[data-bc-user-show-info]")
+      ?.addEventListener("click", (e) => {
+        e.preventDefault();
+        const elStatus = this.container.querySelector("[data-bc-user-info]");
+        const status = elStatus.getAttribute("data-status");
+        if (status == "close") {
+          elStatus.setAttribute("data-status", "open");
+        } else {
+          elStatus.setAttribute("data-status", "close");
+        }
+      });
 
-    this.container.querySelector("[data-bc-user-change-level]").addEventListener("click", (e) => {
-      e.preventDefault();
-      this.signalToDisplayMenu();
-      LocalStorageUtil.resetCurrentUserId();
-      this.container.classList.add("active-user");
-      this.container
-        .closest("[data-bc-bp-main-header]")
-        .querySelector(".active-business")
-        ?.classList.remove("active-business");
-      this.container
-        .closest("[data-bc-bp-main-header]")
-        .querySelector(".active-corporate")
-        ?.classList.remove("active-corporate");
+    this.container
+      .querySelector("[data-bc-user-change-level]")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        this.signalToDisplayMenu(false);
+        //LocalStorageUtil.resetCurrentUserId();
+        LocalStorageUtil.setLevel("profile", 1);
+        this.container.classList.add("active-user");
+        this.container
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-business")
+          ?.classList.remove("active-business");
+        this.container
+          .closest("[data-bc-bp-main-header]")
+          .querySelector(".active-corporate")
+          ?.classList.remove("active-corporate");
 
-      if (this.deviceId == 2) {
-        this.container.closest("[data-bc-bp-header-levels-container]").setAttribute("data-active", "user");
-        this.container.closest("[data-bc-bp-header-levels]").classList.remove("active");
-      }
-    });
-    if(this.options.store.existence == false){
-      const store =  this.container.querySelector("[data-bc-store-wrapper]")
-      store.remove()
+        if (this.deviceId == 2) {
+          this.container
+            .closest("[data-bc-bp-header-levels-container]")
+            .setAttribute("data-active", "user");
+          this.container
+            .closest("[data-bc-bp-header-levels]")
+            .classList.remove("active");
+        }
+      });
+    if (this.options.store.existence == false) {
+      const store = this.container.querySelector("[data-bc-store-wrapper]");
+      store.remove();
     }
-    
-    console.log("sss" , this.container)
-
     return Promise.resolve();
   }
 
@@ -86,37 +102,37 @@ export default class ProfileComponent extends BasisPanelChildComponent {
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-    this.signalToDisplayMenu();
+    //This methode must call if no local storage setting exists
+    // console.log(
+    //   "qam loadDataAsync",
+    //   this.isFirst,
+    //   !this.isFirst || LocalStorageUtil.level === "profile"
+    // );
+    if (!this.isFirst || LocalStorageUtil.level === "profile") {
+      this.signalToDisplayMenu(true);
+    }
+    this.isFirst = false;
   }
 
-  private signalToDisplayMenu() {
+  private signalToDisplayMenu(loadPageFromLocalStorage: boolean) {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
-        owner: "profile",
-        ownerId: "",
-        ownerUrl: this.options.baseUrl.profile,
-        rKey: this.options.rKey,
-        menuMethod: this.options.method.menu,
+        level: "profile",
+        levelId: 1,
+        levelUrl: this.options.baseUrl.profile,
+        moduleId: 1,
+        pageId: loadPageFromLocalStorage ? LocalStorageUtil.pageId : "default",
+        pageArg: loadPageFromLocalStorage
+          ? LocalStorageUtil.pageArguments
+          : null,
       };
+      //console.log("qam show profile menu", menuInfo);
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
-      this.signalToDisplayPage();
+      const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+      activeMenus.forEach((e) => {
+        e.removeAttribute("data-bc-menu-active");
+      });
     }
-  }
-
-  private async signalToDisplayPage() {
-    const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-    activeMenus.forEach((e) => {
-      e.removeAttribute("data-bc-menu-active");
-    });
-    const newParam: IPageLoaderParam = {
-      pageId: "default",
-      owner: "profile",
-      ownerId: "",
-      ownerUrl: this.options.baseUrl.profile,
-      rKey: this.options.rKey,
-      pageMethod: this.options.method.page,
-    };
-    this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
   }
 
   private refreshUI() {
