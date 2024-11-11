@@ -98,7 +98,7 @@ export default class NotificationTab {
           pageId = 20;
         }
         const pageLoader = this._owner.dc.resolve<MenuComponent>("page_loader");
-        pageLoader.tryLoadPage(LocalStorageUtil.level, 1, 1, pageId);
+        pageLoader.tryLoadPage(LocalStorageUtil.level, 1, 1, pageId, false);
       });
   }
 

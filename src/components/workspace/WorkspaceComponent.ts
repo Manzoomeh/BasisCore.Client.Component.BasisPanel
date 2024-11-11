@@ -7,6 +7,7 @@ import "./assets/style.css";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
 import IPageInfo from "../page/IPageInfo";
+import IStateModel from "../menu/IStateModel";
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
   public info: IPageInfo;
@@ -65,20 +66,31 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     pageLoaderParam: IPageLoaderParam
   ): Promise<void> {
     const param = JSON.stringify(pageLoaderParam);
-    //console.log(`qam page`, this.pageType, pageLoaderParam);
-    // //    console.log(`${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${pageLoaderParam.owner ? `/${pageParam.module}` : ""}/${pageParam.pageId}`)
-
-    // history.pushState(
-    //   null,
-    //   "",
-    //   `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${pageLoaderParam.owner}${
-    //     pageParam.module ? `/${pageParam.module}` : ""
-    //   }/${pageParam.pageId}`
-    // );
+    if (!pageLoaderParam.isSilent) {
+      const model: IStateModel = {
+        corporateId: LocalStorageUtil.corporateId,
+        businessId: LocalStorageUtil.businessId,
+        level: pageLoaderParam.level,
+        levelId: pageLoaderParam.levelId,
+        moduleId: pageLoaderParam.moduleId,
+        pageId: pageLoaderParam.pageId,
+        arguments: pageLoaderParam.arguments,
+      };
+      history.pushState(
+        model,
+        "",
+        `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${
+          pageLoaderParam.level
+        }${
+          (pageLoaderParam.moduleId ?? 1) != 1
+            ? `/${pageLoaderParam.moduleName}`
+            : ""
+        }/${pageLoaderParam.pageId}`
+      );
+    }
     const doc = this.owner.toNode(
       `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`
     );
-    // doc.querySelector("[params='']").setAttribute("params", param);
     const nodes = Array.from(doc.childNodes);
     this.container.innerHTML = "";
     this.container.appendChild(doc);

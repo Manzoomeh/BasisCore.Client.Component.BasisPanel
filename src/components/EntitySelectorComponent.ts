@@ -6,9 +6,13 @@ import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
 import IProfileAccessor from "./profile/IProfileAccessor";
+import ILevelSelector from "./ILevelSelector";
 
 declare const $bc: BCWrapperFactory;
-export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
+export default abstract class EntitySelectorComponent
+  extends BasisPanelChildComponent
+  implements ILevelSelector
+{
   protected profileAccessor: IProfileAccessor;
   protected element: Element;
   protected entityList: Array<IEntityInfo>;
@@ -31,6 +35,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     super(owner, desktopLayout, mobileLayout, `data-bc-bp-${level}-container`);
     this.owner.dc
       .resolve<DependencyContainer>("parent.dc")
+      .resolve<DependencyContainer>("parent.dc")
+      .resolve<DependencyContainer>("parent.dc")
       .registerInstance(this.getLevel(), this);
   }
 
@@ -41,6 +47,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected abstract getSourceId(): string;
   protected abstract getLevel(): PanelLevels;
   protected abstract initLIElement(li: HTMLLIElement, data: IEntityInfo): void;
+
+  select(levelId: number) {
+    const relatedElement = this.element.querySelector<HTMLElement>(
+      `[data-id='${levelId}']`
+    );
+    if (relatedElement) {
+      relatedElement.click();
+    }
+  }
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
@@ -103,15 +118,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       }
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
       if (id) {
-        const relatedElement = this.element.querySelector<HTMLElement>(
-          `[data-id='${id}']`
-        );
-        //console.log(`qam ${this.getLevel()} default`, id, relatedElement);
-        if (relatedElement) {
-          relatedElement.click();
-        }
-      } else {
-        //console.log(`qam ${this.getLevel()}`, "empty");
+        this.select(id);
       }
     }
   }

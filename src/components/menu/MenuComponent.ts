@@ -47,6 +47,8 @@ export default class MenuComponent
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
   }
 
@@ -170,26 +172,22 @@ export default class MenuComponent
         `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
       );
     }
-    console.log("qam menu 1", menuItem);
+    //console.log("qam menu 1", menuItem);
     //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
     //   this.menuContainer
     // );
 
     menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
-      .closest("[data-bc-related-menu-id]")
-      .getAttribute("data-bc-related-menu-id");
-    // console.log(
-    //   "qam menu",
-    //   menuItem,
-    //   relatedMenuId,
-    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-    // );
-    this.menuContainer
-      ?.querySelector(
-        `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-      )
-      ?.setAttribute("data-bc-menu-active", "");
+      ?.closest("[data-bc-related-menu-id]")
+      ?.getAttribute("data-bc-related-menu-id");
+    if (relatedMenuId) {
+      this.menuContainer
+        ?.querySelector(
+          `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
+        )
+        ?.setAttribute("data-bc-menu-active", "");
+    }
     // let [li, parent] = this.current.menuItemLookup.get(pageId + "-" + moduleId);
     //menuItem?.setAttribute("data-bc-menu-active", "");
 
@@ -206,13 +204,14 @@ export default class MenuComponent
     target: EventTarget
   ) {
     //LocalStorageUtil.setCurrentMenu(moduleId, node);
-    this.tryLoadPage(level, levelId, moduleId, pageId, null);
+    this.tryLoadPage(level, levelId, moduleId, pageId, false, null);
   }
   public async tryLoadPage(
     level: PanelLevels,
     levelId: number | null,
     moduleId: number,
     pageId: PageId,
+    isSilent?: boolean,
     args?: any
   ): Promise<boolean> {
     //console.log("qam mod 1", arguments);
@@ -224,9 +223,11 @@ export default class MenuComponent
         pageId: pageId,
         levelId: moduleInfo.levelId,
         moduleId: moduleId,
+        moduleName: moduleInfo.name,
         moduleUrl: moduleInfo.url,
         rKey: this.options.rKey,
         arguments: args,
+        isSilent: isSilent ?? false,
       };
       LocalStorageUtil.setPageUrl(moduleInfo.url);
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
@@ -241,7 +242,6 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    //console.log("qam loadex", arguments);
-    return this.tryLoadPage(level, null, moduleId, pageId, args);
+    return this.tryLoadPage(level, null, moduleId, pageId, false, args);
   }
 }

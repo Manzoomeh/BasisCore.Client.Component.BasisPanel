@@ -67,6 +67,7 @@ export default class MenuElementMaker {
     li?: HTMLElement
   ) {
     const tasks = items?.map(async (node) => {
+      let retVal: HTMLLIElement;
       if ((node as IMenuExternalItemInfo).url) {
         this.modules.set(node.mid, {
           name: (node as IMenuExternalItemInfo).name,
@@ -84,38 +85,33 @@ export default class MenuElementMaker {
             url: moduleUrl,
           });
         }
-        ul.appendChild(this.createPageMenuItem(node as IMenuPageInfo, li));
+        retVal = this.createPageMenuItem(node as IMenuPageInfo, li);
       } else if ((node as IMenuLevelInfo).nodes) {
-        ul.appendChild(
-          await this.createLevelMenuItemAsync(
-            node as IMenuLevelInfo,
-            moduleUrl,
-            this.deviceId
-          )
+        retVal = await this.createLevelMenuItemAsync(
+          node as IMenuLevelInfo,
+          moduleUrl,
+          this.deviceId
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
         (node as IMenuExternalItemInfo).multi
       ) {
-        ul.appendChild(
-          await this.createExternalMenuItem(
-            node as IMenuExternalItemInfo,
-            this.deviceId
-          )
+        retVal = await this.createExternalMenuItem(
+          node as IMenuExternalItemInfo,
+          this.deviceId
         );
       } else if (
         (node as IMenuExternalItemInfo).mid &&
         !(node as IMenuExternalItemInfo).multi
       ) {
-        ul.appendChild(
-          await this.createExternalMenuItemSingleItemAsync(
-            node as IMenuExternalItemInfo
-          )
+        retVal = await this.createExternalMenuItemSingleItemAsync(
+          node as IMenuExternalItemInfo
         );
       }
+      return retVal;
     });
     if (tasks) {
-      await Promise.all(tasks);
+      (await Promise.all(tasks)).forEach((x) => ul.appendChild(x));
     }
   }
 
@@ -258,7 +254,7 @@ export default class MenuElementMaker {
     node: IMenuExternalItemInfo
     //menuParam: IMenuLoaderParam
     //pageLookup: Map<number, IMenuLoaderParam>
-  ): Promise<HTMLElement> {
+  ): Promise<HTMLLIElement> {
     // const newMenuParam: IMenuLoaderParam = {
     //   level: menuParam.level,
     //   ownerId: node.mid,

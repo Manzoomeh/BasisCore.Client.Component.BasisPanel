@@ -5,8 +5,10 @@ export default interface IPageLoader {
     levelId: number | null,
     moduleId: number,
     pageId: PageId,
+    isSilent: boolean,
     args?: any
   ): Promise<boolean>;
+
   tryLoadPageEx(
     level: PanelLevels,
     moduleId: number,
