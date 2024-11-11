@@ -23,6 +23,7 @@ export default class MenuComponent
   implements IPageLoader
 {
   readonly ul: HTMLUListElement;
+  private lineHeader : HTMLElement
   readonly menuContainer: HTMLDivElement;
   private readonly cache: MenuCacheManager;
   public current: MenuElement;
@@ -48,6 +49,9 @@ export default class MenuComponent
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
+      this.lineHeader= document.querySelector("[data-bc-header-line]")
+      this.lineHeader.style.transition = "none"    
+      this.lineHeader.style.width = "0"
   }
 
   public initializeAsync(): Promise<void> {
@@ -55,6 +59,10 @@ export default class MenuComponent
       DefaultSource.SHOW_MENU,
       DefaultSource.BUSINESS_SOURCE,
     ]);
+    setTimeout(() => {
+      this.lineHeader.style.transition = "all 1s ease-in-out"    
+      this.lineHeader.style.width = "98%"    
+    }, 500);
     return Promise.resolve();
   }
 

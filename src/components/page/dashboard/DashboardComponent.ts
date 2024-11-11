@@ -16,21 +16,16 @@ export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;
   public groups;
   private _banner = LocalStorageUtil.getLastBanner();
-  private lineHeader : HTMLElement
+  
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-page-container");
-    this.lineHeader= document.querySelector("[data-bc-header-line]")
-    this.lineHeader.style.transition = "none"    
-    this.lineHeader.style.width = "0"
+ 
   }
   public get type(): PageType {
     return PageType.Dashboard;
   }
   public async initializeAsync(): Promise<void> {
-    setTimeout(() => {
-      this.lineHeader.style.transition = "all 1s ease-in-out"    
-      this.lineHeader.style.width = "98%"    
-    }, 500);
+    
     
     
     await super.initializeAsync();
