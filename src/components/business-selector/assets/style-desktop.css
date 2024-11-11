@@ -1,7 +1,9 @@
 [data-bc-bp-business-container="d1"] {
     /* float: right; */
-    height: 48px;
-    padding: 7.5px 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap:15px
 }
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-business-container="d1"] {
@@ -14,7 +16,7 @@
 
 [data-bc-d1-business-list] {
     min-width: 190px;
-    height: 33px;
+    height: 40px;
     background: #fff;
     border: 1px solid #E5E5E5;
     /* float: right; */
@@ -31,7 +33,6 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-business-list] {
     float: right;
-    margin-right: 15px;
     direction: rtl;
 }
 
@@ -44,8 +45,8 @@
 [data-bc-d1-business-list-icon] {
     /* float: right; */
     width: 32px;
-    height: 32px;
-    background-color: #E4E7F4;
+    height: 38px;
+    /* background-color: #E4E7F4; */
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -118,9 +119,6 @@
     transform: translateY(-50%);
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d1-business-list] [data-bc-d1-business-msg] {
-    right: 10px;
-}
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-business-list] [data-bc-d1-business-msg] {
     left: 10px;
@@ -137,10 +135,13 @@
     display: inline-block;
     cursor: pointer;
     width: 30px;
-    height: 30px;
+    height: 38px;
     text-align: center;
     padding: 7px 0px;
     background-color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 [data-bc-d1-business-list] [data-bc-d1-business-drop-down] {
@@ -262,17 +263,12 @@
     background-color: #eee !important;
 } */
 
-[data-bc-bp-business-container="d1"] .active-business {
-    border: 1px solid rgba(0, 75, 133, 1) !important;
-    background-color: #E4E7F4 !important;
-}
 
 [data-bc-bp-business-container="d1"] .active-business [data-bc-main-name] {
     color: rgba(0, 75, 133, 1);
 }
 
 [data-bc-bp-business-container="d1"] .active-business [data-bc-d1-business-list-icon] {
-    border: 1px solid rgba(0, 75, 133, 1);
     border-top: 0;
     /* border-right: 0; */
 }
@@ -380,3 +376,6 @@
 [data-bc-d1-business-list] [data-bc-main-name] [data-bc-business-freeze-label]:active [data-bc-business-freeze-switch] {
     width: 12px;
 }
+[data-bc-main-list-msg-selective] span{
+    color: #004B85 !important;
+  }

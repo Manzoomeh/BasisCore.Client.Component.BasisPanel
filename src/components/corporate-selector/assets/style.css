@@ -3,10 +3,13 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   /* position: absolute; */
-  top: 0 !important;
+  top: -5px !important;
   /* right: 10px; */
   transform: translateY(0) !important;
   line-height: 10px;
+  right: -25px;
+  background-color: #fff;
+  padding: 0 5px;
 }
 [data-bc-erp-icon] {
   display: flex;
@@ -15,7 +18,7 @@
 }
 [data-bc-main-name] {
   font-size: 12px;
-  margin-top: 13px;
+  margin-top: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

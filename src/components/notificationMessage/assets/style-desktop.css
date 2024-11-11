@@ -52,16 +52,16 @@
 }
 
 .success-progress:before {
-  background-color: #006a5e;
+  background-color: #43D787;
 }
 .info-progress:before {
-  background-color: #005386;
+  background-color: #0086D6;
 }
 .error-progress:before {
-  background-color: #b40020;
+  background-color: #F9461C;
 }
 .default-progress:before {
-  background-color: #e96228;
+  background-color: #FFBB00;
 }
 [data-bc-bp-direction="leftToRight"] .NotificationMessageMethod {
   position: fixed;
@@ -109,35 +109,35 @@
   animation: progressRight 3s linear forwards;
 }
 [data-bc-message-info] {
-  background-color: #d9e8f2;
-  color: #0064a6;
+  background-color: #E6F3FB;
+  color: #0086D6;
   padding: 7px 15px;
-  border: 1px solid #c1d8ea;
+  border: 1px solid #0086D6;
   border-radius: 5px;
   transition: all 0.5s ease-in-out;
 }
 [data-bc-message-success] {
-  background-color: #d9f2ef;
-  color: #00a693;
+  background-color: #E6F7F5;
+  color: #43D787;
   padding: 7px 15px;
-  border: 1px solid #c1eae6;
+  border: 1px solid #43D787;
   border-radius: 5px;
   transition: all 0.5s ease-in-out;
 }
 [data-bc-message-error] {
-  background-color: #fde8e8;
-  color: var(--red);
+  background-color: #FFEDE9;
+  color: #F9461C;
   padding: 7px 15px;
   border-radius: 5px;
-  border: 1px solid #f6d5da;
+  border: 1px solid #F9461C;
   transition: all 0.5s ease-in-out;
 }
 [data-bc-message-default] {
-  background-color: #ffeee7;
-  color: #e96228;
+  background-color: #FFF9E6;
+  color: #FFBB00;
   padding: 7px 15px;
   border-radius: 5px;
-  border: 1px solid rgba(233, 98, 40, 0.1);
+  border: 1px solid #FFBB00;
   transition: all 0.5s ease-in-out;
 }
 [data-sys-message-fade-in] {

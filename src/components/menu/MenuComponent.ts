@@ -60,11 +60,12 @@ export default class MenuComponent
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
-      this.container.setAttribute(
+      const headerLine = this.container.querySelector("[data-bc-header-line]")
+      console.log("line" , headerLine)
+      headerLine.setAttribute(
         `data-bc-bp-menu-seperation`,
         source.rows[0].level
       );
-      console.log("qam show menu msg", source.rows[0]);
       await this.loadDataAsync(source.rows[0]);
     }
   }
@@ -228,6 +229,7 @@ export default class MenuComponent
         rKey: this.options.rKey,
         arguments: args,
       };
+      LocalStorageUtil.setPageUrl(moduleInfo.url);
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       this.setMenuUISelected(level, levelId, moduleId, pageId);
     }

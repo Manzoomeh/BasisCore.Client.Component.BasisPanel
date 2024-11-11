@@ -12,7 +12,7 @@
 
 [data-bc-d1-user-info] {
     /* float: right; */
-    height: 48px;
+    height: 40px;
     /* border-left: 0.5px solid #D0D0D0; */
     /* padding-left: 15px; */
     position: relative;
@@ -21,13 +21,13 @@
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-user-info] {
     float: right;
     border-left: 0.5px solid #D0D0D0;
-    padding-left: 15px;
+    
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-user-info] {
     float: right;
     border-left: 0.5px solid #D0D0D0;
-    padding-left: 15px;
+    padding-left: 12px;
 }
 
 [data-bc-d1-user-info] [data-bc-d1-user-info-image] {
@@ -48,8 +48,8 @@
 
 [data-bc-d1-user-info] [data-bc-d1-user-info-image] img {
     border-radius: 5px;
-    height: 48px;
-    width: 48px;
+    height: 40px;
+    width: 40px;
 }
 
 [data-bc-d1-user-info] [data-bc-d1-user-info-drop-down] {

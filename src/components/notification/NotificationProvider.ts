@@ -6,6 +6,7 @@ import { IDisposable, ISourceOptions } from "basiscore"; //"bclib/dist/bclib";
 //import ISourceOptions from "basiscore";
 import HttpUtil from "../../HttpUtil";
 import { IUrlCollectionOption } from "../basispanel/IBasisPanelOptions";
+import { DependencyContainer } from "tsyringe";
 //import ISource from "basiscore";
 
 export default class NotificationProvider implements INotificationProvider {
@@ -16,6 +17,9 @@ export default class NotificationProvider implements INotificationProvider {
   }
   get rKey(): string {
     return this._owner.rKey;
+  }
+  get dc(): DependencyContainer {
+    return this._owner.dc;
   }
   public readonly tab: NotificationTab;
 

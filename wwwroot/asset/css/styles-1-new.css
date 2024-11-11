@@ -2578,8 +2578,8 @@ body.darkmode {
 }
 
 [data-success-green-message] {
-    color: #006A5E;
-    background: #E2FFFC;
+    color: #43D787;
+    background: #E6F7F5;
     min-width: 300px;
     padding: 15px 20px;
     font-size: 14px;
@@ -2587,13 +2587,13 @@ body.darkmode {
 }
 
 .success-progress:before {
-    background-color: #006A5E;
+    background-color: #43D787;
 
 }
 
 [data-error-red-message] {
-    color: #B40020;
-    background: #FFE6EA;
+    color: #F9461C;
+    background: #FFEDE9;
     padding: 15px 20px;
     font-size: 14px;
     font-weight: bold;
@@ -2601,7 +2601,7 @@ body.darkmode {
 }
 
 .error-progress:before {
-    background-color: #B40020;
+    background-color: #F9461C;
 }
 
 .progress.activeNotification:before {
@@ -2628,7 +2628,7 @@ div[data-bc-bp-menu-seperation="business"] {
     margin: 0 auto;
     border-radius: 5px;
     position: absolute;
-    z-index: 99;
+    z-index: 95;
     right: 20px;
 }
 
@@ -2651,7 +2651,7 @@ div[data-bc-bp-menu-seperation="corporate"] {
     margin: 0 auto;
     border-radius: 5px;
     position: absolute;
-    z-index: 99;
+    z-index: 95;
     right: 20px;
 }
 
@@ -2746,3 +2746,9 @@ div[data-bc-bp-menu-seperation="corporate"] {
         transform: rotate(1turn);
     }
 }
+[data-sys-tab-active] {
+    background-color: var(--dark_blue) !important;
+  }
+  [data-bc-page-widget-search-input]{
+    width: 100%;
+  }

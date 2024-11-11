@@ -13,6 +13,7 @@ import "./assets/style-mobile.css";
 
 import INotificationComponent from "./INotificationComponent";
 import NotificationProvider from "./NotificationProvider";
+import { DependencyContainer } from "tsyringe";
 
 export default class NotificationComponent
   extends BasisPanelChildComponent
@@ -25,7 +26,12 @@ export default class NotificationComponent
   }
 
   constructor(owner: IUserDefineComponent) {
-    super(owner, desktopLayout, mobileLayout, "data-bc-bp-notification-container");
+    super(
+      owner,
+      desktopLayout,
+      mobileLayout,
+      "data-bc-bp-notification-container"
+    );
     this.container.setAttribute("data-count", "0");
   }
 
@@ -77,7 +83,8 @@ export default class NotificationComponent
     // }
 
     this._provider = this.options.notification.providers.map(
-      (provider, index) => new NotificationProvider(this, provider, index, this.options.baseUrl)
+      (provider, index) =>
+        new NotificationProvider(this, provider, index, this.options.baseUrl)
     );
     const tasks = this._provider.map((x) => x.initializeAsync());
     await Promise.all(tasks);
@@ -85,5 +92,9 @@ export default class NotificationComponent
 
   public runAsync(source?: ISource) {
     return true;
+  }
+
+  public get dc(): DependencyContainer {
+    return this.owner.dc;
   }
 }

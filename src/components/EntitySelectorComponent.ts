@@ -466,6 +466,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       // fill ", this.getLevel(), freeze, li.textContent);
       entityName.textContent = li.textContent;
     } else {
+      const entityElement = this.element
+      .closest("[data-bc-bp-business-container]")
       const switchInput = document.createElement("input");
       switchInput.setAttribute("type", "checkbox");
       switchInput.setAttribute("id", "switch");
@@ -477,15 +479,30 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           this.resetBusinessEntity();
         }
       });
-      entityName.appendChild(switchInput);
+      // entityName.appendChild(switchInput);
       const switchLabel = document.createElement("label");
       switchLabel.setAttribute("for", "switch");
       switchLabel.setAttribute("data-bc-business-freeze-label", "");
       switchLabel.innerHTML = `<span data-bc-business-freeze-switch=""><svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.18581 2.63636H4.8449V1.95455C4.8449 1.01364 4.08127 0.25 3.14036 0.25C2.19945 0.25 1.43581 1.01364 1.43581 1.95455V2.63636H1.0949C0.719904 2.63636 0.413086 2.94318 0.413086 3.31818V6.72727C0.413086 7.10227 0.719904 7.40909 1.0949 7.40909H5.18581C5.56081 7.40909 5.86763 7.10227 5.86763 6.72727V3.31818C5.86763 2.94318 5.56081 2.63636 5.18581 2.63636ZM3.14036 5.70455C2.76536 5.70455 2.45854 5.39773 2.45854 5.02273C2.45854 4.64773 2.76536 4.34091 3.14036 4.34091C3.51536 4.34091 3.82218 4.64773 3.82218 5.02273C3.82218 5.39773 3.51536 5.70455 3.14036 5.70455ZM2.11763 2.63636V1.95455C2.11763 1.38864 2.57445 0.931818 3.14036 0.931818C3.70627 0.931818 4.16309 1.38864 4.16309 1.95455V2.63636H2.11763Z" fill="#004B85"/></svg></span>`;
-      entityName.appendChild(switchLabel);
+      // entityName.appendChild(switchLabel);
+      console.log("???" , entityElement)
+      // const lockIconWrapper = entityElement.querySelector("[data-bc-bp-business-container]") as HTMLElement
+
+      // lockIcon.querySelector("path").style.fill = "#004B85"
+      const lockIcon = document.createElement("div")
+      lockIcon.setAttribute("data-bc-link-business-corporate","")
+      lockIcon.innerHTML = `
+    
+<svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 8H4C2.88889 8 1.94444 7.61111 1.16667 6.83333C0.388889 6.05556 1.78814e-07 5.11111 1.78814e-07 4C1.78814e-07 2.88889 0.388889 1.94444 1.16667 1.16667C1.94444 0.388888 2.88889 -9.53674e-07 4 -9.53674e-07H7V1.5H4C3.30556 1.5 2.71528 1.74305 2.22917 2.22917C1.74306 2.71528 1.5 3.30556 1.5 4C1.5 4.69444 1.74306 5.28472 2.22917 5.77083C2.71528 6.25694 3.30556 6.5 4 6.5H7V8ZM5 4.75V3.25H11V4.75H5ZM9 8V6.5H12C12.6944 6.5 13.2847 6.25694 13.7708 5.77083C14.2569 5.28472 14.5 4.69444 14.5 4C14.5 3.30556 14.2569 2.71528 13.7708 2.22917C13.2847 1.74305 12.6944 1.5 12 1.5H9V-9.53674e-07H12C13.1111 -9.53674e-07 14.0556 0.388888 14.8333 1.16667C15.6111 1.94444 16 2.88889 16 4C16 5.11111 15.6111 6.05556 14.8333 6.83333C14.0556 7.61111 13.1111 8 12 8H9Z" fill="#004B85"/>
+    </svg>
+    
+`
+entityElement.insertBefore(lockIcon, entityElement.firstChild)
+      // lockIcon.style.fill = "red"
+      
       const title = document.createTextNode(li.textContent);
       entityName.appendChild(title);
-      //console.log("qam fill ", this.getLevel(), freeze, li.textContent);
     }
 
     containerMsgElement.parentNode.insertBefore(

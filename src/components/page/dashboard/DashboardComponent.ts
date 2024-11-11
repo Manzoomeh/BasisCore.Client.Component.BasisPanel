@@ -16,13 +16,23 @@ export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;
   public groups;
   private _banner = LocalStorageUtil.getLastBanner();
+  private lineHeader : HTMLElement
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-page-container");
+    this.lineHeader= document.querySelector("[data-bc-header-line]")
+    this.lineHeader.style.transition = "none"    
+    this.lineHeader.style.width = "0"
   }
   public get type(): PageType {
     return PageType.Dashboard;
   }
   public async initializeAsync(): Promise<void> {
+    setTimeout(() => {
+      this.lineHeader.style.transition = "all 1s ease-in-out"    
+      this.lineHeader.style.width = "98%"    
+    }, 500);
+    
+    
     await super.initializeAsync();
     this.groups = JSON.parse(JSON.stringify(this.info));
 
@@ -59,11 +69,7 @@ export default class DashboardComponent extends PageComponent {
     }
   }
   public async checkBanners() {
-    const last_state = JSON.parse(
-      localStorage.getItem("__bc_panel_last_state__")
-    );
-
-    const level = last_state?.p?.owner;
+    const level = LocalStorageUtil.level;
     if (level == "corporate" && this.options.bannerUrl) {
       const url = HttpUtil.formatString(
         this.options.baseUrl.business + this.options.bannerUrl,
@@ -101,7 +107,7 @@ export default class DashboardComponent extends PageComponent {
           );
           this.addBannerToPage(res.groups[0]);
         }
-      } catch { }
+      } catch {}
     }
   }
   public async runAsync(source?: ISource) {

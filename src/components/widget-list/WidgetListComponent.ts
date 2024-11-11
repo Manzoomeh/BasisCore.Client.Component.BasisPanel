@@ -17,6 +17,7 @@ import IDashboardWidgetData from "../page-widget/widget/IdashboardWidgetData";
 import IDashboardCategoryData from "../page-widget/widget/IDashboardCategoryData";
 import NotificationMessageComponent from "../notificationMessage/NotificationMessageComponent";
 import MenuComponent from "../menu/MenuComponent";
+import LocalStorageUtil from "../../LocalStorageUtil";
 
 export default class WidgetListComponent extends BasisPanelChildComponent {
   private readonly _page: IPage;
@@ -153,8 +154,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       widgetData["moduleid"] =
         allWidgets.find((l) => l.id == e.getAttribute("id"))?.moduleid ||
         e.getAttribute("moduleid") ||
-        JSON.parse(localStorage.getItem("__bc_panel_last_state__"))?.m?.info
-          ?.mid;
+        LocalStorageUtil.moduleId;
       if (
         !data.data.find(
           (w) =>

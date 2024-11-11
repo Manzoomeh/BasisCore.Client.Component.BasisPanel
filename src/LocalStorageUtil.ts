@@ -14,6 +14,7 @@ export default class LocalStorageUtil {
   private static _moduleId?: number;
   private static _pageArguments?: any;
   private static _pageDashboard?: boolean;
+  private static _pageUrl?: string;
 
   public static get level() {
     return LocalStorageUtil._level;
@@ -39,6 +40,10 @@ export default class LocalStorageUtil {
   public static get pageDashboard() {
     return LocalStorageUtil._pageDashboard;
   }
+  public static get pageUrl() {
+    return LocalStorageUtil._pageUrl;
+  }
+
   public static setLevel(level: PanelLevels, ownerId: number) {
     LocalStorageUtil._level = level;
     switch (level) {
@@ -97,19 +102,14 @@ export default class LocalStorageUtil {
     LocalStorageUtil.save();
   }
 
-  private static _lastBusiness: number;
-  private static _lastCorporate: number;
-  private static _lastPage: IPageLoaderParam;
-  private static _lastMenu: ICurrentMenu;
+  public static setPageUrl(pageUrl: string) {
+    LocalStorageUtil._pageUrl = pageUrl;
+    LocalStorageUtil.save();
+  }
 
-  private static _currentBusiness: number;
-  private static _currentCorporate: number;
-  private static _currentPage: IPageLoaderParam;
   private static _currentUserId: number;
   private static _lastBanner: IBannerInfo;
 
-  private static _hasPageToShow: boolean = false;
-  private static _hasMenuToActive: boolean = false;
   public static checkRkeyResult: Promise<ICheckRkeyResult>;
 
   public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
@@ -136,6 +136,7 @@ export default class LocalStorageUtil {
               LocalStorageUtil._pageArguments = obj.pageArguments;
               LocalStorageUtil._pageDashboard = obj.pageDashboard;
               LocalStorageUtil._menuPageId = obj.menuPageId;
+              LocalStorageUtil._pageUrl = obj.pageUrl;
             }
           }
         } catch (ex) {
@@ -176,6 +177,7 @@ export default class LocalStorageUtil {
       menuPageId: LocalStorageUtil._menuPageId,
       pageArguments: LocalStorageUtil._pageArguments,
       pageDashboard: LocalStorageUtil._pageDashboard,
+      pageUrl: LocalStorageUtil._pageUrl,
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
@@ -195,9 +197,9 @@ export default class LocalStorageUtil {
   //   LocalStorageUtil.save();
   // }
 
-  public static getCurrentPage(): IPageLoaderParam {
-    return null; // LocalStorageUtil._lastPage;
-  }
+  // public static getCurrentPage(): IPageLoaderParam {
+  //   return null; // LocalStorageUtil._lastPage;
+  // }
 
   // public static get currentLevel(): PanelLevels {
   //   return LocalStorageUtil.getCurrentPage()?.level ?? "profile";
@@ -256,28 +258,28 @@ export default class LocalStorageUtil {
   //   LocalStorageUtil.save();
   // }
 
-  public static getCurrentMenu(): ICurrentMenu {
-    return null; // LocalStorageUtil._lastMenu;
-  }
+  // public static getCurrentMenu(): ICurrentMenu {
+  //   return null; // LocalStorageUtil._lastMenu;
+  // }
 
-  public static mustActiveMenuItem(level: PanelLevels) {
-    let load = false;
-    if (LocalStorageUtil._lastBusiness) {
-      if (level == "business") {
-        load = true;
-      }
-    } else if (LocalStorageUtil._lastCorporate) {
-      if (level == "corporate") {
-        load = true;
-      }
-    } else if (level == "profile") {
-      load = true;
-    }
-    if (load) {
-      LocalStorageUtil._hasMenuToActive = false;
-    }
-    return load;
-  }
+  // public static mustActiveMenuItem(level: PanelLevels) {
+  //   let load = false;
+  //   if (LocalStorageUtil._lastBusiness) {
+  //     if (level == "business") {
+  //       load = true;
+  //     }
+  //   } else if (LocalStorageUtil._lastCorporate) {
+  //     if (level == "corporate") {
+  //       load = true;
+  //     }
+  //   } else if (level == "profile") {
+  //     load = true;
+  //   }
+  //   if (load) {
+  //     LocalStorageUtil._hasMenuToActive = false;
+  //   }
+  //   return load;
+  // }
 
   public static hasMenuToActive() {
     return false; //LocalStorageUtil._hasMenuToActive;
@@ -317,4 +319,5 @@ interface IStorageObject {
   menuPageId: PageId;
   pageArguments?: any;
   pageDashboard?: boolean;
+  pageUrl: string;
 }
