@@ -37,9 +37,9 @@
   background-image: url('../images/basispanel-logo.png') !important;
 }
 
-[data-sys-menu-link] {
+/* [data-sys-menu-link] {
   color: var(--menu) !important;
-}
+} */
 
 [data-sys-menu-external] {
   background-color: var(--dark_white) !important;
@@ -82,6 +82,8 @@
 [data-sys-menu] [data-bc-menu-active] {
   position: relative;
   font-weight: bold;
+  color: #004B85 !important;
+
 }
 [data-sys-menu] [data-bc-menu-active]:before{
   width: 10px;
@@ -873,10 +875,10 @@ tbody [data-sys-td] {
   transition: all 0.3s ease-in-out;
 }
 
-[data-bc-widget-title]:hover {
+/* [data-bc-widget-title]:hover {
   background-color: #767676 !important;
   color: #fff !important;
-}
+} */
 
 [data-bc-widget-buttons] span {
   /* padding: 5px 10px; */
@@ -949,6 +951,10 @@ tbody [data-sys-td] {
 [data-sys-button-dropdown]:hover ul{
   display: block;
 }
+[data-bc-bp-submenu] [data-bc-menu-active] a{
+  border-right:4px solid #004B85 !important;
+}
+
 
 
 

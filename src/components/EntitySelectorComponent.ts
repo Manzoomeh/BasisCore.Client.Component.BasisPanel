@@ -489,6 +489,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       // const lockIconWrapper = entityElement.querySelector("[data-bc-bp-business-container]") as HTMLElement
 
       // lockIcon.querySelector("path").style.fill = "#004B85"
+      const containLockIcon = document.querySelector("[data-bc-link-business-corporate]")
+      if(containLockIcon){
+        document.querySelector("[data-bc-link-business-corporate]").remove()
+      }
       const lockIcon = document.createElement("div")
       lockIcon.setAttribute("data-bc-link-business-corporate","")
       lockIcon.innerHTML = `
