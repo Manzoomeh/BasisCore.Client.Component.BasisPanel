@@ -155,18 +155,17 @@ export default class MenuComponent
     moduleId: number,
     pageId: PageId
   ) {
-    // if (selectedItem) {
-    //   selectedItem.removeAttribute("data-bc-menu-active");
-    // }
     let menuItem = this.menuContainer.querySelector(
       `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
     );
-    if (menuItem) {
+    if (menuItem || pageId == "default") {
       this.menuContainer
-        .querySelectorAll(`li[data-bc-menu-active]`)
+        .querySelectorAll(`[data-bc-menu-active]`)
         .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+    }
+    if (menuItem) {
       LocalStorageUtil.setMenuLastPage(pageId);
-    } else {
+    } else if (pageId != "default") {
       pageId = LocalStorageUtil.menuPageId;
       menuItem = this.menuContainer.querySelector(
         `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
