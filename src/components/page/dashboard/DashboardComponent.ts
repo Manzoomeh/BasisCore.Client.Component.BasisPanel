@@ -48,8 +48,6 @@ export default class DashboardComponent extends PageComponent {
 
   public addBannerToPage(group: IPageGroupInfo) {
     if (group && group.widgets?.length > 0) {
-
-
       const maxY = Math.max(...group.widgets.map((e) => e.y + e.h));
       this.groups.groups.forEach((g) => {
         g.widgets.forEach((w) => {
@@ -76,14 +74,10 @@ export default class DashboardComponent extends PageComponent {
         { rKey: this.options.rKey }
       );
       try {
-
-
         if (this._banner) {
-
           if (this.options.rKey == this._banner.rkey) {
             this.showLastBanners();
           } else {
-
             const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
             if (res.eventID == this._banner.eventID) {
               this.showLastBanners();

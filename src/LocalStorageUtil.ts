@@ -15,6 +15,7 @@ export default class LocalStorageUtil {
   private static _pageArguments?: any;
   private static _pageDashboard?: boolean;
   private static _pageUrl?: string;
+  private static _pageUrl?: string;
 
   public static get level() {
     return LocalStorageUtil._level;
