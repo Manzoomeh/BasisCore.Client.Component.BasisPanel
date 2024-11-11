@@ -16,13 +16,18 @@ export default class DashboardComponent extends PageComponent {
   public _groupsAdded: boolean = false;
   public groups;
   private _banner = LocalStorageUtil.getLastBanner();
+  
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-page-container");
+ 
   }
   public get type(): PageType {
     return PageType.Dashboard;
   }
   public async initializeAsync(): Promise<void> {
+    
+    
+    
     await super.initializeAsync();
     this.groups = JSON.parse(JSON.stringify(this.info));
 

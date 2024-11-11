@@ -82,6 +82,8 @@
 [data-sys-menu] [data-bc-menu-active] {
   position: relative;
   font-weight: bold;
+  color: #004B85 !important;
+
 }
 [data-sys-menu] [data-bc-menu-active]:before{
   width: 10px;

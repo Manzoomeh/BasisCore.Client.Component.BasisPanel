@@ -1,7 +1,7 @@
 [data-bc-bp-notification-container="d1"] {
     /* float: right; */
     width: 32px;
-    height: 32px;
+    height: 40px;
     /* background-color: #E4E7F4; */
     border-radius: 5px;
     display: flex;
@@ -15,7 +15,7 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-notification-container="d1"] {
     float: right;
-    margin-right: 15px;
+    margin-right: 22px;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-notification-container="d1"] {
@@ -23,9 +23,6 @@
     margin-right: 15px;
 }
 
-[data-bc-d1-notification] [data-bc-d1-notification-alert] {
-    height: 14px;
-}
 
 [data-bc-d1-notification] [data-bc-d1-notification-icon] {
     vertical-align: middle;
@@ -44,11 +41,13 @@
 
 [data-bc-d1-notification] [data-bc-d1-notification-alarm] {
     position: absolute;
-    /* right: -4px; */
-    top: -4px;
+    right: 0;
+    top: 0;
     width: 18px;
     height: 18px;
-    border-radius: 100%;
+    
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
     content: '';
     background-color: #EB5757;
     letter-spacing: 0.9px;
@@ -59,12 +58,12 @@
     justify-content: center;
 }
 
-[data-bc-bp-direction="rightToLeft"] [data-bc-d1-notification] [data-bc-d1-notification-alarm] {
-    right: -4px;
-}
 
+[data-bc-notification-alert]{
+    position: relative;
+}
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-notification] [data-bc-d1-notification-alarm] {
-    right: -4px;
+    right: -8px;
 }
 
 /* ********** notification dropdown ********** */
@@ -171,4 +170,29 @@
     border-radius: 5px;
     cursor: pointer;
     margin: 0 5px;
+}
+
+[data-bc-notifications]{
+    width: 40px;
+    height: 40px;
+    background-color: #E6EDF3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+[data-bc-notifications] span{
+    margin-left: 0;
+}
+[data-bc-download-cloud]{
+    width: 40px;
+    height: 40px;
+    background-color: #E6EDF3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+[data-bc-download-cloud] span{
+    margin-left: 0;
 }

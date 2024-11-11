@@ -23,6 +23,7 @@ export default class MenuComponent
   implements IPageLoader
 {
   readonly ul: HTMLUListElement;
+  private lineHeader : HTMLElement
   readonly menuContainer: HTMLDivElement;
   private readonly cache: MenuCacheManager;
   public current: MenuElement;
@@ -50,6 +51,9 @@ export default class MenuComponent
       .resolve<IDependencyContainer>("parent.dc")
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
+      this.lineHeader= document.querySelector("[data-bc-header-line]")
+      this.lineHeader.style.transition = "none"    
+      this.lineHeader.style.width = "0"
   }
 
   public initializeAsync(): Promise<void> {
@@ -57,16 +61,21 @@ export default class MenuComponent
       DefaultSource.SHOW_MENU,
       DefaultSource.BUSINESS_SOURCE,
     ]);
+    setTimeout(() => {
+      this.lineHeader.style.transition = "all 1s ease-in-out"    
+      this.lineHeader.style.width = "98%"    
+    }, 500);
     return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
-      this.container.setAttribute(
+      const headerLine = this.container.querySelector("[data-bc-header-line]")
+      console.log("line" , headerLine)
+      headerLine.setAttribute(
         `data-bc-bp-menu-seperation`,
         source.rows[0].level
       );
-      console.log("qam show menu msg", source.rows[0]);
       await this.loadDataAsync(source.rows[0]);
     }
   }

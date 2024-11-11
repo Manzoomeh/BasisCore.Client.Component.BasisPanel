@@ -18,6 +18,7 @@ export default abstract class PageComponent
   public readonly widgetDropAreaContainer: HTMLElement;
   private hasSidebar: boolean = false;
   public cell: number;
+  private lineHeader : HTMLElement
   public widgetCell: number = null;
   public get arguments(): any {
     return this.loaderParam.arguments;
@@ -37,6 +38,9 @@ export default abstract class PageComponent
     this.widgetDropAreaContainer = this.container.querySelector<HTMLElement>(
       "[data-bc-widget-drop-area-container]"
     );
+    this.lineHeader= document.querySelector("[data-bc-header-line]")
+    this.lineHeader.style.transition = "none"    
+    this.lineHeader.style.width = "0"
   }
 
   public async initializeAsync(): Promise<void> {
@@ -58,6 +62,10 @@ export default abstract class PageComponent
         this.options.checkRkey
       );
     }
+    setTimeout(() => {
+      this.lineHeader.style.transition = "all 1s ease-in-out"    
+      this.lineHeader.style.width = "98%"    
+    }, 500);
   }
 
   public async runAsync(source?: ISource) {

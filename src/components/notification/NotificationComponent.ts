@@ -15,6 +15,7 @@ import INotificationComponent from "./INotificationComponent";
 import NotificationProvider from "./NotificationProvider";
 import { DependencyContainer } from "tsyringe";
 
+
 export default class NotificationComponent
   extends BasisPanelChildComponent
   implements INotificationComponent
