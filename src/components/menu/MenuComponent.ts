@@ -146,6 +146,7 @@ export default class MenuComponent
       menuParam.levelId,
       menuParam.moduleId,
       menuParam.pageId,
+      false,
       menuParam.pageArg
     );
     // const newParam: IPageLoaderParam = {
@@ -219,8 +220,8 @@ export default class MenuComponent
     levelId: number | null,
     moduleId: number,
     pageId: PageId,
-    isSilent?: boolean,
-    args?: any
+    isSilent: boolean,
+    args: any | null
   ): Promise<boolean> {
     //console.log("qam mod 1", arguments);
     const moduleInfo = this.cache.getModuleInfo(level, levelId, moduleId);

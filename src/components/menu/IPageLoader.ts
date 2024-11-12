@@ -6,7 +6,7 @@ export default interface IPageLoader {
     moduleId: number,
     pageId: PageId,
     isSilent: boolean,
-    args?: any
+    args: any | null
   ): Promise<boolean>;
 
   tryLoadPageEx(
