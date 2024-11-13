@@ -41,6 +41,7 @@ export interface IResponseCheckRkey {
 //   ownerUrl: string;
 // }
 export interface IModuleInfo {
+  id: number;
   levelId: number;
   name: string;
   url: string;

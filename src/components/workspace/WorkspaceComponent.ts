@@ -76,17 +76,17 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         pageId: pageLoaderParam.pageId,
         arguments: pageLoaderParam.arguments,
       };
-      // history.pushState(
-      //   model,
-      //   "",
-      //   `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${
-      //     pageLoaderParam.level
-      //   }${
-      //     (pageLoaderParam.moduleId ?? 1) != 1
-      //       ? `/${pageLoaderParam.moduleName}`
-      //       : ""
-      //   }/${pageLoaderParam.pageId}`
-      // );
+      history.pushState(
+        model,
+        "",
+        `${this.options.urlPrefix ? this.options.urlPrefix : ""}/${
+          pageLoaderParam.level
+        }${
+          (pageLoaderParam.moduleId ?? 1) != 1
+            ? `/${pageLoaderParam.moduleName}`
+            : ""
+        }/${pageLoaderParam.pageId}`
+      );
     }
     const doc = this.owner.toNode(
       `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`
