@@ -5,14 +5,13 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
 import { IUserDefineComponent, ISource, BCWrapperFactory } from "basiscore";
-import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
   IMenuLevelInfo,
   IMenuPageInfo,
 } from "../../menu/IMenuInfo";
-import IPageLoaderParam from "../../menu/IPageLoaderParam";
 import PageWidgetComponent from "../PageWidgetComponent";
+import IPageLoader from "../../menu/IPageLoader";
 
 declare const $bc: BCWrapperFactory;
 
@@ -164,18 +163,16 @@ export default class SidebarComponent extends PageWidgetComponent {
     target: EventTarget,
     args?: any
   ) {
-    const newParam: IPageLoaderParam = {
-      level: this.param.page.level,
-      levelId: this.param.page.levelId,
-      moduleId: this.param.page.moduleId,
-      moduleName: this.param.page.moduleName,
-      moduleUrl: this.param.page.moduleUrl,
-      pageId: pageId,
-      isSilent: false,
-      rKey: this.param.page.rKey,
-      arguments: args,
-    };
-    $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    this.owner.dc
+      .resolve<IPageLoader>("page_loader")
+      .tryLoadPage(
+        this.param.page.level,
+        this.param.page.levelId,
+        this.param.page.moduleId,
+        pageId,
+        false,
+        args
+      );
   }
 
   private toggleSidebar(elements: Array<Element>) {
