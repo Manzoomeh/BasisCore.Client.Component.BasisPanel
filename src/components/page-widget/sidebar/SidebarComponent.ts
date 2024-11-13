@@ -103,13 +103,13 @@ export default class SidebarComponent extends PageWidgetComponent {
     const content = document.createElement("span");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
-    const sidebarIcon = document.createElement("p")
+    const sidebarIcon = document.createElement("p");
     sidebarIcon.innerHTML = `
       <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M5 10L4.76837e-07 5L5 -1.19209e-06L6.0625 1.0625L2.125 5L6.0625 8.9375L5 10Z" fill="#68737C"/>
       </svg>
-    `
-    content.appendChild(sidebarIcon)
+    `;
+    content.appendChild(sidebarIcon);
     content.setAttribute("data-sys-text", "");
     div.appendChild(content);
     const innerUl = document.createElement("div");
@@ -164,12 +164,14 @@ export default class SidebarComponent extends PageWidgetComponent {
     target: EventTarget,
     args?: any
   ) {
-    const newParam: Partial<IPageLoaderParam> = {
-      pageId: pageId,
-      //owner: this.param.page.owner,
-      moduleId: this.param.page.moduleId,
+    const newParam: IPageLoaderParam = {
+      level: this.param.page.level,
       levelId: this.param.page.levelId,
+      moduleId: this.param.page.moduleId,
+      moduleName: this.param.page.moduleName,
       moduleUrl: this.param.page.moduleUrl,
+      pageId: pageId,
+      isSilent: false,
       rKey: this.param.page.rKey,
       arguments: args,
     };

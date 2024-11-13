@@ -257,7 +257,6 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    console.log("err", { level, moduleId, pageId, args }, this.cache);
     return this.tryLoadPage(level, null, moduleId, pageId, false, args);
   }
 
