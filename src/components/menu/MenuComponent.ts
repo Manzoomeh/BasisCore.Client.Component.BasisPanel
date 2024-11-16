@@ -140,10 +140,18 @@ export default class MenuComponent
       //   }
       // }
     }
+    let moduleId = menuParam.moduleId;
+    if (menuParam.moduleName) {
+      moduleId = this.cache.getModuleInfoByName(
+        menuParam.level,
+        menuParam.levelId,
+        menuParam.moduleName
+      ).id;
+    }
     this.tryLoadPage(
       menuParam.level,
       menuParam.levelId,
-      menuParam.moduleId,
+      moduleId,
       menuParam.pageId,
       false,
       menuParam.pageArg
@@ -237,7 +245,6 @@ export default class MenuComponent
         arguments: args,
         isSilent: isSilent ?? false,
       };
-      LocalStorageUtil.setPageUrl(moduleInfo.url);
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       this.setMenuUISelected(level, levelId, moduleId, pageId);
     }
@@ -251,5 +258,13 @@ export default class MenuComponent
     args?: any
   ): Promise<boolean> {
     return this.tryLoadPage(level, null, moduleId, pageId, false, args);
+  }
+
+  public getModuleInfo(
+    level: PanelLevels,
+    levelId: number,
+    moduleId: number
+  ): IModuleInfo {
+    return this.cache.getModuleInfo(level, levelId, moduleId);
   }
 }

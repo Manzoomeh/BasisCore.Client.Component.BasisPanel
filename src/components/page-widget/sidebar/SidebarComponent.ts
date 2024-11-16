@@ -5,14 +5,13 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import HttpUtil from "../../../HttpUtil";
 import { IUserDefineComponent, ISource, BCWrapperFactory } from "basiscore";
-import { DefaultSource } from "../../../type-alias";
 import IMenuInfo, {
   IMenuItemInfo,
   IMenuLevelInfo,
   IMenuPageInfo,
 } from "../../menu/IMenuInfo";
-import IPageLoaderParam from "../../menu/IPageLoaderParam";
 import PageWidgetComponent from "../PageWidgetComponent";
+import IPageLoader from "../../menu/IPageLoader";
 
 declare const $bc: BCWrapperFactory;
 
@@ -103,13 +102,13 @@ export default class SidebarComponent extends PageWidgetComponent {
     const content = document.createElement("span");
     content.setAttribute("data-bc-level", "");
     content.appendChild(document.createTextNode(node.title));
-    const sidebarIcon = document.createElement("p")
+    const sidebarIcon = document.createElement("p");
     sidebarIcon.innerHTML = `
       <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M5 10L4.76837e-07 5L5 -1.19209e-06L6.0625 1.0625L2.125 5L6.0625 8.9375L5 10Z" fill="#68737C"/>
       </svg>
-    `
-    content.appendChild(sidebarIcon)
+    `;
+    content.appendChild(sidebarIcon);
     content.setAttribute("data-sys-text", "");
     div.appendChild(content);
     const innerUl = document.createElement("div");
@@ -164,16 +163,16 @@ export default class SidebarComponent extends PageWidgetComponent {
     target: EventTarget,
     args?: any
   ) {
-    const newParam: Partial<IPageLoaderParam> = {
-      pageId: pageId,
-      //owner: this.param.page.owner,
-      moduleId: this.param.page.moduleId,
-      levelId: this.param.page.levelId,
-      moduleUrl: this.param.page.moduleUrl,
-      rKey: this.param.page.rKey,
-      arguments: args,
-    };
-    $bc.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+    this.owner.dc
+      .resolve<IPageLoader>("page_loader")
+      .tryLoadPage(
+        this.param.page.level,
+        this.param.page.levelId,
+        this.param.page.moduleId,
+        pageId,
+        false,
+        args
+      );
   }
 
   private toggleSidebar(elements: Array<Element>) {

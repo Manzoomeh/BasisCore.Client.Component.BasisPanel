@@ -12,10 +12,9 @@ export default class LocalStorageUtil {
   private static _businessId?: number;
   private static _corporateId?: number;
   private static _moduleId?: number;
+  private static _moduleName?: string;
   private static _pageArguments?: any;
   private static _pageDashboard?: boolean;
-  private static _pageUrl?: string;
-
 
   public static get level() {
     return LocalStorageUtil._level;
@@ -29,6 +28,9 @@ export default class LocalStorageUtil {
   public static get moduleId() {
     return LocalStorageUtil._moduleId;
   }
+  public static get moduleName() {
+    return LocalStorageUtil._moduleName;
+  }
   public static get pageId() {
     return LocalStorageUtil._pageId;
   }
@@ -40,9 +42,6 @@ export default class LocalStorageUtil {
   }
   public static get pageDashboard() {
     return LocalStorageUtil._pageDashboard;
-  }
-  public static get pageUrl() {
-    return LocalStorageUtil._pageUrl;
   }
 
   public static setLevel(level: PanelLevels, ownerId: number) {
@@ -103,32 +102,46 @@ export default class LocalStorageUtil {
     LocalStorageUtil.save();
   }
 
-  public static setPageUrl(pageUrl: string) {
-    LocalStorageUtil._pageUrl = pageUrl;
-    LocalStorageUtil.save();
-  }
-
   private static _currentUserId: number;
   private static _lastBanner: IBannerInfo;
 
-  public static checkRkeyResult: Promise<ICheckRkeyResult>;
+  public static checkRkeyResult: ICheckRkeyResult;
 
-  public static async loadLastStateAsync(rKey: string, checkRKeyUrl: string) {
+  public static async loadLastStateAsync(
+    rKey: string,
+    checkRKeyUrl: string,
+    urlPrefix: string
+  ) {
+    let urlBaseLevel: PanelLevels;
+    let urlBaseModuleName: string;
+    let urlBasePageId: PageId;
+    const parts = window.location.pathname
+      .replace(urlPrefix, "")
+      .substring(1)
+      .split("/");
+    if (parts.length > 1) {
+      urlBaseLevel = <PanelLevels>parts[0]?.toLocaleLowerCase();
+      if (parts.length == 3) {
+        urlBaseModuleName = parts[1];
+        urlBasePageId = parseInt(parts[2]) || "default";
+      } else {
+        urlBaseModuleName = null;
+        urlBasePageId = parseInt(parts[1]) || "default";
+      }
+    }
+
     const url = HttpUtil.formatString(checkRKeyUrl, { rKey: rKey });
-    this.checkRkeyResult = HttpUtil.fetchDataAsync<ICheckRkeyResult>(
-      url,
-      "GET"
-    );
-    const result = await this.checkRkeyResult;
-    if (result.checked) {
-      LocalStorageUtil._currentUserId = result.userid;
+    LocalStorageUtil.checkRkeyResult =
+      await HttpUtil.fetchDataAsync<ICheckRkeyResult>(url, "GET");
+    if (LocalStorageUtil.checkRkeyResult.checked) {
+      LocalStorageUtil._currentUserId = LocalStorageUtil.checkRkeyResult.userid;
       const str = localStorage.getItem("__bc_panel_last_state__");
-      this._lastBanner = JSON.parse(localStorage.getItem("banner"));
+      LocalStorageUtil._lastBanner = JSON.parse(localStorage.getItem("banner"));
       if (str) {
         try {
           const obj: IStorageObject = JSON.parse(str);
           if (obj.ver == LocalStorageUtil.CURRENT_VERSION) {
-            if (obj.i && result.userid == obj.i) {
+            if (obj.i && LocalStorageUtil._currentUserId == obj.i) {
               LocalStorageUtil._level = obj.level ?? "profile";
               LocalStorageUtil._corporateId = obj.corporateId;
               LocalStorageUtil._businessId = obj.businessId;
@@ -137,8 +150,17 @@ export default class LocalStorageUtil {
               LocalStorageUtil._pageArguments = obj.pageArguments;
               LocalStorageUtil._pageDashboard = obj.pageDashboard;
               LocalStorageUtil._menuPageId = obj.menuPageId;
-              LocalStorageUtil._pageUrl = obj.pageUrl;
             }
+          }
+          if (urlBasePageId) {
+            LocalStorageUtil._pageId = urlBasePageId;
+            LocalStorageUtil._moduleName = urlBaseModuleName;
+            LocalStorageUtil._level = urlBaseLevel;
+            LocalStorageUtil._businessId =
+              LocalStorageUtil.checkRkeyResult.currentDmnid;
+            LocalStorageUtil._corporateId =
+              LocalStorageUtil.checkRkeyResult.currentOwnerid;
+            LocalStorageUtil.save();
           }
         } catch (ex) {
           console.error("error in  load local storage data", ex);
@@ -178,7 +200,6 @@ export default class LocalStorageUtil {
       menuPageId: LocalStorageUtil._menuPageId,
       pageArguments: LocalStorageUtil._pageArguments,
       pageDashboard: LocalStorageUtil._pageDashboard,
-      pageUrl: LocalStorageUtil._pageUrl,
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
@@ -320,5 +341,4 @@ interface IStorageObject {
   menuPageId: PageId;
   pageArguments?: any;
   pageDashboard?: boolean;
-  pageUrl: string;
 }
