@@ -25,8 +25,10 @@ export default class WidgetComponent extends PageWidgetComponent {
     //   .get(this.pageLoader.current.param.owner)
     //   //@ts-ignore
     //   ?.get(Number(this.param.moduleid))?.ownerUrl;
-    const baseUrl = this.pageLoader.current.modules.get(
-      this.param.moduleid
+    const baseUrl = this.pageLoader.getModuleInfo(
+      this.param.page.level,
+      this.param.page.levelId,
+      this.param.page.moduleId
     ).url;
 
     const url = HttpUtil.formatString(

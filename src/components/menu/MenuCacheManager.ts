@@ -87,4 +87,23 @@ export default class MenuCacheManager {
     }
     return retVal;
   }
+
+  public getModuleInfoByName(
+    level: PanelLevels,
+    levelId: number,
+    moduleName: string
+  ): IModuleInfo | null {
+    moduleName = moduleName.toLowerCase();
+    let retVal: IModuleInfo = null;
+    const levelCache = this.cache.get(level);
+    if (levelCache) {
+      const levelItemCache = levelCache.get(levelId);
+      if (levelItemCache) {
+        retVal = [...levelItemCache.modules.values()].find(
+          (x) => x.name.toLowerCase() == moduleName
+        );
+      }
+    }
+    return retVal;
+  }
 }

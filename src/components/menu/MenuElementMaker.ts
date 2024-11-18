@@ -70,6 +70,7 @@ export default class MenuElementMaker {
       let retVal: HTMLLIElement;
       if ((node as IMenuExternalItemInfo).url) {
         this.modules.set(node.mid, {
+          id: node.mid,
           name: (node as IMenuExternalItemInfo).name,
           url: (node as IMenuExternalItemInfo).url,
           title: (node as IMenuExternalItemInfo).title,
@@ -79,6 +80,7 @@ export default class MenuElementMaker {
       if ((node as IMenuPageInfo).pid) {
         if (!this.modules.has(node.mid)) {
           this.modules.set(node.mid, {
+            id: node.mid,
             levelId: this.levelId,
             name: this.level,
             title: this.level,
