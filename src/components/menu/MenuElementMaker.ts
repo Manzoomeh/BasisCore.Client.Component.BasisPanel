@@ -126,13 +126,16 @@ export default class MenuElementMaker {
     content.setAttribute("data-bc-level-node", "");
     content.setAttribute("data-bc-level", this.level);
     content.setAttribute("data-bc-level-id", this.levelId.toString());
-    content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
+
     content.setAttribute("data-bc-menu-id", node.title);
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
     innerUl.setAttribute("data-bc-related-menu-id", node.title);
-    await this.createMenuAsync(innerUl, node.nodes, ownerUrl, li);
+    if (node.nodes && node.nodes.length > 0) {
+      content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
+      await this.createMenuAsync(innerUl, node.nodes, ownerUrl, li);
+    }
     li.appendChild(content);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
     if (deviceId == 2) {
