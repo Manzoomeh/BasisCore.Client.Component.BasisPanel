@@ -186,19 +186,21 @@ export default class MenuComponent
 
     menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
-      .closest("[data-bc-related-menu-id]")
-      .getAttribute("data-bc-related-menu-id");
+      ?.closest("[data-bc-related-menu-id]")
+      ?.getAttribute("data-bc-related-menu-id");
     // console.log(
     //   "qam menu",
     //   menuItem,
     //   relatedMenuId,
     //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
     // );
-    this.menuContainer
-      ?.querySelector(
-        `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-      )
-      ?.setAttribute("data-bc-menu-active", "");
+    if (relatedMenuId) {
+      this.menuContainer
+        ?.querySelector(
+          `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
+        )
+        ?.setAttribute("data-bc-menu-active", "");
+    }
     // let [li, parent] = this.current.menuItemLookup.get(pageId + "-" + moduleId);
     //menuItem?.setAttribute("data-bc-menu-active", "");
 
