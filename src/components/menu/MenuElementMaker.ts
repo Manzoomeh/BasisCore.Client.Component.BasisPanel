@@ -128,7 +128,6 @@ export default class MenuElementMaker {
     content.setAttribute("data-bc-level-node", "");
     content.setAttribute("data-bc-level", this.level);
     content.setAttribute("data-bc-level-id", this.levelId.toString());
-
     content.setAttribute("data-bc-menu-id", node.title);
     content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
