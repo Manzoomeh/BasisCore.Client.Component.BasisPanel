@@ -15,6 +15,7 @@ export class DefaultSource {
   static readonly TASK_START = "basispanel.task_start";
   static readonly TASK_INIT = "basispanel.task_init";
   static readonly THEME_CHANGE = "basispanel.theme_change";
+  static readonly SET_STATE = "basispanel.state";
 }
 
 export interface IDictionary<TValue> {

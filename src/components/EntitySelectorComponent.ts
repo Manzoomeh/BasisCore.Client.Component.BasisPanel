@@ -6,17 +6,14 @@ import { IMenuLoaderParam } from "./menu/IMenuInfo";
 import { DependencyContainer } from "tsyringe";
 import LocalStorageUtil from "../LocalStorageUtil";
 import IProfileAccessor from "./profile/IProfileAccessor";
-import ILevelAccessor from "./ILevelAccessor";
 
 declare const $bc: BCWrapperFactory;
-export default abstract class EntitySelectorComponent
-  extends BasisPanelChildComponent
-  implements ILevelAccessor
-{
+export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   protected profileAccessor: IProfileAccessor;
   protected element: Element;
   protected entityList: Array<IEntityInfo>;
   private _isFirst = true;
+  protected isSilent = false;
   protected mustReload = true;
   // private currentOwnerid: number = 0;
   // private currentDomianid: number = 0;
@@ -25,7 +22,6 @@ export default abstract class EntitySelectorComponent
   // private firstLoginFromOtherWebSitesService = false;
   // private firstLoginFromOtherWebSitesBusiness = false;
 
-  public businessComponentFlag: boolean = false;
   constructor(
     owner: IUserDefineComponent,
     desktopLayout: string,
@@ -48,14 +44,6 @@ export default abstract class EntitySelectorComponent
   protected abstract getLevel(): PanelLevels;
   protected abstract initLIElement(li: HTMLLIElement, data: IEntityInfo): void;
 
-  setActiveLevel(levelId: number) {
-    const relatedElement = this.element.querySelector<HTMLElement>(
-      `[data-id='${levelId}']`
-    );
-    if (relatedElement) {
-      relatedElement.click();
-    }
-  }
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
@@ -68,7 +56,7 @@ export default abstract class EntitySelectorComponent
   public async initializeAsync(): Promise<void> {
     this.profileAccessor = this.owner.dc
       .resolve<DependencyContainer>("parent.dc")
-      .resolve<IProfileAccessor>("ProfileAccessor");
+      .resolve<IProfileAccessor>("profile_accessor");
 
     //const checkkrkeyInfo = await this.getCurrentService();
     // this.currentOwnerid = checkkrkeyInfo["currentOwnerid"];
@@ -83,8 +71,9 @@ export default abstract class EntitySelectorComponent
 
     elClicks.forEach((elClick) => {
       elClick.addEventListener("click", async (e) => {
+        //On dropdown array bottom click
+        console.log("qam init click", this.getLevel());
         if (this.mustReload) {
-          this.mustReload = false;
           await this.fillComboAsync();
         }
         const elStatus = this.element.closest("[data-bc-drop-down-container]");
@@ -101,77 +90,41 @@ export default abstract class EntitySelectorComponent
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
     msgElClick?.addEventListener("click", async (e) => {
-      //console.log("qam dropdown click");
+      console.log("qam dropdown click", this.getLevel());
       this.selectService(msgElClick);
     });
 
-    this.owner.addTrigger([DefaultSource.USER_INFO_SOURCE]);
+    this.owner.addTrigger([
+      DefaultSource.USER_INFO_SOURCE,
+      DefaultSource.SET_STATE,
+    ]);
     return Promise.resolve();
   }
 
   protected async trySelectFromLocalStorageAsync(): Promise<void> {
+    if (this.mustReload) {
+      await this.fillComboAsync();
+    }
     if (this._isFirst) {
       this._isFirst = false;
-      if (this.mustReload) {
-        this.mustReload = false;
-        await this.fillComboAsync();
-      }
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
       if (id) {
-        this.setActiveLevel(id);
+        const relatedElement = this.element.querySelector<HTMLElement>(
+          `[data-id='${id}']`
+        );
+        if (relatedElement) {
+          relatedElement.click();
+        }
       }
     }
   }
 
   public async runAsync(source?: ISource) {
     switch (source?.id) {
-      case DefaultSource.USER_INFO_SOURCE: {
-        if (this.getLevel() == "corporate") {
-          const corporateList = await this.getEntitiesAsync();
-
-          if (corporateList.length > 0) {
-            if (this.deviceId == 1) {
-              const corporateElement = this.element
-                .closest("[data-bc-bp-main-header]")
-                .querySelector("[data-bc-corporate-list]") as HTMLElement;
-              corporateElement.style.transform = "scaleY(1)";
-            }
-          } else {
-            let serviceListMobile = document.querySelector(
-              "[data-bc-corporate-list]"
-            ) as HTMLElement;
-            if (serviceListMobile) {
-              serviceListMobile.style.display = "none";
-            }
-            let businessListMobile = document.querySelector(
-              "[data-bc-bp-business-container]"
-            ) as HTMLElement;
-            if (businessListMobile) {
-              businessListMobile.style.display = "none";
-            }
-            const parentElement = this.element.closest(
-              "[data-bc-bp-corporate-container]"
-            );
-            const buyService = document.createElement("div");
-            buyService.innerHTML = `<div data-bc-corporate-buy="">
-            <a href="${this.options.serviceLink}" target="_blank">
-              <span>${this.labels.corporateBuy}</span>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
-              </svg>
-              </a>
-            </div>`;
-            parentElement.prepend(buyService);
-            if (this.deviceId == 1) {
-              const buyServiceElement = buyService.querySelector(
-                "[data-bc-corporate-buy]"
-              ) as HTMLElement;
-              setTimeout(function () {
-                buyServiceElement.style.transform = "scaleY(1)";
-              }, 100);
-            }
-          }
-        }
+      case DefaultSource.SET_STATE: {
+        this._isFirst = true;
+        this.isSilent = true;
+        this.trySelectFromLocalStorageAsync();
         break;
       }
     }
@@ -199,18 +152,16 @@ export default abstract class EntitySelectorComponent
   }
 
   protected async fillComboAsync() {
+    this.mustReload = false;
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
 
-    if (this.deviceId == 1) {
-      if (this.businessComponentFlag == true && this.entityList.length > 0) {
+    if (this.deviceId == 1 && this.getLevel() == "business") {
+      if (this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
-      } else if (
-        this.businessComponentFlag == true &&
-        this.entityList.length == 0
-      ) {
+      } else if (this.entityList.length == 0) {
         businessMsgElement.style.transform = "scaleY(0)";
       }
     }
@@ -300,6 +251,7 @@ export default abstract class EntitySelectorComponent
       const id = parseInt(li.getAttribute("data-id"));
       this.initLIElement(li, item);
       li.addEventListener("click", async (e) => {
+        console.log("qam list maker click", this.getLevel());
         e.preventDefault();
         const id = parseInt(li.getAttribute("data-id"));
 
@@ -524,21 +476,22 @@ export default abstract class EntitySelectorComponent
       containerMsgElement.nextSibling
     );
 
+    containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
     const selectiveList = entityName.closest(
       "[data-bc-main-list-info]"
     ) as HTMLElement;
-    containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
-    selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
-    selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
-    selectiveList.addEventListener("click", (e) => {
-      //console.log("qam 1 0");
-      this.selectService(selectiveList);
-    });
-
-    if (this.deviceId == 2) {
-      selectiveList
-        .querySelector("[data-bc-main-list-msg]")
-        .removeAttribute("data-bc-drop-down-click");
+    if (!selectiveList.hasAttribute("data-id")) {
+      selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
+      selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
+      selectiveList.addEventListener("click", (e) => {
+        console.log("qam select item click", this.getLevel());
+        this.selectService(selectiveList);
+      });
+      if (this.deviceId == 2) {
+        selectiveList
+          .querySelector("[data-bc-main-list-msg]")
+          .removeAttribute("data-bc-drop-down-click");
+      }
     }
 
     this.element
@@ -550,19 +503,7 @@ export default abstract class EntitySelectorComponent
     this.element.innerHTML = "";
   }
 
-  protected createMenuLoaderParam(id: number): IMenuLoaderParam {
-    const menuParam: IMenuLoaderParam = {
-      level: this.getLevel(),
-      levelId: id,
-      levelUrl: this.getLevelUrl(),
-    };
-    return menuParam;
-  }
-
-  private async signalToDisplayMenu(
-    id: number,
-    setPageDataFromLocalStorage: boolean
-  ) {
+  private async signalToDisplayMenu(id: number, setFromStorage: boolean) {
     // console.log(
     //   `qam ${this.getLevel()} send show menu`,
     //   id,
@@ -572,19 +513,17 @@ export default abstract class EntitySelectorComponent
     //   LocalStorageUtil.level == this.getLevel()
     // );
     LocalStorageUtil.setLevel(this.getLevel(), id);
-    const menuParam = this.createMenuLoaderParam(id);
-    menuParam.pageId = setPageDataFromLocalStorage
-      ? LocalStorageUtil.pageId
-      : "default";
-    menuParam.moduleId = setPageDataFromLocalStorage
-      ? LocalStorageUtil.moduleId
-      : 1;
-    menuParam.moduleName = setPageDataFromLocalStorage
-      ? LocalStorageUtil.moduleName
-      : null;
-    menuParam.pageArg = setPageDataFromLocalStorage
-      ? LocalStorageUtil.pageArguments
-      : null;
+    const menuParam: IMenuLoaderParam = {
+      level: this.getLevel(),
+      levelId: id,
+      levelUrl: this.getLevelUrl(),
+      moduleId: setFromStorage ? LocalStorageUtil.moduleId : 1,
+      moduleName: setFromStorage ? LocalStorageUtil.moduleName : null,
+      pageId: setFromStorage ? LocalStorageUtil.pageId : "default",
+      pageArg: setFromStorage ? LocalStorageUtil.pageArguments : null,
+      isSilent: this.isSilent,
+    };
+    this.isSilent = false;
     this.owner.setSource(DefaultSource.SHOW_MENU, menuParam);
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
     activeMenus.forEach((e) => {

@@ -153,7 +153,7 @@ export default class MenuComponent
       menuParam.levelId,
       moduleId,
       menuParam.pageId,
-      false,
+      menuParam.isSilent,
       menuParam.pageArg
     );
     // const newParam: IPageLoaderParam = {

@@ -8,4 +8,5 @@ export default interface IStateModel {
   moduleId?: number;
   pageId: PageId;
   arguments?: any;
+  menuPageId?: PageId;
 }

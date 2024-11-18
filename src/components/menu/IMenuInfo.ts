@@ -1,4 +1,4 @@
-import { ILoaderParam, PageId, PanelLevels } from "../../type-alias";
+import { PageId, PanelLevels } from "../../type-alias";
 
 export default interface IMenuInfo {
   nodes: Array<IMenuItemInfo>;
@@ -29,6 +29,7 @@ export interface IMenuLoaderParam {
   levelUrl: string;
   moduleId?: number;
   moduleName?: string;
+  isSilent: boolean;
   pageId?: PageId;
   pageArg?: any;
 }

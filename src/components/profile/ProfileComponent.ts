@@ -12,6 +12,7 @@ import { IUserDefineComponent, ISource, IDependencyContainer } from "basiscore";
 import { IMenuLoaderParam } from "../menu/IMenuInfo";
 import LocalStorageUtil from "../../LocalStorageUtil";
 import IProfileAccessor from "./IProfileAccessor";
+import IStateModel from "../menu/IStateModel";
 
 export default class ProfileComponent
   extends BasisPanelChildComponent
@@ -27,15 +28,27 @@ export default class ProfileComponent
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-profile-container");
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
-      .registerInstance("ProfileAccessor", this);
+      .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("profile_accessor", this);
   }
 
   public runAsync(source?: ISource): Promise<any> {
-    return this.loadDataAsync();
+    if (source?.id == DefaultSource.SET_STATE) {
+      const state = source.rows[0] as IStateModel;
+      if (state.level == "profile") {
+        this.signalToDisplayMenu(true, true);
+      }
+    } else {
+      if (this.isFirst) {
+        return this.loadDataAsync();
+      }
+    }
   }
 
   public initializeAsync(): Promise<void> {
     const nodes = this.container.querySelectorAll("basis");
+    this.owner.addTrigger([DefaultSource.SET_STATE]);
     if (nodes) {
       nodes.forEach((node) => {
         this.owner.processNodesAsync([node]);
@@ -60,8 +73,7 @@ export default class ProfileComponent
       .querySelector("[data-bc-user-change-level]")
       .addEventListener("click", (e) => {
         e.preventDefault();
-        this.signalToDisplayMenu(false);
-        //LocalStorageUtil.resetCurrentUserId();
+        this.signalToDisplayMenu(false, false);
         LocalStorageUtil.setLevel("profile", 1);
         this.container.classList.add("active-user");
         this.container
@@ -102,37 +114,34 @@ export default class ProfileComponent
     this.profile = QuestionUtil.toObject(questions);
     this.refreshUI();
     this.owner.setSource(DefaultSource.USER_INFO_SOURCE, this.profile);
-    //This methode must call if no local storage setting exists
-    // console.log(
-    //   "qam loadDataAsync",
-    //   this.isFirst,
-    //   !this.isFirst || LocalStorageUtil.level === "profile"
-    // );
-    if (!this.isFirst || LocalStorageUtil.level === "profile") {
-      this.signalToDisplayMenu(true);
+    if (LocalStorageUtil.level === "profile") {
+      this.signalToDisplayMenu(true, false);
     }
-    this.isFirst = false;
   }
 
-  private signalToDisplayMenu(loadPageFromLocalStorage: boolean) {
+  private signalToDisplayMenu(
+    loadPageFromLocalStorage: boolean,
+    isSilent: boolean
+  ) {
     if (this.profile) {
       const menuInfo: IMenuLoaderParam = {
         level: "profile",
         levelId: 1,
         levelUrl: this.options.baseUrl.profile,
         moduleId: 1,
+        isSilent: isSilent,
         pageId: loadPageFromLocalStorage ? LocalStorageUtil.pageId : "default",
         pageArg: loadPageFromLocalStorage
           ? LocalStorageUtil.pageArguments
           : null,
       };
-      //console.log("qam show profile menu", menuInfo);
       this.owner.setSource(DefaultSource.SHOW_MENU, menuInfo);
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
         e.removeAttribute("data-bc-menu-active");
       });
     }
+    this.isFirst = false;
   }
 
   private refreshUI() {
