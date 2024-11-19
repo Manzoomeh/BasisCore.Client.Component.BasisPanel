@@ -480,13 +480,15 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     const selectiveList = entityName.closest(
       "[data-bc-main-list-info]"
     ) as HTMLElement;
-    if (!selectiveList.hasAttribute("data-id")) {
+    if (selectiveList.getAttribute("data-id") != li.getAttribute("data-id")) {
       selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
+      if (!selectiveList.hasAttribute("data-id")) {
+        selectiveList.addEventListener("click", (e) => {
+          console.log("qam select item click", this.getLevel());
+          this.selectService(selectiveList);
+        });
+      }
       selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
-      selectiveList.addEventListener("click", (e) => {
-        console.log("qam select item click", this.getLevel());
-        this.selectService(selectiveList);
-      });
       if (this.deviceId == 2) {
         selectiveList
           .querySelector("[data-bc-main-list-msg]")
