@@ -112,6 +112,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         const relatedElement = this.element.querySelector<HTMLElement>(
           `[data-id='${id}']`
         );
+        console.log(
+          "qam click",
+          this.getLevel(),
+          id,
+          relatedElement,
+          this.element
+        );
         if (relatedElement) {
           relatedElement.click();
         }
@@ -229,7 +236,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected async onItemSelectAsync(id: number, fromUI: boolean) {
     //console.log("qam ssss", this.getLevel());
-    await this.setActiveAsync(id);
+    //await this.setActiveAsync(id);
     if (fromUI || LocalStorageUtil.level == this.getLevel()) {
       this.signalToDisplayMenu(id, !fromUI);
     }
@@ -248,34 +255,41 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       const li = document.createElement("li");
       li.setAttribute("data-id", item.id.toString());
       li.innerHTML = `<div data-bc-main-title="">${item.title} (${item.id})</div>`;
-      const id = parseInt(li.getAttribute("data-id"));
+      //const id = parseInt(li.getAttribute("data-id"));
       this.initLIElement(li, item);
       li.addEventListener("click", async (e) => {
-        console.log("qam list maker click", this.getLevel());
         e.preventDefault();
+        e.stopPropagation();
         const id = parseInt(li.getAttribute("data-id"));
-
-        const entity = this.entityList.find((x) => x.id == id);
-        if (this.profileAccessor.getCurrent()) {
-          if (entity) {
-            await this.onItemSelectAsync(id, e.isTrusted);
+        console.log("qam list maker click", this.getLevel(), id);
+        if (e.isTrusted) {
+          if (this.getLevel() == "corporate") {
+            // choose corporate
+            this.resetBusinessEntity();
+            this.resetNotification();
+          } else if (this.getLevel() == "business") {
+            $bc.setSource(
+              "basispanelcomponent_entityselectorcomponent.businessid",
+              id
+            );
           }
         }
 
+        await this.selectItemAsync(li);
+
+        const entity = this.entityList.find((x) => x.id == id);
+        // if (this.profileAccessor.getCurrent()) {
+        //   if (entity) {
+        await this.onItemSelectAsync(id, e.isTrusted);
+        //}
+        //}
+
+        //if (e.isTrusted) {
         this.owner.setSource(this.getSourceId(), entity ?? {});
-        if (this.getLevel() == "corporate") {
-          // choose corporate
-          this.resetBusinessEntity();
-          this.resetNotification();
-        } else if (this.getLevel() == "business") {
-          $bc.setSource(
-            "basispanelcomponent_entityselectorcomponent.businessid",
-            id
-          );
-        }
-        //console.log("qam dropdown item click", this.getLevel(), e);
+        console.log("qam set source", this.getLevel(), entity);
+        //}
         this.setActive();
-        this.selectItem(li);
+        //console.log("qam dropdown item click", this.getLevel(), e);
       });
       this.element.appendChild(li);
     });
@@ -294,6 +308,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         id: id,
       }
     );
+    console.log("qam setActive", this.getLevel(), id);
     if (this.deviceId == 2) {
       this.element
         .closest("[data-bc-bp-header-levels]")
@@ -406,7 +421,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   //   const result = await LocalStorageUtil.checkRkeyResult;
   //   return result;
   // }
-  protected selectItem(li: HTMLElement, freeze: boolean = false) {
+  protected async selectItemAsync(li: HTMLElement, freeze: boolean = false) {
     const entityElement = this.element
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-name]");
@@ -487,6 +502,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       });
     }
     if (selectiveList.getAttribute("data-id") != li.getAttribute("data-id")) {
+      await this.setActiveAsync(parseInt(li.getAttribute("data-id")));
       selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
       selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
       if (this.deviceId == 2) {

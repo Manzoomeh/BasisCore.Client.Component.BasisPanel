@@ -40,25 +40,29 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     this.owner.addTrigger([DefaultSource.CORPORATE_SOURCE]);
   }
 
+  protected async fillComboAsync(): Promise<void> {
+    await super.fillComboAsync();
+    this.relatedCorporateId = LocalStorageUtil.corporateId;
+  }
   public async runAsync(source?: ISource): Promise<any> {
+    console.log("qam run async", this.getLevel(), source);
     switch (source?.id) {
       case DefaultSource.CORPORATE_SOURCE: {
         this.mustReload =
           this.relatedCorporateId !== LocalStorageUtil.corporateId;
-        this.relatedCorporateId = LocalStorageUtil.corporateId;
+        //this.relatedCorporateId = LocalStorageUtil.corporateId;
         //this.fillComboAsync();
         //this.clearCombo();
         this.trySelectFromLocalStorageAsync();
         break;
       }
-      // case DefaultSource.SET_STATE: {
-      //   const state = source.rows[0] as IStateModel;
-      //   this.mustReload = this.relatedCorporateId !== state.corporateId;
-      //   this.relatedCorporateId = state.corporateId;
-      //   // this.fillComboAsync();
-      //   // this.clearCombo();
-      //   break;
-      // }
+      case DefaultSource.SET_STATE: {
+        this.mustReload =
+          this.relatedCorporateId !== LocalStorageUtil.corporateId;
+        // this.fillComboAsync();
+        // this.clearCombo();
+        break;
+      }
     }
     return super.runAsync(source);
   }
@@ -121,7 +125,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
         data.id
       );
 
-      this.selectItem(li, true);
+      await this.selectItemAsync(li, true);
     });
     li.appendChild(lockIcon);
   }

@@ -14,7 +14,8 @@ import {
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import LocalStorageUtil from "../../LocalStorageUtil";
 import IStateModel from "../menu/IStateModel";
-import { DefaultSource } from "../../type-alias";
+import { DefaultSource, PanelLevels } from "../../type-alias";
+import HttpUtil from "../../HttpUtil";
 
 declare const $bc: BCWrapperFactory;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -31,10 +32,16 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
 
   async runAsync(source?: ISourceOptions): Promise<any> {
     if (!this.runTask) {
-      window.addEventListener("popstate", (event) => {
+      window.addEventListener("popstate", async (event) => {
         if (event.state) {
           event.preventDefault();
           const state: IStateModel = event.state;
+          if (state.corporateId != LocalStorageUtil.corporateId) {
+            await this.setActiveAsync(state.corporateId, "corporate");
+          }
+          if (state.businessId != LocalStorageUtil.businessId) {
+            await this.setActiveAsync(state.businessId, "business");
+          }
           LocalStorageUtil.setLastState(state);
 
           console.log("qam set state in back", state);
@@ -169,6 +176,22 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
           ?.setAttribute("data-status", "close");
       }
     });
+  }
+
+  protected async setActiveAsync(id: number, level: PanelLevels) {
+    const url = HttpUtil.formatString(this.options.baseUrl.active, {
+      rKey: this.options.rKey,
+    });
+    await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "POST",
+      this.options.checkRkey,
+      {
+        type: level,
+        id: id,
+      }
+    );
+    console.log("qam setActive", level, id);
   }
 
   private toggleHeaderMore(elements: Array<Element>) {

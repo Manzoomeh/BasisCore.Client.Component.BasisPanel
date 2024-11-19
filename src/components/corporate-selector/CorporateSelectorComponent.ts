@@ -80,6 +80,8 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
         }
       }
       await this.trySelectFromLocalStorageAsync();
+    } else if (source?.id == DefaultSource.SET_STATE) {
+      this.mustReload = true;
     }
   }
 
