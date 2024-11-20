@@ -197,6 +197,12 @@ export default class MenuComponent
     const relatedMenuId = menuItem
       ?.closest("[data-bc-related-menu-id]")
       ?.getAttribute("data-bc-related-menu-id");
+    // console.log(
+    //   "qam menu",
+    //   menuItem,
+    //   relatedMenuId,
+    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
+    // );
     if (relatedMenuId) {
       this.menuContainer
         ?.querySelector(
