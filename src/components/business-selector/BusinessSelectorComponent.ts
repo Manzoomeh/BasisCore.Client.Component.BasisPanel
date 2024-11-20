@@ -1,6 +1,5 @@
 import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource, PanelLevels } from "../../type-alias";
-import ICorporateInfo from "../corporate-selector/ICorporateInfo";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
@@ -9,12 +8,12 @@ import mobileLayout from "./assets/layout-mobile.html";
 import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
+import LocalStorageUtil from "../../LocalStorageUtil";
 declare const $bc: BCWrapperFactory;
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
-  protected currentCorporate: ICorporateInfo;
   private cache: Map<number, Array<IEntityInfo>>;
-
+  private relatedCorporateId: number;
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
@@ -41,15 +40,34 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     this.owner.addTrigger([DefaultSource.CORPORATE_SOURCE]);
   }
 
+  protected async fillComboAsync(): Promise<void> {
+    await super.fillComboAsync();
+    this.relatedCorporateId = LocalStorageUtil.corporateId;
+  }
   public async runAsync(source?: ISource): Promise<any> {
+    console.log(
+      "qam run async",
+      this.getLevel(),
+      source,
+      this.relatedCorporateId,
+      LocalStorageUtil.corporateId,
+      this.relatedCorporateId !== LocalStorageUtil.corporateId
+    );
     switch (source?.id) {
       case DefaultSource.CORPORATE_SOURCE: {
-        this.businessComponentFlag = true;
-        this.currentCorporate = source.rows[0];
-        this.mustReload = true;
-        this.fillComboAsync();
-        this.clearCombo();
+        this.mustReload =
+          this.relatedCorporateId !== LocalStorageUtil.corporateId;
+        //this.relatedCorporateId = LocalStorageUtil.corporateId;
+        //this.fillComboAsync();
+        //this.clearCombo();
         this.trySelectFromLocalStorageAsync();
+        break;
+      }
+      case DefaultSource.SET_STATE: {
+        this.mustReload =
+          this.relatedCorporateId !== LocalStorageUtil.corporateId;
+        // this.fillComboAsync();
+        // this.clearCombo();
         break;
       }
     }
@@ -58,13 +76,14 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
 
   protected async getEntitiesAsync(): Promise<Array<IEntityInfo>> {
     let retVal: Array<IEntityInfo> = null;
-    if (this.currentCorporate) {
-      retVal = this.cache.get(this.currentCorporate.id);
+    if (LocalStorageUtil.corporateId) {
+      retVal = this.cache.get(LocalStorageUtil.corporateId);
       if (!retVal) {
         retVal = await super.getEntitiesAsync();
-        this.cache.set(this.currentCorporate.id, retVal);
+        this.cache.set(LocalStorageUtil.corporateId, retVal);
       }
     }
+
     return retVal;
   }
 
@@ -113,7 +132,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
         data.id
       );
 
-      this.selectItem(li, true);
+      await this.selectItemAsync(li, true);
     });
     li.appendChild(lockIcon);
   }

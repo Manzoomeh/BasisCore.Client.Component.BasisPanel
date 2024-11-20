@@ -12,7 +12,6 @@ import {
   menuItemClickCallback,
   PanelLevels,
 } from "../../type-alias";
-import { BCWrapperFactory } from "basiscore";
 
 export default class MenuElementMaker {
   readonly onMenuItemClick: menuItemClickCallback;

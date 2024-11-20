@@ -13,9 +13,9 @@ import {
 } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import LocalStorageUtil from "../../LocalStorageUtil";
-import IPageLoader from "../menu/IPageLoader";
 import IStateModel from "../menu/IStateModel";
-import ILevelAccessor from "../ILevelAccessor";
+import { DefaultSource, PanelLevels } from "../../type-alias";
+import HttpUtil from "../../HttpUtil";
 
 declare const $bc: BCWrapperFactory;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -32,56 +32,26 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
 
   async runAsync(source?: ISourceOptions): Promise<any> {
     if (!this.runTask) {
-      window.addEventListener("popstate", (event) => {
+      window.addEventListener("popstate", async (event) => {
         if (event.state) {
           event.preventDefault();
-          // this.container
-          //   .querySelector("[data-bc-bp-main-header]")
-          //   .querySelector(".active-business")
-          //   ?.classList.remove("active-business");
-          // this.container
-          //   .querySelector("[data-bc-bp-main-header]")
-          //   .querySelector(".active-corporate")
-          //   ?.classList.remove("active-corporate");
           const state: IStateModel = event.state;
-
-          console.log("qam set state in back", state);
           if (
             state.corporateId &&
             state.corporateId != LocalStorageUtil.corporateId
           ) {
-            this.owner.dc
-              .resolve<ILevelAccessor>("corporate_accessor")
-              ?.setActiveLevel(state.corporateId);
+            await this.setActiveAsync(state.corporateId, "corporate");
           }
           if (
             state.businessId &&
             state.businessId != LocalStorageUtil.businessId
           ) {
-            this.owner.dc
-              .resolve<ILevelAccessor>("business_accessor")
-              ?.setActiveLevel(state.businessId);
+            await this.setActiveAsync(state.businessId, "business");
           }
-          this.owner.dc
-            .resolve<IPageLoader>("page_loader")
-            ?.tryLoadPage(
-              state.level,
-              state.levelId,
-              state.moduleId,
-              state.pageId,
-              true,
-              state.arguments
-            );
-          // LocalStorageUtil.setCurrentState(state);
-          // if (state.CorporateId) {
-          //   this.owner.setSource(DefaultSource.SET_CORPORATE, state);
-          // }
-          // if (state.BusinessId) {
-          //   this.owner.setSource(DefaultSource.SET_BUSINESS, state);
-          // }
-          // if (state.PageId) {
-          //   this.owner.setSource(DefaultSource.SET_MENU, state);
-          // }
+          LocalStorageUtil.setLastState(state);
+
+          console.log("qam set state in back", state);
+          this.owner.setSource(DefaultSource.SET_STATE, state);
         }
       });
 
@@ -212,6 +182,22 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
           ?.setAttribute("data-status", "close");
       }
     });
+  }
+
+  protected async setActiveAsync(id: number, level: PanelLevels) {
+    const url = HttpUtil.formatString(this.options.baseUrl.active, {
+      rKey: this.options.rKey,
+    });
+    await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "POST",
+      this.options.checkRkey,
+      {
+        type: level,
+        id: id,
+      }
+    );
+    console.log("qam setActive", level, id);
   }
 
   private toggleHeaderMore(elements: Array<Element>) {

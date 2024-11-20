@@ -1,8 +1,7 @@
-import IPageLoaderParam from "./components/menu/IPageLoaderParam";
 import HttpUtil from "./HttpUtil";
 import { PageId, PanelLevels } from "./type-alias";
-import { IMenuPageInfo } from "./components/menu/IMenuInfo";
 import { IPageGroupInfo } from "./components/page/IPageGroupInfo";
+import IStateModel from "./components/menu/IStateModel";
 
 export default class LocalStorageUtil {
   static readonly CURRENT_VERSION: number = 2;
@@ -169,24 +168,17 @@ export default class LocalStorageUtil {
     }
   }
 
-  // public static resetCurrentUserId() {
-  //   LocalStorageUtil._currentBusiness = null;
-  //   LocalStorageUtil._currentCorporate = null;
-  //   LocalStorageUtil.save();
-  // }
-
-  // public static setEntitySelectorCurrentValue(
-  //   ownerType: MenuOwnerType,
-  //   value: number
-  // ) {
-  //   if (ownerType == "business") {
-  //     LocalStorageUtil._currentBusiness = value;
-  //   } else if (ownerType == "corporate") {
-  //     LocalStorageUtil._currentCorporate = value;
-  //     LocalStorageUtil._currentBusiness = null;
-  //   }
-  //   LocalStorageUtil.save();
-  // }
+  public static async setLastState(state: IStateModel) {
+    LocalStorageUtil._level = state.level;
+    LocalStorageUtil._corporateId = state.corporateId;
+    LocalStorageUtil._businessId = state.businessId;
+    LocalStorageUtil._moduleId = state.moduleId;
+    LocalStorageUtil._pageId = state.pageId ?? "default";
+    LocalStorageUtil._pageArguments = state.arguments;
+    LocalStorageUtil._pageDashboard = null;
+    LocalStorageUtil._menuPageId = state.menuPageId;
+    LocalStorageUtil.save();
+  }
 
   private static save(): void {
     const obj: IStorageObject = {
@@ -203,52 +195,6 @@ export default class LocalStorageUtil {
     };
     localStorage.setItem("__bc_panel_last_state__", JSON.stringify(obj));
   }
-
-  // public static getEntitySelectorLastValue(ownerType: MenuOwnerType): number {
-  //   let retVal: number = null;
-  //   if (ownerType == "business") {
-  //     retVal = LocalStorageUtil._lastBusiness;
-  //   } else if (ownerType == "corporate") {
-  //     retVal = LocalStorageUtil._lastCorporate;
-  //   }
-  //   return retVal;
-  // }
-
-  // public static setCurrentPage(page: IPageLoaderParam) {
-  //   LocalStorageUtil._currentPage = page;
-  //   LocalStorageUtil.save();
-  // }
-
-  // public static getCurrentPage(): IPageLoaderParam {
-  //   return null; // LocalStorageUtil._lastPage;
-  // }
-
-  // public static get currentLevel(): PanelLevels {
-  //   return LocalStorageUtil.getCurrentPage()?.level ?? "profile";
-  // }
-
-  // public static mustLoadPage(owner: MenuOwnerType) {
-  //   let load = false;
-  //   if (LocalStorageUtil._lastBusiness) {
-  //     if (owner == "business") {
-  //       load = true;
-  //     }
-  //   } else if (LocalStorageUtil._lastCorporate) {
-  //     if (owner == "corporate") {
-  //       load = true;
-  //     }
-  //   } else if (owner == "profile") {
-  //     load = true;
-  //   }
-  //   if (load) {
-  //     LocalStorageUtil._hasPageToShow = false;
-  //   }
-  //   return load;
-  // }
-
-  // public static hasPageToShow() {
-  //   return LocalStorageUtil._hasPageToShow;
-  // }
 
   public static getLastBanner() {
     return LocalStorageUtil._lastBanner;
@@ -271,41 +217,6 @@ export default class LocalStorageUtil {
     };
     localStorage.setItem("banner", JSON.stringify(this._lastBanner));
   }
-
-  // public static setCurrentMenu(ownerId: string, menu: IMenuPageInfo) {
-  //   LocalStorageUtil._lastMenu = {
-  //     ownerId: ownerId,
-  //     info: menu,
-  //   };
-  //   LocalStorageUtil.save();
-  // }
-
-  // public static getCurrentMenu(): ICurrentMenu {
-  //   return null; // LocalStorageUtil._lastMenu;
-  // }
-
-  // public static mustActiveMenuItem(level: PanelLevels) {
-  //   let load = false;
-  //   if (LocalStorageUtil._lastBusiness) {
-  //     if (level == "business") {
-  //       load = true;
-  //     }
-  //   } else if (LocalStorageUtil._lastCorporate) {
-  //     if (level == "corporate") {
-  //       load = true;
-  //     }
-  //   } else if (level == "profile") {
-  //     load = true;
-  //   }
-  //   if (load) {
-  //     LocalStorageUtil._hasMenuToActive = false;
-  //   }
-  //   return load;
-  // }
-
-  public static hasMenuToActive() {
-    return false; //LocalStorageUtil._hasMenuToActive;
-  }
 }
 
 interface ICheckRkeyResult {
@@ -319,10 +230,6 @@ interface ICheckRkeyResult {
   usercat: string;
 }
 
-interface ICurrentMenu {
-  ownerId: string;
-  info: IMenuPageInfo;
-}
 interface IBannerInfo {
   rkey: string;
   eventID: string;
