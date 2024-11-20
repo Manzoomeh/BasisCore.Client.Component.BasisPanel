@@ -36,10 +36,16 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         if (event.state) {
           event.preventDefault();
           const state: IStateModel = event.state;
-          if (state.corporateId != LocalStorageUtil.corporateId) {
+          if (
+            state.corporateId &&
+            state.corporateId != LocalStorageUtil.corporateId
+          ) {
             await this.setActiveAsync(state.corporateId, "corporate");
           }
-          if (state.businessId != LocalStorageUtil.businessId) {
+          if (
+            state.businessId &&
+            state.businessId != LocalStorageUtil.businessId
+          ) {
             await this.setActiveAsync(state.businessId, "business");
           }
           LocalStorageUtil.setLastState(state);

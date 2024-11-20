@@ -45,7 +45,14 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     this.relatedCorporateId = LocalStorageUtil.corporateId;
   }
   public async runAsync(source?: ISource): Promise<any> {
-    console.log("qam run async", this.getLevel(), source);
+    console.log(
+      "qam run async",
+      this.getLevel(),
+      source,
+      this.relatedCorporateId,
+      LocalStorageUtil.corporateId,
+      this.relatedCorporateId !== LocalStorageUtil.corporateId
+    );
     switch (source?.id) {
       case DefaultSource.CORPORATE_SOURCE: {
         this.mustReload =

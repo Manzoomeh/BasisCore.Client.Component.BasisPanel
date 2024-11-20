@@ -108,32 +108,29 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     if (this._isFirst) {
       this._isFirst = false;
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
-      if (id) {
-        const relatedElement = this.element.querySelector<HTMLElement>(
-          `[data-id='${id}']`
-        );
-        console.log(
-          "qam click",
-          this.getLevel(),
-          id,
-          relatedElement,
-          this.element
-        );
-        if (relatedElement) {
-          relatedElement.click();
-        }
+      const relatedElement = this.element.querySelector<HTMLElement>(
+        `[data-id='${id}']`
+      );
+      console.log(
+        "qam click",
+        this.getLevel(),
+        id,
+        relatedElement,
+        this.element
+      );
+      if (relatedElement) {
+        relatedElement.click();
+      } else if (this.getLevel() == "business") {
+        this.resetBusinessEntity();
       }
     }
   }
 
   public async runAsync(source?: ISource) {
-    switch (source?.id) {
-      case DefaultSource.SET_STATE: {
-        this._isFirst = true;
-        this.isSilent = true;
-        this.trySelectFromLocalStorageAsync();
-        break;
-      }
+    if (source?.id == DefaultSource.SET_STATE) {
+      this._isFirst = true;
+      this.isSilent = true;
+      this.trySelectFromLocalStorageAsync();
     }
     return true;
   }
@@ -164,7 +161,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-
+    console.log("qam fill combo", this.getLevel(), this.entityList);
     if (this.deviceId == 1 && this.getLevel() == "business") {
       if (this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -296,19 +293,21 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async setActiveAsync(id: number) {
-    const url = HttpUtil.formatString(this.options.baseUrl.active, {
-      rKey: this.options.rKey,
-    });
-    await HttpUtil.checkRkeyFetchDataAsync(
-      url,
-      "POST",
-      this.options.checkRkey,
-      {
-        type: this.getLevel(),
-        id: id,
-      }
-    );
-    console.log("qam setActive", this.getLevel(), id);
+    if (id != LocalStorageUtil.getLevelValue(this.getLevel())) {
+      const url = HttpUtil.formatString(this.options.baseUrl.active, {
+        rKey: this.options.rKey,
+      });
+      await HttpUtil.checkRkeyFetchDataAsync(
+        url,
+        "POST",
+        this.options.checkRkey,
+        {
+          type: this.getLevel(),
+          id: id,
+        }
+      );
+      console.log("qam setActive", this.getLevel(), id);
+    }
     if (this.deviceId == 2) {
       this.element
         .closest("[data-bc-bp-header-levels]")
