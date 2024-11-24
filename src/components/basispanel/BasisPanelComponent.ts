@@ -27,7 +27,18 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       this.options.rKey,
       this.options.checkRkey.url,
       this.options.urlPrefix
-    );
+    ).then(async () => {
+      if (LocalStorageUtil.level != "profile") {
+        if (LocalStorageUtil.corporateId) {
+          await this.setActiveAsync(LocalStorageUtil.corporateId, "corporate");
+        }
+        if (LocalStorageUtil.level == "business") {
+          if (LocalStorageUtil.businessId) {
+            await this.setActiveAsync(LocalStorageUtil.businessId, "business");
+          }
+        }
+      }
+    });
   }
 
   async runAsync(source?: ISourceOptions): Promise<any> {
