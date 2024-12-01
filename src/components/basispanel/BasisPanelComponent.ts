@@ -13,6 +13,9 @@ import {
 } from "basiscore";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import IStateModel from "../menu/IStateModel";
+import { DefaultSource, PanelLevels } from "../../type-alias";
+import HttpUtil from "../../HttpUtil";
 
 declare const $bc: BCWrapperFactory;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -22,12 +25,45 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-main-container");
     LocalStorageUtil.loadLastStateAsync(
       this.options.rKey,
-      this.options.checkRkey.url
-    );
+      this.options.checkRkey.url,
+      this.options.urlPrefix
+    ).then(async () => {
+      if (LocalStorageUtil.level != "profile") {
+        if (LocalStorageUtil.corporateId) {
+          await this.setActiveAsync(LocalStorageUtil.corporateId, "corporate");
+        }
+        if (LocalStorageUtil.level == "business") {
+          if (LocalStorageUtil.businessId) {
+            await this.setActiveAsync(LocalStorageUtil.businessId, "business");
+          }
+        }
+      }
+    });
   }
 
   async runAsync(source?: ISourceOptions): Promise<any> {
     if (!this.runTask) {
+      window.addEventListener("popstate", async (event) => {
+        if (event.state) {
+          event.preventDefault();
+          const state: IStateModel = event.state;
+          if (
+            state.corporateId &&
+            state.corporateId != LocalStorageUtil.corporateId
+          ) {
+            await this.setActiveAsync(state.corporateId, "corporate");
+          }
+          if (
+            state.businessId &&
+            state.businessId != LocalStorageUtil.businessId
+          ) {
+            await this.setActiveAsync(state.businessId, "business");
+          }
+          LocalStorageUtil.setLastState(state);
+          this.owner.setSource(DefaultSource.SET_STATE, state);
+        }
+      });
+
       this.runTask = this.owner.processNodesAsync(
         Array.from(this.container.childNodes)
       );
@@ -155,6 +191,21 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
           ?.setAttribute("data-status", "close");
       }
     });
+  }
+
+  protected async setActiveAsync(id: number, level: PanelLevels) {
+    const url = HttpUtil.formatString(this.options.baseUrl.active, {
+      rKey: this.options.rKey,
+    });
+    await HttpUtil.checkRkeyFetchDataAsync(
+      url,
+      "POST",
+      this.options.checkRkey,
+      {
+        type: level,
+        id: id,
+      }
+    );
   }
 
   private toggleHeaderMore(elements: Array<Element>) {

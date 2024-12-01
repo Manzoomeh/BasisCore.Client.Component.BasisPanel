@@ -1,4 +1,4 @@
-import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
+import { ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource, PanelLevels } from "../../type-alias";
 import EntitySelectorComponent, {
   IEntityInfo,
@@ -9,11 +9,7 @@ import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 
-declare const $bc: BCWrapperFactory;
-
 export default class CorporateSelectorComponent extends EntitySelectorComponent {
-  private dataLoaded = false;
-
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "corporate");
   }
@@ -34,17 +30,58 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
     return "corporate";
   }
 
-  protected async fillComboAsync() {
-    if (!this.dataLoaded) {
-      await super.fillComboAsync();
-      this.dataLoaded = true;
-    }
-  }
-
   public async runAsync(source?: ISource): Promise<any> {
     await super.runAsync(source);
     if (source?.id == DefaultSource.USER_INFO_SOURCE) {
+      if (this.mustReload) {
+        const corporateList = await this.getEntitiesAsync();
+
+        if (corporateList.length > 0) {
+          if (this.deviceId == 1) {
+            const corporateElement = this.element
+              .closest("[data-bc-bp-main-header]")
+              .querySelector("[data-bc-corporate-list]") as HTMLElement;
+            corporateElement.style.transform = "scaleY(1)";
+          }
+        } else {
+          let serviceListMobile = document.querySelector(
+            "[data-bc-corporate-list]"
+          ) as HTMLElement;
+          if (serviceListMobile) {
+            serviceListMobile.style.display = "none";
+          }
+          let businessListMobile = document.querySelector(
+            "[data-bc-bp-business-container]"
+          ) as HTMLElement;
+          if (businessListMobile) {
+            businessListMobile.style.display = "none";
+          }
+          const parentElement = this.element.closest(
+            "[data-bc-bp-corporate-container]"
+          );
+          const buyService = document.createElement("div");
+          buyService.innerHTML = `<div data-bc-corporate-buy="">
+        <a href="${this.options.serviceLink}" target="_blank">
+          <span>${this.labels.corporateBuy}</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#004B85"/>
+          </svg>
+          </a>
+        </div>`;
+          parentElement.prepend(buyService);
+          if (this.deviceId == 1) {
+            const buyServiceElement = buyService.querySelector(
+              "[data-bc-corporate-buy]"
+            ) as HTMLElement;
+            setTimeout(function () {
+              buyServiceElement.style.transform = "scaleY(1)";
+            }, 100);
+          }
+        }
+      }
       await this.trySelectFromLocalStorageAsync();
+    } else if (source?.id == DefaultSource.SET_STATE) {
+      this.mustReload = true;
     }
   }
 

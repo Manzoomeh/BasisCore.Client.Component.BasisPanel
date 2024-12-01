@@ -7,6 +7,7 @@ import "./assets/style-mobile.css";
 import INotifiationMessage from "./INotificationMessage";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import IPageLoader from "../menu/IPageLoader";
 
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
@@ -202,12 +203,19 @@ export default class NotificationMessageComponent
   private async showMessage() {
     document.querySelector("[data-bc-notification-custom-css]")?.remove();
 
+    const moduleUrl = this.owner.dc
+      .resolve<IPageLoader>("page_loader")
+      .getModuleInfo(
+        LocalStorageUtil.level,
+        LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
+        LocalStorageUtil.moduleId
+      ).url;
     const currentModule =
-      this.options.baseUrl.business == LocalStorageUtil.pageUrl ||
-      this.options.baseUrl.corporate == LocalStorageUtil.pageUrl ||
-      this.options.baseUrl.profile == LocalStorageUtil.pageUrl
+      this.options.baseUrl.business == moduleUrl ||
+      this.options.baseUrl.corporate == moduleUrl ||
+      this.options.baseUrl.profile == moduleUrl
         ? "/"
-        : LocalStorageUtil.pageUrl;
+        : moduleUrl;
     const { Message, Errorid, Lid, Type, templateValue, time } =
       this.messageQueue.shift();
     let message = Message;
@@ -231,7 +239,7 @@ export default class NotificationMessageComponent
             );
           } else {
             url = HttpUtil.formatString(
-              LocalStorageUtil.pageUrl + this.options.method.errorMessages,
+              moduleUrl + this.options.method.errorMessages,
               {
                 rKey: this.options.rKey,
               }
@@ -491,12 +499,19 @@ export default class NotificationMessageComponent
     );
   }
   public async getMessageTypeByErrorId(errorid: number) {
+    const moduleUrl = this.owner.dc
+      .resolve<IPageLoader>("page_loader")
+      .getModuleInfo(
+        LocalStorageUtil.level,
+        LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
+        LocalStorageUtil.moduleId
+      ).url;
     const currentModule =
-      this.options.baseUrl.business == LocalStorageUtil.pageUrl ||
-      this.options.baseUrl.corporate == LocalStorageUtil.pageUrl ||
-      this.options.baseUrl.profile == LocalStorageUtil.pageUrl
+      this.options.baseUrl.business == moduleUrl ||
+      this.options.baseUrl.corporate == moduleUrl ||
+      this.options.baseUrl.profile == moduleUrl
         ? "/"
-        : LocalStorageUtil.pageUrl;
+        : moduleUrl;
     try {
       const cachedItem = await this.checkErrorCode(
         String(errorid),
@@ -517,7 +532,7 @@ export default class NotificationMessageComponent
           );
         } else {
           url = HttpUtil.formatString(
-            LocalStorageUtil.pageUrl + this.options.method.errorMessages,
+            moduleUrl + this.options.method.errorMessages,
             {
               rKey: this.options.rKey,
             }

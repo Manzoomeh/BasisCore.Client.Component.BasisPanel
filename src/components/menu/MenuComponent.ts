@@ -23,7 +23,7 @@ export default class MenuComponent
   implements IPageLoader
 {
   readonly ul: HTMLUListElement;
-  private lineHeader : HTMLElement
+  private lineHeader: HTMLElement;
   readonly menuContainer: HTMLDivElement;
   private readonly cache: MenuCacheManager;
   public current: MenuElement;
@@ -48,10 +48,12 @@ export default class MenuComponent
     //add this to parent container to see in all other components
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
-      this.lineHeader= document.querySelector("[data-bc-header-line]")
-      this.lineHeader.style.transition = "none"    
-      this.lineHeader.style.width = "0"
+    this.lineHeader = document.querySelector("[data-bc-header-line]");
+    this.lineHeader.style.transition = "none";
+    this.lineHeader.style.width = "0";
   }
 
   public initializeAsync(): Promise<void> {
@@ -60,16 +62,15 @@ export default class MenuComponent
       DefaultSource.BUSINESS_SOURCE,
     ]);
     setTimeout(() => {
-      this.lineHeader.style.transition = "all 1s ease-in-out"    
-      this.lineHeader.style.width = "98%"    
+      this.lineHeader.style.transition = "all 1s ease-in-out";
+      this.lineHeader.style.width = "98%";
     }, 500);
     return Promise.resolve();
   }
 
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
-      const headerLine = this.container.querySelector("[data-bc-header-line]")
-      console.log("line" , headerLine)
+      const headerLine = this.container.querySelector("[data-bc-header-line]");
       headerLine.setAttribute(
         `data-bc-bp-menu-seperation`,
         source.rows[0].level
@@ -139,11 +140,20 @@ export default class MenuComponent
       //   }
       // }
     }
+    let moduleId = menuParam.moduleId;
+    if (menuParam.moduleName) {
+      moduleId = this.cache.getModuleInfoByName(
+        menuParam.level,
+        menuParam.levelId,
+        menuParam.moduleName
+      ).id;
+    }
     this.tryLoadPage(
       menuParam.level,
       menuParam.levelId,
-      menuParam.moduleId,
+      moduleId,
       menuParam.pageId,
+      menuParam.isSilent,
       menuParam.pageArg
     );
     // const newParam: IPageLoaderParam = {
@@ -162,38 +172,27 @@ export default class MenuComponent
     moduleId: number,
     pageId: PageId
   ) {
-    // if (selectedItem) {
-    //   selectedItem.removeAttribute("data-bc-menu-active");
-    // }
     let menuItem = this.menuContainer.querySelector(
       `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
     );
-    if (menuItem) {
+    if (menuItem || pageId == "default") {
       this.menuContainer
-        .querySelectorAll(`li[data-bc-menu-active]`)
+        .querySelectorAll(`[data-bc-menu-active]`)
         .forEach((x) => x.removeAttribute("data-bc-menu-active"));
+    }
+    if (menuItem) {
       LocalStorageUtil.setMenuLastPage(pageId);
-    } else {
+    } else if (pageId != "default") {
       pageId = LocalStorageUtil.menuPageId;
       menuItem = this.menuContainer.querySelector(
         `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
       );
     }
-    console.log("qam menu 1", menuItem);
-    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
-    //   this.menuContainer
-    // );
 
     menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
       ?.closest("[data-bc-related-menu-id]")
       ?.getAttribute("data-bc-related-menu-id");
-    // console.log(
-    //   "qam menu",
-    //   menuItem,
-    //   relatedMenuId,
-    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-    // );
     if (relatedMenuId) {
       this.menuContainer
         ?.querySelector(
@@ -217,29 +216,29 @@ export default class MenuComponent
     target: EventTarget
   ) {
     //LocalStorageUtil.setCurrentMenu(moduleId, node);
-    this.tryLoadPage(level, levelId, moduleId, pageId, null);
+    this.tryLoadPage(level, levelId, moduleId, pageId, false, null);
   }
   public async tryLoadPage(
     level: PanelLevels,
     levelId: number | null,
     moduleId: number,
     pageId: PageId,
-    args?: any
+    isSilent: boolean,
+    args: any
   ): Promise<boolean> {
-    //console.log("qam mod 1", arguments);
     const moduleInfo = this.cache.getModuleInfo(level, levelId, moduleId);
-    //console.log("qam mod", moduleInfo, level, levelId, moduleId, this.cache);
     if (moduleInfo) {
       const newParam: IPageLoaderParam = {
         level: level,
         pageId: pageId,
         levelId: moduleInfo.levelId,
         moduleId: moduleId,
+        moduleName: moduleInfo.name,
         moduleUrl: moduleInfo.url,
         rKey: this.options.rKey,
         arguments: args,
+        isSilent: isSilent ?? false,
       };
-      LocalStorageUtil.setPageUrl(moduleInfo.url);
       this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
       this.setMenuUISelected(level, levelId, moduleId, pageId);
     }
@@ -252,7 +251,14 @@ export default class MenuComponent
     pageId: PageId,
     args?: any
   ): Promise<boolean> {
-    //console.log("qam loadex", arguments);
-    return this.tryLoadPage(level, null, moduleId, pageId, args);
+    return this.tryLoadPage(level, null, moduleId, pageId, false, args);
+  }
+
+  public getModuleInfo(
+    level: PanelLevels,
+    levelId: number,
+    moduleId: number
+  ): IModuleInfo {
+    return this.cache.getModuleInfo(level, levelId, moduleId);
   }
 }
