@@ -60,8 +60,6 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
             await this.setActiveAsync(state.businessId, "business");
           }
           LocalStorageUtil.setLastState(state);
-
-          console.log("qam set state in back", state);
           this.owner.setSource(DefaultSource.SET_STATE, state);
         }
       });
@@ -208,7 +206,6 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         id: id,
       }
     );
-    console.log("qam setActive", level, id);
   }
 
   private toggleHeaderMore(elements: Array<Element>) {

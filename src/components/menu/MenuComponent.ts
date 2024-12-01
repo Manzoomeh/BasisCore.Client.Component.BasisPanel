@@ -188,21 +188,11 @@ export default class MenuComponent
         `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
       );
     }
-    //console.log("qam menu 1", menuItem);
-    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`,
-    //   this.menuContainer
-    // );
 
     menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
     const relatedMenuId = menuItem
       ?.closest("[data-bc-related-menu-id]")
       ?.getAttribute("data-bc-related-menu-id");
-    // console.log(
-    //   "qam menu",
-    //   menuItem,
-    //   relatedMenuId,
-    //   `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-mid="${moduleId}"][data-bc-menu-id="${relatedMenuId}"]`
-    // );
     if (relatedMenuId) {
       this.menuContainer
         ?.querySelector(
@@ -234,11 +224,9 @@ export default class MenuComponent
     moduleId: number,
     pageId: PageId,
     isSilent: boolean,
-    args: any | null
+    args: any
   ): Promise<boolean> {
-    //console.log("qam mod 1", arguments);
     const moduleInfo = this.cache.getModuleInfo(level, levelId, moduleId);
-    //console.log("qam mod", moduleInfo, level, levelId, moduleId, this.cache);
     if (moduleInfo) {
       const newParam: IPageLoaderParam = {
         level: level,

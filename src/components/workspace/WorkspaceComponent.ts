@@ -88,7 +88,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
             : ""
         }/${pageLoaderParam.pageId}`
       );
-      console.log("qam add", model);
     }
     const doc = this.owner.toNode(
       `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`

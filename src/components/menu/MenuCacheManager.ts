@@ -63,7 +63,6 @@ export default class MenuCacheManager {
         "GET",
         this.checkRkeyOption
       );
-      //console.log("qam menu data", menuData);
       moduleCache = await menuMaker.createAsync(menuData, levelUrl);
       levelCache.set(levelId, moduleCache);
     }

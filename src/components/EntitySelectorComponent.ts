@@ -47,7 +47,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   public selectService(el: HTMLElement) {
     const msgElId = el.getAttribute("data-id");
     const id = parseInt(msgElId);
-    //console.log("qam select service", id);
     if (id != 0) {
       this.setActive();
       this.signalToDisplayMenu(id, false);
@@ -72,7 +71,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     elClicks.forEach((elClick) => {
       elClick.addEventListener("click", async (e) => {
         //On dropdown array bottom click
-        console.log("qam init click", this.getLevel());
         if (this.mustReload) {
           await this.fillComboAsync();
         }
@@ -90,7 +88,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-main-list-container]")
       .querySelector("[data-bc-main-list-msg-selective]") as HTMLElement;
     msgElClick?.addEventListener("click", async (e) => {
-      console.log("qam dropdown click", this.getLevel());
+      //dropdown click
       this.selectService(msgElClick);
     });
 
@@ -110,13 +108,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
       const relatedElement = this.element.querySelector<HTMLElement>(
         `[data-id='${id}']`
-      );
-      console.log(
-        "qam click",
-        this.getLevel(),
-        id,
-        relatedElement,
-        this.element
       );
       if (relatedElement) {
         relatedElement.click();
@@ -161,7 +152,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
-    console.log("qam fill combo", this.getLevel(), this.entityList);
     if (this.deviceId == 1 && this.getLevel() == "business") {
       if (this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
@@ -232,8 +222,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   protected async onItemSelectAsync(id: number, fromUI: boolean) {
-    //console.log("qam ssss", this.getLevel());
-    //await this.setActiveAsync(id);
     if (fromUI || LocalStorageUtil.level == this.getLevel()) {
       this.signalToDisplayMenu(id, !fromUI);
     }
@@ -255,10 +243,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       //const id = parseInt(li.getAttribute("data-id"));
       this.initLIElement(li, item);
       li.addEventListener("click", async (e) => {
+        //list item click
         e.preventDefault();
         e.stopPropagation();
         const id = parseInt(li.getAttribute("data-id"));
-        console.log("qam list maker click", this.getLevel(), id);
         if (e.isTrusted) {
           if (this.getLevel() == "corporate") {
             // choose corporate
@@ -283,10 +271,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
         //if (e.isTrusted) {
         this.owner.setSource(this.getSourceId(), entity ?? {});
-        console.log("qam set source", this.getLevel(), entity);
         //}
         this.setActive();
-        //console.log("qam dropdown item click", this.getLevel(), e);
       });
       this.element.appendChild(li);
     });
@@ -306,7 +292,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           id: id,
         }
       );
-      console.log("qam setActive", this.getLevel(), id);
     }
     if (this.deviceId == 2) {
       this.element
@@ -496,7 +481,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     ) as HTMLElement;
     if (!selectiveList.hasAttribute("data-id")) {
       selectiveList.addEventListener("click", (e) => {
-        console.log("qam select item click", this.getLevel());
+        //select item click
         this.selectService(selectiveList);
       });
     }
@@ -521,14 +506,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   }
 
   private async signalToDisplayMenu(id: number, setFromStorage: boolean) {
-    // console.log(
-    //   `qam ${this.getLevel()} send show menu`,
-    //   id,
-    //   this._isFirst,
-    //   LocalStorageUtil.level,
-    //   this.getLevel(),
-    //   LocalStorageUtil.level == this.getLevel()
-    // );
     LocalStorageUtil.setLevel(this.getLevel(), id);
     const menuParam: IMenuLoaderParam = {
       level: this.getLevel(),
