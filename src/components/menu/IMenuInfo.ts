@@ -7,6 +7,8 @@ export default interface IMenuInfo {
 export interface IMenuItemInfo {
   title: string;
   mid: number;
+  showInToolbox?: boolean;
+  image?: string;
 }
 
 export interface IMenuExternalItemInfo extends IMenuItemInfo {
