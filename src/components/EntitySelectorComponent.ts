@@ -391,7 +391,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       "[data-bc-business-select] [data-bc-main-list-info]"
     );
     selectiveList?.setAttribute("data-id", "0");
-    console.log("qam", header, selectiveList);
     header.querySelector("#ctaForBusinessBuy")?.remove();
     header
       .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
