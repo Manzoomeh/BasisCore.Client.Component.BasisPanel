@@ -387,6 +387,10 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     businessMsgElement.textContent = this.labels.businessTitle;
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
+    const selectiveList = header?.querySelector(
+      "[data-bc-business-select] [data-bc-main-list-info]"
+    );
+    selectiveList?.setAttribute("data-id", "0");
     header.querySelector("#ctaForBusinessBuy")?.remove();
     header
       .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
