@@ -3,6 +3,7 @@ import ICartOptions from "../cart/ICartOptions";
 import IStoreOptions from "../store/IStoreOptions";
 import { INotificationOptions } from "../notification/options/INotificationOptions";
 
+
 export default interface IBasisPanelOptions {
   rKey: string;
   avatar: string;
@@ -24,6 +25,7 @@ export default interface IBasisPanelOptions {
   businessLink?: string;
   urlPrefix?: string;
   lid?: string;
+search?: ISearchOptions[]
 }
 interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;
@@ -98,4 +100,21 @@ export interface ILabels {
   lightModeTitle: string;
   darkModeTitle: string;
   widgetsHeaderTitle: string;
+}
+
+export  interface ISearchOptions {
+  title: string;
+  icon:  string;
+  module:{
+    id : number
+    name : string, 
+    url : string
+  },
+  api: string;
+  method : "post" | "get";
+  body : object
+  pageid: number,
+  level : string,
+  outputKey: string,
+  type : "json" | "formData"
 }

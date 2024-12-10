@@ -335,7 +335,8 @@
   direction: rtl;
   display: flex;
   width: fit-content;
-  gap:15px
+  gap:15px;
+  float: right;
 }
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-corporate-business-wrapper] {
   direction: rtl;

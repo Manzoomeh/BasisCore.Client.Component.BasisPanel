@@ -2,6 +2,7 @@ import ProfileComponent from "./components/profile/ProfileComponent";
 import BasisPanelComponent from "./components/basispanel/BasisPanelComponent";
 import BusinessSelectorComponent from "./components/business-selector/BusinessSelectorComponent";
 import CorporateSelectorComponent from "./components/corporate-selector/CorporateSelectorComponent";
+import SearchComponent from "./components/search/SearchComponent";
 import FooterComponent from "./components/footer/FooterComponent";
 import MenuComponent from "./components/menu/MenuComponent";
 import PageComponent from "./components/page/PageComponent";
@@ -27,6 +28,7 @@ const panel = BasisPanelComponent;
 const profile = ProfileComponent;
 const corporate = CorporateSelectorComponent;
 const business = BusinessSelectorComponent;
+const search = SearchComponent;
 const workspace = WorkspaceComponent;
 const footer = FooterComponent;
 const menu = MenuComponent;
@@ -52,6 +54,7 @@ export {
   profile,
   corporate,
   business,
+  search,
   workspace,
   footer,
   menu,

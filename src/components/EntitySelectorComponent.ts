@@ -396,6 +396,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
       ?.remove();
     // header.innerHTML = ""
+     // empty search input
+     const searchInput = this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-search-input-text]") as HTMLInputElement
+     searchInput ? searchInput.value = "" : null
+     const searchListWrapper =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-drop-down-container1]") as HTMLElement 
+     const searchList =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-main-search-list]") as HTMLElement 
+     searchList.innerHTML = ""
+     searchListWrapper.setAttribute("data-status" , "close")
+   
   }
 
   protected resetNotification() {
