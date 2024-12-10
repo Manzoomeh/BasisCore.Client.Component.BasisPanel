@@ -190,6 +190,37 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
           .querySelector("[data-bc-business-drop-down]")
           ?.setAttribute("data-status", "close");
       }
+
+      // for close corporate search
+      if (
+        currentElement.getAttribute("data-bc-drop-down-click") === null &&
+        currentElement.getAttribute("data-bc-search-icon-drop-down") ===
+          null &&
+        currentElement.getAttribute("data-bc-search-input-text") ===
+          null &&
+        currentElement.getAttribute("data-bc-drop-down-container1") ===
+          null
+      ) {
+        document
+          .querySelector("[data-bc-drop-down-container1]")
+          ?.setAttribute("data-status", "close");
+      }
+
+
+      // for close corporate search category
+      if (
+        currentElement.getAttribute("data-bc-search-notif-drop-down") === null &&
+        currentElement.getAttribute("data-bc-search-icon-drop-down") ===
+          null &&
+        currentElement.getAttribute("data-bc-search-input-text") ===
+          null &&
+        currentElement.getAttribute("data-bc-search-drop-down") ===
+          null 
+      ) {
+        document
+          .querySelector("[data-bc-search-drop-down]")
+          ?.setAttribute("data-status", "close");
+      }
     });
   }
 
