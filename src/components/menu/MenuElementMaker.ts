@@ -413,7 +413,7 @@ export default class MenuElementMaker {
       content.addEventListener("click", function () {
         if (subMenuFlag == false) {
           ul.style.transition = "all 0.3s ease-in-out";
-          ul.style.width = `auto`;
+          ul.style.width = `max-content`;
           ul.style.overflow = `visible`;
           content.setAttribute("data-bc-bp-menu-external-open", "");
           subMenuFlag = true;

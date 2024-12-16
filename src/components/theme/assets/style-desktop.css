@@ -28,7 +28,9 @@
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-theme-container="d1"][data-bc-bp-sticky] {
     right: 10px;
 }
-
+[data-bc-bp-direction="leftToRight"] [data-bc-d1-theme-button] {
+    top: 5px  !important;
+}
 [data-bc-d1-theme-button] {
     position: relative;
     top: 50%;

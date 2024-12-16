@@ -62,9 +62,7 @@
 [data-bc-notification-alert]{
     position: relative;
 }
-[data-bc-bp-direction="leftToRight"] [data-bc-d1-notification] [data-bc-d1-notification-alarm] {
-    right: -8px;
-}
+
 
 /* ********** notification dropdown ********** */
 [data-bc-d1-notification] [data-bc-d1-notification-dropdown] {

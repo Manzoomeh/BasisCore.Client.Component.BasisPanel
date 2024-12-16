@@ -120,9 +120,6 @@
 }
 
 
-[data-bc-bp-direction="leftToRight"] [data-bc-d1-business-list] [data-bc-d1-business-msg] {
-    left: 10px;
-}
 
 /* [data-bc-d1-business-list] [data-bc-d1-business-msg][data-bc-d1-business-msg-inactive] {
     color: #bcbcbc;
@@ -379,3 +376,6 @@
 [data-bc-main-list-msg-selective] span{
     color: #004B85 !important;
   }
+[data-bc-bp-direction="leftToRight"] [data-bc-search-list-container]{
+    display: none;
+}

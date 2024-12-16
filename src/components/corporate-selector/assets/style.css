@@ -26,3 +26,18 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+
+[data-bc-bp-direction="leftToRight"] [data-bc-main-list-msg-select] {
+  font-size: 8px !important;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  /* position: absolute; */
+  top: -5px !important;
+  /* right: 10px; */
+  transform: translateY(0) !important;
+  line-height: 10px;
+  left: -25px;
+  width: fit-content;
+  background-color: #fff;
+  padding: 0 5px;
+}

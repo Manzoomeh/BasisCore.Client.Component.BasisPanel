@@ -49,6 +49,7 @@
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     right: -10px;
+    margin-top: -45px;
 }
 
 [data-bc-page-widget-list-dlg-btn-add][data-bc-bp-sticky] {

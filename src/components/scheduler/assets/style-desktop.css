@@ -60,9 +60,6 @@
 
 
 
-[data-bc-bp-direction="leftToRight"] [data-bc-d1-task-list] [data-bc-d1-task-list-alarm] {
-    right: -4px;
-}
 
 /* ********** task list dropdown ********** */
 [data-bc-d1-task-list] [data-bc-d1-task-list-dropdown] {

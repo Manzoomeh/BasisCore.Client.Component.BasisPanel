@@ -55,6 +55,64 @@ router.get("/:rKey/menu", function (req, res) {
         pid: "userInfo",
       },
       {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+      {
+        title: "اطلاعات کاربری",
+        pid: "userInfo",
+      },
+
+      {
         title: "مدیریت فایل ها",
         nodes: [
           { title: "فایل های من", pid: "myFiles1" },
@@ -62,6 +120,12 @@ router.get("/:rKey/menu", function (req, res) {
         ],
       },
       { title: "تقویم", pid: "myFiles" },
+      {
+        mid: 2,
+        title: "Ticketing",
+        multi: true,
+        url: "/server/external/calender",
+      },
       {
         mid: 2,
         title: "Ticketing",

@@ -201,7 +201,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       res.errorid,
       Number(this.options.lid) || 1
     );
-    if (res.errorid == "61") {
+
       const btn = document.querySelector(
         "[data-bc-page-widget-list-dlg-btn-add]"
       );
@@ -213,7 +213,7 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
       this.hideList();
 
       page.owner.setSource("refresh", true);
-    }
+    
   }
   private async sendSelectedWidgetToServerAsync(): Promise<void> {
     const addedWidgetList = Array.from(
