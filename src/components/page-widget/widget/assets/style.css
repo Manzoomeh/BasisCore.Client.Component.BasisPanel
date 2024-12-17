@@ -58,6 +58,7 @@
   /* align-items: center; */
   /* flex-direction: row; */
   position: sticky;
+  z-index: 9;
 }
 
 [data-bc-bp-widget-container] [data-bc-widget-body] {

@@ -1,6 +1,6 @@
 {
   "name": "basispanel",
-  "version": "1.16.1",
+  "version": "1.16.3",
   "description": "Fundamental infrastructure for manage and present user created widget or component, based in BasisCore(TM) technology.",
   "main": "dist/basiscore.basispanel.component.js",
   "types": "dist/basiscore.basispanel.component.d.ts",
