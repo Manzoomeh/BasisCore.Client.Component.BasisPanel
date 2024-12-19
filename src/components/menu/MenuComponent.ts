@@ -215,7 +215,7 @@ export default class MenuComponent
     }
 
     if (menuItem && !menuItem.getAttribute("data-bc-bp-menu-toolbox-item")) {
-      const currentIcon = menuItem.querySelector("[data-bc-bp-menu-toolbox-item-icon]").innerHTML;
+      const currentIcon = menuItem.querySelector("[data-bc-bp-menu-toolbox-item-icon]")?.innerHTML;
 
       const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
       const buttonContainer = toolboxContainer.querySelector("[data-bc-bp-menu-toolbox-button]");
