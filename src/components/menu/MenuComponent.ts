@@ -219,7 +219,9 @@ export default class MenuComponent
 
       const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
       const buttonContainer = toolboxContainer.querySelector("[data-bc-bp-menu-toolbox-button]");
-      buttonContainer.innerHTML = currentIcon;
+      if (currentIcon) {
+        buttonContainer.innerHTML = currentIcon;
+      }
     } else {
       menuItem?.parentElement.setAttribute("data-bc-menu-active", "");
       const relatedMenuId = menuItem
