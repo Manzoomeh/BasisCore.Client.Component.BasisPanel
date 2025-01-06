@@ -53,7 +53,7 @@ export default class MenuElementMaker {
     const tmpUL = document.createElement("ul");
     const tmpDiv = document.createElement("div");
 
-    await this.createMenuAsync(tmpUL, tmpDiv, menuInfo.nodes, levelUrl);
+    await this.createMenuAsync(tmpUL, tmpDiv, menuInfo.nodes, levelUrl,undefined,menuInfo);
     return new MenuElement(
       Array.from(tmpUL.childNodes),
       Array.from(tmpDiv.childNodes),
@@ -67,11 +67,15 @@ export default class MenuElementMaker {
     div: HTMLDivElement,
     items: Array<IMenuItemInfo>,
     moduleUrl: string,
-    li?: HTMLElement
+    li?: HTMLElement,
+    menuInfo?:IMenuInfo
   ) {
+
     const tasks = items?.map(async (node) => {
-      let retVal: HTMLLIElement|HTMLAnchorElement;
+
+      let retVal: HTMLLIElement | HTMLAnchorElement;
       if ((node as IMenuExternalItemInfo).url) {
+
         this.modules.set(node.mid, {
           id: node.mid,
           name: (node as IMenuExternalItemInfo).name,
@@ -81,6 +85,7 @@ export default class MenuElementMaker {
         });
       }
       if ((node as IMenuPageInfo).pid) {
+
         if (!this.modules.has(node.mid)) {
           this.modules.set(node.mid, {
             id: node.mid,
@@ -89,45 +94,96 @@ export default class MenuElementMaker {
             title: this.level,
             url: moduleUrl,
           });
+
         }
         if (this.deviceId == 1 && node.showInToolbox) {
           retVal = this.createPageToolboxItem(node as IMenuPageInfo);
+
+
         } else {
+
           retVal = this.createPageMenuItem(node as IMenuPageInfo, li);
+
         }
-      } else if ((node as IMenuLevelInfo).nodes) {
+
+      }
+      else if ((node as IMenuLevelInfo).nodes) {
         retVal = await this.createLevelMenuItemAsync(
           node as IMenuLevelInfo,
           moduleUrl,
           this.deviceId
         );
-      } else if (
-        (node as IMenuExternalItemInfo).mid &&
-        (node as IMenuExternalItemInfo).multi
-      ) {
+
+      }
+      else if ((node as IMenuExternalItemInfo).mid && (node as IMenuExternalItemInfo).multi) {
         retVal = await this.createExternalMenuItem(
           node as IMenuExternalItemInfo,
           this.deviceId
         );
-      } else if (
-        (node as IMenuExternalItemInfo).mid &&
-        !(node as IMenuExternalItemInfo).multi
-      ) {
+
+      }
+      else if ((node as IMenuExternalItemInfo).mid && !(node as IMenuExternalItemInfo).multi) {
         retVal = await this.createExternalMenuItemSingleItemAsync(
           node as IMenuExternalItemInfo
         );
+
       }
       return retVal;
     });
+    
     if (tasks) {
-      (await Promise.all(tasks)).forEach((x) => {
+      (await Promise.all(tasks)).forEach((x, i) => {
         if (x instanceof HTMLLIElement) {
-          ul.appendChild(x)
-        } else if (x instanceof HTMLAnchorElement) {
-          div.appendChild(x)
+          const childrenWithAttr = [...x.children].filter(
+            (child) =>
+              child.hasAttribute("data-sys-menu-link") ||
+              child.hasAttribute("data-bc-level-node")
+          );
+
+          const silngleNode = [...x.children].filter((child) =>
+            child.hasAttribute("data-bc-bp-menu-external-single-node")
+          );
+          
+        
+        
+          
+           // آیتم مربوطه را دریافت می‌کنیم
+          const iconLi = document.createElement("i");
+          iconLi.setAttribute("data-bc-node-icon-container", "");
+          const iconImg = document.createElement("img");
+          iconImg.setAttribute("data-bc-node-icon", "");
+          
+          const node = menuInfo?.nodes;
+          if (node) {
+            if (node[i].image) {
+              
+              childrenWithAttr.forEach((child, index) => {
+                iconLi.appendChild(iconImg);
+                child.insertAdjacentElement("afterbegin", iconLi);
+              });
+              silngleNode.forEach((child) => {
+                
+                if (child.tagName == "UL") {
+                  iconLi.appendChild(iconImg);
+                  child.querySelector("[data-bc-level-node]").insertAdjacentElement("afterbegin", iconLi);
+                }
+                else{
+                  
+                  iconLi.appendChild(iconImg);
+                  child.insertAdjacentElement("afterbegin", iconLi);
+                }
+              });
+              iconImg.setAttribute("src" , node[i].image)
+            }
+          }
+
+          ul.appendChild(x);
+        } else if (x instanceof HTMLAnchorElement) {          
+          div.appendChild(x);
         }
       });
     }
+
   }
 
   private async createLevelMenuItemAsync(
@@ -138,21 +194,34 @@ export default class MenuElementMaker {
   ): Promise<HTMLLIElement> {
     const li = document.createElement("li");
     const content = document.createElement("a");
+
     content.setAttribute("data-bc-level-node", "");
     content.setAttribute("data-bc-level", this.level);
     content.setAttribute("data-bc-level-id", this.levelId.toString());
     content.setAttribute("data-bc-menu-id", node.title);
-    content.appendChild(document.createTextNode(node.title));
+    const contentTitle = document.createElement("span")
+    contentTitle.setAttribute("data-bc-menu-node-title", "")
+    contentTitle.appendChild(document.createTextNode(node.title));
+    content.insertAdjacentElement("afterbegin", contentTitle)
+    // content.appendChild(document.createTextNode(node.title));
     const innerUl = document.createElement("ul");
     innerUl.setAttribute("data-bc-bp-submenu", "");
     innerUl.setAttribute("data-bc-related-menu-id", node.title);
+
+
+
+
+    // multyyyyyyyyy
+
     if (node.nodes && node.nodes.length > 0) {
       content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
       await this.createMenuAsync(innerUl, null, node.nodes, ownerUrl, li);
+
     }
     li.appendChild(content);
     document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
     if (deviceId == 2) {
+
       content.addEventListener("click", function (e) {
         if (li.classList.contains("active")) {
           // collapseSubMenu();
@@ -170,32 +239,36 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-submenu]");
+          console.log("subMenu", li);
+          
           // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
           (subMenu as HTMLElement).style.maxHeight = "50rem";
           (subMenu as HTMLElement).style.transition = "all 1s ease";
           // subMenu.classList.add("show");
         }
       });
-    } else {
+
+
+    }
+    else {
       const liBoundingRect = document
         .querySelector("[data-bc-menu]")
         .getBoundingClientRect();
+
       innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
       li.addEventListener("click", function (e) {
         const parentBoundingRect = (
           e.target as HTMLElement
         ).getBoundingClientRect();
-        innerUl.style.top = `${
-          parentBoundingRect.y +
+        innerUl.style.top = `${parentBoundingRect.y +
           parentBoundingRect.height +
           (!document.querySelector("[data-bc-bp-sticky]")
             ? window.pageYOffset
             : 0)
-        }px`;
-        innerUl.style.left = `${
-          parentBoundingRect.x -
+          }px`;
+        innerUl.style.left = `${parentBoundingRect.x -
           (innerUl.offsetWidth - parentBoundingRect.width)
-        }px`;
+          }px`;
 
         if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
           const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
@@ -215,6 +288,7 @@ export default class MenuElementMaker {
           innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
         }
       });
+
     }
     return li;
   }
@@ -231,8 +305,13 @@ export default class MenuElementMaker {
     content.setAttribute("data-bc-level-id", this.levelId.toString());
     content.setAttribute("data-bc-pid", node.pid.toString());
     content.setAttribute("data-bc-mid", node.mid?.toString());
+    const contentTitle = document.createElement("span")
+    contentTitle.setAttribute("data-bc-menu-node-title", "")
+    contentTitle.appendChild(document.createTextNode(node.title));
+    content.insertAdjacentElement("afterbegin", contentTitle)
     //content.setAttribute("data-bc-ownerid", menuParam.ownerId?.toString());
-    content.appendChild(document.createTextNode(node.title));
+    // content.appendChild(document.createTextNode(node.title));
+
     content.addEventListener("click", (e) => {
       e.preventDefault();
       this.onMenuItemClick(
@@ -243,9 +322,9 @@ export default class MenuElementMaker {
         e.target
       );
       document.body.classList.remove("scrolling");
-
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
+
         e.removeAttribute("data-bc-menu-active");
       });
       if (parentLi) {
@@ -262,14 +341,12 @@ export default class MenuElementMaker {
           "active"
         );
       }
-
-      //LocalStorageUtil.setCurrentMenu(menuParam.ownerId, node);
     });
-    //pageLookup.set(node.pid, menuParam);
+
+
     li.appendChild(content);
     return li;
   }
-
   private createPageToolboxItem(
     node: IMenuPageInfo
   ): HTMLAnchorElement {
@@ -280,7 +357,6 @@ export default class MenuElementMaker {
     divItem.setAttribute("data-bc-level-id", this.levelId.toString());
     divItem.setAttribute("data-bc-pid", node.pid.toString());
     divItem.setAttribute("data-bc-mid", node.mid?.toString());
-
     const divItemIcon = document.createElement("div");
     divItemIcon.setAttribute("data-bc-bp-menu-toolbox-item-icon", "");
     divItemIcon.setAttribute("data-bc-bp-d1-menu-toolbox-item-icon", "");
@@ -321,9 +397,10 @@ export default class MenuElementMaker {
 
     return divItem;
   }
-  
-  private changeToolBoxIcon(status: "set"|"reset", icon?: string) {
+
+  private changeToolBoxIcon(status: "set" | "reset", icon?: string) {
     const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
+
     const buttonContainer = toolboxContainer.querySelector("[data-bc-bp-menu-toolbox-button]");
     if (status == "set") {
       buttonContainer.innerHTML = icon;
@@ -370,16 +447,24 @@ export default class MenuElementMaker {
     deviceId: number
   ): Promise<HTMLLIElement> {
     const li = document.createElement("li");
+
+
     const content = document.createElement("a");
     content.setAttribute("data-sys-menu-link", "");
     li.setAttribute("data-bc-bp-menu-external-title", "");
     li.setAttribute("data-sys-menu-external", "");
-    content.appendChild(document.createTextNode(node.title));
+    // content.appendChild(document.createTextNode(node.title));
+    const contentTitle = document.createElement("span")
+    contentTitle.setAttribute("data-bc-menu-node-title", "")
+    contentTitle.appendChild(document.createTextNode(node.title));
+    content.insertAdjacentElement("afterbegin", contentTitle)
+
     li.appendChild(content);
     const ul = document.createElement("ul");
     ul.setAttribute("data-bc-bp-menu-external", "");
     content.setAttribute("data-bc-bp-menu-external-level", "");
     li.appendChild(ul);
+    // multyyyyyy
     let subMenuFlag = false;
     if (deviceId == 2) {
       content.addEventListener("click", function (e) {

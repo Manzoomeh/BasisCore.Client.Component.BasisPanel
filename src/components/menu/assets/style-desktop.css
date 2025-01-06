@@ -479,3 +479,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+
+
+[data-bc-bp-menu-wrapper] [data-bc-node-icon-container] [data-bc-node-icon]{
+max-width: 20px;
+transform: translateY(5px);
+}
+[data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+  display: inline-block;
+  width: 20px;
+}
+[data-bc-bp-direction="rightToLeft"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+  margin-left: 4px;
+}
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+  margin-right: 4px;
+}

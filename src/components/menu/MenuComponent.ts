@@ -39,7 +39,9 @@ export default class MenuComponent
       "[data-bc-bp-menu-wrapper]"
     );
     this.ul = this.menuContainer.querySelector("[data-bc-menu]");
+    
     this.toolboxDiv = this.menuContainer.querySelector("[data-bc-bp-menu-toolbox-items]");
+    
     this.cache = new MenuCacheManager(
       this.options.rKey,
       this.options.method.menu,
@@ -53,9 +55,16 @@ export default class MenuComponent
       .resolve<IDependencyContainer>("parent.dc")
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("page_loader", this);
+      
     this.lineHeader = document.querySelector("[data-bc-header-line]");
-    this.lineHeader.style.transition = "none";
-    this.lineHeader.style.width = "0";
+    console.log(this.lineHeader);
+    
+    if (this.lineHeader != null) {
+      
+      this.lineHeader.style.transition = "none";
+      this.lineHeader.style.width = "0";
+    }
+    
   }
 
   public initializeAsync(): Promise<void> {
@@ -64,8 +73,11 @@ export default class MenuComponent
       DefaultSource.BUSINESS_SOURCE,
     ]);
     setTimeout(() => {
-      this.lineHeader.style.transition = "all 1s ease-in-out";
-      this.lineHeader.style.width = "98%";
+      if (this.lineHeader) {
+        
+        this.lineHeader.style.transition = "all 1s ease-in-out";
+        this.lineHeader.style.width = "98%";
+      }
     }, 500);
 
     if (this.toolboxDiv) {
@@ -82,10 +94,13 @@ export default class MenuComponent
   public async runAsync(source?: ISource) {
     if (source?.id == DefaultSource.SHOW_MENU) {
       const headerLine = this.container.querySelector("[data-bc-header-line]");
-      headerLine.setAttribute(
-        `data-bc-bp-menu-seperation`,
-        source.rows[0].level
-      );
+      if (headerLine) {
+        headerLine.setAttribute(
+          `data-bc-bp-menu-seperation`,
+          source.rows[0].level
+        );
+        
+      }
       await this.loadDataAsync(source.rows[0]);
     }
   }
@@ -141,24 +156,7 @@ export default class MenuComponent
             });
         });
       }
-      // const tempPage = LocalStorageUtil.getCurrentPage();
-      // if (tempPage) {
-      //   //&& tempPage.pageId > 0) {
-      //   if (LocalStorageUtil.hasMenuToActive()) {
-      //     if (LocalStorageUtil.mustActiveMenuItem(menuParam.level)) {
-      //       const temp = LocalStorageUtil.getCurrentMenu();
-      //       const pid = temp?.info?.pid.toString();
-      //       const mid = temp?.info?.mid.toString();
-      //       const ownerId = temp?.ownerId.toString();
-      //       // let [li, parent] = this.current.menuItemLookup.get(pid + "-" + mid);
-      //       // li?.setAttribute("data-bc-menu-active", "");
 
-      //       // if (parent) {
-      //       //   parent.setAttribute("data-bc-menu-active", "");
-      //       // }
-      //     }
-      //   }
-      // }
     }
     let moduleId = menuParam.moduleId;
     if (menuParam.moduleName) {
@@ -176,14 +174,12 @@ export default class MenuComponent
       menuParam.isSilent,
       menuParam.pageArg
     );
-    // const newParam: IPageLoaderParam = {
-    //   level: menuParam.level,
-    //   pageId: menuParam.pageId,
-    //   levelId: menuParam.levelId,
-    //   moduleUrl: menuParam.levelUrl,
-    //   rKey: this.options.rKey,
-    // };
-    // this.owner.setSource(DefaultSource.DISPLAY_PAGE, newParam);
+      let firsLevelLi = document.querySelectorAll("[data-bc-menu] li" )
+      firsLevelLi.forEach(element => {
+        if (element.parentElement.hasAttribute("data-bc-menu")) {
+        //  console.log(element);
+       }
+      });
   }
 
   private setMenuUISelected(
@@ -195,6 +191,7 @@ export default class MenuComponent
     let menuItem = this.menuContainer.querySelector(
       `a[data-bc-level="${level}"][data-bc-level-id="${levelId}"][data-bc-pid="${pageId}"][data-bc-mid="${moduleId}"]`
     );
+    
     const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
 
     if (menuItem || pageId == "default") {
@@ -295,6 +292,7 @@ export default class MenuComponent
     levelId: number,
     moduleId: number
   ): IModuleInfo {
+    
     return this.cache.getModuleInfo(level, levelId, moduleId);
   }
 }
