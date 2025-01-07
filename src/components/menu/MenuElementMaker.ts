@@ -239,7 +239,6 @@ export default class MenuElementMaker {
           // Expand New menuItemHasChildren
           li.classList.add("active");
           const subMenu = li.querySelector("[data-bc-bp-submenu]");
-          console.log("subMenu", li);
           
           // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
           (subMenu as HTMLElement).style.maxHeight = "50rem";

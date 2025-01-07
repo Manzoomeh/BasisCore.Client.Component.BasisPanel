@@ -17,35 +17,40 @@ export default class NotificationTab {
   private alarm: HTMLElement;
   private content: HTMLElement;
 
-  constructor(
-    owner: INotificationProvider,
-    index: number,
-    baseUrls: IUrlCollectionOption
-  ) {
+  constructor(owner: INotificationProvider, index: number,baseUrls: IUrlCollectionOption) {
     this._owner = owner;
-
     this.notificationContainer = this._owner.container;
     this.optionsName = this._owner.options.name;
     this.optionsRkey = this._owner.options.rKey;
     this.optionConfig = this._owner.options.config;
+    
     this.contents = this.notificationContainer.querySelector(
       "[data-bc-notification-contents]"
     );
     this.alarm = this.notificationContainer.querySelector(
       "[data-bc-notification-alarm]"
     );
+    
+    if (this.alarm.innerHTML.trim()=="0") {
+      this.alarm.style.display="none"
+    }
+    else{
+          this.alarm.style.display="flex"
 
+        }
     // create contents
     const optionName = this._owner.storeAsGlobal(this.optionConfig); //`${this.optionsName}_option`;
+    
     let contentTemplate = (contentLayout as any)
-      // .replaceAll("@dataMemberName", `notification.${this.optionsName}`)
-      .replaceAll("@memberName", `${this.optionsName}`)
-      .replaceAll("@rkey", this.optionsRkey)
-      .replaceAll("@name", this.optionsName)
-      .replaceAll("@option", optionName);
-
+    // .replaceAll("@dataMemberName", `notification.${this.optionsName}`)
+    .replaceAll("@memberName", `${this.optionsName}`)
+    .replaceAll("@rkey", this.optionsRkey)
+    .replaceAll("@name", this.optionsName)
+    .replaceAll("@option", optionName);
+    
     this.content = this._owner.toNode(contentTemplate)
       .firstChild as HTMLElement;
+      
     if (index == 0) {
       this.content.setAttribute("data-bc-notification-tab-content", "active");
     }
@@ -53,11 +58,10 @@ export default class NotificationTab {
     this._owner.processNodesAsync([this.content]);
 
     // event read button
-    this.contents
-      .querySelector("[data-bc-notification-read-button]")
-      ?.addEventListener("click", (e) => {
+    this.contents.querySelector("[data-bc-notification-read-button]")?.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+        
         const listContainer = this.contents.querySelector(
           "[data-bc-notification-tab-list]"
         );
@@ -73,12 +77,11 @@ export default class NotificationTab {
           type: "read",
           usedforid: listItemsString,
         });
+        
       });
 
     // event view button
-    this.contents
-      .querySelector("[data-bc-notification-view-button]")
-      ?.addEventListener("click", (e) => {
+    this.contents.querySelector("[data-bc-notification-view-button]")?.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -110,11 +113,16 @@ export default class NotificationTab {
   }
 
   public refreshUI(data: Array<any>) {
+
     if (data.length > 0) {
       if (this.alarm.style.display == "none") {
         this.alarm.style.display = "block";
       }
+
+    }else{
+      this.alarm.style.display == "none"
     }
+
     this._owner.setSource(`notification.${this.optionsName}`, data);
   }
 }

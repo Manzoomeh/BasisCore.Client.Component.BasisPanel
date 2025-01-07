@@ -57,7 +57,6 @@ export default class MenuComponent
       .registerInstance("page_loader", this);
       
     this.lineHeader = document.querySelector("[data-bc-header-line]");
-    console.log(this.lineHeader);
     
     if (this.lineHeader != null) {
       
@@ -177,7 +176,6 @@ export default class MenuComponent
       let firsLevelLi = document.querySelectorAll("[data-bc-menu] li" )
       firsLevelLi.forEach(element => {
         if (element.parentElement.hasAttribute("data-bc-menu")) {
-        //  console.log(element);
        }
       });
   }

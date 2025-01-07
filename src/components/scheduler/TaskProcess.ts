@@ -26,10 +26,15 @@ export default class TaskProcess {
     ).style.display = "none";
     owner.ulElement.appendChild(this._container);
     const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
+    
     this._owner.container.setAttribute("data-count", (parseInt(alarmEl.textContent) + 1).toString());
     if (this._owner.container.querySelector("[data-bc-task-list-count-text]")) {
       this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     }
+    // alarmEl.style.display="none"
+    document.querySelector<HTMLElement>('[data-bc-task-list-alarm]').style.display="flex"
+
+
     alarmEl.innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     const mainAlarmEl = this._owner.container.closest("[data-bc-bp-main-header]");
     const mainAlarm = mainAlarmEl.getAttribute("data-alertCount");
@@ -95,7 +100,12 @@ export default class TaskProcess {
           ) as HTMLElement
         ).style.display = "block";
       }
+
+      
+      
+      document.querySelector<HTMLElement>('[data-bc-task-list-alarm]').style.display="none";
     }, 3_000);
+ 
   }
 
   private startDisplayAjax() {

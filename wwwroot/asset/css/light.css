@@ -215,7 +215,9 @@
 [data-bc-notification-alarm] {
   background-color: #F9461C !important;
 }
-
+[data-bc-task-list-alarm]{
+  display: n;
+}
 [data-sys-button] {
   background: var(--dark_blue) !important;
   /* border-color: var(--dark_blue) !important; */
