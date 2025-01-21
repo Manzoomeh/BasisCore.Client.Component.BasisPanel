@@ -312,7 +312,7 @@ export default class MenuElementMaker {
     // content.appendChild(document.createTextNode(node.title));
 
     content.addEventListener("click", (e) => {
-      e.preventDefault();
+      e.preventDefault();      
       this.onMenuItemClick(
         this.level,
         this.levelId,
@@ -323,18 +323,20 @@ export default class MenuElementMaker {
       document.body.classList.remove("scrolling");
       const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
       activeMenus.forEach((e) => {
-
+        
         e.removeAttribute("data-bc-menu-active");
+        
       });
       if (parentLi) {
         parentLi.setAttribute("data-bc-menu-active", "");
+        if (parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]")) {
+          parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]").style.display="none"
+        }
         li.setAttribute("data-bc-menu-active", "");
       } else {
         li.setAttribute("data-bc-menu-active", "");
       }
-
       this.changeToolBoxIcon("reset");
-
       if (this.deviceId == 2) {
         li.closest("[data-bc-bp-header-more-container]").classList.remove(
           "active"
