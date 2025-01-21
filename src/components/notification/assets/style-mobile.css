@@ -148,3 +148,7 @@
     right: 28px !important;
     left: unset !important;
 }
+
+[data-bc-theme-button]{
+    display: none;
+}
