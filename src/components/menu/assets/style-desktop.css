@@ -18,7 +18,7 @@
 [data-bc-bp-d1-menu-container] {
   display: flex;
   align-items: center;
-  position: relative;
+  /* position: relative; */
   z-index: 9;
   overflow-y: auto;
 }
