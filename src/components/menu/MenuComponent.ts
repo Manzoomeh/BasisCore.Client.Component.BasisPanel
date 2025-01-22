@@ -64,7 +64,7 @@ export default class MenuComponent
       this.lineHeader.style.transition = "none";
       this.lineHeader.style.width = "0";
     }
-    
+ 
   }
 
   public initializeAsync(): Promise<void> {
@@ -82,6 +82,19 @@ export default class MenuComponent
 
     if (this.toolboxDiv) {
       const toolboxWrapper = this.toolboxDiv.closest("[data-bc-bp-menu-toolbox-wrapper]");
+   
+      setTimeout(() => {
+        const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
+        if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML!="") {
+          if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="rightToLeft" ) {
+            nextSib.style.marginRight="30px"
+          } 
+          else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="leftToRight" ){
+            nextSib.style.marginLeft="30px"
+            
+          }
+        }
+      }, 10);
       toolboxWrapper.querySelector("[data-bc-bp-menu-toolbox-button]").addEventListener("click", (e) => {
         const activate = toolboxWrapper.getAttribute("data-bc-bp-menu-toolbox");
         toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", activate == "active" ? "" : "active");

@@ -209,7 +209,7 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-menu] {
   direction: rtl;
-  margin-right:30px;
+  /* margin-right:30px; */
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-menu] {
