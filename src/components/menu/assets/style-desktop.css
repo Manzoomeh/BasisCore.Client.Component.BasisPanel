@@ -64,6 +64,7 @@
 [data-bc-bp-d1-menu-container] {
   scrollbar-width: thin;
   scrollbar-color: var(--dark_blue) #F5F5F5;
+  border-radius: 10px;
 }
 
 [data-bc-bp-d1-menu-container]::-moz-scrollbar {
@@ -104,13 +105,15 @@
 }
 
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper] {
-  display: none;
+  /* display: none; */
   margin-left: 10px;
   /* position: relative; */
   position: fixed;
   z-index: 10;
 }
-
+[data-bc-bp-d1-menu-container] {
+  box-sizing: border-box;
+}
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper][data-bc-have-menu-toolbox="true"] {
   display: inline-block;
 }

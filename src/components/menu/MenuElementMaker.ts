@@ -52,7 +52,6 @@ export default class MenuElementMaker {
   ): Promise<MenuElement> {
     const tmpUL = document.createElement("ul");
     const tmpDiv = document.createElement("div");
-
     await this.createMenuAsync(tmpUL, tmpDiv, menuInfo.nodes, levelUrl,undefined,menuInfo);
     return new MenuElement(
       Array.from(tmpUL.childNodes),
@@ -72,7 +71,6 @@ export default class MenuElementMaker {
   ) {
 
     const tasks = items?.map(async (node) => {
-
       let retVal: HTMLLIElement | HTMLAnchorElement;
       if ((node as IMenuExternalItemInfo).url) {
 
@@ -186,111 +184,114 @@ export default class MenuElementMaker {
 
   }
 
-  private async createLevelMenuItemAsync(
-    node: IMenuLevelInfo,
-    ownerUrl: string,
-    //pageLookup: Map<number, IMenuLoaderParam>,
-    deviceId: number
-  ): Promise<HTMLLIElement> {
-    const li = document.createElement("li");
-    const content = document.createElement("a");
+    private async createLevelMenuItemAsync(
+      node: IMenuLevelInfo,
+      ownerUrl: string,
+      //pageLookup: Map<number, IMenuLoaderParam>,
+      deviceId: number
+    ): Promise<HTMLLIElement> {
+      const li = document.createElement("li");
+      const content = document.createElement("a");
 
-    content.setAttribute("data-bc-level-node", "");
-    content.setAttribute("data-bc-level", this.level);
-    content.setAttribute("data-bc-level-id", this.levelId.toString());
-    content.setAttribute("data-bc-menu-id", node.title);
-    const contentTitle = document.createElement("span")
-    contentTitle.setAttribute("data-bc-menu-node-title", "")
-    contentTitle.appendChild(document.createTextNode(node.title));
-    content.insertAdjacentElement("afterbegin", contentTitle)
-    // content.appendChild(document.createTextNode(node.title));
-    const innerUl = document.createElement("ul");
-    innerUl.setAttribute("data-bc-bp-submenu", "");
-    innerUl.setAttribute("data-bc-related-menu-id", node.title);
-
-
+      content.setAttribute("data-bc-level-node", "");
+      content.setAttribute("data-bc-level", this.level);
+      content.setAttribute("data-bc-level-id", this.levelId.toString());
+      content.setAttribute("data-bc-menu-id", node.title);
+      const contentTitle = document.createElement("span")
+      contentTitle.setAttribute("data-bc-menu-node-title", "")
+      contentTitle.appendChild(document.createTextNode(node.title));
+      content.insertAdjacentElement("afterbegin", contentTitle)
+      // content.appendChild(document.createTextNode(node.title));
+      const innerUl = document.createElement("ul");
+      innerUl.setAttribute("data-bc-bp-submenu", "");
+      innerUl.setAttribute("data-bc-related-menu-id", node.title);
 
 
-    // multyyyyyyyyy
 
-    if (node.nodes && node.nodes.length > 0) {
-      content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
-      await this.createMenuAsync(innerUl, null, node.nodes, ownerUrl, li);
 
+      // multyyyyyyyyy
+
+      if (node.nodes && node.nodes.length > 0) {
+        content.setAttribute("data-bc-mid", node.nodes[0].mid?.toString());
+        await this.createMenuAsync(innerUl, null, node.nodes, ownerUrl, li);
+
+      }
+      li.appendChild(content);
+      document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
+      if (deviceId == 2) {
+
+        content.addEventListener("click", function (e) {
+  
+          if (li.classList.contains("active")) {
+            // collapseSubMenu();
+            li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+            li.classList.remove("active");
+          } else {
+            // Collapse Existing Expanded menuItemHasChildren
+            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+            openMenu.forEach((e) => {
+              if (e != li) {
+                e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
+                e.classList.remove("active");
+              }
+            });
+            // Expand New menuItemHasChildren
+            li.classList.add("active");
+            const subMenu = li.querySelector("[data-bc-bp-submenu]");
+            
+            // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
+            (subMenu as HTMLElement).style.maxHeight = "50rem";
+            (subMenu as HTMLElement).style.transition = "all 1s ease";
+            // subMenu.classList.add("show");
+          }
+        });
+
+
+      }
+      else {
+        const liBoundingRect = document
+          .querySelector("[data-bc-menu]")
+          .getBoundingClientRect();
+
+        innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
+        li.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const parentBoundingRect = (
+            e.target as HTMLElement
+          ).getBoundingClientRect();
+          innerUl.style.top = `${parentBoundingRect.y +
+            parentBoundingRect.height +
+            (!document.querySelector("[data-bc-bp-sticky]")
+              ? window.pageYOffset
+              : 0)
+            }px`;
+          innerUl.style.left = `${parentBoundingRect.x -
+            (innerUl.offsetWidth - parentBoundingRect.width)
+            }px`;
+
+          if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
+            const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
+            openMenu.forEach((e) => {
+              (e as HTMLElement).style.maxHeight = `0px`;
+              e.removeAttribute("data-bc-ul-level-open");
+              e.previousElementSibling.removeAttribute("data-bc-level-open");
+            });
+
+            innerUl.setAttribute("data-bc-ul-level-open", "1");
+            content.setAttribute("data-bc-level-open", "");
+            innerUl.style.maxHeight = `500px`;
+            innerUl.style.opacity = `1`;
+          } else {
+            innerUl.style.maxHeight = `0px`;
+            innerUl.removeAttribute("data-bc-ul-level-open");
+            innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
+          }
+        });
+
+      }
+      return li;
     }
-    li.appendChild(content);
-    document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
-    if (deviceId == 2) {
-
-      content.addEventListener("click", function (e) {
-        if (li.classList.contains("active")) {
-          // collapseSubMenu();
-          li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
-          li.classList.remove("active");
-        } else {
-          // Collapse Existing Expanded menuItemHasChildren
-          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-          openMenu.forEach((e) => {
-            if (e != li) {
-              e.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
-              e.classList.remove("active");
-            }
-          });
-          // Expand New menuItemHasChildren
-          li.classList.add("active");
-          const subMenu = li.querySelector("[data-bc-bp-submenu]");
-          
-          // (subMenu as HTMLElement).style.maxHeight = subMenu.scrollHeight + 'px';
-          (subMenu as HTMLElement).style.maxHeight = "50rem";
-          (subMenu as HTMLElement).style.transition = "all 1s ease";
-          // subMenu.classList.add("show");
-        }
-      });
-
-
-    }
-    else {
-      const liBoundingRect = document
-        .querySelector("[data-bc-menu]")
-        .getBoundingClientRect();
-
-      innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
-      li.addEventListener("click", function (e) {
-        const parentBoundingRect = (
-          e.target as HTMLElement
-        ).getBoundingClientRect();
-        innerUl.style.top = `${parentBoundingRect.y +
-          parentBoundingRect.height +
-          (!document.querySelector("[data-bc-bp-sticky]")
-            ? window.pageYOffset
-            : 0)
-          }px`;
-        innerUl.style.left = `${parentBoundingRect.x -
-          (innerUl.offsetWidth - parentBoundingRect.width)
-          }px`;
-
-        if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
-          const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
-          openMenu.forEach((e) => {
-            (e as HTMLElement).style.maxHeight = `0px`;
-            e.removeAttribute("data-bc-ul-level-open");
-            e.previousElementSibling.removeAttribute("data-bc-level-open");
-          });
-
-          innerUl.setAttribute("data-bc-ul-level-open", "1");
-          content.setAttribute("data-bc-level-open", "");
-          innerUl.style.maxHeight = `500px`;
-          innerUl.style.opacity = `1`;
-        } else {
-          innerUl.style.maxHeight = `0px`;
-          innerUl.removeAttribute("data-bc-ul-level-open");
-          innerUl.previousElementSibling.removeAttribute("data-bc-level-open");
-        }
-      });
-
-    }
-    return li;
-  }
 
   private createPageMenuItem(
     node: IMenuPageInfo,
