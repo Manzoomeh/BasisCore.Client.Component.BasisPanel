@@ -173,7 +173,7 @@ export default class MenuElementMaker {
                   child.insertAdjacentElement("afterbegin", iconLi);
                 }
               });
-              iconImg.setAttribute("src" , node[i].image)
+              iconImg.setAttribute("src" , `/${node[i].image}`)
             }
           }
 
