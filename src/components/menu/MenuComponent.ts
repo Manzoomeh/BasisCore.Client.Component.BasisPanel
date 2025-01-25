@@ -93,7 +93,7 @@ export default class MenuComponent
             nextSib.style.marginLeft="30px"
           }
         }
-      }, 100);
+      }, 200);
       toolboxWrapper.querySelector("[data-bc-bp-menu-toolbox-button]").addEventListener("click", (e) => {
         const activate = toolboxWrapper.getAttribute("data-bc-bp-menu-toolbox");
         toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", activate == "active" ? "" : "active");
