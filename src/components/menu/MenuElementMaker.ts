@@ -73,7 +73,6 @@ export default class MenuElementMaker {
     const tasks = items?.map(async (node) => {
       let retVal: HTMLLIElement | HTMLAnchorElement;
 
-      console.log("node",node);
       
       if ((node as IMenuExternalItemInfo).url) {
 
@@ -224,7 +223,7 @@ export default class MenuElementMaker {
       if (deviceId == 2) {
 
         content.addEventListener("click", function (e) {
-  
+          
           if (li.classList.contains("active")) {
             // collapseSubMenu();
             li.querySelector("[data-bc-bp-submenu]").removeAttribute("style");
@@ -258,17 +257,16 @@ export default class MenuElementMaker {
 
         innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
         li.addEventListener("click", function (e) {
-          e.preventDefault();
+          
+          // e.preventDefault();
           e.stopPropagation();
           const parentBoundingRect = (
-            e.target as HTMLElement
+            li as HTMLElement
           ).getBoundingClientRect();
-          innerUl.style.top = `${parentBoundingRect.y +
-            parentBoundingRect.height +
-            (!document.querySelector("[data-bc-bp-sticky]")
-              ? window.pageYOffset
-              : 0)
+          innerUl.style.top = `${parentBoundingRect.y +parentBoundingRect.height +(!document.querySelector("[data-bc-bp-sticky]")? window.pageYOffset: 0)
             }px`;
+
+            
           innerUl.style.left = `${parentBoundingRect.x -
             (innerUl.offsetWidth - parentBoundingRect.width)
             }px`;
