@@ -99,7 +99,6 @@ export default class MenuComponent
         toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", activate == "active" ? "" : "active");
       });
     }
-
     return Promise.resolve();
   }
 

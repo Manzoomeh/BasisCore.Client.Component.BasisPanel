@@ -72,6 +72,9 @@ export default class MenuElementMaker {
 
     const tasks = items?.map(async (node) => {
       let retVal: HTMLLIElement | HTMLAnchorElement;
+
+      console.log("node",node);
+      
       if ((node as IMenuExternalItemInfo).url) {
 
         this.modules.set(node.mid, {
