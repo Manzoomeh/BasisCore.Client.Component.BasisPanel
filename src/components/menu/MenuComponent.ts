@@ -122,6 +122,11 @@ export default class MenuComponent
             else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
               nextSib.style.marginLeft = "30px"
             }
+            else{
+              nextSib.style.marginLeft = "0px"
+
+            }
+            
           }
         }, 200);
       }
@@ -308,6 +313,10 @@ export default class MenuComponent
       }
       else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
         nextSib.style.marginLeft = "30px"
+      }
+      else{
+        nextSib.style.marginLeft = "0px"
+
       }
     }
 

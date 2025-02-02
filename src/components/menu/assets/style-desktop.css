@@ -295,7 +295,7 @@
 }
 
 [data-bc-d1-menu] li a {
-  padding: 0 20px;
+  padding: 0 25px 0 20px;
   white-space: nowrap;
   cursor: pointer;
   height: 100%;
@@ -475,7 +475,7 @@
 [data-bc-d1-menu] [data-bc-bp-menu-external-single-node] li a {
   /* border: none; */
   /* border-left: 1px solid rgba(255, 255, 255, 0.13); */
-  padding: 0 15px;
+  padding: 0 25px 0 15px;
   /* position: relative; */
   /* top: 16px; */
 }
@@ -554,6 +554,8 @@ transform: translateY(5px);
 }
 [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
   display: inline-block;
+  position: absolute;
+  right: 0px;
   width: 20px;
 }
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{

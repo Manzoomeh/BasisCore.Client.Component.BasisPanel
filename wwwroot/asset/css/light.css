@@ -88,7 +88,7 @@
   height: 10px;
   border-radius: 50%;
   background-color:var(--dark_blue) ;
-  /* position: absolute; */
+  position: absolute;
   right: 0;
   content: '';
   top: 25px;
