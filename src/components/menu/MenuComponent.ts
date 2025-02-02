@@ -112,8 +112,7 @@ export default class MenuComponent
           source.rows[0].level
         );
         const toolboxWrapper = this.toolboxDiv.closest("[data-bc-bp-menu-toolbox-wrapper]");
-   
-        setTimeout(() => {
+                setTimeout(() => {
           const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;                  
           if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML!="") {
             if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="rightToLeft" ) {
