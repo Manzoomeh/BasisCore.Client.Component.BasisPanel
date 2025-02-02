@@ -105,6 +105,15 @@ export default class MenuComponent
         const activate = toolboxWrapper.getAttribute("data-bc-bp-menu-toolbox");
         toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", activate == "active" ? "" : "active");
       });
+      document.addEventListener("click", (event) => {
+        const toolboxWrapper = this.toolboxDiv.closest("[data-bc-bp-menu-toolbox-wrapper]");
+        if (toolboxWrapper) {
+          if (!toolboxWrapper.contains(event.target as Node)) {
+            toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", "");
+          }
+        }
+      });
+      
     }
     return Promise.resolve();
   }
