@@ -96,17 +96,7 @@ export default class MenuComponent
           }
         }
       }, 200);
-      // setTimeout(() => {
-      //   const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
-      //   if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML!="") {
-      //     if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="rightToLeft" ) {
-      //       nextSib.style.marginRight="30px"
-      //     } 
-      //     else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="leftToRight" ){
-      //       nextSib.style.marginLeft="30px"
-      //     }
-      //   }
-      // }, 200);
+     
       toolboxWrapper.querySelector("[data-bc-bp-menu-toolbox-button]").addEventListener("click", (e) => {
         const activate = toolboxWrapper.getAttribute("data-bc-bp-menu-toolbox");
         toolboxWrapper.setAttribute("data-bc-bp-menu-toolbox", activate == "active" ? "" : "active");
