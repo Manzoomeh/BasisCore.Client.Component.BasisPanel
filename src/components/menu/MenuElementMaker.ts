@@ -256,8 +256,7 @@ export default class MenuElementMaker {
           .getBoundingClientRect();
 
         innerUl.style.top = `${liBoundingRect.y + liBoundingRect.height}px`;
-        li.addEventListener("click", function (e) {
-          
+        li.addEventListener("click", function (e) {          
           // e.preventDefault();
           e.stopPropagation();
           const parentBoundingRect = (
