@@ -84,7 +84,8 @@ export default class MenuComponent
       const toolboxWrapper = this.toolboxDiv.closest("[data-bc-bp-menu-toolbox-wrapper]");
    
       setTimeout(() => {
-        const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
+        const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;        
+        
         if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML!="") {
           if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="rightToLeft" ) {
             nextSib.style.marginRight="30px"
@@ -110,7 +111,19 @@ export default class MenuComponent
           `data-bc-bp-menu-seperation`,
           source.rows[0].level
         );
-        
+        const toolboxWrapper = this.toolboxDiv.closest("[data-bc-bp-menu-toolbox-wrapper]");
+   
+        setTimeout(() => {
+          const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;                  
+          if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML!="") {
+            if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="rightToLeft" ) {
+              nextSib.style.marginRight="30px"
+            } 
+            else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction')=="leftToRight" ){
+              nextSib.style.marginLeft="30px"
+            }
+          }
+        }, 200);
       }
       await this.loadDataAsync(source.rows[0]);
     }
