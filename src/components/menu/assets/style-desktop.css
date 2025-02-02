@@ -105,7 +105,7 @@
 }
 
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper] {
-  display: none;
+  /* display: none; */
   margin-left: 10px;
   /* position: relative; */
   position: fixed;

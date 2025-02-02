@@ -88,10 +88,15 @@ export default class MenuComponent
 
         if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
           if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-            nextSib.style.marginRight = "30px"
+            nextSib.style.marginRight = "40px"
           }
           else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
-            nextSib.style.marginLeft = "30px"
+            nextSib.style.marginLeft = "40px"
+          }
+          else{
+        
+            nextSib.style.marginRight = "0px"
+            nextSib.style.marginLeft = "0px"
           }
         }
       }, 200);
@@ -117,14 +122,15 @@ export default class MenuComponent
           const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
           if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
             if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-              nextSib.style.marginRight = "30px"
+              nextSib.style.marginRight = "40px"
             }
             else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
-              nextSib.style.marginLeft = "30px"
+              nextSib.style.marginLeft = "40px"
             }
             else{
+        
+              nextSib.style.marginRight = "0px"
               nextSib.style.marginLeft = "0px"
-
             }
             
           }
@@ -309,14 +315,15 @@ export default class MenuComponent
     const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
     if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
       if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-        nextSib.style.marginRight = "30px"
+        nextSib.style.marginRight = "40px"
       }
       else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
-        nextSib.style.marginLeft = "30px"
+        nextSib.style.marginLeft = "40px"
       }
       else{
+        
+        nextSib.style.marginRight = "0px"
         nextSib.style.marginLeft = "0px"
-
       }
     }
 
