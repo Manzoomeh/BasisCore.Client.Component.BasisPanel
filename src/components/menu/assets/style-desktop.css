@@ -555,12 +555,11 @@ transform: translateY(5px);
 [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
   display: inline-block;
   position: absolute;
-  right: 0px;
+  right: 3px;
+  top: -2px;
   width: 20px;
 }
-[data-bc-bp-direction="rightToLeft"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
-  margin-left: 4px;
-}
+
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
   margin-right: 4px;
 }
