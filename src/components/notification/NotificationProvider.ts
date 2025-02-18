@@ -33,6 +33,7 @@ export default class NotificationProvider implements INotificationProvider {
     this.options = options;
 
     this.tab = new NotificationTab(this, index, baseUrl);
+    
   }
 
   storeAsGlobal(
@@ -78,8 +79,8 @@ export default class NotificationProvider implements INotificationProvider {
     const url = HttpUtil.formatString(this.options.url, {
       rKey: this.rKey,
     });
+    
     const result = await HttpUtil.fetchDataAsync<Array<any>>(url, "GET");
-
     this.tab.refreshUI(result);
   }
 }

@@ -3,7 +3,6 @@
     <basis core="dbsource" source="simple" name="notification" rkey="@rkey" type="{##notification.websocket.type|()##}" usedforid="{##notification.websocket.usedforid|()##}" run="atclient" triggers="notification.websocket">
         <member name="@memberName" />
     </basis>
-
     <basis core="callback" run="atclient" triggers="notification.@memberName" method="notificationLoad"></basis>
 
     <div data-bc-notification-tab-list="">
@@ -44,12 +43,15 @@
     <script type="text/javascript">
         function notificationLoad(args) {
             const notificationLength = args.source?.rows.length;
-            document.querySelector("[data-bc-notification-alarm]").textContent = notificationLength;
+            const notificationAlarm =  document.querySelector("[data-bc-notification-alarm]")
+            notificationAlarm.textContent = notificationLength;
             const notificationReadButton = document.querySelector("[data-bc-notification-buttons-container]");
             if (notificationLength > 0) {
                 notificationReadButton.style.display = "block";
+                notificationAlarm.style.display = "flex";
             } else {
                 notificationReadButton.style.display = "none";
+                notificationAlarm.style.display = "none";
             }
 
             // sort rows

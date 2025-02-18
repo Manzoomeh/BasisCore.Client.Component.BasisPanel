@@ -49,6 +49,7 @@ router.get("/:rKey/menu", function (req, res) {
       {
         title: "میز کار ",
         pid: "default",
+        image:"assets/images/ticket.svg"
       },
       {
         title: "اطلاعات کاربری",
@@ -124,6 +125,7 @@ router.get("/:rKey/menu", function (req, res) {
         mid: 2,
         title: "Ticketing",
         multi: true,
+        image:"assets/images/ticket.svg",
         url: "/server/external/calender",
       },
       {
@@ -136,6 +138,8 @@ router.get("/:rKey/menu", function (req, res) {
         mid: 4,
         title: "TaskManager",
         multi: false,
+        image:"assets/images/ticket.svg",
+
         url: "http://localhost:8080/server/external/task",
       },
     ],

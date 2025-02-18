@@ -532,6 +532,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.isSilent = false;
     this.owner.setSource(DefaultSource.SHOW_MENU, menuParam);
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
+    
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });

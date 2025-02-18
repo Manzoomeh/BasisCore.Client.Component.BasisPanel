@@ -18,13 +18,75 @@
 [data-bc-bp-d1-menu-container] {
   display: flex;
   align-items: center;
-  position: relative;
+  /* position: relative; */
   z-index: 9;
+  overflow-y: auto;
 }
+
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar-track
+{
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar
+{
+	width: 2px;
+  height: 5px;
+	background-color: #F5F5F5;
+}
+
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color:  var(--dark_blue) !important;
+  
+}
+
+/* برای کروم، سفاری و مرورگرهای Webkit */
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar {
+  width: 2px;
+  height: 5px;
+  background-color: #F5F5F5;
+}
+
+[data-bc-bp-d1-menu-container]::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: var(--dark_blue) !important;
+}
+
+/* برای فایرفاکس */
+[data-bc-bp-d1-menu-container] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark_blue) #F5F5F5;
+  border-radius: 10px;
+}
+
+[data-bc-bp-d1-menu-container]::-moz-scrollbar {
+  width: 2px;
+  height: 5px;
+}
+
+[data-bc-bp-d1-menu-container]::-moz-scrollbar-track {
+  background-color: #F5F5F5;
+  border-radius: 10px;
+}
+
+[data-bc-bp-d1-menu-container]::-moz-scrollbar-thumb {
+  background-color: var(--dark_blue);
+  border-radius: 10px;
+}
+
+
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-menu-wrapper] [data-bc-bp-d1-menu-container]::after {
   content: "";
-  position: fixed;
+  position: absolute;
   left: 0;
   height: 60px;
   width: 100px;
@@ -34,7 +96,7 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-wrapper] [data-bc-bp-d1-menu-container]::after {
   content: "";
-  position: fixed;
+  position: absolute;
   right: 0;
   width: 100px;
   height: 60px;
@@ -45,9 +107,13 @@
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper] {
   display: none;
   margin-left: 10px;
-  position: relative;
+  /* position: relative; */
+  position: fixed;
+  z-index: 10;
 }
-
+[data-bc-bp-d1-menu-container] {
+  box-sizing: border-box;
+}
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper][data-bc-have-menu-toolbox="true"] {
   display: inline-block;
 }
@@ -176,8 +242,8 @@
   position: relative;
   z-index: 9;
   scrollbar-width: thin;
-  overflow-y: hidden;
-  overflow-x: auto;
+  /* overflow-y: hidden;
+  overflow-x: auto; */
   direction: rtl;
   border-top: 0.5px solid #e1e1e1;
   min-height: 62px;
@@ -185,7 +251,7 @@
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-d1-menu] {
   direction: rtl;
-  /* margin-right:20px; */
+  /* margin-right:30px; */
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-menu] {
@@ -229,7 +295,7 @@
 }
 
 [data-bc-d1-menu] li a {
-  padding: 0 20px;
+  padding: 0 25px 0 20px;
   white-space: nowrap;
   cursor: pointer;
   height: 100%;
@@ -409,7 +475,7 @@
 [data-bc-d1-menu] [data-bc-bp-menu-external-single-node] li a {
   /* border: none; */
   /* border-left: 1px solid rgba(255, 255, 255, 0.13); */
-  padding: 0 15px;
+  padding: 0 25px 0 15px;
   /* position: relative; */
   /* top: 16px; */
 }
@@ -478,4 +544,22 @@
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-toolbox="active"] [data-bc-bp-d1-menu-toolbox-items]{
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+
+
+[data-bc-bp-menu-wrapper] [data-bc-node-icon-container] [data-bc-node-icon]{
+max-width: 20px;
+transform: translateY(5px);
+}
+[data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+  display: inline-block;
+  position: absolute;
+  right: 3px;
+  top: -2px;
+  width: 20px;
+}
+
+[data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+  margin-right: 4px;
 }

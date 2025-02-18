@@ -194,3 +194,7 @@
 [data-bc-download-cloud] span{
     margin-left: 0;
 }
+
+[data-bc-theme-button]{
+    display: none;
+}

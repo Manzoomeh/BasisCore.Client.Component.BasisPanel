@@ -94,10 +94,10 @@ export default class ProfileComponent
             .classList.remove("active");
         }
       });
-    if (this.options.store.existence == false) {
-      const store = this.container.querySelector("[data-bc-store-wrapper]");
-      store.remove();
-    }
+    // if (this.options.store.existence == false) {
+    //   const store = this.container.querySelector("[data-bc-store-wrapper]");
+    //   store.remove();
+    // }
     return Promise.resolve();
   }
 

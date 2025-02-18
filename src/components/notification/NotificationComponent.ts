@@ -34,8 +34,8 @@ export default class NotificationComponent
       "data-bc-bp-notification-container"
     );
     this.container.setAttribute("data-count", "0");
+    
   }
-
   storeAsGlobal(
     data: any,
     name?: string,
