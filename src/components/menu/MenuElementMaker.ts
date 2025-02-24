@@ -165,7 +165,7 @@ export default class MenuElementMaker {
                 
                 if (child.tagName == "UL") {
                   iconLi.appendChild(iconImg);
-                  child.querySelector("[data-bc-level-node]").insertAdjacentElement("afterbegin", iconLi);
+                  child.querySelector("[data-bc-level-node]")?.insertAdjacentElement("afterbegin", iconLi);
                 }
                 else{
                   

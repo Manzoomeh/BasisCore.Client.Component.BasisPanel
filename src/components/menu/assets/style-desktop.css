@@ -92,6 +92,7 @@
   width: 100px;
   z-index: 1000;
   box-shadow: 160px 0px 13px -73px rgba(255, 255, 255, 0.77) inset;
+  z-index: 9;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-menu-wrapper] [data-bc-bp-d1-menu-container]::after {
@@ -556,7 +557,7 @@ transform: translateY(5px);
   display: inline-block;
   position: absolute;
   right: 3px;
-  top: -2px;
+  top: 0;
   width: 20px;
 }
 

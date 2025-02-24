@@ -42,7 +42,7 @@
     border-bottom-right-radius: 5px;
     left: -10px;
     transform: translateY(-9px);
-    z-index: 1001;
+    z-index: 9;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-page-widget-list-dlg-btn-add] {
