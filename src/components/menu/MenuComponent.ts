@@ -247,7 +247,7 @@ export default class MenuComponent
       document.querySelectorAll<HTMLElement>("[data-bc-node-icon-container]").forEach(element => {
         element.style.display = "inline-block"
       });
-      if (menuItem.querySelector<HTMLElement>("[data-bc-node-icon-container]")) {
+      if (menuItem?.querySelector<HTMLElement>("[data-bc-node-icon-container]")) {
         menuItem.querySelector<HTMLElement>("[data-bc-node-icon-container]").style.display = "none"
       }
       // reset toolbox icon
