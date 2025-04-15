@@ -109,7 +109,7 @@
   display: none;
   margin-left: 10px;
   /* position: relative; */
-  position: fixed;
+  /* position: fixed; */
   z-index: 10;
 }
 [data-bc-bp-d1-menu-container] {

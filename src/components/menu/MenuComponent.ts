@@ -88,7 +88,7 @@ export default class MenuComponent
 
         if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
           if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-            nextSib.style.marginRight = "40px"
+            nextSib.style.marginRight = "0"
           }
           else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
             nextSib.style.marginLeft = "40px"
@@ -131,7 +131,7 @@ export default class MenuComponent
           const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
           if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
             if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-              nextSib.style.marginRight = "40px"
+              nextSib.style.marginRight = "0"
             }
             else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
               nextSib.style.marginLeft = "40px"
@@ -324,7 +324,7 @@ export default class MenuComponent
     const nextSib = toolboxWrapper?.nextElementSibling as HTMLElement;
     if (Reflect.has(this.owner.manager, 'direction') && toolboxWrapper.innerHTML != "") {
       if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "rightToLeft") {
-        nextSib.style.marginRight = "40px"
+        nextSib.style.marginRight = "0"
       }
       else if (window.getComputedStyle(toolboxWrapper).display !== 'none' && Reflect.get(this.owner.manager, 'direction') == "leftToRight") {
         nextSib.style.marginLeft = "40px"
