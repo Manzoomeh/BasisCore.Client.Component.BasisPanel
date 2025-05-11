@@ -146,7 +146,7 @@
   padding: 16px 16px 0 16px;
   position: absolute;
   /* right: 0; */
-  top: 45px;
+  top: 125px;
   background-color: #fff;
   border-radius: 0 0 4px 4px;
   border-bottom: 4px solid #e6edf3;
@@ -158,7 +158,7 @@
 
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-d1-menu-toolbox-wrapper] [data-bc-bp-d1-menu-toolbox-items] {
-  right: 0;
+  right: 20px;
 }
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-d1-menu-toolbox-wrapper] [data-bc-bp-d1-menu-toolbox-items] {
