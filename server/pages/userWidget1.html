@@ -1,6 +1,8 @@
 <span id="span_id">ویجت داشبورد سطح user</span>
 
-<button id="btn-ajax" onclick="click_process(this)">ajax process</button>
+<button id="btn-ajax" onclick="click_continuous_process(this)">Continuous Process</button>
+<button id="btn-ajax" onclick="click_progressive_process(this)">Progressive Process</button>
+<button id="btn-ajax" onclick="click_progressive_process_with_cancel(this)">Progressive Process with cancel</button>
 
 <!-- <Basis core="component.local.DemoComponent" run="atclient" triggers="event.click">
 </Basis> -->
@@ -127,7 +129,7 @@
     console.log(await message.getMessageTypeByErrorId(7));
   }
 
-  function click_process(e) {
+  function click_progressive_process(e) {
     const scheduler = pagesList_component.owner.dc.resolve("scheduler");
     const widget = pagesList_component.owner.dc.resolve("widget");
 
@@ -142,26 +144,128 @@
     notify?: boolean;
     cancel?: () => void;
   }
+    enum TaskType {
+  continuous = 0,
+  progressive = 1,
+}
 
       */
-    const task = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(true);
-      }, 3000);
-    });
     const taskOptions = {
       key: "process-1",
       container: widget.body,
-      title: "process",
-      type: 0,
+      title: "progressive process",
+      type: 1,
       reportHandlers: null,
-      task: task,
+      task: null,
       notify: false,
       cancel: null,
     };
+    taskOptions.task = new Promise((resolve, reject) => {
+      let i = 0;
+      const fn = () => {
+        i = i + 1
+        taskOptions.reportHandlers?.Trigger({ percent: i, title: `progressive process ${i}%` })
+        if (i < 100) {
+          setTimeout(fn, 100)
+        } else {
+          resolve(true);
+        }
+      };
+      setTimeout(fn, 100);
+    });
     const r = scheduler.startTask(taskOptions);
-    // console.log(r);
   }
+
+  function click_progressive_process_with_cancel(e) {
+    const scheduler = pagesList_component.owner.dc.resolve("scheduler");
+    const widget = pagesList_component.owner.dc.resolve("widget");
+
+    /*
+       ITaskOptions {
+    key?: string;
+    container?: Element;
+    title?: string;
+    type?: TaskType;
+    reportHandlers?: EventManager<IReportParam>;
+    task: Promise<any>;
+    notify?: boolean;
+    cancel?: () => void;
+  }
+    enum TaskType {
+  continuous = 0,
+  progressive = 1,
+}
+
+      */
+    let canceled = false;
+    const taskOptions = {
+      key: "process-1",
+      container: widget.body,
+      title: "progressive process",
+      type: 1,
+      reportHandlers: null,
+      task: null,
+      notify: false,
+      cancel: () => canceled = true,
+    };
+    taskOptions.task = new Promise((resolve, reject) => {
+      let i = 0;
+      const fn = () => {
+        i = i + 1
+        taskOptions.reportHandlers?.Trigger({ percent: i, title: `progressive process ${i}%` })
+        if (i < 100) {
+          if (!canceled) {
+            setTimeout(fn, 100)
+          } else {
+            taskOptions.reportHandlers?.Trigger({ percent: i, title: `Canceled` })
+          }
+        } else {
+          resolve(true);
+        }
+      };
+      setTimeout(fn, 100);
+    });
+    const r = scheduler.startTask(taskOptions);
+  }
+
+  function click_continuous_process(e) {
+    const scheduler = pagesList_component.owner.dc.resolve("scheduler");
+    const widget = pagesList_component.owner.dc.resolve("widget");
+
+    /*
+       ITaskOptions {
+    key?: string;
+    container?: Element;
+    title?: string;
+    type?: TaskType;
+    reportHandlers?: EventManager<IReportParam>;
+    task: Promise<any>;
+    notify?: boolean;
+    cancel?: () => void;
+  }
+    enum TaskType {
+  continuous = 0,
+  progressive = 1,
+}
+
+      */
+    const taskOptions = {
+      key: "process-2",
+      container: widget.body,
+      title: "continuous process",
+      type: 0,
+      reportHandlers: null,
+      task: null,
+      notify: false,
+      cancel: null,
+    };
+    taskOptions.task = new Promise((resolve, reject) => {
+
+      setTimeout(() => resolve(true), 5000);
+    });
+    const r = scheduler.startTask(taskOptions);
+  }
+
   document.getElementById("file-form").addEventListener("change", (e) => {
     let data = new FormData(e.currentTarget);
     // console.log(data);

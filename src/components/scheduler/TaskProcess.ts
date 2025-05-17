@@ -25,20 +25,33 @@ export default class TaskProcess {
       owner.ulElement.querySelector("[data-bc-task-list-noTask]") as HTMLElement
     ).style.display = "none";
     owner.ulElement.appendChild(this._container);
-    const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
-    
-    this._owner.container.setAttribute("data-count", (parseInt(alarmEl.textContent) + 1).toString());
+    const alarmEl = this._owner.container.querySelector(
+      "[data-bc-task-list-alarm]"
+    );
+
+    this._owner.container.setAttribute(
+      "data-count",
+      (parseInt(alarmEl.textContent) + 1).toString()
+    );
     if (this._owner.container.querySelector("[data-bc-task-list-count-text]")) {
-      this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
+      this._owner.container.querySelector(
+        "[data-bc-task-list-count-text] span"
+      ).innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
     }
     // alarmEl.style.display="none"
-    document.querySelector<HTMLElement>('[data-bc-task-list-alarm]').style.display="flex"
-
+    document.querySelector<HTMLElement>(
+      "[data-bc-task-list-alarm]"
+    ).style.display = "flex";
 
     alarmEl.innerHTML = (parseInt(alarmEl.textContent) + 1).toString();
-    const mainAlarmEl = this._owner.container.closest("[data-bc-bp-main-header]");
+    const mainAlarmEl = this._owner.container.closest(
+      "[data-bc-bp-main-header]"
+    );
     const mainAlarm = mainAlarmEl.getAttribute("data-alertCount");
-    mainAlarmEl.setAttribute("data-alertCount", (parseInt(mainAlarm) + 1).toString());
+    mainAlarmEl.setAttribute(
+      "data-alertCount",
+      (parseInt(mainAlarm) + 1).toString()
+    );
     this.startDisplayAjax();
     this._options.task.finally(this.dispose.bind(this));
     const btn = this._container.querySelector("[data-bc-task-list-btn-cancel]");
@@ -46,6 +59,7 @@ export default class TaskProcess {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         this._options?.cancel();
+        this.dispose();
       });
     } else {
       btn.remove();
@@ -81,15 +95,29 @@ export default class TaskProcess {
     this._owner.taskComplete(this._key, this._options);
     setTimeout((_) => {
       this._container.remove();
-      const alarmEl = this._owner.container.querySelector("[data-bc-task-list-alarm]");
-      this._owner.container.setAttribute("data-count", (parseInt(alarmEl.textContent) - 1).toString());
-      if (this._owner.container.querySelector("[data-bc-task-list-count-text]")) {
-        this._owner.container.querySelector("[data-bc-task-list-count-text] span").innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
+      const alarmEl = this._owner.container.querySelector(
+        "[data-bc-task-list-alarm]"
+      );
+      this._owner.container.setAttribute(
+        "data-count",
+        (parseInt(alarmEl.textContent) - 1).toString()
+      );
+      if (
+        this._owner.container.querySelector("[data-bc-task-list-count-text]")
+      ) {
+        this._owner.container.querySelector(
+          "[data-bc-task-list-count-text] span"
+        ).innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
       }
       alarmEl.innerHTML = (parseInt(alarmEl.textContent) - 1).toString();
-      const mainAlarmEl = this._owner.container.closest("[data-bc-bp-main-header]");
+      const mainAlarmEl = this._owner.container.closest(
+        "[data-bc-bp-main-header]"
+      );
       const mainAlarm = mainAlarmEl.getAttribute("data-alertCount");
-      mainAlarmEl.setAttribute("data-alertCount", (parseInt(mainAlarm) - 1).toString());
+      mainAlarmEl.setAttribute(
+        "data-alertCount",
+        (parseInt(mainAlarm) - 1).toString()
+      );
       const countTask = this._owner.container.querySelectorAll(
         "[data-bc-task-list-item]"
       ).length;
@@ -101,11 +129,10 @@ export default class TaskProcess {
         ).style.display = "block";
       }
 
-      
-      
-      document.querySelector<HTMLElement>('[data-bc-task-list-alarm]').style.display="none";
+      document.querySelector<HTMLElement>(
+        "[data-bc-task-list-alarm]"
+      ).style.display = "none";
     }, 3_000);
- 
   }
 
   private startDisplayAjax() {
