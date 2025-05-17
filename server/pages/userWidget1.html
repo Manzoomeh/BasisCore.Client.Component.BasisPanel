@@ -218,6 +218,7 @@
             setTimeout(fn, 100)
           } else {
             taskOptions.reportHandlers?.Trigger({ percent: i, title: `Canceled` })
+            reject(false)
           }
         } else {
           resolve(true);
