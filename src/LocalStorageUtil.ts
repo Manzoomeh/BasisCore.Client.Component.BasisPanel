@@ -103,7 +103,7 @@ export default class LocalStorageUtil {
 
   private static _currentUserId: number;
   private static _lastBanner: IBannerInfo;
-
+  private static _announceLS : IAnnounceInfo;
   public static checkRkeyResult: ICheckRkeyResult;
 
   public static async loadLastStateAsync(
@@ -199,6 +199,9 @@ export default class LocalStorageUtil {
   public static getLastBanner() {
     return LocalStorageUtil._lastBanner;
   }
+  public static getLastAnnounce() {
+    return LocalStorageUtil._announceLS;
+  }
   public static setClosedBanners(widgetId: number) {
     this._lastBanner.closedWidgets.push(widgetId);
     localStorage.setItem("banner", JSON.stringify(this._lastBanner));
@@ -216,6 +219,20 @@ export default class LocalStorageUtil {
       group,
     };
     localStorage.setItem("banner", JSON.stringify(this._lastBanner));
+  }
+
+  public static setAnnounce(
+    rkey: string,
+    text: string,
+    link
+  ) {
+    this._announceLS = {
+      rkey,
+      text,
+      link
+      
+    };
+    localStorage.setItem("_announce", JSON.stringify(this._announceLS));
   }
 }
 
@@ -235,6 +252,12 @@ interface IBannerInfo {
   eventID: string;
   closedWidgets: number[];
   group: IPageGroupInfo;
+}
+
+interface IAnnounceInfo {
+  rkey: string;
+  text: string;
+  link: string
 }
 
 interface IStorageObject {

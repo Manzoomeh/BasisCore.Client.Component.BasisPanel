@@ -72,6 +72,18 @@
   /* background-color: rgba(0, 75, 133, 0.1); */
 }
 
+[data-sys-menu] li:hover img {
+  /* content:url("/asset/images/content-icon-hover.svg") !important;  */
+  filter: invert(18%) sepia(72%) saturate(2012%) hue-rotate(196deg) brightness(90%) contrast(92%);
+  /* background-color: rgba(0, 75, 133, 0.1); */
+}
+
+[data-bc-menu-active]:hover img {
+  /* content:url("/asset/images/content-icon-hover.svg") !important;  */
+  filter: none !important
+  /* background-color: rgba(0, 75, 133, 0.1); */
+}
+
 [data-sys-menu]>li:hover>a,
 [data-sys-menu] [data-bc-bp-menu-external]>li:hover>a,
 [data-sys-menu] [data-bc-bp-menu-external-single-node]>li:hover>a {
@@ -82,8 +94,10 @@
 [data-sys-menu] [data-bc-menu-active] {
   position: relative;
   font-weight: bold;
+  color: #004B85 !important;
+
 }
-[data-sys-menu] [data-bc-menu-active]:before{
+/* [data-sys-menu] [data-bc-menu-active]:before{
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -91,11 +105,9 @@
   position: absolute;
   right: 0;
   content: '';
-  top: 25px;
+  top: 23px;
   left: 15px;
-  display: inline-block;
-  margin-left: 5px;
-}
+} */
 
 [data-sys-menu] [data-bc-menu-active]>a {
   color: var(--dark_blue) !important;
@@ -150,7 +162,7 @@
 [data-bc-bp-direction="leftToRight"] .active-business [data-bc-drop-down-click] {
   color: rgba(0, 75, 133, 1) !important;
   border-radius: 5px;
-  border-left: 1px solid rgba(0, 75, 133, 1);
+  /* border-left: 1px solid rgba(0, 75, 133, 1); */
 }
 
 [data-sys-widget-header] {
@@ -217,9 +229,7 @@
 [data-bc-notification-alarm] {
   background-color: #F9461C !important;
 }
-[data-bc-task-list-alarm]{
-  display: n;
-}
+
 [data-sys-button] {
   background: var(--dark_blue) !important;
   /* border-color: var(--dark_blue) !important; */
@@ -228,11 +238,11 @@
   
 }
 [data-sys-button-type2] {
-  background: #CCDBE7 !important;
+  background: #E6EDF3 !important;
   /* border-color: var(--dark_blue) !important; */
   color: var(--dark_blue) !important;
-  border-right: 4px solid var(--dark_blue);
-  border-left: 4px solid var(--dark_blue);
+   /* border-right: 4px solid #CCDBE7;
+  border-left: 4px solid #CCDBE7;  */
   font-weight: bold;
   position: relative;
   transition: all 0.1s ease-in-out;
@@ -240,14 +250,23 @@
   align-items: center;
   justify-content: center;
 }
+/* [data-sys-button-type2]:hover {
+  background: #CCDBE7 !important;
+  color: var(--dark_blue) !important;
+  cursor: pointer;
+  border-right: 4px solid var(--dark_blue);
+  border-left: 4px solid var(--dark_blue);
+} */
 [data-sys-button-type2]:hover {
   background: #CCDBE7 !important;
   /* border-color: var(--dark_blue) !important; */
   color: var(--dark_blue) !important;
   cursor: pointer;
-  border-right: 4px solid #CCDBE7;
-  border-left: 4px solid #CCDBE7;
+  background-color: #CCDBE7;
+  /* border-right: 4px solid var(--dark_blue);
+  border-left: 4px solid var(--dark_blue); */
 }
+
 [data-sys-excel-button]{
   background: #1D6F42 !important;
   color: var(--white) !important;
@@ -338,6 +357,19 @@
   color: var(--vdark_gray) !important;
 }
 
+[data-bc-schema-skin="template2"] [data-sys-input-text],
+[data-bc-schema-skin="template2"] [data-sys-textarea],
+[data-bc-schema-skin="template2"] [data-sys-select-option],
+[data-bc-schema-skin="template2"] [data-sys-part-checkbox],
+[data-bc-schema-skin="template2"] [data-sys-part-radio],
+[data-bc-schema-skin="template2"] [data-sys-auto-complete],
+[data-bc-schema-skin="template2"] [data-sys-select-lookup],
+[data-bc-schema-skin="template2"] [data-sys-select-select] {
+  background-color: #fff !important;
+  border: 1px solid #c8cccf !important;
+  color: #68737c !important;
+}
+
 [data-sys-input-text-secondary] {
   background: var(--white) !important;
   border: 1.5px solid rgba(0, 75, 133, 0.1) !important;
@@ -355,6 +387,17 @@
   background: rgba(208, 208, 208, 0.3) !important;
 }
 
+[data-bc-schema-skin="template2"] [data-sys-input-text]:hover,
+[data-bc-schema-skin="template2"] [data-sys-textarea]:hover,
+[data-bc-schema-skin="template2"] [data-sys-select-option]:hover,
+[data-bc-schema-skin="template2"] [data-sys-part-checkbox]:hover,
+[data-bc-schema-skin="template2"] [data-sys-part-radio]:hover,
+[data-bc-schema-skin="template2"] [data-sys-auto-complete]:hover,
+[data-bc-schema-skin="template2"] [data-sys-select-lookup]:hover,
+[data-bc-schema-skin="template2"] [data-sys-select-select]:hover {
+  background: #fff !important;
+}
+
 [data-sys-input-text]:focus,
 [data-sys-textarea]:focus,
 [data-sys-select-option]:focus,
@@ -366,6 +409,24 @@
   box-shadow: none !important;
   border: 1px solid #004B85 !important;
   box-shadow: 0px 0px 4px rgba(0, 75, 133, 0.25) !important;
+}
+
+[data-bc-schema-skin="template2"] [data-sys-input-text]:focus,
+[data-bc-schema-skin="template2"] [data-sys-textarea]:focus,
+[data-bc-schema-skin="template2"] [data-sys-select-option]:focus,
+[data-bc-schema-skin="template2"] [data-sys-part-checkbox]:focus,
+[data-bc-schema-skin="template2"] [data-sys-part-radio]:focus,
+[data-bc-schema-skin="template2"] [data-sys-auto-complete]:focus,
+[data-bc-schema-skin="template2"] [data-sys-select-lookup]:focus,
+[data-bc-schema-skin="template2"] [data-sys-select-select]:focus {
+  border-top-width: 1.5px !important;
+  border-bottom-width: 1.5px !important;
+  border-right-width: 3px !important;
+  border-left-width: 3px !important;
+  border-color: #004b85 !important;
+  box-shadow: none !important;
+  outline: 0 none !important;
+  background-color: transparent !important;
 }
 
 [data-bc-part][data-bc-invalid] [data-sys-input-text],
@@ -513,7 +574,7 @@
   cursor: pointer;
   background-repeat: no-repeat;
   background-position: right 1% bottom 50%;
-  background-image: url("../images/sort_both_light.png") !important;
+  /* background-image: url("../images/sort_both_light.png") !important; */
 }
 
 [data-sys-th][data-bc-sorting="asc"] {
@@ -812,9 +873,9 @@ tbody [data-sys-td] {
   fill: var(--gray7) !important;
 }
 
-[data-sys-text-delete] {
-  color: var(--red) !important;
-  fill: var(--red) !important;
+[data-sys-text-delete], [data-sys-text-view] ,.iconsDetail .title{
+  color: var(--listItem) !important;
+  fill: var(--listItem) !important;
 }
 
 [data-sys-tooltip]:before {
@@ -956,6 +1017,26 @@ tbody [data-sys-td] {
 [data-bc-bp-submenu] [data-bc-menu-active] a{
   border-right:4px solid #004B85 !important;
 }
+
+.iconsDetail [data-sys-text]{
+  color: var(--listItem) !important;
+  fill: var(--listItem) !important;
+}
+.iconsDetail  .bs-icons-material{
+  color: var(--listItem) !important;
+}
+.iconsDetail  path{
+  fill: var(--listItem) !important;
+}
+
+
+
+
+
+
+
+
+
 
 
 

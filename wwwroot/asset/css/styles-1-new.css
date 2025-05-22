@@ -303,9 +303,9 @@ body.darkmode {
     /* justify-content: space-between; */
 }
 
-.widgetButtonsContainer .widgetButton:hover {
+/* .widgetButtonsContainer .widgetButton:hover {
     background: #007BDB !important;
-}
+} */
 
 .widgetButtonsContainer .widgetButton:focus {
     background: #003965 !important;
@@ -2751,4 +2751,42 @@ div[data-bc-bp-menu-seperation="corporate"] {
   }
   [data-bc-page-widget-search-input]{
     width: 100%;
+  }
+
+  [data-sys-select-option-filter]{
+    width: 200px;
+    height: 44px;
+    border: 1px solid #C8CCCF;
+    border-radius: 4px;
+    color: #68737C;
+    padding: 8px;
+    background-color: #fff;
+}
+[data-bc-bp-menu-external-open]:after{
+    transform: rotate(90deg);
+}
+.grid-column-align-right [data-sys-th-container]{
+    justify-content: right!important;
+  }
+  .grid-column-align-left [data-sys-th-container]{
+    justify-content: left!important;
+  }
+  .grid-column-align-center [data-sys-th-container]{
+    justify-content: center!important;
+  }
+  [data-bc-grid="d1"] table[data-bc-table] thead td [data-sys-th-container] span{
+    white-space: nowrap;
+  }
+  [data-sys-th-col-title] {
+    white-space: nowrap;
+  }
+  [data-bc-bp-menu-wrapper] [data-bc-node-icon-container]{
+    right: 5px !important;
+  }
+  [data-bc-d1-menu] li a{
+    padding-right: 15px !important;
+  }
+  [data-sys-menu] [data-bc-menu-active]::before {
+    left : unset !important;
+    right: 5px !important;
   }

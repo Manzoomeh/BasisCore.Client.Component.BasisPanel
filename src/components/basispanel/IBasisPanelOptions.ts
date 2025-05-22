@@ -25,7 +25,8 @@ export default interface IBasisPanelOptions {
   businessLink?: string;
   urlPrefix?: string;
   lid?: string;
-search?: ISearchOptions[]
+  announceURL: string;
+  search?: ISearchOptions[]
 }
 interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;

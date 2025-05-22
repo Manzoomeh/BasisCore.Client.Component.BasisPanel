@@ -51,54 +51,27 @@ router.get("/:rKey/menu", function (req, res) {
         pid: "default",
         image:"assets/images/ticket.svg"
       },
+    
       {
         title: "اطلاعات کاربری",
         pid: "userInfo",
+        image:"assets/images/ticket.svg"
       },
       {
         title: "اطلاعات کاربری",
         pid: "userInfo",
+        image:"assets/images/ticket.svg"
       },
       {
         title: "اطلاعات کاربری",
         pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
-      },
-      {
-        title: "اطلاعات کاربری",
-        pid: "userInfo",
+        image:"assets/images/ticket.svg"
       },
 
       {
         title: "اطلاعات کاربری",
         pid: "userInfo",
+        image:"assets/images/ticket.svg"
       },
       {
         title: "اطلاعات کاربری",
@@ -255,6 +228,13 @@ router.get("/:rKey/tempwidgets", function (req, res) {
   ];
   // const result = [];
   res.json(result);
+});
+router.get("/:rKey/announce", function (req, res) {
+  // const business = businessList.filter((x) => x.ownerid == active.corporate);
+  res.json({
+      "text":"کلیک کنید",
+      "link":"https://basispanel.ir"
+  });
 });
 
 module.exports = router;

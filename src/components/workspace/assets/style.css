@@ -286,3 +286,63 @@ div[data-bc-page-body] {
     width: 60px;
     margin-top: 5px;
 }
+[bc-bp-announce-wrapper]{
+    background-color: #CCEDE9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 77px;
+    z-index: 999999999;
+    border-bottom: 2px solid #00A693;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00A693;
+    animation: slideDown 0.5s ease-out forwards;
+}
+[bc-bp-announce-wrapper-hide]{
+    animation: slideUp 0.5s ease-out forwards; 
+}
+[data-bc-bp-announcetext]{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+[data-bc-bp-announceliknk]{
+    text-decoration: underline;
+}
+[data-bc-bp-announceliknk-wrapper]{
+    display: flex;
+    position: absolute;
+    top: 30px;
+    left: 25px;
+    gap: 5px;
+    align-items: center;
+}
+[data-bc-bp-announceliknk-wrapper] div{
+    display: flex;
+    cursor: pointer;
+}
+@keyframes slideDown {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+@keyframes slideUp {
+    from {
+        top: 0;
+        opacity: 1;
+    }
+    to {
+        top: -100px;
+        opacity: 0;
+    }
+}

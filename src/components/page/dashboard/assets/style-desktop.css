@@ -41,7 +41,7 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     left: -10px;
-    transform: translateY(-9px);
+    transform: translateY(-1px);
     z-index: 9;
 }
 

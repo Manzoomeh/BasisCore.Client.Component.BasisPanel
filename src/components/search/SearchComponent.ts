@@ -109,23 +109,26 @@ export default class WidgetListComponent extends BasisPanelChildComponent {
 
 private initSearchCategories(){
   this.element = this.container.querySelector<Element>("[data-bc-search-category-all]");
-  this.options.search.forEach(e => {
-    const itemCategory = document.createElement("li")
-    const itemCategoryTitle = document.createElement("span")
-    const itemCategoryIcon = document.createElement("span")
-    itemCategoryIcon.setAttribute("data-bc-item-category-icon", "")
-    itemCategoryTitle.textContent = e.title
-    itemCategoryIcon.innerHTML = e.icon
-    itemCategory.appendChild(itemCategoryIcon)
-    itemCategory.appendChild(itemCategoryTitle)
-    itemCategory.setAttribute("data-search-title", e.title)
-    itemCategory.setAttribute("data-moduleid", e.module.id.toString())
-    
-    itemCategory.addEventListener("click", el =>{
-      this.selectModule(itemCategory, e.module.id , e.api , e.method , e.body , e.pageid , e.level , e.module.name, e.module.url, e.outputKey, e.type);
-    } )
-    this.element.appendChild(itemCategory)
-  })
+  if(this.options.search){
+    this.options.search.forEach(e => {
+      const itemCategory = document.createElement("li")
+      const itemCategoryTitle = document.createElement("span")
+      const itemCategoryIcon = document.createElement("span")
+      itemCategoryIcon.setAttribute("data-bc-item-category-icon", "")
+      itemCategoryTitle.textContent = e.title
+      itemCategoryIcon.innerHTML = e.icon
+      itemCategory.appendChild(itemCategoryIcon)
+      itemCategory.appendChild(itemCategoryTitle)
+      itemCategory.setAttribute("data-search-title", e.title)
+      itemCategory.setAttribute("data-moduleid", e.module.id.toString())
+      
+      itemCategory.addEventListener("click", el =>{
+        this.selectModule(itemCategory, e.module.id , e.api , e.method , e.body , e.pageid , e.level , e.module.name, e.module.url, e.outputKey, e.type);
+      } )
+      this.element.appendChild(itemCategory)
+    })
+  }
+ 
 }
 
   searchText(){

@@ -174,6 +174,7 @@ export default class MenuElementMaker {
                 }
               });
               iconImg.setAttribute("src" , `/${node[i].image}`)
+              iconImg.setAttribute("data-src" , `/${node[i].image}`)
             }
           }
 
@@ -331,7 +332,11 @@ export default class MenuElementMaker {
       if (parentLi) {
         parentLi.setAttribute("data-bc-menu-active", "");
         if (parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]")) {
-          parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]").style.display="none"
+          // parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]").style.display="none"
+          const menuIcon = parentLi.querySelector<HTMLElement>("[data-bc-node-icon-container]")
+          const menuIconImgTag = menuIcon.querySelector("img")
+          // menuIconImgTag.setAttribute("data-src", menuIconImgTag.getAttribute("src"))
+          menuIconImgTag.setAttribute("src","/asset/images/menu_active_circle.png")
         }
         li.setAttribute("data-bc-menu-active", "");
       } else {
