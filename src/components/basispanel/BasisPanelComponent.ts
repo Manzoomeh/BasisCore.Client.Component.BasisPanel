@@ -16,6 +16,7 @@ import LocalStorageUtil from "../../LocalStorageUtil";
 import IStateModel from "../menu/IStateModel";
 import { DefaultSource, PanelLevels } from "../../type-alias";
 import HttpUtil from "../../HttpUtil";
+import IPageLoader from "../menu/IPageLoader";
 
 declare const $bc: BCWrapperFactory;
 export default class BasisPanelComponent extends BasisPanelChildComponent {
@@ -47,20 +48,8 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
         if (event.state) {
           event.preventDefault();
           const state: IStateModel = event.state;
-          if (
-            state.corporateId &&
-            state.corporateId != LocalStorageUtil.corporateId
-          ) {
-            await this.setActiveAsync(state.corporateId, "corporate");
-          }
-          if (
-            state.businessId &&
-            state.businessId != LocalStorageUtil.businessId
-          ) {
-            await this.setActiveAsync(state.businessId, "business");
-          }
-          LocalStorageUtil.setLastState(state);
-          this.owner.setSource(DefaultSource.SET_STATE, state);
+          const pageLoader = this.owner.dc.resolve<IPageLoader>("page_loader");
+          await pageLoader.tryLoadPageAsync(state);
         }
       });
 
@@ -194,28 +183,22 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
       // for close corporate search
       if (
         currentElement.getAttribute("data-bc-drop-down-click") === null &&
-        currentElement.getAttribute("data-bc-search-icon-drop-down") ===
-          null &&
-        currentElement.getAttribute("data-bc-search-input-text") ===
-          null &&
-        currentElement.getAttribute("data-bc-drop-down-container1") ===
-          null
+        currentElement.getAttribute("data-bc-search-icon-drop-down") === null &&
+        currentElement.getAttribute("data-bc-search-input-text") === null &&
+        currentElement.getAttribute("data-bc-drop-down-container1") === null
       ) {
         document
           .querySelector("[data-bc-drop-down-container1]")
           ?.setAttribute("data-status", "close");
       }
 
-
       // for close corporate search category
       if (
-        currentElement.getAttribute("data-bc-search-notif-drop-down") === null &&
-        currentElement.getAttribute("data-bc-search-icon-drop-down") ===
+        currentElement.getAttribute("data-bc-search-notif-drop-down") ===
           null &&
-        currentElement.getAttribute("data-bc-search-input-text") ===
-          null &&
-        currentElement.getAttribute("data-bc-search-drop-down") ===
-          null 
+        currentElement.getAttribute("data-bc-search-icon-drop-down") === null &&
+        currentElement.getAttribute("data-bc-search-input-text") === null &&
+        currentElement.getAttribute("data-bc-search-drop-down") === null
       ) {
         document
           .querySelector("[data-bc-search-drop-down]")
