@@ -49,7 +49,7 @@ export default class BasisPanelComponent extends BasisPanelChildComponent {
           event.preventDefault();
           const state: IStateModel = event.state;
           const pageLoader = this.owner.dc.resolve<IPageLoader>("page_loader");
-          await pageLoader.tryLoadPageAsync(state);
+          await pageLoader.tryLoadPageFromPageInfoAsync(state);
         }
       });
 

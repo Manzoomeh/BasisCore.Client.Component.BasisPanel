@@ -23,7 +23,11 @@ export default interface IPageLoader {
     moduleId: number
   ): IModuleInfo;
 
-  tryLoadPageAsync(pageInfo: IStateModel);
+  tryLoadPageFromPageInfoAsync(pageInfo: IStateModel);
+
+  tryLoadPageFromUrlAsync(url: string);
 
   convertPageInfoToUrl(pageInfo: IStateModel): string;
+
+  convertUrlToPageInfo(url: string): IStateModel;
 }

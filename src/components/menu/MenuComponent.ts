@@ -457,7 +457,24 @@ export default class MenuComponent
     );
   }
 
-  public async tryLoadPageAsync(pageInfo: IStateModel) {
+  public convertUrlToPageInfo(url: string): IStateModel {
+    const [path, queryString] = url.split("?", 2);
+    const parts = path.split("/", 6);
+    return {
+      level: <PanelLevels>parts[0],
+      corporateId: parts[1] == "null" ? null : parseInt(parts[1]),
+      businessId: parts[2] == "null" ? null : parseInt(parts[2]),
+      moduleId: parts[3] == "null" ? null : parseInt(parts[3]),
+      pageId: parts[4] == "null" ? null : parseInt(parts[4]),
+      menuPageId: parts[5] == "null" ? null : parseInt(parts[5]),
+      arguments:
+        (queryString?.length ?? 0) > 0
+          ? Object.fromEntries(new URLSearchParams(queryString).entries())
+          : null,
+    };
+  }
+
+  public async tryLoadPageFromPageInfoAsync(pageInfo: IStateModel) {
     if (
       pageInfo.corporateId &&
       pageInfo.corporateId != LocalStorageUtil.corporateId
@@ -472,6 +489,11 @@ export default class MenuComponent
     }
     LocalStorageUtil.setLastState(pageInfo);
     this.owner.setSource(DefaultSource.SET_STATE, pageInfo);
+  }
+
+  public async tryLoadPageFromUrlAsync(url: string) {
+    const pageInfo = this.convertUrlToPageInfo(url);
+    await this.tryLoadPageFromPageInfoAsync(pageInfo);
   }
 
   protected async setActiveAsync(id: number, level: PanelLevels) {
