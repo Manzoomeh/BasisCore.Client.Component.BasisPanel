@@ -39,8 +39,12 @@ export default abstract class PageComponent
       "[data-bc-widget-drop-area-container]"
     );
     this.lineHeader= document.querySelector("[data-bc-header-line]")
+    if(this.lineHeader){
+
+    
     this.lineHeader.style.transition = "none"    
     this.lineHeader.style.width = "0"
+    }
   }
 
   public async initializeAsync(): Promise<void> {
@@ -62,11 +66,13 @@ export default abstract class PageComponent
         this.options.checkRkey
       );
     }
+    if(this.lineHeader){
     setTimeout(() => {
       this.lineHeader.style.transition = "all 1s ease-in-out"    
       this.lineHeader.style.width = "98%"    
     }, 500);
   }
+}
 
   public async runAsync(source?: ISource) {
     if (!this._groupsAdded) {

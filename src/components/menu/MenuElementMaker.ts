@@ -44,6 +44,7 @@ export default class MenuElementMaker {
     this.checkRkeyOption = checkRkey;
     this.deviceId = deviceId;
     //this.menuItemLookup = new Map<string, HTMLElement[]>();
+
   }
 
   public async createAsync(
@@ -220,9 +221,10 @@ export default class MenuElementMaker {
 
       }
       li.appendChild(content);
-      document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
-      if (deviceId == 2) {
+      
 
+      if (deviceId == 2) {
+        li.appendChild(innerUl);
         content.addEventListener("click", function (e) {
           
           if (li.classList.contains("active")) {
@@ -252,6 +254,7 @@ export default class MenuElementMaker {
 
       }
       else {
+        document.querySelector("[data-bc-bp-menu-wrapper]").appendChild(innerUl);
         const liBoundingRect = document
           .querySelector("[data-bc-menu]")
           .getBoundingClientRect();
@@ -266,10 +269,18 @@ export default class MenuElementMaker {
           innerUl.style.top = `${parentBoundingRect.y +parentBoundingRect.height +(!document.querySelector("[data-bc-bp-sticky]")? window.pageYOffset: 0)
             }px`;
 
-            
-          innerUl.style.left = `${parentBoundingRect.x -
-            (innerUl.offsetWidth - parentBoundingRect.width)
-            }px`;
+          const menuDir : string = document.querySelector("[data-bc-bp-main-container]").getAttribute("data-bc-bp-direction")
+          if(menuDir == "leftToRight"){
+            innerUl.style.left = `+${parentBoundingRect.x -
+              (innerUl.offsetWidth - parentBoundingRect.width)
+              }px`;
+          }
+          else{
+            innerUl.style.left = `${parentBoundingRect.x -
+              (innerUl.offsetWidth - parentBoundingRect.width)
+              }px`;
+          }
+        
 
           if (innerUl.getAttribute("data-bc-ul-level-open") == null) {
             const openMenu = document.querySelectorAll("[data-bc-ul-level-open]");
@@ -437,7 +448,7 @@ export default class MenuElementMaker {
       rKey: this.rKey,
       level: this.level,
     });
-
+ 
     const menu = await HttpUtil.checkRkeyFetchDataAsync<IMenuInfo>(
       url,
       "GET",

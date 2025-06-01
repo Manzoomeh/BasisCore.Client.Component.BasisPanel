@@ -302,6 +302,28 @@ div[data-bc-page-body] {
     color: #00A693;
     animation: slideDown 0.5s ease-out forwards;
 }
+[data-bc-bp-announce-container="2"]{
+    background-color: #CCEDE9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 77px;
+    z-index: 999999999;
+    border-bottom: 2px solid #00A693;
+    display: flex;
+    justify-content: flex-end !important;
+    align-items: center;
+    color: #00A693;
+    animation: slideDown 0.5s ease-out forwards;
+}
+[data-bc-bp-announce-container="2"] [data-bc-bp-announcetext]{
+    margin-right: 15px;
+}
+[data-bc-bp-announce-container="2"]  [data-bc-bp-announceliknk-wrapper]{
+    direction: rtl !important
+}
 [bc-bp-announce-wrapper-hide]{
     animation: slideUp 0.5s ease-out forwards; 
 }
