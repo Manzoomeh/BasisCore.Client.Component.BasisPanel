@@ -263,10 +263,15 @@ export default class MenuElementMaker {
         li.addEventListener("click", function (e) {          
           // e.preventDefault();
           e.stopPropagation();
+          const hasAnnounce = document.querySelector("[bc-bp-announce-wrapper-hide]")
+          let announceHeight = 55
+          if(hasAnnounce){
+            announceHeight = 0
+          }
           const parentBoundingRect = (
             li as HTMLElement
           ).getBoundingClientRect();
-          innerUl.style.top = `${parentBoundingRect.y +parentBoundingRect.height +(!document.querySelector("[data-bc-bp-sticky]")? window.pageYOffset: 0)
+          innerUl.style.top = `${(parentBoundingRect.y +parentBoundingRect.height +(!document.querySelector("[data-bc-bp-sticky]")? window.pageYOffset: 0))- announceHeight
             }px`;
 
           const menuDir : string = document.querySelector("[data-bc-bp-main-container]").getAttribute("data-bc-bp-direction")
