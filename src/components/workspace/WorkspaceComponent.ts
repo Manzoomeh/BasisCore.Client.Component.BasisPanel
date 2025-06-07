@@ -130,6 +130,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       LocalStorageUtil.announceSeen(true)
       this._announce = LocalStorageUtil.getLastAnnounce();
       announceWrapper.setAttribute("bc-bp-announce-wrapper-hide","")
+      
     })
     
     announceLinkWrapper.appendChild(closeAnnounce)

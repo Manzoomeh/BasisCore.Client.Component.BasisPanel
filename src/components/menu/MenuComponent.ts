@@ -291,12 +291,14 @@ export default class MenuComponent
 
     if (menuItem && !menuItem.getAttribute("data-bc-bp-menu-toolbox-item")) {
       const currentIcon = menuItem.querySelector("[data-bc-bp-menu-toolbox-item-icon]")?.innerHTML;
-
-      const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
-      const buttonContainer = toolboxContainer.querySelector("[data-bc-bp-menu-toolbox-button]");
-      if (currentIcon) {
-        buttonContainer.innerHTML = currentIcon;
+      if(this.deviceId == 1){
+        const toolboxContainer = document.querySelector("[data-bc-bp-menu-toolbox-wrapper]");
+        const buttonContainer = toolboxContainer.querySelector("[data-bc-bp-menu-toolbox-button]");
+        if (currentIcon) {
+          buttonContainer.innerHTML = currentIcon;
+        }
       }
+     
       // document.querySelectorAll<HTMLElement>("[data-bc-node-icon-container]").forEach(element => {
       //   element.style.display="inline-block"
 
