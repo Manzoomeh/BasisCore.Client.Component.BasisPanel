@@ -102,7 +102,7 @@
   width: 100px;
   height: 60px;
   z-index: 1000;
-  box-shadow: -160px 0px 13px -73px rgba(255, 255, 255, 0.77) inset;
+  
 }
 
 [data-bc-bp-d1-menu-wrapper] [data-bc-bp-d1-menu-toolbox-wrapper] {
@@ -317,6 +317,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  display: flex;
 }
 [data-sys-menu-external]  [data-bc-bp-menu-external-level] [data-bc-menu-node-title]{
   position: relative;
@@ -367,6 +368,7 @@
 [data-bc-bp-menu-wrapper] [data-bc-bp-submenu] li {
   border-bottom: 0.7px solid #d0d0d0 !important;
 }
+
 
 [data-bc-bp-submenu] li:last-child {
   border-bottom: none !important;

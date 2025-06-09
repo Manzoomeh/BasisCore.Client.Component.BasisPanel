@@ -51,7 +51,7 @@ export default class WidgetComponent extends PageWidgetComponent {
       "[data-bc-widget-btn-close]"
     ) as HTMLElement;
     // closeBtn.setAttribute("style", "display:none !important;z-index:10");
-
+    if(closeBtn){
     closeBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
       e.preventDefault();
@@ -111,7 +111,8 @@ export default class WidgetComponent extends PageWidgetComponent {
         }
       }
     });
-    if (!this.param.isBanner) {
+  }
+    if (!this.param.isBanner && closeBtn) {
       closeBtn.setAttribute("style", "display:none !important");
     }
     this.container.setAttribute("gs-x", this.param.x.toString());

@@ -136,6 +136,7 @@ export default class LocalStorageUtil {
       LocalStorageUtil._currentUserId = LocalStorageUtil.checkRkeyResult.userid;
       const str = localStorage.getItem("__bc_panel_last_state__");
       LocalStorageUtil._lastBanner = JSON.parse(localStorage.getItem("banner"));
+
       if (str) {
         try {
           const obj: IStorageObject = JSON.parse(str);
@@ -200,6 +201,8 @@ export default class LocalStorageUtil {
     return LocalStorageUtil._lastBanner;
   }
   public static getLastAnnounce() {
+    
+    LocalStorageUtil._announceLS = JSON.parse(localStorage.getItem("announce"));
     return LocalStorageUtil._announceLS;
   }
   public static setClosedBanners(widgetId: number) {
@@ -224,7 +227,7 @@ export default class LocalStorageUtil {
   public static setAnnounce(
     rkey: string,
     text: string,
-    link
+    link : string
   ) {
     this._announceLS = {
       rkey,
@@ -232,7 +235,15 @@ export default class LocalStorageUtil {
       link
       
     };
-    localStorage.setItem("_announce", JSON.stringify(this._announceLS));
+    localStorage.setItem("announce", JSON.stringify(this._announceLS));
+  }
+
+  public static announceSeen(
+    seen : boolean
+  ) {
+    const lastAnnounce : IAnnounceInfo = this.getLastAnnounce()
+    lastAnnounce.seen = seen
+    localStorage.setItem("announce", JSON.stringify(lastAnnounce));
   }
 }
 
@@ -257,7 +268,8 @@ interface IBannerInfo {
 interface IAnnounceInfo {
   rkey: string;
   text: string;
-  link: string
+  link: string;
+  seen? : boolean
 }
 
 interface IStorageObject {

@@ -8,65 +8,102 @@ import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
 import IPageInfo from "../page/IPageInfo";
 import IStateModel from "../menu/IStateModel";
+import { corporate } from "../../ComponentLoader";
+
 
 export default class WorkspaceComponent extends BasisPanelChildComponent {
   private pageType: string;
   public info: IPageInfo;
-  private _announce = LocalStorageUtil.getLastAnnounce();
+  private _announce 
+  private  pageParam: IPageLoaderParam 
   constructor(owner: IUserDefineComponent) {
     super(owner, layout, layout, "data-bc-bp-workspace-container");
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("workspace", this);
+     this._announce = LocalStorageUtil.getLastAnnounce();
   }
 
   public initializeAsync(): Promise<void> {
     this.owner.addTrigger([DefaultSource.DISPLAY_PAGE]);
     return Promise.resolve();
   }
-  public async checkAnnounce() {
-    if (this.options.bannerUrl) {
+  public async checkAnnounce(model : IStateModel) {
+    
+    // بعد از دادن api نیاز به تغییرات دارد
+    if (this.options.announceURL) {
+      let text = `44% تخفیف ارتقا به پنل<a href="/campaign" target="_blank" > هوش مصنوعی</a> (04/04/1404 تا 05/05/1404)`
+      let link = "https://basispanel.ir/campaign"
       const url = HttpUtil.formatString(
         this.options.baseUrl.profile + this.options.announceURL,
         { rKey: this.options.rKey }
       );
-      
+      // for temporary solutions
+        const ownerids = [1, 6, 7, 10, 30, 7539, 7540, 7541, 7542, 7545, 7546, 7547, 7548, 7549, 7550, 7552, 9167, 9409, 9444, 9455, 9456, 9512, 9623, 9635, 9656]
+    
       try {
-        if (this._announce) {
-          if (this.options.rKey == this._announce.rkey) {
+        if((this.pageParam.level == "corporate" || this.pageParam.level == "business") && ownerids.includes(LocalStorageUtil.corporateId)){
+        if (this._announce  ) {
+          
+          if (this._announce.seen && this._announce.seen == true) {
             // this.showLastBanners();
           } else {
-            const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
-           
-              LocalStorageUtil.setAnnounce(
-                this.options.rKey,
-                res.text,
-                res.link
-              );
+            // const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
+            LocalStorageUtil.setAnnounce(
+              this.options.rKey,
+              text,
+              link
+            );
+            this.addAnnounceToPage(text, link);
+              // LocalStorageUtil.setAnnounce(
+              //   this.options.rKey,
+              //   res.text,
+              //   res.link
+              // );
               // this.addBannerToPage(res.groups[0]);
             
           }
-        } else {
-          const res = await HttpUtil.fetchDataAsync<any>(url, "GET");
-
+        } 
+      
+        else{
+          
           LocalStorageUtil.setAnnounce(
             this.options.rKey,
-            "click here",
-            "link"
+            text,
+            link
           );
-          this.addAnnounceToPage(res.text, res.link);
+          this.addAnnounceToPage(text, link);
         }
-      } catch {}
+      }
+        else {
+          const availableAnnounce = document.querySelectorAll("[data-bc-bp-announce-container]")
+          
+          availableAnnounce.forEach(e => {
+            e.setAttribute("bc-bp-announce-wrapper-hide","")
+          })
+          
+        }
+        
+
+      } catch {
+        console.error()
+      }
     }
    
   }
-  private addAnnounceToPage(text:string , link: string){
+  private addAnnounceToPage(text:string , link: string ){
+    
+    const announceWrappers = document.querySelectorAll("[bc-bp-announce-wrapper]")
+    announceWrappers.forEach(e => {
+      e.remove()
+    })
     const announceWrapper = document.createElement("div")
     const announceLinkWrapper = document.createElement("div")
     const announceLink = document.createElement("a")
     const announceText = document.createElement("div")
     const closeAnnounce = document.createElement("div")
     announceWrapper.setAttribute("bc-bp-announce-wrapper","")
+    announceWrapper.setAttribute("data-bc-bp-announce-container" ,  this.options.culture.deviceId.toString())
     announceLink.setAttribute("href" , link)
     announceLink.setAttribute("target" , "_blank")
     announceLink.setAttribute("data-bc-bp-announceliknk","")
@@ -82,27 +119,30 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
 <svg width="23" height="21" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M13.3425 0.449219L12.2625 1.52922L13.8625 3.12922C14.0825 3.37922 14.1925 3.66922 14.1925 3.99922C14.1925 4.32922 14.0825 4.63922 13.8625 4.85922L10.3125 8.46922L11.3125 9.54922L14.9425 5.93922C15.4725 5.34922 15.7325 4.69922 15.7325 3.99922C15.7325 3.29922 15.4725 2.63922 14.9425 2.04922L13.3425 0.449219ZM9.3625 2.46922L8.2825 3.54922L8.8925 4.10922C9.1125 4.32922 9.2225 4.62922 9.2225 4.99922C9.2225 5.36922 9.1125 5.66922 8.8925 5.88922L8.2825 6.44922L9.3625 7.52922L9.9225 6.91922C10.4525 6.32922 10.7225 5.68922 10.7225 4.99922C10.7225 4.27922 10.4525 3.62922 9.9225 3.02922L9.3625 2.46922ZM19.8125 4.05922C19.1225 4.05922 18.4825 4.32922 17.8925 4.85922L12.2625 10.4992L13.3425 11.4992L18.9225 5.93922C19.1725 5.68922 19.4725 5.55922 19.8125 5.55922C20.1525 5.55922 20.4525 5.68922 20.7025 5.93922L21.3125 6.54922L22.3425 5.46922L21.7825 4.85922C21.1925 4.32922 20.5325 4.05922 19.8125 4.05922ZM5.8125 6.99922L0.8125 20.9992L14.8125 15.9992L5.8125 6.99922ZM17.8125 10.0592C17.1125 10.0592 16.4725 10.3292 15.8725 10.8592L14.2825 12.4492L15.3625 13.5292L16.9525 11.9392C17.2025 11.6892 17.4825 11.5592 17.8125 11.5592C18.1425 11.5592 18.4425 11.6892 18.6925 11.9392L20.3125 13.5292L21.3625 12.4992L19.7625 10.8592C19.1725 10.3292 18.5125 10.0592 17.8125 10.0592Z" fill="#00A693"/>
 </svg>
- نسخه جدید ماژول حسابداری شروع به کار کرد
+ %44 تخفیف ارتقا به <a href="/campaign" target="_blank" >پنل هوش مصنوعی </a> (1404/04/04 تا 1404/05/05)
  
 <svg width="23" height="21" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M13.3425 0.449219L12.2625 1.52922L13.8625 3.12922C14.0825 3.37922 14.1925 3.66922 14.1925 3.99922C14.1925 4.32922 14.0825 4.63922 13.8625 4.85922L10.3125 8.46922L11.3125 9.54922L14.9425 5.93922C15.4725 5.34922 15.7325 4.69922 15.7325 3.99922C15.7325 3.29922 15.4725 2.63922 14.9425 2.04922L13.3425 0.449219ZM9.3625 2.46922L8.2825 3.54922L8.8925 4.10922C9.1125 4.32922 9.2225 4.62922 9.2225 4.99922C9.2225 5.36922 9.1125 5.66922 8.8925 5.88922L8.2825 6.44922L9.3625 7.52922L9.9225 6.91922C10.4525 6.32922 10.7225 5.68922 10.7225 4.99922C10.7225 4.27922 10.4525 3.62922 9.9225 3.02922L9.3625 2.46922ZM19.8125 4.05922C19.1225 4.05922 18.4825 4.32922 17.8925 4.85922L12.2625 10.4992L13.3425 11.4992L18.9225 5.93922C19.1725 5.68922 19.4725 5.55922 19.8125 5.55922C20.1525 5.55922 20.4525 5.68922 20.7025 5.93922L21.3125 6.54922L22.3425 5.46922L21.7825 4.85922C21.1925 4.32922 20.5325 4.05922 19.8125 4.05922ZM5.8125 6.99922L0.8125 20.9992L14.8125 15.9992L5.8125 6.99922ZM17.8125 10.0592C17.1125 10.0592 16.4725 10.3292 15.8725 10.8592L14.2825 12.4492L15.3625 13.5292L16.9525 11.9392C17.2025 11.6892 17.4825 11.5592 17.8125 11.5592C18.1425 11.5592 18.4425 11.6892 18.6925 11.9392L20.3125 13.5292L21.3625 12.4992L19.7625 10.8592C19.1725 10.3292 18.5125 10.0592 17.8125 10.0592Z" fill="#00A693"/>
 </svg>
 
  `  
-    closeAnnounce.addEventListener("click" , function(){
+    closeAnnounce.addEventListener("click" , e => {
+      LocalStorageUtil.announceSeen(true)
+      this._announce = LocalStorageUtil.getLastAnnounce();
       announceWrapper.setAttribute("bc-bp-announce-wrapper-hide","")
+      
     })
-    announceLinkWrapper.appendChild(announceLink)
+    
     announceLinkWrapper.appendChild(closeAnnounce)
     announceWrapper.appendChild(announceLinkWrapper)
     announceWrapper.appendChild(announceText)
-    document.querySelector("body").appendChild(announceWrapper)
+    document.querySelector("body").prepend(announceWrapper)
     
   }
   public async runAsync(source?: ISource) {
     if (source?.id === DefaultSource.DISPLAY_PAGE) {
-      await this.checkAnnounce()
-      let pageParam: IPageLoaderParam = source.rows[0] as IPageLoaderParam;
+      
+      this.pageParam = source.rows[0] as IPageLoaderParam;
       // if (LocalStorageUtil.hasPageToShow()) {
       //   if (LocalStorageUtil.mustLoadPage(pageParam.level)) {
       //     const temp = LocalStorageUtil.getCurrentPage();
@@ -114,17 +154,17 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
       //     pageParam = null;
       //   }
       // }
-      if (pageParam) {
+      if (this.pageParam) {
         //LocalStorageUtil.setCurrentPage(pageParam);
         LocalStorageUtil.setPage(
-          pageParam.moduleId,
-          pageParam.pageId,
-          pageParam.dashboard,
-          pageParam.arguments
+          this.pageParam.moduleId,
+          this.pageParam.pageId,
+          this.pageParam.dashboard,
+          this.pageParam.arguments
         );
         const url = HttpUtil.formatString(
-          `${pageParam.moduleUrl}${this.options.method.page}`,
-          pageParam
+          `${this.pageParam.moduleUrl}${this.options.method.page}`,
+          this.pageParam
         );
         this.info = await HttpUtil.checkRkeyFetchDataAsync<IPageInfo>(
           url,
@@ -133,7 +173,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         );
         this.pageType = this.info?.container;
 
-        await this.displayPageAsync(pageParam);
+        await this.displayPageAsync(this.pageParam);
       }
     }
     return true;
@@ -165,6 +205,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
             : ""
         }/${pageLoaderParam.pageId}`
       );
+      await this.checkAnnounce(model)
     }
     const doc = this.owner.toNode(
       `<basis core="group" run="atclient"> <basis core="component.basispanel.${this.pageType}" run="atclient" params='${param}'></basis></basis>`
@@ -173,5 +214,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
     this.container.innerHTML = "";
     this.container.appendChild(doc);
     this.owner.processNodesAsync(nodes);
+  
   }
 }

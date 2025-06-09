@@ -3,7 +3,7 @@
     height: 40px;
     display: flex;
     align-items: center;
-    gap:15px
+    gap:0 !important
 }
 
 [data-bc-bp-direction="rightToLeft"] [data-bc-bp-business-container="d1"] {
@@ -12,6 +12,7 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-business-container="d1"] {
     float: right;
+    direction: rtl !important;
 }
 
 [data-bc-d1-business-list] {
@@ -22,12 +23,15 @@
     /* float: right; */
     /* margin-right: 15px; */
     position: relative;
-    border-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     /* direction: rtl; */
     z-index: 98;
     transform-origin: top;
     transform: scaleY(1);
     transition: all 0.3s ease-in-out;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     /* padding-right: 40px; */
 }
 
@@ -38,7 +42,7 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-d1-business-list] {
     float: right;
-    margin-right: 15px;
+    margin-right: 0 !important;
     direction: rtl;
 }
 
@@ -376,4 +380,49 @@
 }
 [data-bc-main-list-msg-selective] span{
     color: #004B85 !important;
+  }
+  [data-bc-bp-direction="rightToLeft"] [data-bc-web-link]{
+    width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #E5E5E5;
+  border-right: 0;
+
+  }
+  [data-bc-bp-direction="rightToLeft"] [data-bc-web-link] a{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-bc-bp-direction="leftToRight"] [data-bc-web-link]{
+    width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #E5E5E5;
+  border-right: 0;
+
+  }
+  [data-bc-bp-direction="leftToRight"] [data-bc-web-link] a{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }

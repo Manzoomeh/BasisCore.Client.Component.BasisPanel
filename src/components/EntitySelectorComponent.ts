@@ -1,4 +1,4 @@
-import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
+import { BCWrapperFactory, HttpMethod, ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../HttpUtil";
 import { DefaultSource, PanelLevels } from "../type-alias";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
@@ -148,11 +148,13 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
   protected async fillComboAsync() {
     this.mustReload = false;
+
     const businessMsgElement = this.element
       .closest("[data-bc-bp-main-header]")
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
     if (this.deviceId == 1 && this.getLevel() == "business") {
+
       if (this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
       } else if (this.entityList.length == 0) {
@@ -185,6 +187,8 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           searchInput.setAttribute("data-sys-input-text", "");
         }
       } else if (this.getLevel() == "business") {
+        
+   
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
         searchInput.setAttribute(
@@ -248,11 +252,18 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         e.stopPropagation();
         const id = parseInt(li.getAttribute("data-id"));
         if (e.isTrusted) {
+        
           if (this.getLevel() == "corporate") {
+            const webSiteLink : HTMLElement= document.querySelector("[data-bc-web-link]") as HTMLElement
+            const webSiteLinkLink : HTMLElement= document.querySelector("[data-bc-web-link-address]") as HTMLElement
+            webSiteLink.style.display="none"
+            webSiteLinkLink.removeAttribute("href")
             // choose corporate
             this.resetBusinessEntity();
             this.resetNotification();
           } else if (this.getLevel() == "business") {
+            
+          
             $bc.setSource(
               "basispanelcomponent_entityselectorcomponent.businessid",
               id
@@ -401,8 +412,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
      searchInput ? searchInput.value = "" : null
      const searchListWrapper =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-drop-down-container1]") as HTMLElement 
      const searchList =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-main-search-list]") as HTMLElement 
-     searchList.innerHTML = ""
-     searchListWrapper.setAttribute("data-status" , "close")
+     if(searchListWrapper){
+      searchListWrapper.setAttribute("data-status" , "close")
+        searchList.innerHTML = ""
+     }
+    
+    
    
   }
 
@@ -456,7 +471,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       switchLabel.setAttribute("data-bc-business-freeze-label", "");
       switchLabel.innerHTML = `<span data-bc-business-freeze-switch=""><svg width="6" height="8" viewBox="0 0 6 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.18581 2.63636H4.8449V1.95455C4.8449 1.01364 4.08127 0.25 3.14036 0.25C2.19945 0.25 1.43581 1.01364 1.43581 1.95455V2.63636H1.0949C0.719904 2.63636 0.413086 2.94318 0.413086 3.31818V6.72727C0.413086 7.10227 0.719904 7.40909 1.0949 7.40909H5.18581C5.56081 7.40909 5.86763 7.10227 5.86763 6.72727V3.31818C5.86763 2.94318 5.56081 2.63636 5.18581 2.63636ZM3.14036 5.70455C2.76536 5.70455 2.45854 5.39773 2.45854 5.02273C2.45854 4.64773 2.76536 4.34091 3.14036 4.34091C3.51536 4.34091 3.82218 4.64773 3.82218 5.02273C3.82218 5.39773 3.51536 5.70455 3.14036 5.70455ZM2.11763 2.63636V1.95455C2.11763 1.38864 2.57445 0.931818 3.14036 0.931818C3.70627 0.931818 4.16309 1.38864 4.16309 1.95455V2.63636H2.11763Z" fill="#004B85"/></svg></span>`;
       // entityName.appendChild(switchLabel);
-      //console.log("???", entityElement);
       // const lockIconWrapper = entityElement.querySelector("[data-bc-bp-business-container]") as HTMLElement
 
       // lockIcon.querySelector("path").style.fill = "#004B85"
@@ -499,6 +513,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     }
     if (selectiveList.getAttribute("data-id") != li.getAttribute("data-id")) {
       await this.setActiveAsync(parseInt(li.getAttribute("data-id")));
+      this.getWebSiteLink()
       selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
       selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
       if (this.deviceId == 2) {
@@ -516,6 +531,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
   protected clearCombo() {
     this.element.innerHTML = "";
   }
+
 
   private async signalToDisplayMenu(id: number, setFromStorage: boolean) {
     LocalStorageUtil.setLevel(this.getLevel(), id);
@@ -536,6 +552,44 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
+  }
+  private async getWebSiteLink(){
+    const domainAddress = this.options.domains
+    var  mainHeader : HTMLElement 
+    if(this.deviceId == 1){
+     mainHeader = this.element.closest("[data-bc-bp-main-header]") as HTMLElement
+    
+    }
+    else if(this.deviceId == 2){
+        mainHeader = this.element.closest("[data-bc-bp-business-container]") as HTMLElement
+       
+      }
+
+    if(domainAddress && this.deviceId == 1){
+      const url = HttpUtil.formatString(domainAddress, {
+        rKey: this.options.rKey,
+      });
+    
+      const res = await HttpUtil.fetchStringAsync(url, "GET");
+      const domains = JSON.parse(res)
+    
+      if(domains.length > 0){
+      domains.forEach(e => {
+        e.status.forEach( el => {
+          if(el.id == 1){
+            const linkWrapper:HTMLElement = mainHeader.querySelector("[data-bc-web-link]") as HTMLElement
+            linkWrapper.style.display="block"
+            mainHeader.querySelector("[data-bc-web-link-address]").setAttribute("href","http://" +  e.title)
+            return
+          }
+          
+        })
+      });
+    }
+   
+
+    }
+  
   }
 }
 

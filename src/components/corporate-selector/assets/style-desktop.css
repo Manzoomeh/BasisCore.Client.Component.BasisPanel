@@ -10,6 +10,7 @@
 
 [data-bc-bp-direction="leftToRight"] [data-bc-bp-corporate-container="d1"] {
   float: right;
+  margin-left: 20px !important;
 }
 
 [data-bc-d1-corporate-list] {
