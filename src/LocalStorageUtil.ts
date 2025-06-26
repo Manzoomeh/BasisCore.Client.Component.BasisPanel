@@ -225,11 +225,13 @@ export default class LocalStorageUtil {
   }
 
   public static setAnnounce(
+    id : number , 
     rkey: string,
     text: string,
     link : string
   ) {
     this._announceLS = {
+      id,
       rkey,
       text,
       link
@@ -266,6 +268,7 @@ interface IBannerInfo {
 }
 
 interface IAnnounceInfo {
+  id: number ;
   rkey: string;
   text: string;
   link: string;
