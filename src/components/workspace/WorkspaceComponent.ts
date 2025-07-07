@@ -94,7 +94,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
    
   }
   private addAnnounceToPage(text:string , link: string ){
-    
+    return 
     const announceWrappers = document.querySelectorAll("[bc-bp-announce-wrapper]")
     announceWrappers.forEach(e => {
       e.remove()
