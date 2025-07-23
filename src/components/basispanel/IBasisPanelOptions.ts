@@ -26,6 +26,7 @@ export default interface IBasisPanelOptions {
   urlPrefix?: string;
   lid?: string;
   announceURL: string;
+  domains: string;
   search?: ISearchOptions[]
 }
 interface IPanelPartDashboardOptions {

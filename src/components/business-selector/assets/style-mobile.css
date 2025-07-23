@@ -157,6 +157,7 @@
     top: 50%;
     right: 0;
     transform: translateY(-50%);
+    background-color: inherit !important;
 }
 [data-bc-bp-direction="leftToRight"] [data-bc-d2-business-list] [data-bc-d2-business-msg] {
     font-size: 12px;
@@ -463,3 +464,31 @@
 [data-bc-d2-business-list] [data-bc-main-name] [data-bc-business-freeze-label]:active [data-bc-business-freeze-switch] {
     width: 12px;
 }
+[data-bc-web-link]{
+    width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #E5E5E5;
+  border-right: 0;
+    
+  }
+  [data-bc-web-link] a{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  [data-bc-d2-web]{
+    position: absolute;
+    z-index: 99;
+    top: 10px;
+    right: 50px;
+  }
