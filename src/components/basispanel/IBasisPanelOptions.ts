@@ -1,8 +1,7 @@
-import ILogoutOptions from "../logout/ILogoutOptions";
 import ICartOptions from "../cart/ICartOptions";
+import ILogoutOptions from "../logout/ILogoutOptions";
+import { INotificationOptions } from "../notification/INotificationOptions";
 import IStoreOptions from "../store/IStoreOptions";
-import { INotificationOptions } from "../notification/options/INotificationOptions";
-
 
 export default interface IBasisPanelOptions {
   rKey: string;
@@ -27,7 +26,7 @@ export default interface IBasisPanelOptions {
   lid?: string;
   announceURL: string;
   domains: string;
-  search?: ISearchOptions[]
+  search?: ISearchOptions[];
 }
 interface IPanelPartDashboardOptions {
   removeDashboardReservedWidgets: string;
@@ -104,19 +103,19 @@ export interface ILabels {
   widgetsHeaderTitle: string;
 }
 
-export  interface ISearchOptions {
+export interface ISearchOptions {
   title: string;
-  icon:  string;
-  module:{
-    id : number
-    name : string, 
-    url : string
-  },
+  icon: string;
+  module: {
+    id: number;
+    name: string;
+    url: string;
+  };
   api: string;
-  method : "post" | "get";
-  body : object
-  pageid: number,
-  level : string,
-  outputKey: string,
-  type : "json" | "formData"
+  method: "post" | "get";
+  body: object;
+  pageid: number;
+  level: string;
+  outputKey: string;
+  type: "json" | "formData";
 }
