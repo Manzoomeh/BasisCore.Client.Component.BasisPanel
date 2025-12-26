@@ -6,6 +6,7 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import "./assets/style.css";
 
+import HttpUtil from "../../HttpUtil";
 import INotificationComponent from "./INotificationComponent";
 import {
   INotificationDetailsResponse,
@@ -14,6 +15,7 @@ import {
   INotificationItem,
   INotificationListResponse,
   INotificationPushResponse,
+  INotificationSeenResponse,
   NotificationType,
 } from "./INotificationItem";
 import { INotificationOptions } from "./INotificationOptions";
@@ -49,7 +51,9 @@ export default class NotificationComponent
       throw new Error("WebSocket URL is required");
     }
 
-    this.websocketUrl = options.websocketUrl;
+    this.websocketUrl = HttpUtil.formatString(options.websocketUrl, {
+      rKey: this.options.rKey,
+    });
     this.reconnectInterval = options.reconnectInterval || 3000;
     this.autoReconnect = options.autoReconnect !== false; // پیش‌فرض true
 
@@ -133,6 +137,8 @@ export default class NotificationComponent
         );
       } else if (data.action === "notification") {
         this.handleNotificationPush(data as INotificationPushResponse);
+      } else if (data.action === "notification-seen") {
+        this.handleNotificationSeenUpdate(data as INotificationSeenResponse);
       } else {
         console.warn("Unknown WebSocket message action:", data.action);
       }
@@ -305,7 +311,7 @@ export default class NotificationComponent
   public requestNotificationDetails(notificationId: string): void {
     const request: INotificationGetDetailsRequest = {
       action: "get-details",
-      notification_id: notificationId,
+      notificationId: notificationId,
     };
     this.sendWebSocketMessage(request);
   }
@@ -388,6 +394,39 @@ export default class NotificationComponent
       setTimeout(() => {
         alarmElement.classList.remove("pulse");
       }, 1000);
+    }
+  }
+
+  private handleNotificationSeenUpdate(
+    response: INotificationSeenResponse
+  ): void {
+    console.log(
+      "Notification seen update received:",
+      response.notificationId,
+      response.seenAt
+    );
+
+    // پیدا کردن نوتیفیکیشن مربوطه در لیست
+    const index = this.notifications.findIndex(
+      (n) => n.id === response.notificationId
+    );
+
+    if (index !== -1) {
+      // به‌روزرسانی وضعیت seen
+      this.notifications[index].seenAt = response.seenAt;
+      this.notifications[index].seen = response.seenAt; // برای سازگاری با فیلدهای قدیمی
+
+      // به‌روزرسانی UI
+      this.updateNotificationCount();
+      this.renderNotifications();
+
+      console.log(
+        `Notification ${response.notificationId} marked as seen at ${response.seenAt}`
+      );
+    } else {
+      console.warn(
+        `Notification ${response.notificationId} not found in local list`
+      );
     }
   }
 
@@ -551,11 +590,33 @@ export default class NotificationComponent
     return element;
   }
 
+  private convertUtcToLocal(utcDateString: string): Date {
+    // تبدیل UTC به تاریخ محلی
+    // اگر تاریخ بدون timezone suffix باشد (مثل "2025-12-25T12:43:03.589000")
+    // باید Z اضافه کنیم تا به عنوان UTC تفسیر شود
+    let dateStr = utcDateString.trim();
+
+    // چک می‌کنیم که آیا timezone info داره یا نه
+    const hasTimezone =
+      dateStr.endsWith("Z") ||
+      dateStr.includes("+") ||
+      dateStr.includes("-", 10); // offset منفی مثل -05:00
+
+    // اگر timezone نداره، Z اضافه می‌کنیم
+    if (!hasTimezone) {
+      dateStr = dateStr + "Z";
+    }
+
+    const date = new Date(dateStr);
+    return date;
+  }
+
   private formatTime(dateString: string | null | undefined): string {
     if (!dateString) return "";
 
     try {
-      const date = new Date(dateString);
+      // تبدیل UTC به Local
+      const date = this.convertUtcToLocal(dateString);
       const now = new Date();
       const diffMs = now.getTime() - date.getTime();
       const diffMins = Math.floor(diffMs / 60000);

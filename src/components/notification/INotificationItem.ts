@@ -42,10 +42,16 @@ export interface INotificationGetListRequest {
 
 export interface INotificationGetDetailsRequest {
   action: "get-details";
-  notification_id: string;
+  notificationId: string;
 }
 
 export interface INotificationPushResponse {
   action: "notification";
   notification: INotificationItem;
+}
+
+export interface INotificationSeenResponse {
+  action: "notification-seen";
+  notificationId: string;
+  seenAt: string;
 }
