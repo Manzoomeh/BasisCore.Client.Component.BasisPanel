@@ -19,6 +19,7 @@ import {
   NotificationType,
 } from "./INotificationItem";
 import { INotificationOptions } from "./INotificationOptions";
+import { NotificationModal } from "./NotificationModal";
 
 export default class NotificationComponent
   extends BasisPanelChildComponent
@@ -35,6 +36,7 @@ export default class NotificationComponent
   private tabButtons: Map<string, HTMLElement> = new Map();
   private isInitialized: boolean = false;
   private messageQueue: any[] = []; // صف پیام‌های در انتظار ارسال
+  private modal: NotificationModal | null = null;
 
   constructor(owner: IUserDefineComponent) {
     super(
@@ -66,6 +68,12 @@ export default class NotificationComponent
 
     // افزودن event listener برای دکمه نوتیفیکیشن
     this.setupNotificationToggle();
+
+    // ایجاد modal برای نمایش جزئیات
+    this.modal = new NotificationModal(
+      this.container as HTMLElement,
+      (notificationId) => this.requestNotificationDetails(notificationId)
+    );
 
     // اتصال به WebSocket
     this.connectWebSocket();
@@ -353,9 +361,10 @@ export default class NotificationComponent
   }
 
   private showNotificationDetails(notification: INotificationItem): void {
-    // TODO: پیاده‌سازی نمایش جزئیات
-    // می‌تونی یک modal یا side panel برای نمایش جزئیات بسازی
-    console.log("Notification details:", notification);
+    // نمایش جزئیات در modal
+    if (this.modal) {
+      this.modal.displayNotification(notification);
+    }
   }
 
   private handleNotificationPush(response: INotificationPushResponse): void {
@@ -584,7 +593,10 @@ export default class NotificationComponent
 
     // افزودن رویداد کلیک
     element.addEventListener("click", () => {
-      this.requestNotificationDetails(notification.id);
+      // باز کردن modal و درخواست جزئیات
+      if (this.modal) {
+        this.modal.open(notification.id);
+      }
     });
 
     return element;
@@ -680,6 +692,12 @@ export default class NotificationComponent
     if (this.websocket) {
       this.websocket.close();
       this.websocket = null;
+    }
+
+    // پاکسازی modal
+    if (this.modal) {
+      this.modal.dispose();
+      this.modal = null;
     }
 
     console.log("NotificationComponent disposed");
