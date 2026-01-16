@@ -27,4 +27,26 @@
             </section>
         </div>
     </div>
+    <!-- Notification Schema Modal -->
+    <div data-bc-notification-schema-modal="" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000; padding: 20px; align-items: center; justify-content: center;">
+        <div data-bc-notification-schema-content="" style="background: white; border-radius: 8px; max-width: 100%; width: 95%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);">
+            <div data-bc-notification-schema-header="" style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">اسکیما نوتیفیکیشن</h3>
+                <button data-bc-notification-schema-close="" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.2s;">&times;</button>
+            </div>
+            <div data-bc-notification-schema-body="" style="padding: 20px; overflow-y: auto; flex: 1;">
+                <div data-bc-notification-schema-loading="" style="display: none; text-align: center; padding: 40px; color: #6b7280;">در حال بارگذاری...</div>
+                <div data-bc-notification-schema-data="">
+                    <div data-msg-content>
+                        <Basis core="api" data-bc-notification-api="" url="" method="get" run="atclient">
+                        </Basis>
+                        <button data-btn-edit>Edit</button>
+                        <Basis core="schema" datamembername="answer.data" run="atclient" schemaUrl="https://basispanel.ai/schema" displayMode="edit" button="[data-btn-edit]" resultSourceId="demo.data">
+                        </Basis>
+                        <basis core="callback" run="atclient" triggers="demo.data"></basis>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

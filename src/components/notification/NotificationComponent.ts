@@ -19,7 +19,6 @@ import {
   NotificationType,
 } from "./INotificationItem";
 import { INotificationOptions } from "./INotificationOptions";
-import { NotificationModal } from "./NotificationModal";
 
 export default class NotificationComponent
   extends BasisPanelChildComponent
@@ -36,7 +35,8 @@ export default class NotificationComponent
   private tabButtons: Map<string, HTMLElement> = new Map();
   private isInitialized: boolean = false;
   private messageQueue: any[] = []; // صف پیام‌های در انتظار ارسال
-  private modal: NotificationModal | null = null;
+  private schemaModal: HTMLElement | null = null;
+  private currentNotification: INotificationItem | null = null;
 
   constructor(owner: IUserDefineComponent) {
     super(
@@ -69,11 +69,8 @@ export default class NotificationComponent
     // افزودن event listener برای دکمه نوتیفیکیشن
     this.setupNotificationToggle();
 
-    // ایجاد modal برای نمایش جزئیات
-    this.modal = new NotificationModal(
-      this.container as HTMLElement,
-      (notificationId) => this.requestNotificationDetails(notificationId)
-    );
+    // آماده‌سازی مودال اسکیما
+    this.setupSchemaModal();
 
     // اتصال به WebSocket
     this.connectWebSocket();
@@ -362,9 +359,7 @@ export default class NotificationComponent
 
   private showNotificationDetails(notification: INotificationItem): void {
     // نمایش جزئیات در modal
-    if (this.modal) {
-      this.modal.displayNotification(notification);
-    }
+    this.openSchemaModal(notification);
   }
 
   private handleNotificationPush(response: INotificationPushResponse): void {
@@ -593,10 +588,8 @@ export default class NotificationComponent
 
     // افزودن رویداد کلیک
     element.addEventListener("click", () => {
-      // باز کردن modal و درخواست جزئیات
-      if (this.modal) {
-        this.modal.open(notification.id);
-      }
+      // درخواست جزئیات و باز کردن modal
+      this.requestNotificationDetails(notification.id);
     });
 
     return element;
@@ -666,6 +659,111 @@ export default class NotificationComponent
     }
   }
 
+  private setupSchemaModal(): void {
+    this.schemaModal = this.container.querySelector(
+      "[data-bc-notification-schema-modal]"
+    ) as HTMLElement;
+
+    if (!this.schemaModal) return;
+
+    // دکمه بستن
+    const closeButton = this.schemaModal.querySelector(
+      "[data-bc-notification-schema-close]"
+    ) as HTMLElement;
+
+    if (closeButton) {
+      closeButton.addEventListener("click", () => this.closeSchemaModal());
+
+      // Hover effect
+      closeButton.addEventListener("mouseenter", () => {
+        closeButton.style.background = "#f3f4f6";
+      });
+      closeButton.addEventListener("mouseleave", () => {
+        closeButton.style.background = "none";
+      });
+    }
+
+    // بستن با کلیک روی overlay
+    this.schemaModal.addEventListener("click", (e) => {
+      if (e.target === this.schemaModal) {
+        this.closeSchemaModal();
+      }
+    });
+
+    // بستن با کلید Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.schemaModal?.style.display === "flex") {
+        this.closeSchemaModal();
+      }
+    });
+  }
+
+  private openSchemaModal(notification: INotificationItem): void {
+    if (!this.schemaModal) return;
+
+    this.currentNotification = notification;
+    this.schemaModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    // نمایش loading
+    const loadingElement = this.schemaModal.querySelector(
+      "[data-bc-notification-schema-loading]"
+    ) as HTMLElement;
+    const dataElement = this.schemaModal.querySelector(
+      "[data-bc-notification-schema-data]"
+    ) as HTMLElement;
+
+    if (loadingElement) loadingElement.style.display = "block";
+    if (dataElement) dataElement.innerHTML = "";
+
+    // رندر داده‌ها
+    this.renderSchemaData(notification);
+  }
+
+  private closeSchemaModal(): void {
+    if (!this.schemaModal) return;
+
+    this.schemaModal.style.display = "none";
+    document.body.style.overflow = "";
+    this.currentNotification = null;
+  }
+
+  private renderSchemaData(notification: INotificationItem): void {
+    if (!this.schemaModal) return;
+
+    const loadingElement = this.schemaModal.querySelector(
+      "[data-bc-notification-schema-loading]"
+    ) as HTMLElement;
+    const dataElement = this.schemaModal.querySelector(
+      "[data-bc-notification-schema-data]"
+    ) as HTMLElement;
+
+    if (loadingElement) loadingElement.style.display = "none";
+    if (!dataElement) return;
+
+    // آپدیت URL در Basis API
+    const apiElement = dataElement.querySelector(
+      "[data-bc-notification-api]"
+    ) as HTMLElement;
+
+    if (apiElement) {
+      const apiUrl = `https://basispanel.ai/proxy/A8EFE128-E1E6-4BA7-A8B9-ABD306574725/userslog/view/${notification.id}`;
+      apiElement.setAttribute("url", apiUrl);
+    }
+
+    // اجرای اسکریپت‌های Basis
+    this.processBasisCores(dataElement);
+  }
+
+  private processBasisCores(container: HTMLElement): void {
+    // این متد می‌تواند Basis core ها را فعال کند
+    // در صورت نیاز به پردازش خاص، اینجا پیاده‌سازی می‌شود
+    const event = new CustomEvent("basis-content-loaded", {
+      detail: { container },
+    });
+    document.dispatchEvent(event);
+  }
+
   public getNotifications(): INotificationItem[] {
     return this.notifications;
   }
@@ -695,10 +793,8 @@ export default class NotificationComponent
     }
 
     // پاکسازی modal
-    if (this.modal) {
-      this.modal.dispose();
-      this.modal = null;
-    }
+    this.closeSchemaModal();
+    this.schemaModal = null;
 
     console.log("NotificationComponent disposed");
   }
