@@ -75,6 +75,7 @@ export default class NotificationComponent
     // اتصال به WebSocket
     this.connectWebSocket();
 
+    this.owner.processNodesAsync([...this.container.childNodes]);
     this.isInitialized = true;
   }
 
@@ -717,7 +718,7 @@ export default class NotificationComponent
     if (dataElement) dataElement.innerHTML = "";
 
     // رندر داده‌ها
-    this.renderSchemaData(notification);
+    this.owner.setSource("notification.data", notification.data);
   }
 
   private closeSchemaModal(): void {

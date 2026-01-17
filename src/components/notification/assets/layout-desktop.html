@@ -34,23 +34,12 @@
                 <button data-bc-notification-schema-close="" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.2s;">&times;</button>
             </div>
             <div data-bc-notification-schema-body="" style="padding: 20px; overflow-y: auto; flex: 1;">
-                <div data-bc-notification-schema-loading="" style="display: none; text-align: center; padding: 40px; color: #6b7280;">در حال بارگذاری...</div>
-                <div data-bc-notification-schema-data="">
-                    <div data-msg-content>
-                        <Basis core="api" data-bc-notification-api="" url="" method="get" run="atclient">
-                        </Basis>
-                        <button data-btn-edit>Edit</button>
-                        <Basis core="schema" datamembername="answer.data" run="atclient" schemaUrl="https://basispanel.ai/schema" displayMode="edit" button="[data-btn-edit]" resultSourceId="demo.data">
-                        </Basis>
-                        <basis core="callback" run="atclient" triggers="demo.data"></basis>
-                        <Basis core="api" url="https://basispanel.ai/proxy/AA42155D-F347-4233-A1B8-FB3FC87F7E05/userslog/view/694c1e91af76ac135614c107" method="get" run="atclient">
-                        </Basis>
-                        <button data-btn-edit>Edit</button>
-                        <Basis core="schema" datamembername="answer.data" run="atclient" schemaUrl="https://basispanel.ai/schema" displayMode="edit" button="[data-btn-edit]" resultSourceId="demo.data">
-                        </Basis>
-                        <button data-btn-edit>Edit</button>
-                        <basis core="callback" run="atclient" triggers="demo.data"></basis>
-                    </div>
+                <div data-msg-content>
+
+                    <Basis core="schema" datamembername="notification.data" run="atclient" schemaUrl="https://basispanel.ir/schema/freeform/D1E40F7D-EA3A-40D7-AFC7-32186CDF5837" displayMode="view">
+                    </Basis>
+
+
                 </div>
             </div>
         </div>
