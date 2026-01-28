@@ -1,4 +1,4 @@
-import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
+import { IComponentCollection, IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IPageLoaderParam from "../menu/IPageLoaderParam";
