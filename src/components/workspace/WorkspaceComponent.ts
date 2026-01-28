@@ -208,7 +208,7 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
             : ""
         }/${pageLoaderParam.pageId}`
       );
-	  await this.checkAnnounce(model);
+	  await this.checkAnnounce(model)
 	  }
     try {
       await this._currentPageComponents?.disposeAsync();
