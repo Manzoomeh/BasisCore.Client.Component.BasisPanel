@@ -23,7 +23,7 @@ export interface INotificationItem {
   seen: string | null;
   createdAt?: string;
   seenAt?: string;
-  data?: any;
+  logId?: any;
 }
 
 export interface INotificationListResponse {

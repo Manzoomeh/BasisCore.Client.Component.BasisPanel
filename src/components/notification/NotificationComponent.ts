@@ -43,7 +43,7 @@ export default class NotificationComponent
       owner,
       desktopLayout,
       mobileLayout,
-      "data-bc-bp-notification-container"
+      "data-bc-bp-notification-container",
     );
 
     const options = this.options.notification as INotificationOptions;
@@ -139,7 +139,7 @@ export default class NotificationComponent
         this.handleNotificationListResponse(data as INotificationListResponse);
       } else if (data.action === "notification-details") {
         this.handleNotificationDetailsResponse(
-          data as INotificationDetailsResponse
+          data as INotificationDetailsResponse,
         );
       } else if (data.action === "notification") {
         this.handleNotificationPush(data as INotificationPushResponse);
@@ -164,7 +164,7 @@ export default class NotificationComponent
     // اگر بستن دستی نبوده و autoReconnect فعال باشه، reconnect کن
     if (!this.isManualClose && this.autoReconnect) {
       console.log(
-        `WebSocket closed, will reconnect in ${this.reconnectInterval}ms`
+        `WebSocket closed, will reconnect in ${this.reconnectInterval}ms`,
       );
       this.scheduleReconnect();
     }
@@ -194,7 +194,7 @@ export default class NotificationComponent
 
   private createTabs(): void {
     const tabsContainer = this.container.querySelector(
-      "[data-bc-notification-tabs]"
+      "[data-bc-notification-tabs]",
     );
     if (!tabsContainer) return;
 
@@ -224,7 +224,7 @@ export default class NotificationComponent
   private createTabButton(
     label: string,
     tabId: string,
-    isActive: boolean
+    isActive: boolean,
   ): HTMLElement {
     const button = document.createElement("button");
     button.setAttribute("data-bc-notification-tab-button", "");
@@ -273,13 +273,13 @@ export default class NotificationComponent
 
   private setupNotificationToggle(): void {
     const alertButton = this.container.querySelector(
-      "[data-bc-notification-alert]"
+      "[data-bc-notification-alert]",
     );
     const dropdown = this.container.querySelector(
-      "[data-bc-notification-dropdown-wrapper]"
+      "[data-bc-notification-dropdown-wrapper]",
     );
     const closeButton = this.container.querySelector(
-      "[data-bc-notification-dropdown-closed]"
+      "[data-bc-notification-dropdown-closed]",
     );
 
     if (alertButton && dropdown) {
@@ -334,7 +334,7 @@ export default class NotificationComponent
   }
 
   private handleNotificationListResponse(
-    response: INotificationListResponse
+    response: INotificationListResponse,
   ): void {
     this.notifications = response.notifications || [];
     this.updateNotificationCount();
@@ -342,11 +342,11 @@ export default class NotificationComponent
   }
 
   private handleNotificationDetailsResponse(
-    response: INotificationDetailsResponse
+    response: INotificationDetailsResponse,
   ): void {
     // پیدا کردن و به‌روزرسانی نوتیفیکیشن در لیست
     const index = this.notifications.findIndex(
-      (n) => n.id === response.notification.id
+      (n) => n.id === response.notification.id,
     );
 
     if (index !== -1) {
@@ -368,7 +368,7 @@ export default class NotificationComponent
 
     // چک کنیم که این نوتیفیکیشن از قبل وجود نداره
     const existingIndex = this.notifications.findIndex(
-      (n) => n.id === response.notification.id
+      (n) => n.id === response.notification.id,
     );
 
     if (existingIndex === -1) {
@@ -391,7 +391,7 @@ export default class NotificationComponent
     // می‌تونی اینجا یک اعلان بصری، صدا، یا animation اضافه کنی
     // مثلاً یک pulse animation روی badge
     const alarmElement = this.container.querySelector(
-      "[data-bc-notification-alarm]"
+      "[data-bc-notification-alarm]",
     );
 
     if (alarmElement) {
@@ -403,17 +403,17 @@ export default class NotificationComponent
   }
 
   private handleNotificationSeenUpdate(
-    response: INotificationSeenResponse
+    response: INotificationSeenResponse,
   ): void {
     console.log(
       "Notification seen update received:",
       response.notificationId,
-      response.seenAt
+      response.seenAt,
     );
 
     // پیدا کردن نوتیفیکیشن مربوطه در لیست
     const index = this.notifications.findIndex(
-      (n) => n.id === response.notificationId
+      (n) => n.id === response.notificationId,
     );
 
     if (index !== -1) {
@@ -426,21 +426,21 @@ export default class NotificationComponent
       this.renderNotifications();
 
       console.log(
-        `Notification ${response.notificationId} marked as seen at ${response.seenAt}`
+        `Notification ${response.notificationId} marked as seen at ${response.seenAt}`,
       );
     } else {
       console.warn(
-        `Notification ${response.notificationId} not found in local list`
+        `Notification ${response.notificationId} not found in local list`,
       );
     }
   }
 
   private updateNotificationCount(): void {
     const unseenCount = this.notifications.filter(
-      (n) => !n.seen && !n.seenAt
+      (n) => !n.seen && !n.seenAt,
     ).length;
     const alarmElement = this.container.querySelector(
-      "[data-bc-notification-alarm]"
+      "[data-bc-notification-alarm]",
     );
 
     if (alarmElement) {
@@ -462,7 +462,7 @@ export default class NotificationComponent
   private updateTabCounts(): void {
     // تب همه
     const allCount = this.notifications.filter(
-      (n) => !n.seen && !n.seenAt
+      (n) => !n.seen && !n.seenAt,
     ).length;
     this.updateTabCount("all", allCount);
 
@@ -476,7 +476,7 @@ export default class NotificationComponent
 
     types.forEach((type) => {
       const count = this.notifications.filter(
-        (n) => n.type === type && !n.seen && !n.seenAt
+        (n) => n.type === type && !n.seen && !n.seenAt,
       ).length;
       this.updateTabCount(type.toString(), count);
     });
@@ -499,7 +499,7 @@ export default class NotificationComponent
 
   private renderNotifications(): void {
     const listContainer = this.container.querySelector(
-      "[data-bc-notification-list]"
+      "[data-bc-notification-list]",
     );
     if (!listContainer) return;
 
@@ -534,14 +534,14 @@ export default class NotificationComponent
   }
 
   private createNotificationElement(
-    notification: INotificationItem
+    notification: INotificationItem,
   ): HTMLElement {
     const element = document.createElement("div");
     element.setAttribute("data-bc-notification-item", "");
     element.setAttribute("data-notification-id", notification.id);
     element.setAttribute(
       "data-notification-type",
-      notification.type.toString()
+      notification.type.toString(),
     );
 
     // تشخیص دیده شده یا نشده
@@ -578,7 +578,7 @@ export default class NotificationComponent
       const timeElement = document.createElement("span");
       timeElement.style.cssText = "font-size: 11px; color: #9ca3af;";
       const timeStr = this.formatTime(
-        notification.createdAt || notification.requestAt
+        notification.createdAt || notification.requestAt,
       );
       timeElement.textContent = timeStr;
       footer.appendChild(timeElement);
@@ -662,14 +662,14 @@ export default class NotificationComponent
 
   private setupSchemaModal(): void {
     this.schemaModal = this.container.querySelector(
-      "[data-bc-notification-schema-modal]"
+      "[data-bc-notification-schema-modal]",
     ) as HTMLElement;
 
     if (!this.schemaModal) return;
 
     // دکمه بستن
     const closeButton = this.schemaModal.querySelector(
-      "[data-bc-notification-schema-close]"
+      "[data-bc-notification-schema-close]",
     ) as HTMLElement;
 
     if (closeButton) {
@@ -708,17 +708,22 @@ export default class NotificationComponent
 
     // نمایش loading
     const loadingElement = this.schemaModal.querySelector(
-      "[data-bc-notification-schema-loading]"
+      "[data-bc-notification-schema-loading]",
     ) as HTMLElement;
     const dataElement = this.schemaModal.querySelector(
-      "[data-bc-notification-schema-data]"
+      "[data-bc-notification-schema-data]",
     ) as HTMLElement;
 
     if (loadingElement) loadingElement.style.display = "block";
     if (dataElement) dataElement.innerHTML = "";
 
-    // رندر داده‌ها
-    this.owner.setSource("notification.data", notification.data);
+    //TODO
+    const url = `/proxy/${this.options.rKey}/userslog/view/${notification.logId}`;
+    HttpUtil.fetchDataAsync(url, "GET").then((result: any) => {
+      // رندر داده‌ها
+      console.log("qam", result, result.sources[0].data[0]);
+      this.owner.setSource("notification.data", result.sources[0].data[0]);
+    });
   }
 
   private closeSchemaModal(): void {
@@ -733,10 +738,10 @@ export default class NotificationComponent
     if (!this.schemaModal) return;
 
     const loadingElement = this.schemaModal.querySelector(
-      "[data-bc-notification-schema-loading]"
+      "[data-bc-notification-schema-loading]",
     ) as HTMLElement;
     const dataElement = this.schemaModal.querySelector(
-      "[data-bc-notification-schema-data]"
+      "[data-bc-notification-schema-data]",
     ) as HTMLElement;
 
     if (loadingElement) loadingElement.style.display = "none";
@@ -744,7 +749,7 @@ export default class NotificationComponent
 
     // آپدیت URL در Basis API
     const apiElement = dataElement.querySelector(
-      "[data-bc-notification-api]"
+      "[data-bc-notification-api]",
     ) as HTMLElement;
 
     if (apiElement) {
