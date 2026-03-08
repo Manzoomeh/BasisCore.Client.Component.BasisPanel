@@ -1,26 +1,47 @@
 <div data-bc-notification="" data-bc-d1-notification="">
     <div data-bc-notification-alert="" data-bc-d1-notification-alert="">
         <div data-bc-notifications="">
-      
-<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M1.19209e-07 17V15H2V8C2 6.61667 2.41667 5.39167 3.25 4.325C4.08333 3.24167 5.16667 2.53333 6.5 2.2V1.5C6.5 1.08333 6.64167 0.733332 6.925 0.449998C7.225 0.149999 7.58333 -4.76837e-07 8 -4.76837e-07C8.41667 -4.76837e-07 8.76667 0.149999 9.05 0.449998C9.35 0.733332 9.5 1.08333 9.5 1.5V2.2C10.8333 2.53333 11.9167 3.24167 12.75 4.325C13.5833 5.39167 14 6.61667 14 8V15H16V17H1.19209e-07ZM8 20C7.45 20 6.975 19.8083 6.575 19.425C6.19167 19.025 6 18.55 6 18H10C10 18.55 9.8 19.025 9.4 19.425C9.01667 19.8083 8.55 20 8 20ZM4 15H12V8C12 6.9 11.6083 5.95833 10.825 5.175C10.0417 4.39167 9.1 4 8 4C6.9 4 5.95833 4.39167 5.175 5.175C4.39167 5.95833 4 6.9 4 8V15Z" fill="#004B85"/>
-    </svg>
-    
-    </div>
+            <svg width="20" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.19209e-07 17V15H2V8C2 6.61667 2.41667 5.39167 3.25 4.325C4.08333 3.24167 5.16667 2.53333 6.5 2.2V1.5C6.5 1.08333 6.64167 0.733332 6.925 0.449998C7.225 0.149999 7.58333 -4.76837e-07 8 -4.76837e-07C8.41667 -4.76837e-07 8.76667 0.149999 9.05 0.449998C9.35 0.733332 9.5 1.08333 9.5 1.5V2.2C10.8333 2.53333 11.9167 3.24167 12.75 4.325C13.5833 5.39167 14 6.61667 14 8V15H16V17H1.19209e-07ZM8 20C7.45 20 6.975 19.8083 6.575 19.425C6.19167 19.025 6 18.55 6 18H10C10 18.55 9.8 19.025 9.4 19.425C9.01667 19.8083 8.55 20 8 20ZM4 15H12V8C12 6.9 11.6083 5.95833 10.825 5.175C10.0417 4.39167 9.1 4 8 4C6.9 4 5.95833 4.39167 5.175 5.175C4.39167 5.95833 4 6.9 4 8V15Z" fill="currentColor" />
+            </svg>
+        </div>
         <span data-bc-notification-alarm="" data-bc-d1-notification-alarm="">
             0
         </span>
     </div>
     <div data-bc-notification-dropdown-wrapper="" data-bc-d1-notification-dropdown-wrapper="">
         <div data-bc-notification-dropdown="" data-bc-d1-notification-dropdown="">
+            <div data-bc-notification-header="">
+                <h3 data-bc-notification-header-title="">اعلان‌ها</h3>
+            </div>
             <section data-bc-notification-wrapper="" data-bc-d1-notification-wrapper="">
                 <div data-bc-notification-tabs="" data-bc-d1-notification-tabs="">
-                    <!-- insert buttons -->
+                    <!-- تب‌ها به صورت داینامیک اضافه می‌شوند -->
                 </div>
                 <div data-bc-notification-contents="" data-bc-d1-notification-contents="">
-                    <!-- insert contents -->
+                    <div data-bc-notification-list="">
+                        <!-- لیست نوتیفیکیشن‌ها به صورت داینامیک اضافه می‌شوند -->
+                    </div>
                 </div>
             </section>
+        </div>
+    </div>
+    <!-- Notification Schema Modal -->
+    <div data-bc-notification-schema-modal="" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 10000; padding: 20px; align-items: center; justify-content: center;">
+        <div data-bc-notification-schema-content="" style="background: white; border-radius: 8px; max-width: 800px; width: 100%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);">
+            <div data-bc-notification-schema-header="" style="padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #111827;">اسکیما نوتیفیکیشن</h3>
+                <button data-bc-notification-schema-close="" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: background 0.2s;">&times;</button>
+            </div>
+            <div data-bc-notification-schema-body="" style="padding: 20px; overflow-y: auto; flex: 1;">
+                <div data-msg-content>
+
+                    <Basis core="schema" datamembername="notification.data" run="atclient" schemaUrl="/schema" displayMode="view">
+                    </Basis>
+
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

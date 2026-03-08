@@ -10,6 +10,7 @@ import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
 import LocalStorageUtil from "../../LocalStorageUtil";
 declare const $bc: BCWrapperFactory;
+import HttpUtil from "../../HttpUtil";
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   private cache: Map<number, Array<IEntityInfo>>;
@@ -17,6 +18,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
+    
   }
 
   protected getLevelUrl(): string {
@@ -37,6 +39,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
 
   public async initializeAsync(): Promise<void> {
     await super.initializeAsync();
+    // await this.owner.getWebSiteLink()
     this.owner.addTrigger([DefaultSource.CORPORATE_SOURCE]);
   }
 
@@ -79,7 +82,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     return retVal;
   }
 
-  protected entryListMaker(list) {
+  protected async entryListMaker(list) {
     if (this.entityList.length == 0) {
       document.getElementById("ctaForBusinessBuy")?.remove();
 
@@ -128,4 +131,5 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     });
     li.appendChild(lockIcon);
   }
+
 }

@@ -13,6 +13,7 @@
   float: right;
   /* width: 43px; */
   width: 38px;
+  display: flex;
 }
 
 [data-bc-bp-d2-main-header] [data-bc-bp-d2-header-more-opened] {
@@ -210,6 +211,7 @@
   [data-bc-bp-d2-header-items-left] {
   float: left;
   border-right: 0.5px solid rgba(0, 75, 133, 0.1);
+  display: none;
 }
 
 [data-bc-bp-d2-main-header]

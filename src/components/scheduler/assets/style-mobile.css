@@ -27,13 +27,16 @@
     height: 40px;
     text-align: center;
     line-height: 40px;
-    border-radius: 15px;
+    border-radius: 5px;
     background: rgba(0, 75, 133, 0.1);
     transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 [data-bc-bp-scheduler-container="d2"][data-count="0"] [data-bc-d2-task-list] [data-bc-d2-task-list-alert] {
-    background: #E8E8E8;
+    background: #E6EDF3;
 }
 
 .openedScheduler [data-bc-d2-task-list] [data-bc-d2-task-list-alert] {
@@ -51,10 +54,6 @@
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-icon] path {
     fill: #004B85 !important;
-}
-
-[data-bc-bp-scheduler-container="d2"][data-count="0"] [data-bc-d2-task-list] [data-bc-d2-task-list-icon] path {
-    fill: #767676 !important;
 }
 
 [data-bc-d2-task-list] [data-bc-d2-task-list-icon] * {
