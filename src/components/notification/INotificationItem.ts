@@ -1,7 +1,9 @@
+import IStateModel from "../menu/IStateModel";
+
 export enum NotificationType {
-  ERROR = 1,
-  WARNING = 2,
-  NOTICE = 3,
+  SUCCESS = 1,
+  ERROR = 2,
+  INFO = 3,
   OTHER = 4,
 }
 
@@ -24,6 +26,13 @@ export interface INotificationItem {
   createdAt?: string;
   seenAt?: string;
   logId?: any;
+  routingParams: IRoutingParams;
+  messageId: number;
+  messageParams?: any;
+}
+export interface IRoutingParams extends IStateModel {
+  schemaId: string;
+  culture: string;
 }
 
 export interface INotificationListResponse {

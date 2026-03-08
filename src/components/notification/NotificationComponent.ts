@@ -8,7 +8,7 @@ import "./assets/style.css";
 
 import HttpUtil from "../../HttpUtil";
 import IPageLoader from "../menu/IPageLoader";
-import INotifiationMessage from "../notificationMessage/INotificationMessage";
+import INotificationMessage from "../notificationMessage/INotificationMessage";
 import INotificationComponent from "./INotificationComponent";
 import {
   INotificationDetailsResponse,
@@ -138,13 +138,15 @@ export default class NotificationComponent
       const data = JSON.parse(event.data);
 
       if (data.action === "notification-list") {
-        this.handleNotificationListResponse(data as INotificationListResponse);
+        this.handleNotificationListResponseAsync(
+          data as INotificationListResponse,
+        );
       } else if (data.action === "notification-details") {
-        this.handleNotificationDetailsResponse(
+        this.handleNotificationDetailsResponseAsync(
           data as INotificationDetailsResponse,
         );
       } else if (data.action === "notification") {
-        this.handleNotificationPush(data as INotificationPushResponse);
+        this.handleNotificationPushAsync(data as INotificationPushResponse);
       } else if (data.action === "notification-seen") {
         this.handleNotificationSeenUpdate(data as INotificationSeenResponse);
       } else {
@@ -207,9 +209,9 @@ export default class NotificationComponent
 
     // تب‌های مربوط به هر نوع
     const types = [
+      { type: NotificationType.SUCCESS, label: "اطلاعیه" },
       { type: NotificationType.ERROR, label: "خطا" },
-      { type: NotificationType.WARNING, label: "هشدار" },
-      { type: NotificationType.NOTICE, label: "اطلاعیه" },
+      { type: NotificationType.INFO, label: "هشدار" },
       { type: NotificationType.OTHER, label: "سایر" },
     ];
 
@@ -335,30 +337,46 @@ export default class NotificationComponent
     }
   }
 
-  private handleNotificationListResponse(
+  private async notificationEnrichmentAsync(
+    ...items: INotificationItem[]
+  ): Promise<INotificationItem[]> {
+    const notificationMessage =
+      this.owner.dc.resolve<INotificationMessage>("message");
+    const tasks = items.map(async (item) => {
+      const info = await notificationMessage
+        .getMessageAsync(item.messageId, item.messageParams)
+        .then((x) => {
+          item.type = x.type;
+          item.title = x.message;
+        });
+    });
+    await Promise.all(tasks);
+    return items;
+  }
+
+  private async handleNotificationListResponseAsync(
     response: INotificationListResponse,
-  ): void {
-    this.notifications = response.notifications || [];
+  ): Promise<void> {
+    this.notifications = await this.notificationEnrichmentAsync(
+      ...response.notifications,
+    );
+
     this.updateNotificationCount();
     this.renderNotifications();
   }
 
-  private handleNotificationDetailsResponse(
+  private async handleNotificationDetailsResponseAsync(
     response: INotificationDetailsResponse,
-  ): void {
+  ): Promise<void> {
     // پیدا کردن و به‌روزرسانی نوتیفیکیشن در لیست
     const index = this.notifications.findIndex(
       (n) => n.id === response.notification.id,
     );
-
+    await this.notificationEnrichmentAsync(response.notification);
     if (index !== -1) {
       this.notifications[index] = response.notification;
       this.renderNotifications();
     }
-
-    const notification = this.owner.dc.resolve<INotifiationMessage>("message");
-
-    // notification.NotificationMessageMethod(71)
     var pageLoader = this.owner.dc.resolve<IPageLoader>("page_loader");
     pageLoader.tryLoadPageFromPageInfoAsync(
       response.notification.routingParams,
@@ -372,9 +390,12 @@ export default class NotificationComponent
     this.openSchemaModal(notification);
   }
 
-  private handleNotificationPush(response: INotificationPushResponse): void {
+  private async handleNotificationPushAsync(
+    response: INotificationPushResponse,
+  ): Promise<void> {
     console.log("New notification pushed from server:", response.notification);
 
+    await this.notificationEnrichmentAsync(response.notification);
     // چک کنیم که این نوتیفیکیشن از قبل وجود نداره
     const existingIndex = this.notifications.findIndex(
       (n) => n.id === response.notification.id,
@@ -393,10 +414,10 @@ export default class NotificationComponent
     this.renderNotifications();
 
     // نمایش اعلان بصری یا صوتی (اختیاری)
-    this.showNewNotificationAlert();
+    this.showNewNotificationAlert(response.notification);
   }
 
-  private showNewNotificationAlert(): void {
+  private showNewNotificationAlert(notification: INotificationItem): void {
     // می‌تونی اینجا یک اعلان بصری، صدا، یا animation اضافه کنی
     // مثلاً یک pulse animation روی badge
     const alarmElement = this.container.querySelector(
@@ -409,6 +430,9 @@ export default class NotificationComponent
         alarmElement.classList.remove("pulse");
       }, 1000);
     }
+    this.owner.dc
+      .resolve<INotificationMessage>("message")
+      .showByMessageIdAsync(notification.messageId, notification.messageParams);
   }
 
   private handleNotificationSeenUpdate(
@@ -477,9 +501,9 @@ export default class NotificationComponent
 
     // تب‌ها بر اساس نوع
     const types = [
+      NotificationType.SUCCESS,
       NotificationType.ERROR,
-      NotificationType.WARNING,
-      NotificationType.NOTICE,
+      NotificationType.INFO,
       NotificationType.OTHER,
     ];
 
@@ -658,10 +682,10 @@ export default class NotificationComponent
     switch (type) {
       case NotificationType.ERROR:
         return "خطا";
-      case NotificationType.WARNING:
-        return "هشدار";
-      case NotificationType.NOTICE:
+      case NotificationType.SUCCESS:
         return "اطلاعیه";
+      case NotificationType.INFO:
+        return "هشدار";
       case NotificationType.OTHER:
         return "سایر";
       default:
