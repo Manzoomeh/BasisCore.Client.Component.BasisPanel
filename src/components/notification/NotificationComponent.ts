@@ -7,6 +7,8 @@ import "./assets/style-mobile.css";
 import "./assets/style.css";
 
 import HttpUtil from "../../HttpUtil";
+import IPageLoader from "../menu/IPageLoader";
+import INotifiationMessage from "../notificationMessage/INotificationMessage";
 import INotificationComponent from "./INotificationComponent";
 import {
   INotificationDetailsResponse,
@@ -354,8 +356,15 @@ export default class NotificationComponent
       this.renderNotifications();
     }
 
+    const notification = this.owner.dc.resolve<INotifiationMessage>("message");
+
+    // notification.NotificationMessageMethod(71)
+    var pageLoader = this.owner.dc.resolve<IPageLoader>("page_loader");
+    pageLoader.tryLoadPageFromPageInfoAsync(
+      response.notification.routingParams,
+    );
     // نمایش جزئیات (می‌تونی یک modal یا panel بسازی)
-    this.showNotificationDetails(response.notification);
+    //this.showNotificationDetails(response.notification);
   }
 
   private showNotificationDetails(notification: INotificationItem): void {
