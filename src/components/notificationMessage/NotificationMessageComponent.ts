@@ -318,7 +318,6 @@ export default class NotificationMessageComponent
       if (params) {
         message = HttpUtil.formatString(message, params);
       }
-      console.log("qam", message, params);
       return { message: message, type: type };
     }
   }

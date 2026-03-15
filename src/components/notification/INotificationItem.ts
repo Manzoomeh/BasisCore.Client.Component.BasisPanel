@@ -16,8 +16,9 @@ export enum NotificationLevel {
 export interface INotificationItem {
   id: string;
   userId: string | null;
-  ownerId: string | null;
-  domainId: string | null;
+  ownerId: number;
+  ownerName: string | null;
+  domainId: number;
   type: NotificationType;
   title: string;
   level: NotificationLevel;
@@ -52,6 +53,7 @@ export interface INotificationGetListRequest {
 export interface INotificationGetDetailsRequest {
   action: "get-details";
   notificationId: string;
+  companyId: number;
 }
 
 export interface INotificationPushResponse {

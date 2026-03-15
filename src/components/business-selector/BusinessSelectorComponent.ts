@@ -1,16 +1,15 @@
 import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
+import LocalStorageUtil from "../../LocalStorageUtil";
 import { DefaultSource, PanelLevels } from "../../type-alias";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
 import desktopLayout from "./assets/layout-desktop.html";
 import mobileLayout from "./assets/layout-mobile.html";
-import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import LocalStorageUtil from "../../LocalStorageUtil";
+import "./assets/style.css";
 declare const $bc: BCWrapperFactory;
-import HttpUtil from "../../HttpUtil";
 
 export default class BusinessSelectorComponent extends EntitySelectorComponent {
   private cache: Map<number, Array<IEntityInfo>>;
@@ -18,7 +17,6 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "business");
     this.cache = new Map<number, Array<IEntityInfo>>();
-    
   }
 
   protected getLevelUrl(): string {
@@ -69,7 +67,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
     return super.runAsync(source);
   }
 
-  protected async getEntitiesAsync(): Promise<Array<IEntityInfo>> {
+  public async getEntitiesAsync(): Promise<Array<IEntityInfo>> {
     let retVal: Array<IEntityInfo> = null;
     if (LocalStorageUtil.corporateId) {
       retVal = this.cache.get(LocalStorageUtil.corporateId);
@@ -87,7 +85,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
       document.getElementById("ctaForBusinessBuy")?.remove();
 
       const parentElementForBusiness = this.element.closest(
-        "[data-bc-bp-business-container]"
+        "[data-bc-bp-business-container]",
       );
 
       const buyBusiness = document.createElement("div");
@@ -102,7 +100,7 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
       </div>`;
       parentElementForBusiness.prepend(buyBusiness);
       let businessListMobile = parentElementForBusiness.querySelector(
-        "[data-bc-d2-business-list-wrapper]"
+        "[data-bc-d2-business-list-wrapper]",
       ) as HTMLElement;
       if (businessListMobile) {
         businessListMobile.style.display = "none";
@@ -124,12 +122,11 @@ export default class BusinessSelectorComponent extends EntitySelectorComponent {
       await this.setActiveAsync(data.id);
       $bc.setSource(
         "basispanelcomponent_entityselectorcomponent.businessid",
-        data.id
+        data.id,
       );
 
       await this.selectItemAsync(li, true);
     });
     li.appendChild(lockIcon);
   }
-
 }

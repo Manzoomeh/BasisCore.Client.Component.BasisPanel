@@ -4,5 +4,5 @@ export default interface INotificationComponent {
   getNotifications(): INotificationItem[];
   getNotificationsByType(type: number): INotificationItem[];
   sendWebSocketMessage(message: any): void;
-  requestNotificationDetails(notificationId: string): void;
+  requestNotificationDetails(notificationId: string, companyId: number): void;
 }
