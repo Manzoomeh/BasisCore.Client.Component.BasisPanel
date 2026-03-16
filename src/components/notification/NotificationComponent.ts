@@ -515,11 +515,13 @@ export default class NotificationComponent
       const info = await notificationMessage
         .getMessageAsync(item.messageId, item.messageParams)
         .then((x) => {
-          item.type = x.type;
-          item.title = x.message;
+          item.type = x?.type || NotificationType.OTHER;
+          item.title =
+            x?.message || `Message with id '${item.messageId}' not found!`;
           item.ownerName =
             this.corporateList.find((c) => c.id === item.ownerId)?.title ||
-            item.domainId.toString();
+            item?.domainId.toString() ||
+            "***";
         });
     });
     await Promise.all(tasks);
