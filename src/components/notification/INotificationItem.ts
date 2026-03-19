@@ -1,7 +1,9 @@
+import IStateModel from "../menu/IStateModel";
+
 export enum NotificationType {
-  ERROR = 1,
-  WARNING = 2,
-  NOTICE = 3,
+  SUCCESS = 1,
+  ERROR = 2,
+  INFO = 3,
   OTHER = 4,
 }
 
@@ -14,8 +16,9 @@ export enum NotificationLevel {
 export interface INotificationItem {
   id: string;
   userId: string | null;
-  ownerId: string | null;
-  domainId: string | null;
+  ownerId: number;
+  ownerName: string | null;
+  domainId: number;
   type: NotificationType;
   title: string;
   level: NotificationLevel;
@@ -24,6 +27,13 @@ export interface INotificationItem {
   createdAt?: string;
   seenAt?: string;
   logId?: any;
+  routingParams: IRoutingParams;
+  messageId: number;
+  messageParams?: any;
+}
+export interface IRoutingParams extends IStateModel {
+  schemaId: string;
+  culture: string;
 }
 
 export interface INotificationListResponse {
@@ -43,6 +53,7 @@ export interface INotificationGetListRequest {
 export interface INotificationGetDetailsRequest {
   action: "get-details";
   notificationId: string;
+  companyId: number;
 }
 
 export interface INotificationPushResponse {

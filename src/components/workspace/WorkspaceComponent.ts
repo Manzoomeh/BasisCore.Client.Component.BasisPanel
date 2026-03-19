@@ -186,7 +186,6 @@ export default class WorkspaceComponent extends BasisPanelChildComponent {
         corporateId: LocalStorageUtil.corporateId,
         businessId: LocalStorageUtil.businessId,
         level: pageLoaderParam.level,
-        levelId: pageLoaderParam.levelId,
         moduleId: pageLoaderParam.moduleId,
         pageId: pageLoaderParam.pageId,
         arguments: pageLoaderParam.arguments,

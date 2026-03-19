@@ -1,4 +1,5 @@
 import { IModuleInfo, PageId, PanelLevels } from "../../type-alias";
+import IStateModel from "./IStateModel";
 export default interface IPageLoader {
   tryLoadPage(
     level: PanelLevels,
@@ -21,4 +22,12 @@ export default interface IPageLoader {
     levelId: number,
     moduleId: number
   ): IModuleInfo;
+
+  tryLoadPageFromPageInfoAsync(pageInfo: IStateModel);
+
+  tryLoadPageFromUrlAsync(url: string);
+
+  convertPageInfoToUrl(pageInfo: IStateModel): string;
+
+  convertUrlToPageInfo(url: string): IStateModel;
 }

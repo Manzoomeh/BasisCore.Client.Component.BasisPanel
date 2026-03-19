@@ -3,13 +3,94 @@
     position: relative;
     margin: 0;
     min-width: 380px;
-    width: 420px;
+    width: 590px;
     max-width: 100%;
     background: #fff;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
     max-height: 600px;
+}
+
+[data-bc-notification] [data-bc-notification-wrapper] {
+    display: flex;
+    flex-direction: row;
+}
+
+[data-bc-notification] [data-bc-notification-main] {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+[data-bc-notification] [data-bc-notification-company-pane] {
+    width: 140px;
+    border-left: 1px solid #e5e7eb;
+    background: #f8fafc;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+[data-bc-notification] [data-bc-notification-company-list] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 8px;
+}
+
+[data-bc-notification] [data-bc-notification-company-button] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #4b5563;
+    border-radius: 8px;
+    min-height: 36px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: all 0.2s ease;
+    text-align: right;
+}
+
+[data-bc-notification] [data-bc-notification-company-button]:hover {
+    background: rgba(0, 75, 133, 0.08);
+    color: #004B85;
+}
+
+[data-bc-notification] [data-bc-notification-company-button][data-active="true"] {
+    background: rgba(0, 75, 133, 0.12);
+    color: #004B85;
+}
+
+[data-bc-notification] [data-bc-company-label] {
+    font-size: 12px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+[data-bc-notification] [data-bc-company-count] {
+    background: #ef4444;
+    color: #fff;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+[data-bc-notification] [data-bc-notification-company-button][data-active="true"] [data-bc-company-count] {
+    background: #004B85;
 }
 
 [data-bc-notification] [data-bc-notification-header] {
@@ -32,9 +113,15 @@
     padding: 12px 16px 0;
     background: #fff;
     border-bottom: 1px solid #e5e7eb;
-    overflow-x: auto;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
     scrollbar-width: none;
     flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 [data-bc-notification] [data-bc-notification-tabs]::-webkit-scrollbar {
@@ -55,7 +142,7 @@
     transition: all 0.2s ease;
     cursor: pointer;
     white-space: nowrap;
-    flex-shrink: 0;
+    flex-shrink: 1;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -292,4 +379,31 @@
 
 [data-bc-notification-items-new] {
     background: rgba(0, 75, 133, 0.1) !important;
+}
+
+@media (max-width: 768px) {
+    [data-bc-notification] [data-bc-notification-wrapper] {
+        flex-direction: column;
+    }
+
+    [data-bc-notification] [data-bc-notification-company-pane] {
+        width: 100%;
+        border-left: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    [data-bc-notification] [data-bc-notification-company-list] {
+        flex-direction: row;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    [data-bc-notification] [data-bc-notification-company-list]::-webkit-scrollbar {
+        display: none;
+    }
+
+    [data-bc-notification] [data-bc-notification-company-button] {
+        width: auto;
+        min-width: 110px;
+    }
 }

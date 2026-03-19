@@ -1,17 +1,27 @@
-import { ISource, IUserDefineComponent } from "basiscore";
+import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import { DefaultSource, PanelLevels } from "../../type-alias";
 import EntitySelectorComponent, {
   IEntityInfo,
 } from "../EntitySelectorComponent";
 import desktopLayout from "./assets/layout-desktop.html";
 import mobileLayout from "./assets/layout-mobile.html";
-import "./assets/style.css";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-
-export default class CorporateSelectorComponent extends EntitySelectorComponent {
+import "./assets/style.css";
+export interface ICorporateListAccessor {
+  getEntitiesAsync(): Promise<Array<IEntityInfo>>;
+}
+export default class CorporateSelectorComponent
+  extends EntitySelectorComponent
+  implements ICorporateListAccessor
+{
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "corporate");
+    this.owner.dc
+      .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
+      .resolve<IDependencyContainer>("parent.dc")
+      .registerInstance("ICorporateListAccessor", this);
   }
 
   protected getSourceId(): string {
@@ -45,19 +55,19 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
           }
         } else {
           let serviceListMobile = document.querySelector(
-            "[data-bc-corporate-list]"
+            "[data-bc-corporate-list]",
           ) as HTMLElement;
           if (serviceListMobile) {
             serviceListMobile.style.display = "none";
           }
           let businessListMobile = document.querySelector(
-            "[data-bc-bp-business-container]"
+            "[data-bc-bp-business-container]",
           ) as HTMLElement;
           if (businessListMobile) {
             businessListMobile.style.display = "none";
           }
           const parentElement = this.element.closest(
-            "[data-bc-bp-corporate-container]"
+            "[data-bc-bp-corporate-container]",
           );
           const buyService = document.createElement("div");
           buyService.innerHTML = `<div data-bc-corporate-buy="">
@@ -71,7 +81,7 @@ export default class CorporateSelectorComponent extends EntitySelectorComponent 
           parentElement.prepend(buyService);
           if (this.deviceId == 1) {
             const buyServiceElement = buyService.querySelector(
-              "[data-bc-corporate-buy]"
+              "[data-bc-corporate-buy]",
             ) as HTMLElement;
             setTimeout(function () {
               buyServiceElement.style.transform = "scaleY(1)";

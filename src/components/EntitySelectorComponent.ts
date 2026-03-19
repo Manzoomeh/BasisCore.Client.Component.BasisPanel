@@ -1,13 +1,14 @@
-import { BCWrapperFactory, HttpMethod, ISource, IUserDefineComponent } from "basiscore";
+import { BCWrapperFactory, ISource, IUserDefineComponent } from "basiscore";
+import { DependencyContainer } from "tsyringe";
 import HttpUtil from "../HttpUtil";
+import LocalStorageUtil from "../LocalStorageUtil";
 import { DefaultSource, PanelLevels } from "../type-alias";
 import BasisPanelChildComponent from "./BasisPanelChildComponent";
 import { IMenuLoaderParam } from "./menu/IMenuInfo";
-import { DependencyContainer } from "tsyringe";
-import LocalStorageUtil from "../LocalStorageUtil";
 import IProfileAccessor from "./profile/IProfileAccessor";
 
 declare const $bc: BCWrapperFactory;
+
 export default abstract class EntitySelectorComponent extends BasisPanelChildComponent {
   protected profileAccessor: IProfileAccessor;
   protected element: Element;
@@ -26,7 +27,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     owner: IUserDefineComponent,
     desktopLayout: string,
     mobileLayout: string,
-    level: PanelLevels
+    level: PanelLevels,
   ) {
     super(owner, desktopLayout, mobileLayout, `data-bc-bp-${level}-container`);
     this.owner.dc
@@ -107,7 +108,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       this._isFirst = false;
       const id = LocalStorageUtil.getLevelValue(this.getLevel());
       const relatedElement = this.element.querySelector<HTMLElement>(
-        `[data-id='${id}']`
+        `[data-id='${id}']`,
       );
       if (relatedElement) {
         relatedElement.click();
@@ -126,14 +127,14 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     return true;
   }
 
-  protected getEntitiesAsync(): Promise<Array<IEntityInfo>> {
+  public getEntitiesAsync(): Promise<Array<IEntityInfo>> {
     const url = HttpUtil.formatString(this.getListUrl(), {
       rKey: this.options.rKey,
     });
     return HttpUtil.checkRkeyFetchDataAsync<Array<IEntityInfo>>(
       url,
       "GET",
-      this.options.checkRkey
+      this.options.checkRkey,
     );
   }
 
@@ -154,7 +155,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .querySelector("[data-bc-business-list]") as HTMLElement;
     this.entityList = await this.getEntitiesAsync();
     if (this.deviceId == 1 && this.getLevel() == "business") {
-
       if (this.entityList.length > 0) {
         businessMsgElement.style.transform = "scaleY(1)";
       } else if (this.entityList.length == 0) {
@@ -172,7 +172,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         searchInput.setAttribute("data-bc-corporate-search-input", "");
         searchInput.setAttribute(
           "placeHolder",
-          this.labels.corporateSearchPlaceholder
+          this.labels.corporateSearchPlaceholder,
         );
         searchWrapper.appendChild(searchInput);
 
@@ -187,13 +187,11 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
           searchInput.setAttribute("data-sys-input-text", "");
         }
       } else if (this.getLevel() == "business") {
-        
-   
         searchWrapper.setAttribute("data-bc-business-search", "");
         searchInput.setAttribute("data-bc-business-search-input", "");
         searchInput.setAttribute(
           "placeHolder",
-          this.labels.businessSearchPlaceholder
+          this.labels.businessSearchPlaceholder,
         );
         searchWrapper.appendChild(searchInput);
 
@@ -235,7 +233,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.innerHTML = "";
     list.forEach(async (item) => {
       let businessListMobile = document.querySelector(
-        "[data-bc-d2-business-list-wrapper]"
+        "[data-bc-d2-business-list-wrapper]",
       ) as HTMLElement;
       if (businessListMobile) {
         businessListMobile.style.display = "block";
@@ -252,21 +250,22 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         e.stopPropagation();
         const id = parseInt(li.getAttribute("data-id"));
         if (e.isTrusted) {
-        
           if (this.getLevel() == "corporate") {
-            const webSiteLink : HTMLElement= document.querySelector("[data-bc-web-link]") as HTMLElement
-            const webSiteLinkLink : HTMLElement= document.querySelector("[data-bc-web-link-address]") as HTMLElement
-            webSiteLink.style.display="none"
-            webSiteLinkLink.removeAttribute("href")
+            const webSiteLink: HTMLElement = document.querySelector(
+              "[data-bc-web-link]",
+            ) as HTMLElement;
+            const webSiteLinkLink: HTMLElement = document.querySelector(
+              "[data-bc-web-link-address]",
+            ) as HTMLElement;
+            webSiteLink.style.display = "none";
+            webSiteLinkLink.removeAttribute("href");
             // choose corporate
             this.resetBusinessEntity();
             this.resetNotification();
           } else if (this.getLevel() == "business") {
-            
-          
             $bc.setSource(
               "basispanelcomponent_entityselectorcomponent.businessid",
-              id
+              id,
             );
           }
         }
@@ -301,7 +300,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
         {
           type: this.getLevel(),
           id: id,
-        }
+        },
       );
     }
     if (this.deviceId == 2) {
@@ -399,7 +398,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     businessMsgElement.setAttribute("data-id", "0");
     businessMsgElement.removeAttribute("data-bc-main-list-msg-select");
     const selectiveList = header?.querySelector(
-      "[data-bc-business-select] [data-bc-main-list-info]"
+      "[data-bc-business-select] [data-bc-main-list-info]",
     );
     selectiveList?.setAttribute("data-id", "0");
     header.querySelector("#ctaForBusinessBuy")?.remove();
@@ -407,18 +406,21 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       .querySelector("[data-bc-bp-business-container] [data-bc-main-name]")
       ?.remove();
     // header.innerHTML = ""
-     // empty search input
-     const searchInput = this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-search-input-text]") as HTMLInputElement
-     searchInput ? searchInput.value = "" : null
-     const searchListWrapper =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-drop-down-container1]") as HTMLElement 
-     const searchList =   this.container.closest("[data-bc-bp-main-header]").querySelector("[data-bc-main-search-list]") as HTMLElement 
-     if(searchListWrapper){
-      searchListWrapper.setAttribute("data-status" , "close")
-        searchList.innerHTML = ""
-     }
-    
-    
-   
+    // empty search input
+    const searchInput = this.container
+      .closest("[data-bc-bp-main-header]")
+      .querySelector("[data-bc-search-input-text]") as HTMLInputElement;
+    searchInput ? (searchInput.value = "") : null;
+    const searchListWrapper = this.container
+      .closest("[data-bc-bp-main-header]")
+      .querySelector("[data-bc-drop-down-container1]") as HTMLElement;
+    const searchList = this.container
+      .closest("[data-bc-bp-main-header]")
+      .querySelector("[data-bc-main-search-list]") as HTMLElement;
+    if (searchListWrapper) {
+      searchListWrapper.setAttribute("data-status", "close");
+      searchList.innerHTML = "";
+    }
   }
 
   protected resetNotification() {
@@ -452,7 +454,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
       entityName.textContent = li.textContent;
     } else {
       const entityElement = this.element.closest(
-        "[data-bc-bp-business-container]"
+        "[data-bc-bp-business-container]",
       );
       const switchInput = document.createElement("input");
       switchInput.setAttribute("type", "checkbox");
@@ -475,7 +477,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
       // lockIcon.querySelector("path").style.fill = "#004B85"
       const containLockIcon = document.querySelector(
-        "[data-bc-link-business-corporate]"
+        "[data-bc-link-business-corporate]",
       );
       if (containLockIcon) {
         document.querySelector("[data-bc-link-business-corporate]").remove();
@@ -498,12 +500,12 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
 
     containerMsgElement.parentNode.insertBefore(
       entityName,
-      containerMsgElement.nextSibling
+      containerMsgElement.nextSibling,
     );
 
     containerMsgElement.setAttribute("data-bc-main-list-msg-select", "");
     const selectiveList = entityName.closest(
-      "[data-bc-main-list-info]"
+      "[data-bc-main-list-info]",
     ) as HTMLElement;
     if (!selectiveList.hasAttribute("data-id")) {
       selectiveList.addEventListener("click", (e) => {
@@ -513,7 +515,7 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     }
     if (selectiveList.getAttribute("data-id") != li.getAttribute("data-id")) {
       await this.setActiveAsync(parseInt(li.getAttribute("data-id")));
-      this.getWebSiteLink()
+      this.getWebSiteLink();
       selectiveList.setAttribute("data-bc-main-list-msg-selective", "");
       selectiveList.setAttribute("data-id", li.getAttribute("data-id"));
       if (this.deviceId == 2) {
@@ -532,7 +534,6 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.element.innerHTML = "";
   }
 
-
   private async signalToDisplayMenu(id: number, setFromStorage: boolean) {
     LocalStorageUtil.setLevel(this.getLevel(), id);
     const menuParam: IMenuLoaderParam = {
@@ -548,48 +549,49 @@ export default abstract class EntitySelectorComponent extends BasisPanelChildCom
     this.isSilent = false;
     this.owner.setSource(DefaultSource.SHOW_MENU, menuParam);
     const activeMenus = document.querySelectorAll("[data-bc-menu-active]");
-    
+
     activeMenus.forEach((e) => {
       e.removeAttribute("data-bc-menu-active");
     });
   }
-  private async getWebSiteLink(){
-    const domainAddress = this.options.domains
-    var  mainHeader : HTMLElement 
-    if(this.deviceId == 1){
-     mainHeader = this.element.closest("[data-bc-bp-main-header]") as HTMLElement
-    
+  private async getWebSiteLink() {
+    const domainAddress = this.options.domains;
+    var mainHeader: HTMLElement;
+    if (this.deviceId == 1) {
+      mainHeader = this.element.closest(
+        "[data-bc-bp-main-header]",
+      ) as HTMLElement;
+    } else if (this.deviceId == 2) {
+      mainHeader = this.element.closest(
+        "[data-bc-bp-business-container]",
+      ) as HTMLElement;
     }
-    else if(this.deviceId == 2){
-        mainHeader = this.element.closest("[data-bc-bp-business-container]") as HTMLElement
-       
-      }
 
-    if(domainAddress && this.deviceId == 1){
+    if (domainAddress && this.deviceId == 1) {
       const url = HttpUtil.formatString(domainAddress, {
         rKey: this.options.rKey,
       });
-    
-      const res = await HttpUtil.fetchStringAsync(url, "GET");
-      const domains = JSON.parse(res)
-    
-      if(domains.length > 0){
-      domains.forEach(e => {
-        e.status.forEach( el => {
-          if(el.id == 1){
-            const linkWrapper:HTMLElement = mainHeader.querySelector("[data-bc-web-link]") as HTMLElement
-            linkWrapper.style.display="block"
-            mainHeader.querySelector("[data-bc-web-link-address]").setAttribute("href","http://" +  e.title)
-            return
-          }
-          
-        })
-      });
-    }
-   
 
+      const res = await HttpUtil.fetchStringAsync(url, "GET");
+      const domains = JSON.parse(res);
+
+      if (domains.length > 0) {
+        domains.forEach((e) => {
+          e.status.forEach((el) => {
+            if (el.id == 1) {
+              const linkWrapper: HTMLElement = mainHeader.querySelector(
+                "[data-bc-web-link]",
+              ) as HTMLElement;
+              linkWrapper.style.display = "block";
+              mainHeader
+                .querySelector("[data-bc-web-link-address]")
+                .setAttribute("href", "http://" + e.title);
+              return;
+            }
+          });
+        });
+      }
     }
-  
   }
 }
 

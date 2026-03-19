@@ -7,6 +7,10 @@ import "./assets/style-mobile.css";
 import "./assets/style.css";
 
 import HttpUtil from "../../HttpUtil";
+import { ICorporateListAccessor } from "../corporate-selector/CorporateSelectorComponent";
+import { IEntityInfo } from "../EntitySelectorComponent";
+import IPageLoader from "../menu/IPageLoader";
+import INotificationMessage from "../notificationMessage/INotificationMessage";
 import INotificationComponent from "./INotificationComponent";
 import {
   INotificationDetailsResponse,
@@ -33,10 +37,13 @@ export default class NotificationComponent
   private isManualClose: boolean = false;
   private currentTab: "all" | NotificationType = "all";
   private tabButtons: Map<string, HTMLElement> = new Map();
+  private currentCompanyFilter: string = "all";
+  private companyButtons: Map<string, HTMLElement> = new Map();
   private isInitialized: boolean = false;
   private messageQueue: any[] = []; // صف پیام‌های در انتظار ارسال
   private schemaModal: HTMLElement | null = null;
   private currentNotification: INotificationItem | null = null;
+  private corporateList: IEntityInfo[] = null;
 
   constructor(owner: IUserDefineComponent) {
     super(
@@ -65,6 +72,7 @@ export default class NotificationComponent
   public async initializeAsync(): Promise<void> {
     // ایجاد تب‌ها
     this.createTabs();
+    this.renderCompanyFilters();
 
     // افزودن event listener برای دکمه نوتیفیکیشن
     this.setupNotificationToggle();
@@ -76,6 +84,7 @@ export default class NotificationComponent
     this.connectWebSocket();
 
     this.owner.processNodesAsync([...this.container.childNodes]);
+
     this.isInitialized = true;
   }
 
@@ -136,13 +145,15 @@ export default class NotificationComponent
       const data = JSON.parse(event.data);
 
       if (data.action === "notification-list") {
-        this.handleNotificationListResponse(data as INotificationListResponse);
+        this.handleNotificationListResponseAsync(
+          data as INotificationListResponse,
+        );
       } else if (data.action === "notification-details") {
-        this.handleNotificationDetailsResponse(
+        this.handleNotificationDetailsResponseAsync(
           data as INotificationDetailsResponse,
         );
       } else if (data.action === "notification") {
-        this.handleNotificationPush(data as INotificationPushResponse);
+        this.handleNotificationPushAsync(data as INotificationPushResponse);
       } else if (data.action === "notification-seen") {
         this.handleNotificationSeenUpdate(data as INotificationSeenResponse);
       } else {
@@ -205,9 +216,9 @@ export default class NotificationComponent
 
     // تب‌های مربوط به هر نوع
     const types = [
+      { type: NotificationType.SUCCESS, label: "اطلاعیه" },
       { type: NotificationType.ERROR, label: "خطا" },
-      { type: NotificationType.WARNING, label: "هشدار" },
-      { type: NotificationType.NOTICE, label: "اطلاعیه" },
+      { type: NotificationType.INFO, label: "هشدار" },
       { type: NotificationType.OTHER, label: "سایر" },
     ];
 
@@ -271,6 +282,159 @@ export default class NotificationComponent
     this.renderNotifications();
   }
 
+  private createCompanyButton(
+    label: string,
+    companyId: string,
+    isActive: boolean,
+    count: number,
+  ): HTMLElement {
+    const button = document.createElement("button");
+    button.setAttribute("type", "button");
+    button.setAttribute("data-bc-notification-company-button", "");
+    button.setAttribute("data-company-id", companyId);
+
+    const labelSpan = document.createElement("span");
+    labelSpan.setAttribute("data-bc-company-label", "");
+    labelSpan.textContent = label;
+    button.appendChild(labelSpan);
+
+    const badge = document.createElement("span");
+    badge.setAttribute("data-bc-company-count", "");
+    if (count > 0) {
+      badge.textContent = count.toString();
+    } else {
+      badge.style.display = "none";
+    }
+    button.appendChild(badge);
+
+    if (isActive) {
+      button.setAttribute("data-active", "true");
+    }
+
+    button.addEventListener("click", () => {
+      this.switchCompany(companyId);
+    });
+
+    return button;
+  }
+
+  private switchCompany(companyId: string): void {
+    this.companyButtons.forEach((btn) => {
+      btn.removeAttribute("data-active");
+    });
+
+    const selectedButton = this.companyButtons.get(companyId);
+    if (selectedButton) {
+      selectedButton.setAttribute("data-active", "true");
+    }
+
+    this.currentCompanyFilter = companyId;
+    this.updateTabCounts();
+    this.renderNotifications();
+  }
+
+  private getNotificationCompanyKey(notification: INotificationItem): string {
+    return notification.ownerId?.toString() || "unknown";
+  }
+
+  private getCompanyTitle(notification: INotificationItem): string {
+    if (notification.ownerName && notification.ownerName.trim().length > 0) {
+      return notification.ownerName;
+    }
+
+    const ownerId = notification.ownerId?.toString();
+    const company = this.corporateList?.find(
+      (c) => c.id.toString() === ownerId,
+    );
+    if (company?.title) {
+      return company.title;
+    }
+
+    return notification.domainId?.toString() || "-";
+  }
+
+  private renderCompanyFilters(): void {
+    const pane = this.container.querySelector(
+      "[data-bc-notification-company-pane]",
+    ) as HTMLElement;
+    const listContainer = this.container.querySelector(
+      "[data-bc-notification-company-list]",
+    ) as HTMLElement;
+
+    if (!pane || !listContainer) return;
+
+    const grouped = new Map<
+      string,
+      { title: string; unseenCount: number; totalCount: number }
+    >();
+
+    this.notifications.forEach((notification) => {
+      const key = this.getNotificationCompanyKey(notification);
+      const info = grouped.get(key) || {
+        title: this.getCompanyTitle(notification),
+        unseenCount: 0,
+        totalCount: 0,
+      };
+
+      info.totalCount += 1;
+      if (!notification.seen && !notification.seenAt) {
+        info.unseenCount += 1;
+      }
+
+      grouped.set(key, info);
+    });
+
+    const companyEntries = Array.from(grouped.entries())
+      .map(([id, value]) => ({ id, ...value }))
+      .sort((a, b) => a.title.localeCompare(b.title, "fa"));
+
+    // اگر فقط یک شرکت داریم، نیازی به نمایش این سطح فیلتر نیست
+    if (companyEntries.length <= 1) {
+      pane.style.display = "none";
+      listContainer.innerHTML = "";
+      this.companyButtons.clear();
+      this.currentCompanyFilter = "all";
+      return;
+    }
+
+    pane.style.display = "block";
+
+    if (
+      this.currentCompanyFilter !== "all" &&
+      !companyEntries.some((x) => x.id === this.currentCompanyFilter)
+    ) {
+      this.currentCompanyFilter = "all";
+    }
+
+    listContainer.innerHTML = "";
+    this.companyButtons.clear();
+
+    const allUnseenCount = companyEntries.reduce(
+      (sum, item) => sum + item.unseenCount,
+      0,
+    );
+
+    const allButton = this.createCompanyButton(
+      "همه شرکت‌ها",
+      "all",
+      this.currentCompanyFilter === "all",
+      allUnseenCount,
+    );
+    listContainer.appendChild(allButton);
+    this.companyButtons.set("all", allButton);
+
+    companyEntries.forEach((company) => {
+      const button = this.createCompanyButton(
+        company.title,
+        company.id,
+        this.currentCompanyFilter === company.id,
+        company.unseenCount,
+      );
+      listContainer.appendChild(button);
+      this.companyButtons.set(company.id, button);
+    });
+  }
+
   private setupNotificationToggle(): void {
     const alertButton = this.container.querySelector(
       "[data-bc-notification-alert]",
@@ -314,10 +478,14 @@ export default class NotificationComponent
     this.sendWebSocketMessage(request);
   }
 
-  public requestNotificationDetails(notificationId: string): void {
+  public requestNotificationDetails(
+    notificationId: string,
+    companyId: number,
+  ): void {
     const request: INotificationGetDetailsRequest = {
       action: "get-details",
       notificationId: notificationId,
+      companyId: companyId,
     };
     this.sendWebSocketMessage(request);
   }
@@ -333,29 +501,62 @@ export default class NotificationComponent
     }
   }
 
-  private handleNotificationListResponse(
+  private async notificationEnrichmentAsync(
+    ...items: INotificationItem[]
+  ): Promise<INotificationItem[]> {
+    const notificationMessage =
+      this.owner.dc.resolve<INotificationMessage>("message");
+    if (!this.corporateList) {
+      const corporateListAccessor =
+        this.owner.dc.resolve<ICorporateListAccessor>("ICorporateListAccessor");
+      this.corporateList = await corporateListAccessor.getEntitiesAsync();
+    }
+    const tasks = items.map(async (item) => {
+      const info = await notificationMessage
+        .getMessageAsync(item.messageId, item.messageParams)
+        .then((x) => {
+          item.type = x?.type || NotificationType.OTHER;
+          item.title =
+            x?.message || `Message with id '${item.messageId}' not found!`;
+          item.ownerName =
+            this.corporateList.find((c) => c.id === item.ownerId)?.title ||
+            item?.domainId.toString() ||
+            "***";
+        });
+    });
+    await Promise.all(tasks);
+    return items;
+  }
+
+  private async handleNotificationListResponseAsync(
     response: INotificationListResponse,
-  ): void {
-    this.notifications = response.notifications || [];
+  ): Promise<void> {
+    this.notifications = await this.notificationEnrichmentAsync(
+      ...response.notifications,
+    );
+
     this.updateNotificationCount();
     this.renderNotifications();
   }
 
-  private handleNotificationDetailsResponse(
+  private async handleNotificationDetailsResponseAsync(
     response: INotificationDetailsResponse,
-  ): void {
+  ): Promise<void> {
     // پیدا کردن و به‌روزرسانی نوتیفیکیشن در لیست
     const index = this.notifications.findIndex(
       (n) => n.id === response.notification.id,
     );
-
+    await this.notificationEnrichmentAsync(response.notification);
     if (index !== -1) {
       this.notifications[index] = response.notification;
       this.renderNotifications();
     }
-
+    var pageLoader = this.owner.dc.resolve<IPageLoader>("page_loader");
+    pageLoader.tryLoadPageFromPageInfoAsync(
+      response.notification.routingParams,
+    );
     // نمایش جزئیات (می‌تونی یک modal یا panel بسازی)
-    this.showNotificationDetails(response.notification);
+    //this.showNotificationDetails(response.notification);
   }
 
   private showNotificationDetails(notification: INotificationItem): void {
@@ -363,9 +564,12 @@ export default class NotificationComponent
     this.openSchemaModal(notification);
   }
 
-  private handleNotificationPush(response: INotificationPushResponse): void {
+  private async handleNotificationPushAsync(
+    response: INotificationPushResponse,
+  ): Promise<void> {
     console.log("New notification pushed from server:", response.notification);
 
+    await this.notificationEnrichmentAsync(response.notification);
     // چک کنیم که این نوتیفیکیشن از قبل وجود نداره
     const existingIndex = this.notifications.findIndex(
       (n) => n.id === response.notification.id,
@@ -384,10 +588,10 @@ export default class NotificationComponent
     this.renderNotifications();
 
     // نمایش اعلان بصری یا صوتی (اختیاری)
-    this.showNewNotificationAlert();
+    this.showNewNotificationAlert(response.notification);
   }
 
-  private showNewNotificationAlert(): void {
+  private showNewNotificationAlert(notification: INotificationItem): void {
     // می‌تونی اینجا یک اعلان بصری، صدا، یا animation اضافه کنی
     // مثلاً یک pulse animation روی badge
     const alarmElement = this.container.querySelector(
@@ -400,6 +604,9 @@ export default class NotificationComponent
         alarmElement.classList.remove("pulse");
       }, 1000);
     }
+    this.owner.dc
+      .resolve<INotificationMessage>("message")
+      .showByMessageIdAsync(notification.messageId, notification.messageParams);
   }
 
   private handleNotificationSeenUpdate(
@@ -455,27 +662,32 @@ export default class NotificationComponent
 
     this.container.setAttribute("data-count", unseenCount.toString());
 
+    // به‌روزرسانی فیلتر شرکت‌ها
+    this.renderCompanyFilters();
+
     // به‌روزرسانی شمارنده‌های تب‌ها
     this.updateTabCounts();
   }
 
   private updateTabCounts(): void {
+    const companyScopedNotifications = this.getCompanyFilteredNotifications();
+
     // تب همه
-    const allCount = this.notifications.filter(
+    const allCount = companyScopedNotifications.filter(
       (n) => !n.seen && !n.seenAt,
     ).length;
     this.updateTabCount("all", allCount);
 
     // تب‌ها بر اساس نوع
     const types = [
+      NotificationType.SUCCESS,
       NotificationType.ERROR,
-      NotificationType.WARNING,
-      NotificationType.NOTICE,
+      NotificationType.INFO,
       NotificationType.OTHER,
     ];
 
     types.forEach((type) => {
-      const count = this.notifications.filter(
+      const count = companyScopedNotifications.filter(
         (n) => n.type === type && !n.seen && !n.seenAt,
       ).length;
       this.updateTabCount(type.toString(), count);
@@ -526,11 +738,23 @@ export default class NotificationComponent
   }
 
   private getFilteredNotifications(): INotificationItem[] {
+    const companyFiltered = this.getCompanyFilteredNotifications();
+
     if (this.currentTab === "all") {
+      return companyFiltered;
+    }
+
+    return companyFiltered.filter((n) => n.type === this.currentTab);
+  }
+
+  private getCompanyFilteredNotifications(): INotificationItem[] {
+    if (this.currentCompanyFilter === "all") {
       return this.notifications;
     }
 
-    return this.notifications.filter((n) => n.type === this.currentTab);
+    return this.notifications.filter(
+      (n) => this.getNotificationCompanyKey(n) === this.currentCompanyFilter,
+    );
   }
 
   private createNotificationElement(
@@ -590,7 +814,7 @@ export default class NotificationComponent
     // افزودن رویداد کلیک
     element.addEventListener("click", () => {
       // درخواست جزئیات و باز کردن modal
-      this.requestNotificationDetails(notification.id);
+      this.requestNotificationDetails(notification.id, notification.ownerId);
     });
 
     return element;
@@ -649,10 +873,10 @@ export default class NotificationComponent
     switch (type) {
       case NotificationType.ERROR:
         return "خطا";
-      case NotificationType.WARNING:
-        return "هشدار";
-      case NotificationType.NOTICE:
+      case NotificationType.SUCCESS:
         return "اطلاعیه";
+      case NotificationType.INFO:
+        return "هشدار";
       case NotificationType.OTHER:
         return "سایر";
       default:
@@ -721,7 +945,6 @@ export default class NotificationComponent
     const url = `/proxy/${this.options.rKey}/userslog/view/${notification.logId}`;
     HttpUtil.fetchDataAsync(url, "GET").then((result: any) => {
       // رندر داده‌ها
-      console.log("qam", result, result.sources[0].data[0]);
       this.owner.setSource("notification.data", result.sources[0].data[0]);
     });
   }
