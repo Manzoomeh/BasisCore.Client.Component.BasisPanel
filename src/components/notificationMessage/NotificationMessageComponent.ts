@@ -1,20 +1,83 @@
 import { IDependencyContainer, ISource, IUserDefineComponent } from "basiscore";
 import HttpUtil from "../../HttpUtil";
 import LocalStorageUtil from "../../LocalStorageUtil";
+import { IModuleInfo } from "../../type-alias";
 import BasisPanelChildComponent from "../BasisPanelChildComponent";
 import IPageLoader from "../menu/IPageLoader";
 import desktopLayout from "./assets/desktop-layout.html";
 import mobileLayout from "./assets/mobile-layout.html";
 import "./assets/style-desktop.css";
 import "./assets/style-mobile.css";
-import INotificationMessage, { IMessageInfo } from "./INotificationMessage";
+import type { IMessageInfo, IMessageTemplateValue } from "./INotificationMessage";
+import INotificationMessage from "./INotificationMessage";
+
+type MessageType = number;
+type PanelLevel = 0 | 1 | 2 | 3;
+
+type ErrorMessageItem = {
+  messageType: MessageType;
+  messages: Record<string, string>;
+};
+
+type ErrorCacheEntry = {
+  date: number;
+  v: string;
+  values: Record<string, ErrorMessageItem>;
+};
+
+type ErrorCacheMap = Record<string, ErrorCacheEntry>;
+
+type RawCultureItem = {
+  lid: number;
+  message: string;
+};
+
+type RawMessageItem = {
+  id: number;
+  messageType: MessageType;
+  culture: RawCultureItem[];
+};
+
+type RawMessageResponse = {
+  v: string;
+  messages: RawMessageItem[];
+};
+
+type NotificationQueueItem = {
+  Errorid: string | number;
+  Lid?: number;
+  Type?: number;
+  Message?: string;
+  templateValue?: IMessageTemplateValue;
+  time?: number;
+};
+
+type ModuleContext = {
+  cacheKey: string;
+  moduleUrl: string;
+  isInternal: boolean;
+  moduleId: number;
+  levelId: PanelLevel;
+};
+
+type DefaultMessageItem = {
+  id: number;
+  messageType: MessageType;
+  culture: RawCultureItem[];
+};
+
+const CACHE_STORAGE_KEY = "errorKeys";
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+const LEVEL_PADDING = 4;
+const GENERAL_INTERNAL_MODULE_ID = 1;
 
 export default class NotificationMessageComponent
   extends BasisPanelChildComponent
   implements INotificationMessage
 {
-  public messageQueue = [];
-  public defaultMessages;
+  public messageQueue: NotificationQueueItem[] = [];
+  public defaultMessages: DefaultMessageItem[];
+
   private messageActionCases = {
     1: (message: string, time?: number) =>
       this.showSuccessMessage(message, time),
@@ -22,32 +85,36 @@ export default class NotificationMessageComponent
     3: (message: string, time?: number) => this.showInfoMessage(message, time),
     4: (message: string, time?: number) =>
       this.showDefaultMessage(message, time),
-    get: function (key) {
+    get: function (key: number) {
       return this.hasOwnProperty(key) ? this[key] : this[4];
     },
   };
+
   constructor(owner: IUserDefineComponent) {
     super(owner, desktopLayout, mobileLayout, "data-bc-bp-message-container");
+
     this.defaultMessages = [
       {
-        id: 1.0,
+        id: 1,
         messageType: 1,
         culture: [
           {
-            lid: 1.0,
+            lid: 1,
             message: "با موفقیت انجام شد",
           },
           {
-            lid: 2.0,
+            lid: 2,
             message: "successful",
           },
         ],
       },
     ];
-    const cached = localStorage.getItem("errorKeys");
+
+    const cached = localStorage.getItem(CACHE_STORAGE_KEY);
     if (!cached) {
       this.getGeneralErrors();
     }
+
     this.owner.dc
       .resolve<IDependencyContainer>("parent.dc")
       .registerInstance("message", this);
@@ -56,269 +123,425 @@ export default class NotificationMessageComponent
   public initializeAsync(): Promise<void> {
     return Promise.resolve();
   }
-  private async getGeneralErrors() {
-    const url = HttpUtil.formatString(
-      this.options.culture.generalErrorMessages,
+
+  private buildErrorCacheKey(moduleId: number, levelId: number): string {
+    return `${moduleId}${levelId.toString().padStart(LEVEL_PADDING, "0")}`;
+  }
+
+  private mapLevelToNumber(level?: string): PanelLevel {
+    switch ((level || "").toLowerCase()) {
+      case "profile":
+        return 1;
+      case "corporate":
+        return 2;
+      case "business":
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
+  private getCacheObject(): ErrorCacheMap {
+    try {
+      return JSON.parse(localStorage.getItem(CACHE_STORAGE_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  private setCacheObject(cacheObject: ErrorCacheMap): void {
+    localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(cacheObject));
+  }
+
+  private isCacheFresh(cacheEntry?: ErrorCacheEntry | null): boolean {
+    if (!cacheEntry || !cacheEntry.values) {
+      return false;
+    }
+
+    if (!cacheEntry.date) {
+      return false;
+    }
+
+    return new Date().getTime() - cacheEntry.date < CACHE_TTL;
+  }
+
+  private mapMessagesToCacheValues(
+    messages: RawMessageItem[],
+  ): Record<string, ErrorMessageItem> {
+    const values: Record<string, ErrorMessageItem> = {};
+
+    (messages || []).forEach((item) => {
+      try {
+        if (!item || item.id == null) {
+          return;
+        }
+
+        values[String(item.id)] = {
+          messageType: item.messageType,
+          messages: {},
+        };
+
+        (item.culture || []).forEach((cultureItem) => {
+          values[String(item.id)].messages[String(cultureItem.lid)] =
+            cultureItem.message;
+        });
+      } catch {
+        // ignore malformed item and keep processing the rest
+      }
+    });
+
+    return values;
+  }
+
+  private getGeneralErrorUrl(): string {
+    return HttpUtil.formatString(this.options.culture.generalErrorMessages, {
+      rKey: this.options.rKey,
+    });
+  }
+
+  private getModuleErrorUrl(moduleContext: ModuleContext): string {
+    if (moduleContext.isInternal) {
+      return this.getGeneralErrorUrl();
+    }
+
+    return HttpUtil.formatString(
+      moduleContext.moduleUrl + this.options.method.errorMessages,
       {
         rKey: this.options.rKey,
       },
     );
-    const res: any = await HttpUtil.checkRkeyFetchDataAsync(
+  }
+
+  private isInternalModuleByUrl(moduleUrl: string): boolean {
+    return (
+      this.options.baseUrl.business == moduleUrl ||
+      this.options.baseUrl.corporate == moduleUrl ||
+      this.options.baseUrl.profile == moduleUrl
+    );
+  }
+
+  private getModuleInfo(): IModuleInfo | null {
+    try {
+      return this.owner.dc.resolve<IPageLoader>("page_loader").getModuleInfo(
+        LocalStorageUtil.level,
+        LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
+        LocalStorageUtil.moduleId,
+      );
+    } catch (ex) {
+      console.error(ex);
+      return null;
+    }
+  }
+
+  private getModuleContext(): ModuleContext {
+    const moduleInfo = this.getModuleInfo();
+    const moduleUrl = moduleInfo?.url || "/";
+    const moduleId = Number(moduleInfo?.id ?? LocalStorageUtil.moduleId ?? 0);
+
+    const isInternal =
+    moduleId === GENERAL_INTERNAL_MODULE_ID ||
+    this.isInternalModuleByUrl(moduleUrl);
+    
+
+    const levelId: PanelLevel = isInternal
+      ? 0
+      : this.mapLevelToNumber(LocalStorageUtil.level);
+
+    return {
+      cacheKey: this.buildErrorCacheKey(moduleId, levelId),
+      moduleUrl,
+      isInternal,
+      moduleId,
+      levelId,
+    };
+  }
+
+  private getAlternativeCacheKeys(moduleContext: ModuleContext): string[] {
+    const keys: string[] = [];
+
+    if (moduleContext.isInternal) {
+      keys.push(this.buildErrorCacheKey(moduleContext.moduleId, 0));
+      return keys;
+    }
+
+    keys.push(this.buildErrorCacheKey(moduleContext.moduleId, 1));
+    keys.push(this.buildErrorCacheKey(moduleContext.moduleId, 2));
+    keys.push(this.buildErrorCacheKey(moduleContext.moduleId, 3));
+
+    return Array.from(new Set(keys));
+  }
+
+  private findErrorItemAcrossCache(
+    errorId: string | number,
+    moduleContext: ModuleContext,
+  ): ErrorMessageItem | null {
+    const cacheObject = this.getCacheObject();
+    const normalizedErrorId = String(errorId);
+
+    const directItem =
+      cacheObject[moduleContext.cacheKey]?.values?.[normalizedErrorId];
+    if (directItem) {
+      return directItem;
+    }
+
+    const legacyKey = moduleContext.isInternal ? "/" : moduleContext.moduleUrl;
+    const legacyItem = cacheObject[legacyKey]?.values?.[normalizedErrorId];
+    if (legacyItem) {
+      return legacyItem;
+    }
+
+    const alternativeKeys = this.getAlternativeCacheKeys(moduleContext);
+    for (const key of alternativeKeys) {
+      const item = cacheObject[key]?.values?.[normalizedErrorId];
+      if (item) {
+        return item;
+      }
+    }
+
+    for (const key of Object.keys(cacheObject)) {
+      const item = cacheObject[key]?.values?.[normalizedErrorId];
+      if (item) {
+        return item;
+      }
+    }
+
+    return null;
+  }
+
+  private migrateLegacyCache(
+    cacheObject: ErrorCacheMap,
+    moduleContext: ModuleContext,
+  ): ErrorCacheMap {
+    const currentEntry = cacheObject[moduleContext.cacheKey];
+    if (currentEntry?.values) {
+      return cacheObject;
+    }
+
+    const legacyKey = moduleContext.isInternal ? "/" : moduleContext.moduleUrl;
+    const legacyEntry = cacheObject[legacyKey];
+
+    if (legacyEntry?.values) {
+      cacheObject[moduleContext.cacheKey] = legacyEntry;
+      this.setCacheObject(cacheObject);
+    }
+
+    return cacheObject;
+  }
+
+  private getDefaultMessageInfo(
+    messageId: number,
+    lid: number,
+  ): IMessageInfo | null {
+    const defaultMessage = this.defaultMessages.find(
+      (item) => item.id == messageId,
+    );
+    if (!defaultMessage) {
+      return null;
+    }
+
+    const cultureItem =
+      defaultMessage.culture.find((item) => item.lid == lid) ||
+      defaultMessage.culture[0];
+
+    if (!cultureItem) {
+      return null;
+    }
+
+    return {
+      message: cultureItem.message,
+      type: defaultMessage.messageType,
+    };
+  }
+
+  private saveCacheEntry(
+    cacheKey: string,
+    version: string,
+    messages: RawMessageItem[],
+  ): ErrorCacheEntry {
+    const cacheObject = this.getCacheObject();
+    const entry: ErrorCacheEntry = {
+      date: new Date().getTime(),
+      v: version,
+      values: this.mapMessagesToCacheValues(messages),
+    };
+
+    cacheObject[cacheKey] = entry;
+    this.setCacheObject(cacheObject);
+
+    return entry;
+  }
+
+  private async fetchAndCacheMessages(
+    moduleContext: ModuleContext,
+  ): Promise<ErrorCacheEntry | null> {
+    const url = this.getModuleErrorUrl(moduleContext);
+    const response: RawMessageResponse = await HttpUtil.checkRkeyFetchDataAsync(
       url,
       "GET",
       this.options.checkRkey,
     );
-    if (res) {
-      const cachedObject = JSON.parse(localStorage.getItem("errorKeys")) || {};
-      const cached = cachedObject["/"] || {};
-      cached.date = new Date().getTime();
 
-      if (cached.v != res.v) {
-        cached.v = res.v;
-        cached.values = {};
+    if (!response) {
+      return null;
+    }
 
-        res.messages.map((i) => {
-          try {
-            if (i.id) {
-              cached.values[i.id] = {
-                messageType: i.messageType,
-                messages: {},
-              };
-              i.culture.map((e) => {
-                cached.values[i.id]["messages"][e.lid] = e.message;
-              });
-            }
-          } catch (e) {}
-        });
+    return this.saveCacheEntry(
+      moduleContext.cacheKey,
+      response.v,
+      response.messages || [],
+    );
+  }
+
+  private async ensureCache(
+    moduleContext: ModuleContext,
+    forceRefresh: boolean = false,
+  ): Promise<ErrorCacheEntry | null> {
+    let cacheObject = this.getCacheObject();
+    cacheObject = this.migrateLegacyCache(cacheObject, moduleContext);
+
+    const currentEntry = cacheObject[moduleContext.cacheKey];
+    if (!forceRefresh && this.isCacheFresh(currentEntry)) {
+      return currentEntry;
+    }
+
+    const refreshed = await this.fetchAndCacheMessages(moduleContext);
+    return refreshed || currentEntry || null;
+  }
+
+  private normalizeLid(lid?: number): number {
+    return Number(lid ?? parseInt(this.options.lid ?? "1", 10) ?? 1);
+  }
+
+  private getCachedErrorItem(
+    cacheEntry: ErrorCacheEntry | null,
+    errorId: string | number,
+  ): ErrorMessageItem | null {
+    if (!cacheEntry?.values) {
+      return null;
+    }
+
+    return cacheEntry.values[String(errorId)] || null;
+  }
+
+  private async resolveMessageInfo(
+    messageId: number,
+    lid?: number,
+  ): Promise<IMessageInfo | null> {
+    const normalizedLid = this.normalizeLid(lid);
+    const moduleContext = this.getModuleContext();
+
+    try {
+      let cacheEntry = await this.ensureCache(moduleContext);
+      let cachedItem = this.getCachedErrorItem(cacheEntry, messageId);
+
+      if (!cachedItem) {
+        cachedItem = this.findErrorItemAcrossCache(messageId, moduleContext);
       }
-      cachedObject["/"] = cached;
-      localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
+
+      if (!cachedItem || !cachedItem.messages[String(normalizedLid)]) {
+        cacheEntry = await this.ensureCache(moduleContext, true);
+        cachedItem = this.getCachedErrorItem(cacheEntry, messageId);
+
+        if (!cachedItem) {
+          cachedItem = this.findErrorItemAcrossCache(messageId, moduleContext);
+        }
+      }
+
+      if (cachedItem) {
+        const message =
+          cachedItem.messages[String(normalizedLid)] ||
+          cachedItem.messages[String(this.normalizeLid())] ||
+          cachedItem.messages[Object.keys(cachedItem.messages)[0]];
+
+        if (message) {
+          return {
+            message,
+            type: cachedItem.messageType,
+          };
+        }
+      }
+    } catch {
+      // fallback to default messages below
+    }
+
+    return this.getDefaultMessageInfo(messageId, normalizedLid);
+  }
+
+  private formatTemplateMessage(
+    message: string,
+    templateValue?: IMessageTemplateValue,
+  ): string {
+    if (!message) {
+      return message;
+    }
+
+    return message.replace(/\$\{(.*?)\}/g, (_match, value) => {
+      const key = String(value).trim();
+      if (
+        templateValue &&
+        Object.prototype.hasOwnProperty.call(templateValue, key)
+      ) {
+        const content = templateValue[key];
+        return `<strong>${content == null ? "" : content}</strong>`;
+      }
+
+      return "";
+    });
+  }
+
+  private async getGeneralErrors() {
+    const generalContext: ModuleContext = {
+      cacheKey: this.buildErrorCacheKey(GENERAL_INTERNAL_MODULE_ID, 0),
+      moduleUrl: "/",
+      isInternal: true,
+      moduleId: GENERAL_INTERNAL_MODULE_ID,
+      levelId: 0,
+    };
+
+    try {
+      await this.ensureCache(generalContext, true);
+    } catch {
+      // do not break component initialization because of cache warmup failure
     }
   }
-  public async checkErrorCode(errorid: string, mid: string) {
-    const cached = JSON.parse(localStorage.getItem("errorKeys"));
-    let messageData;
-    if (!cached || !cached["/"]) {
-      const url = HttpUtil.formatString(
-        this.options.culture.generalErrorMessages,
-        {
-          rKey: this.options.rKey,
-        },
-      );
-      const res: any = await HttpUtil.checkRkeyFetchDataAsync(
-        url,
-        "GET",
-        this.options.checkRkey,
-      );
-      if (res) {
-        const cachedObject =
-          JSON.parse(localStorage.getItem("errorKeys")) || {};
-        const cached = cachedObject["/"] || {};
-        cached.date = new Date().getTime();
 
-        cached.v = res.v;
-        cached.values = {};
+  public async checkErrorCode(errorid: string, cacheKey: string) {
+    const cacheObject = this.getCacheObject();
+    const cachedItem = cacheObject[cacheKey]?.values?.[String(errorid)];
 
-        res.messages.map((i) => {
-          try {
-            if (i.id) {
-              cached.values[i.id] = {
-                messageType: i.messageType,
-                messages: {},
-              };
-              i.culture.map((e) => {
-                cached.values[i.id]["messages"][e.lid] = e.message;
-              });
-            }
-          } catch (e) {}
-        });
-        cachedObject["/"] = cached;
-        localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-      }
+    if (!cachedItem) {
+      return null;
     }
 
-    if (cached && cached["/"] && cached["/"]?.values[errorid]) {
-      messageData = cached["/"].values[errorid];
-      const currentDate = new Date().getTime();
-
-      if (
-        messageData.messages &&
-        currentDate - cached["/"].date < 3600 * 1000 * 24 &&
-        cached["/"].v != "1.0.0"
-      ) {
-        return messageData;
-      } else {
-        const url = HttpUtil.formatString(
-          this.options.culture.generalErrorMessages,
-          {
-            rKey: this.options.rKey,
-          },
-        );
-        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
-          url,
-          "GET",
-          this.options.checkRkey,
-        );
-        if (res) {
-          const cachedObject =
-            JSON.parse(localStorage.getItem("errorKeys")) || {};
-          const cached = cachedObject["/"] || {};
-          cached.date = new Date().getTime();
-
-          cached.v = res.v;
-          cached.values = {};
-
-          res.messages.map((i) => {
-            try {
-              if (i.id) {
-                cached.values[i.id] = {
-                  messageType: i.messageType,
-                  messages: {},
-                };
-                i.culture.map((e) => {
-                  cached.values[i.id]["messages"][e.lid] = e.message;
-                });
-              }
-            } catch (e) {}
-          });
-          cachedObject["/"] = cached;
-          localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-
-          return cachedObject["/"].values[errorid];
-        }
-      }
-    } else {
-      if (cached && cached[mid] && cached[mid]?.values[errorid]) {
-        messageData = cached[mid].values[errorid];
-        if (messageData) {
-          const currentDate = new Date().getTime();
-
-          if (currentDate - cached[mid].date < 3600 * 1000 * 24) {
-            return messageData;
-          }
-        }
-      }
+    if (this.isCacheFresh(cacheObject[cacheKey])) {
+      return cachedItem;
     }
+
+    return cachedItem;
   }
 
   public async getMessageAsync(
     messageId: number,
     params?: any,
     lid?: number,
-  ): Promise<IMessageInfo> {
-    var moduleUrl = "/";
+  ): Promise<IMessageInfo | null> {
     try {
-      moduleUrl = this.owner.dc
-        .resolve<IPageLoader>("page_loader")
-        .getModuleInfo(
-          LocalStorageUtil.level,
-          LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
-          LocalStorageUtil.moduleId,
-        ).url;
-    } catch (ex) {
-      console.error(ex);
-    }
-    const currentModule =
-      this.options.baseUrl.business == moduleUrl ||
-      this.options.baseUrl.corporate == moduleUrl ||
-      this.options.baseUrl.profile == moduleUrl
-        ? "/"
-        : moduleUrl;
-    // const { Message, Errorid, Lid, Type, templateValue, time } =
-    //   this.messageQueue.shift();
-    let message = null;
-    let type = null;
-    lid = lid || parseInt(this.options.lid ?? "1");
-    if (!(message || type)) {
-      try {
-        const cachedItem = await this.checkErrorCode(
-          messageId.toString(),
-          currentModule,
-        );
-        if (cachedItem && cachedItem?.messages[lid]) {
-          message = cachedItem.messages[lid];
-          type = cachedItem.messageType;
-        } else {
-          let url;
-          //@ts-ignore
-          if (currentModule == "/") {
-            url = HttpUtil.formatString(
-              this.options.culture.generalErrorMessages,
-              {
-                rKey: this.options.rKey,
-              },
-            );
-          } else {
-            url = HttpUtil.formatString(
-              moduleUrl + this.options.method.errorMessages,
-              {
-                rKey: this.options.rKey,
-              },
-            );
-          }
-          const res: any = await HttpUtil.checkRkeyFetchDataAsync(
-            url,
-            "GET",
-            this.options.checkRkey,
-          );
-          if (res) {
-            const cachedObject =
-              JSON.parse(localStorage.getItem("errorKeys")) || {};
-            const cached = cachedObject[currentModule] || {};
-            cached.date = new Date().getTime();
-
-            cached.v = res.v;
-            cached.values = {};
-
-            res.messages.map((i) => {
-              try {
-                if (i.id) {
-                  cached.values[i.id] = {
-                    messageType: i.messageType,
-                    messages: {},
-                  };
-                  i.culture.map((e) => {
-                    cached.values[i.id]["messages"][e.lid] = e.message;
-                  });
-                }
-              } catch (e) {}
-            });
-            cachedObject[currentModule] = cached;
-            localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-            const found = res.messages.find((e) => e.id == messageId);
-            if (found) {
-              message = found.culture.find((e) => e.lid == lid).message;
-              type = found.messageType;
-            } else {
-              message = this.defaultMessages
-                .find((e) => e.id == messageId)
-                .culture.find((e) => e.lid == lid).message;
-              type = this.defaultMessages.find(
-                (e) => e.id == messageId,
-              ).messageType;
-            }
-          } else {
-            message = this.defaultMessages
-              .find((e) => e.id == messageId)
-              .culture.find((e) => e.lid == lid).message;
-            type = this.defaultMessages.find(
-              (e) => e.id == messageId,
-            ).messageType;
-          }
-        }
-      } catch (e) {
-        message = this.defaultMessages
-          .find((e) => e.id == messageId)
-          ?.culture?.find((e) => e.lid == lid)?.message;
-        type = this.defaultMessages.find((e) => e.id == messageId)?.messageType;
+      const messageInfo = await this.resolveMessageInfo(messageId, lid);
+      if (!messageInfo) {
+        return null;
       }
-    }
 
-    if (message) {
+      let message = messageInfo.message;
       if (params) {
         message = HttpUtil.formatString(message, params);
       }
-      return { message: message, type: type };
+
+      return {
+        message,
+        type: messageInfo.type,
+      };
+    } catch {
+      return this.getDefaultMessageInfo(messageId, this.normalizeLid(lid));
     }
   }
 
@@ -329,7 +552,9 @@ export default class NotificationMessageComponent
     time?: number,
   ): Promise<void> {
     const messageInfo = await this.getMessageAsync(messageId, params, lid);
-    this.showByMessage(messageInfo.message, messageInfo.type, time);
+    if (messageInfo) {
+      this.showByMessage(messageInfo.message, messageInfo.type, time);
+    }
   }
 
   public showByMessage(message: string, type?: number, time?: number): void {
@@ -339,120 +564,29 @@ export default class NotificationMessageComponent
   private async showMessage() {
     document.querySelector("[data-bc-notification-custom-css]")?.remove();
 
-    const moduleUrl = this.owner.dc
-      .resolve<IPageLoader>("page_loader")
-      .getModuleInfo(
-        LocalStorageUtil.level,
-        LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
-        LocalStorageUtil.moduleId,
-      ).url;
-    const currentModule =
-      this.options.baseUrl.business == moduleUrl ||
-      this.options.baseUrl.corporate == moduleUrl ||
-      this.options.baseUrl.profile == moduleUrl
-        ? "/"
-        : moduleUrl;
-    const { Message, Errorid, Lid, Type, templateValue, time } =
-      this.messageQueue.shift();
-    let message = Message;
-    let type = Type;
-    let lid = Lid || 1;
+    const queueItem = this.messageQueue.shift();
+    if (!queueItem) {
+      return;
+    }
+
+    const { Message, Errorid, Lid, Type, templateValue, time } = queueItem;
+
+    let message = Message || null;
+    let type = Type ?? null;
+    const lid = this.normalizeLid(Lid);
+
     if (!(message || type)) {
-      try {
-        const cachedItem = await this.checkErrorCode(Errorid, currentModule);
-        if (cachedItem && cachedItem?.messages[lid]) {
-          message = cachedItem.messages[lid];
-          type = cachedItem.messageType;
-        } else {
-          let url;
-          //@ts-ignore
-          if (currentModule == "/") {
-            url = HttpUtil.formatString(
-              this.options.culture.generalErrorMessages,
-              {
-                rKey: this.options.rKey,
-              },
-            );
-          } else {
-            url = HttpUtil.formatString(
-              moduleUrl + this.options.method.errorMessages,
-              {
-                rKey: this.options.rKey,
-              },
-            );
-          }
-          const res: any = await HttpUtil.checkRkeyFetchDataAsync(
-            url,
-            "GET",
-            this.options.checkRkey,
-          );
-          if (res) {
-            const cachedObject =
-              JSON.parse(localStorage.getItem("errorKeys")) || {};
-            const cached = cachedObject[currentModule] || {};
-            cached.date = new Date().getTime();
-
-            cached.v = res.v;
-            cached.values = {};
-
-            res.messages.map((i) => {
-              try {
-                if (i.id) {
-                  cached.values[i.id] = {
-                    messageType: i.messageType,
-                    messages: {},
-                  };
-                  i.culture.map((e) => {
-                    cached.values[i.id]["messages"][e.lid] = e.message;
-                  });
-                }
-              } catch (e) {}
-            });
-            cachedObject[currentModule] = cached;
-            localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-            const found = res.messages.find((e) => e.id == Errorid);
-            if (found) {
-              message = found.culture.find((e) => e.lid == lid).message;
-              type = found.messageType;
-            } else {
-              message = this.defaultMessages
-                .find((e) => e.id == Errorid)
-                .culture.find((e) => e.lid == lid).message;
-              type = this.defaultMessages.find(
-                (e) => e.id == Errorid,
-              ).messageType;
-            }
-          } else {
-            message = this.defaultMessages
-              .find((e) => e.id == Errorid)
-              .culture.find((e) => e.lid == lid).message;
-            type = this.defaultMessages.find(
-              (e) => e.id == Errorid,
-            ).messageType;
-          }
-        }
-      } catch (e) {
-        message = this.defaultMessages
-          .find((e) => e.id == Errorid)
-          ?.culture?.find((e) => e.lid == lid)?.message;
-        type = this.defaultMessages.find((e) => e.id == Errorid)?.messageType;
-      }
+      const messageInfo = await this.getMessageAsync(Number(Errorid), null, lid);
+      message = messageInfo?.message || null;
+      type = messageInfo?.type ?? null;
     }
 
     if (message) {
-      const newText = message.replace(/\$\{(.*?)\}/g, (match, value) => {
-        if (
-          templateValue &&
-          Object.keys(templateValue).find((e) => e == value)
-        ) {
-          return `<strong>${templateValue[value]}</strong>`;
-        } else {
-          return "";
-        }
-      });
+      const newText = this.formatTemplateMessage(message, templateValue);
       this.messageActionCases.get(type)(newText, time);
     }
   }
+
   showInfoMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
@@ -496,6 +630,7 @@ export default class NotificationMessageComponent
       time ? time * 1000 : 3000,
     );
   }
+
   showSuccessMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
@@ -553,6 +688,7 @@ export default class NotificationMessageComponent
       time ? time * 1000 : 3000,
     );
   }
+
   showErrorMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
@@ -587,6 +723,7 @@ export default class NotificationMessageComponent
       time ? time * 1000 : 3000,
     );
   }
+
   showDefaultMessage(message: string, time?: number) {
     const container =
       this.container.querySelector(".NotificationMessageMethod") ||
@@ -634,111 +771,29 @@ export default class NotificationMessageComponent
       time ? time * 1000 : 3000,
     );
   }
+
   public async getMessageTypeByErrorId(errorid: number) {
-    const moduleUrl = this.owner.dc
-      .resolve<IPageLoader>("page_loader")
-      .getModuleInfo(
-        LocalStorageUtil.level,
-        LocalStorageUtil.getLevelValue(LocalStorageUtil.level),
-        LocalStorageUtil.moduleId,
-      ).url;
-    const currentModule =
-      this.options.baseUrl.business == moduleUrl ||
-      this.options.baseUrl.corporate == moduleUrl ||
-      this.options.baseUrl.profile == moduleUrl
-        ? "/"
-        : moduleUrl;
     try {
-      const cachedItem = await this.checkErrorCode(
-        String(errorid),
-        currentModule,
+      const messageInfo = await this.resolveMessageInfo(
+        errorid,
+        this.normalizeLid(),
       );
-      if (cachedItem) {
-        return cachedItem.messageType;
-      } else {
-        let url;
-        //@ts-ignore
-
-        if (currentModule == "/") {
-          url = HttpUtil.formatString(
-            this.options.culture.generalErrorMessages,
-            {
-              rKey: this.options.rKey,
-            },
-          );
-        } else {
-          url = HttpUtil.formatString(
-            moduleUrl + this.options.method.errorMessages,
-            {
-              rKey: this.options.rKey,
-            },
-          );
-        }
-
-        const res: any = await HttpUtil.checkRkeyFetchDataAsync(
-          url,
-          "GET",
-          this.options.checkRkey,
-        );
-        if (res) {
-          const cachedObject =
-            JSON.parse(localStorage.getItem("errorKeys")) || {};
-          const cached = cachedObject[currentModule] || {};
-          cached.date = new Date().getTime();
-
-          cached.v = res.v;
-          cached.values = {};
-
-          res.messages.map((i) => {
-            try {
-              if (i.id) {
-                cached.values[i.id] = {
-                  messageType: i.messageType,
-                  messages: {},
-                };
-                i.culture.map((e) => {
-                  cached.values[i.id]["messages"][e.lid] = e.message;
-                });
-              }
-            } catch (e) {}
-          });
-          cachedObject[currentModule] = cached;
-          localStorage.setItem("errorKeys", JSON.stringify(cachedObject));
-          const found = res.messages.find((e) => e.id == errorid);
-          if (found) {
-            return found.messageType;
-          } else {
-            const message = this.defaultMessages.find((e) => e.id == errorid);
-            if (message) {
-              return message.messageType;
-            } else {
-              return null;
-            }
-          }
-        } else {
-          const message = this.defaultMessages.find((e) => e.id == errorid);
-          if (message) {
-            return message.messageType;
-          } else {
-            return null;
-          }
-        }
-      }
-    } catch (e) {
-      const message = this.defaultMessages.find((e) => e.id == errorid);
-      if (message) {
-        return message.messageType;
-      } else {
-        return null;
-      }
+      return messageInfo?.type ?? null;
+    } catch {
+      const fallback = this.getDefaultMessageInfo(
+        errorid,
+        this.normalizeLid(),
+      );
+      return fallback?.type ?? null;
     }
   }
+
   public async NotificationMessageMethod(
-    Errorid: string,
-    Lid: number,
+    Errorid: string | number,
+    Lid?: number,
     Type?: number,
     Message?: string,
-    templateValue?: string,
+    templateValue?: IMessageTemplateValue,
     time?: number,
   ) {
     const container =
@@ -757,6 +812,7 @@ export default class NotificationMessageComponent
       this.showMessage();
     }
   }
+
   public runAsync(source?: ISource) {
     return true;
   }

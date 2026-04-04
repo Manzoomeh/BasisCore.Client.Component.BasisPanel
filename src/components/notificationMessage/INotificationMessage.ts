@@ -1,9 +1,16 @@
+export type IMessageTemplateValue = Record<
+  string,
+  string | number | boolean | null | undefined
+>;
+
 export default interface INotificationMessage {
   NotificationMessageMethod(
-    Errorid: string,
-    Lid: number,
-    Type: number,
+    Errorid: string | number,
+    Lid?: number,
+    Type?: number,
     Message?: string,
+    templateValue?: IMessageTemplateValue,
+    time?: number,
   ): Promise<void>;
 
   showByMessageIdAsync(
@@ -19,7 +26,9 @@ export default interface INotificationMessage {
     messageId: number,
     params?: any,
     lid?: number,
-  ): Promise<IMessageInfo>;
+  ): Promise<IMessageInfo | null>;
+
+  getMessageTypeByErrorId(errorid: number): Promise<number | null>;
 }
 
 export interface IMessageInfo {
